@@ -202,13 +202,16 @@ export function duplicateSheet(ctx: EditContext, index: number): number {
 				delete next.partName;
 				return next;
 			});
-			// The copy's own formulas follow its tables (references elsewhere keep the originals).
-			if (renames.length)
-				rewriteSheetFormulas(copy, (formula) =>
-					renames.reduce((f, [from, to]) => renameTableInFormula(f, from, to), formula),
+			/** Rebinds source-sheet and source-table references inside the copy only. */
+			const rewrite = (formula: string): string =>
+				renames.reduce(
+					(f, [from, to]) => renameTableInFormula(f, from, to),
+					renameSheetInFormula(formula, sheet.name, copy.name),
 				);
+			rewriteSheetFormulas(copy, rewrite);
 			for (const drawing of copy.drawings) if (drawing.kind === 'chart') delete drawing.partName;
 			const copiedNames = namesForCopy(workbook, index, sheet.name, copy.name);
+			for (const name of copiedNames) name.formula = rewrite(name.formula);
 			workbook.sheets.splice(at, 0, copy);
 			remapSheets(workbook, (i) => (i >= at ? i + 1 : i));
 			for (const n of copiedNames) workbook.definedNames.push({ ...n, localSheet: at });
