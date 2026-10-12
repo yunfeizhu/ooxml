@@ -17,7 +17,13 @@
  * "Lighter N%" is `lumMod = 1 - N`, `lumOff = N`; "Darker N%" is `lumMod = 1 - N`.
  *
  */
-import { hexToRgbChannels, rgbToHsl } from '../../color/index';
+import {
+	hexToRgbChannels,
+	rgbToHsl,
+	themePaletteVariantLuminance,
+	themePaletteVariantsForLuminance,
+	type ThemePaletteVariant,
+} from '../../color/index';
 import { resolveThemeColorRef } from '../core/color/theme-color-ref';
 import type { PptxThemeColorRef, PptxThemeColorSchemeName } from '../core/types/color-ref';
 import { THEME_COLOR_PALETTE_COLUMNS } from '../core/types/color-ref';
@@ -34,12 +40,8 @@ export interface ThemeColorSwatch {
 	readonly variant: ThemeColorVariant | undefined;
 }
 
-/** A luminance variant of a base theme colour. */
-export interface ThemeColorVariant {
-	readonly kind: 'lighter' | 'darker';
-	/** Whole percent as PowerPoint labels it (80 for "Lighter 80%"). */
-	readonly percent: number;
-}
+/** A luminance variant of a base theme colour (the shared Office palette's). */
+export type ThemeColorVariant = ThemePaletteVariant;
 
 /** One palette column: the base swatch followed by its five variants. */
 export interface ThemeColorSwatchColumn {
@@ -67,29 +69,15 @@ const COLUMN_LABELS: Readonly<Record<string, string>> = {
 	folHlink: 'Followed Hyperlink',
 };
 
-function lighter(percent: number): ThemeColorVariant {
-	return { kind: 'lighter', percent };
-}
+const lighter = (percent: number): ThemeColorVariant => ({ kind: 'lighter', percent });
+const darker = (percent: number): ThemeColorVariant => ({ kind: 'darker', percent });
 
-function darker(percent: number): ThemeColorVariant {
-	return { kind: 'darker', percent };
-}
-
-/** The five variants PowerPoint shows under a base colour of luminance `l` (0..1). */
+/**
+ * The five variants PowerPoint shows under a base colour of luminance `l` (0..1). The rule is
+ * Office's, shared by every product: see `themePaletteVariantsForLuminance` in the color area.
+ */
 export function themeColorVariantsForLuminance(l: number): readonly ThemeColorVariant[] {
-	if (l < 0.05) {
-		return [lighter(50), lighter(35), lighter(25), lighter(15), lighter(5)];
-	}
-	if (l < 0.25) {
-		return [lighter(90), lighter(75), lighter(50), lighter(25), lighter(10)];
-	}
-	if (l < 0.75) {
-		return [lighter(80), lighter(60), lighter(40), darker(25), darker(50)];
-	}
-	if (l < 0.95) {
-		return [darker(10), darker(25), darker(50), darker(75), darker(90)];
-	}
-	return [darker(5), darker(15), darker(25), darker(35), darker(50)];
+	return themePaletteVariantsForLuminance(l);
 }
 
 /** The `lumMod`/`lumOff` pair a variant serialises as. */
@@ -97,9 +85,7 @@ export function themeColorVariantToRef(
 	scheme: PptxThemeColorSchemeName,
 	variant: ThemeColorVariant,
 ): PptxThemeColorRef {
-	const fraction = variant.percent / 100;
-	const lumMod = Math.round((1 - fraction) * 100000) / 100000;
-	return variant.kind === 'lighter' ? { scheme, lumMod, lumOff: fraction } : { scheme, lumMod };
+	return { scheme, ...themePaletteVariantLuminance(variant) };
 }
 
 /** Human label for a swatch: "Accent 1" or "Accent 1, Lighter 80%". */

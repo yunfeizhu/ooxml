@@ -1,10 +1,10 @@
-import type { PptxTagCollection } from 'pptx-viewer-core';
 import {
 	addTagToCollections,
 	deleteTagFromCollections,
 	flattenTagCollections,
 	updateTagInCollections,
 } from 'ooxml-ui/pptx';
+import type { PptxTagCollection } from 'pptx-viewer-core';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { LuChevronDown, LuChevronRight, LuTrash2 } from 'react-icons/lu';

@@ -1,3 +1,4 @@
+import { translationsEn } from 'ooxml-ui/pptx/i18n';
 // @vitest-environment happy-dom
 /**
  * The Elements tab is a per-slide layer list, not a per-element panel.
@@ -9,7 +10,6 @@
  * object to select (or to un-hide one you can no longer click).
  */
 import type { PptxSlide } from 'pptx-viewer-core';
-import { translationsEn } from 'ooxml-ui/pptx/i18n';
 import React, { act } from 'react';
 import { createRoot } from 'react-dom/client';
 import type { Root } from 'react-dom/client';

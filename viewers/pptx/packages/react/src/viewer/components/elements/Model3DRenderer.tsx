@@ -12,8 +12,8 @@
  * @module Model3DRenderer
  */
 
-import type { Model3DPptxElement } from 'pptx-viewer-core';
 import { modelDataToBlobUrl } from 'ooxml-ui/pptx';
+import type { Model3DPptxElement } from 'pptx-viewer-core';
 import React, { Suspense, useState, useEffect, useMemo } from 'react';
 
 // ---------------------------------------------------------------------------

@@ -17,9 +17,9 @@
 import { dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
+import { isElementHidden, isElementRendered } from 'ooxml-ui/pptx';
 import { describe, expect, it } from 'vitest';
 
-import { isElementHidden, isElementRendered } from 'ooxml-ui/pptx';
 import { componentSource as readComponentSource } from './component-source.test-support';
 
 const componentSource = readComponentSource(

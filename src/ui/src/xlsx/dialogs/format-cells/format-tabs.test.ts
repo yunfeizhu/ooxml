@@ -25,8 +25,19 @@ const styleOf = (ctx: ReturnType<typeof setup>, row = 0, col = 0) => {
 	return styleAt(wb, getCell(wb.sheets[0]!, row, col)?.styleId);
 };
 
+/** A swatch or command of the colour picker named `group` (the shared colour grid). */
 const within = (root: HTMLElement, group: string, label: string) =>
-	root.querySelector<HTMLElement>(`[aria-label="${group}"] [aria-label="${label}"]`)!;
+	root
+		.querySelector<HTMLElement>(`office-ui-color-grid[aria-label="${group}"]`)!
+		.shadowRoot!.querySelector<HTMLElement>(
+			label === 'none' ? '[data-command="automatic"]' : `[aria-label="${label}"]`,
+		)!;
+const swatch = (root: HTMLElement, label: string) =>
+	root
+		.querySelector('office-ui-color-grid')!
+		.shadowRoot!.querySelector<HTMLElement>(
+			label === 'none' ? '[data-command="automatic"]' : `[aria-label="${label}"]`,
+		)!;
 
 describe('Format Cells: Font tab', () => {
 	it('applies name, style and colour', async () => {
@@ -160,13 +171,13 @@ describe('Tab Color dialog', () => {
 		const ctx = setup();
 		let result = ctx.dialogs.open('tab-color');
 		let dialog = dialogEl(ctx, 'tab-color');
-		dialog.querySelector<HTMLElement>('[aria-label="Red"]')!.click();
+		swatch(dialog, 'Red').click();
 		clickButton(dialog, 'OK');
 		expect(await result).toEqual({ color: { rgb: 'FFFF0000' } });
 		expect(ctx.workbook()!.sheets[0]!.tabColor).toEqual({ rgb: 'FFFF0000' });
 		result = ctx.dialogs.open('tab-color');
 		dialog = dialogEl(ctx, 'tab-color');
-		clickButton(dialog, 'No Color');
+		swatch(dialog, 'none').click();
 		clickButton(dialog, 'OK');
 		expect(await result).toEqual({ color: undefined });
 		expect(ctx.workbook()!.sheets[0]!.tabColor).toBeUndefined();
@@ -176,7 +187,7 @@ describe('Tab Color dialog', () => {
 		const ctx = setup();
 		const result = ctx.dialogs.open('tab-color');
 		const dialog = dialogEl(ctx, 'tab-color');
-		dialog.querySelector<HTMLElement>('[aria-label="Red"]')!.click();
+		swatch(dialog, 'Red').click();
 		clickButton(dialog, 'Cancel');
 		expect(await result).toBeUndefined();
 		expect(ctx.workbook()!.sheets[0]!.tabColor).toBeUndefined();

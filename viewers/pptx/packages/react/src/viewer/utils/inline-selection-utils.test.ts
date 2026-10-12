@@ -1,10 +1,6 @@
+import { applyListStyleUpdate, buildParagraphs, selectedParagraphBulletKind } from 'ooxml-ui/pptx';
 // @vitest-environment happy-dom
 import type { PptxElement, TextSegment, TextStyle } from 'pptx-viewer-core';
-import {
-	applyListStyleUpdate,
-	buildParagraphs,
-	selectedParagraphBulletKind,
-} from 'ooxml-ui/pptx';
 import { describe, it, expect } from 'vitest';
 
 import { applyStyleToSelectedSegments, getInlineEditorSelection } from './inline-selection-utils';

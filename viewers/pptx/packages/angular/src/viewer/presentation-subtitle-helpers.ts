@@ -1,9 +1,5 @@
 /** Compatibility barrel for shared live-caption helpers and structural types. */
-export {
-	captionDisplayText,
-	getSpeechRecognitionCtor,
-	mergeCaptionResults,
-} from 'ooxml-ui/pptx';
+export { captionDisplayText, getSpeechRecognitionCtor, mergeCaptionResults } from 'ooxml-ui/pptx';
 export type {
 	SpeechAlternative,
 	SpeechRecognitionCtor,

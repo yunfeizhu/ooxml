@@ -5,14 +5,18 @@ import { ViewerController, type ViewerState } from './controller';
 import { MAX_INPUT_BYTES } from 'ooxml-core/visio/ui';
 import { selectedShape } from './shape-inspector';
 import { wireViewerInputs } from './viewer-input';
-import { renderLayerControls, wireLayerControls } from './viewer-layer-controls';
 import { viewerStyles } from './styles';
 import { canvasAndRibbonStyles, visioThemeAliases } from './styles/index';
 import { installOfficeUiTheme } from '../theme';
 import { createRibbon } from './ribbon';
+import { wireInlineGalleries } from './ribbon-inline-galleries';
+import { syncRibbonAddIns, type RibbonAddInTab } from '../ribbon/add-in-tabs';
+import { commandRow } from './ribbon-parts';
 import { applyKeyTips } from './ribbon-keytips';
 import { attachKeyTips } from '../controls';
-import { createPageTabs, createStatusBar } from './status-bar';
+import { createPageTabs, createStatusBar, statusLanguage } from './status-bar';
+import { createTitleBar, renderTitleBar } from './title-bar';
+import { wireRibbonOverflow } from './ribbon-overflow';
 import { createFindBar, renderFindBar, wireFindBar, type FindBar } from './viewer-search';
 import { ViewerReplace } from './viewer-replace';
 import { fitZoom } from './viewer-fit';
@@ -25,11 +29,16 @@ import { createSizePosition, ViewerSizePosition } from './viewer-size-position';
 import { createContextMenus, wireContextMenus } from './viewer-context-menu';
 import { wireTellMe } from './viewer-tell-me';
 import { createPanZoom, ViewerPanZoom } from './viewer-pan-zoom';
-import { createOptionsDialog, ViewerProfile } from './viewer-options';
+import {
+	createOptionsDialog,
+	readStatusBarTheme,
+	ViewerProfile,
+	type StatusBarTheme,
+} from './viewer-options';
 import { ViewerShare } from './viewer-share';
 import { wireStencil } from './viewer-stencil';
 import { createRulers, type Rulers } from './viewer-ruler';
-import { ViewerEditControls } from './viewer-edit-controls';
+import { ViewerInlineText } from './viewer-inline-text';
 import { ViewerChrome, viewerChromeTemplate } from './viewer-chrome';
 import { ViewerCanvas } from './viewer-canvas';
 import { ViewerCommands } from './viewer-commands';
@@ -40,6 +49,7 @@ import { ViewerResizeHandles } from './viewer-resize-handles';
 import { editErrorMessage } from 'ooxml-core/visio/ui';
 import { registerViewerControls } from './office-ui';
 import { exportPageSvg, type SvgExportOptions, type SvgExportResult } from './export-svg';
+import { exportDocumentPdf, exportPagePng } from './viewer-export';
 import {
 	createPrintSnapshot,
 	type CurrentPagePrintSnapshotOptions,
@@ -55,7 +65,6 @@ export class VisioViewerElement extends BaseElement {
 	#disposeInputs: () => void;
 	#viewport: HTMLDivElement;
 	#zoomSlider: HTMLElement & { value: number; disabled: boolean };
-	#shapeStatus: HTMLElement;
 	#announcement: string | undefined;
 	#commands: ViewerCommands;
 	#presentation: ViewerPresentation;
@@ -76,11 +85,11 @@ export class VisioViewerElement extends BaseElement {
 	#findBar: FindBar;
 	#replace: ViewerReplace;
 	#status: HTMLSpanElement;
-	#diagnostics: HTMLSpanElement;
+	#titleBar: HTMLElement;
 	#toolbar: HTMLDivElement;
+	#ribbonAddIns: readonly RibbonAddInTab[] = [];
 	#chrome: ViewerChrome;
-	#edit: ViewerEditControls;
-	#layers: HTMLDetailsElement;
+	#edit: ViewerInlineText;
 	#notes: HTMLUListElement;
 	#unsubscribe: () => void;
 	#eventUnsubscribe: () => void;
@@ -104,7 +113,8 @@ export class VisioViewerElement extends BaseElement {
 		this.#findBar = createFindBar(document);
 		const ribbon = createRibbon(document);
 		applyKeyTips(ribbon);
-		workspace.before(ribbon, this.#findBar);
+		this.#titleBar = createTitleBar(document);
+		workspace.before(this.#titleBar, ribbon, this.#findBar);
 		workspace.prepend(createShapesStrip(document), createShapesWindow(document));
 		workspace.append(createPanZoom(document), createSizePosition(document));
 		this.#root.append(
@@ -116,17 +126,17 @@ export class VisioViewerElement extends BaseElement {
 		this.#viewport = this.#root.querySelector('.viewport')!;
 		this.#rulers = createRulers(this.#viewport);
 		this.#zoomSlider = this.#root.querySelector('office-ui-zoom-slider')!;
-		this.#shapeStatus = this.#root.querySelector('[data-shape-status]')!;
 		this.#status = this.#root.querySelector('[data-status]')!;
-		this.#diagnostics = this.#root.querySelector('[data-diagnostics]')!;
 		this.#toolbar = this.#root.querySelector('.toolbar')!;
-		this.#edit = new ViewerEditControls(this.#root, this.controller);
-		this.#layers = this.#root.querySelector('.layer-controls')!;
-		this.#notes = this.#root.querySelector('.notes ul')!;
+		this.#edit = new ViewerInlineText(this.#viewport, this.controller, (message) => {
+			this.#announcement = message;
+			this.#status.textContent = message;
+		});
+		this.#notes = this.#root.querySelector('.backstage-notes ul')!;
 		this.#canvas = new ViewerCanvas(
 			this.#viewport,
 			this.#notes,
-			this.#root.querySelector('.notes')!,
+			this.#root.querySelector('.backstage-notes')!,
 			this.#root.querySelector('.shape-inspector')!,
 		);
 		this.#chrome = new ViewerChrome(this.#root, this.controller);
@@ -153,7 +163,7 @@ export class VisioViewerElement extends BaseElement {
 			},
 			fit: (mode) => this.#fit(mode),
 			togglePane: (pane) => this.#chrome.togglePane(pane),
-			reveal: (panel, focusText) => this.#chrome.reveal(panel, focusText),
+			reveal: (panel) => this.#reveal(panel),
 			rulers: this.#rulers,
 			togglePanZoom: () => this.#panZoom.toggle(),
 			present: () => this.#presentation.start(),
@@ -172,13 +182,25 @@ export class VisioViewerElement extends BaseElement {
 				this.#status.textContent = message;
 			},
 		});
-		this.#profile = new ViewerProfile(this.#root);
+		const profileChanged = (): void =>
+			renderTitleBar(this.#titleBar, this.controller.state, this.#fileName, this.#profile.profile);
+		this.#profile = new ViewerProfile(this.#root, profileChanged, {
+			get: () => (this.#dark() ? 'dark' : this.statusBar),
+			set: (theme) => {
+				if (theme !== 'dark') this.statusBar = theme;
+				if ((theme === 'dark') !== this.#dark())
+					this.#requestScheme(theme === 'dark' ? 'dark' : 'light');
+			},
+		});
 		this.#pointer = new ViewerPointerGestures(this.#viewport, this.controller, {
 			active: () => this.#commands.tool === 'pointer',
 			announce: (message) => {
 				this.#announcement = message;
 				this.#status.textContent = message;
 			},
+			snap: (page, ids, delta) =>
+				this.#commands.layoutCommands.guides.snap(page, ids, delta, this.#commands.gridStep),
+			clearSnap: () => this.#commands.layoutCommands.guides.clearHints(),
 		});
 		this.#lineEndpoints = new ViewerLineEndpoints(this.#viewport, this.controller, {
 			active: () => this.#commands.tool === 'pointer',
@@ -210,17 +232,30 @@ export class VisioViewerElement extends BaseElement {
 			createBlankDrawing: () => this.createBlankDrawing(),
 			exportVsdx: () => this.controller.exportVsdx(),
 			exportSvg: () => this.exportSvg(),
+			exportPicture: async (format) => {
+				const { document: model, pageIndex } = this.controller.state;
+				if (!model) throw new Error('Open a drawing before exporting.');
+				const doc = this.ownerDocument;
+				return {
+					blob:
+						format === 'pdf'
+							? await exportDocumentPdf(doc, model)
+							: await exportPagePng(doc, model, pageIndex),
+					pageIndex,
+				};
+			},
 			closeDocument: () => {
 				this.#fileName = '';
 				this.controller.setDocument(null);
 			},
-			revealNotes: () => this.#chrome.reveal('notes'),
 			showOptions: () => this.#profile.showOptions(),
 			announce: (message) => {
 				this.#announcement = message;
 				this.#status.textContent = message;
 			},
 			noteCount: () => this.#notes.children.length,
+			pageSetup: () =>
+				this.#commands.run({ type: 'page-setup', command: { op: 'dialog', tab: 'print' } }),
 		});
 		this.#disposeInputs = this.#wireInputs();
 		this.#unsubscribe = this.controller.subscribe((state) => this.#render(state));
@@ -248,12 +283,59 @@ export class VisioViewerElement extends BaseElement {
 	set zoom(value: number) {
 		this.controller.setZoom(value);
 	}
+	/**
+	 * The status bar's look: `'neutral'` (the suite's bar, the default) or `'colorful'` (Visio's
+	 * product colour). Reflects the `status-bar` attribute; `--vv-status-background` and
+	 * `--vv-status-ink` recolour either.
+	 */
+	get statusBar(): StatusBarTheme {
+		return this.getAttribute('status-bar') === 'colorful' ? 'colorful' : 'neutral';
+	}
+	set statusBar(value: StatusBarTheme) {
+		this.setAttribute('status-bar', value === 'colorful' ? 'colorful' : 'neutral');
+	}
+	/** Whether the page the viewer sits in is using the dark theme. */
+	#dark(): boolean {
+		const root = this.ownerDocument.documentElement;
+		return (root.dataset.officeTheme ?? root.dataset.theme) === 'dark';
+	}
+	/**
+	 * Light or dark belongs to the page, which every editor on it shares. Ask the host with a
+	 * cancelable `office-theme-request` (`{ scheme }`); when no host takes it, set the shared
+	 * theme's `data-office-theme` on the document.
+	 */
+	#requestScheme(scheme: 'light' | 'dark'): void {
+		const event = new CustomEvent('office-theme-request', {
+			detail: { scheme },
+			bubbles: true,
+			composed: true,
+			cancelable: true,
+		});
+		if (this.dispatchEvent(event)) this.ownerDocument.documentElement.dataset.officeTheme = scheme;
+	}
+	/**
+	 * Tabs a host adds after Help, as an Office add-in does (Visio's ACROBAT tab). Each command
+	 * runs its `run` callback and dispatches `office-ribbon-add-in` (`{ tab, command }`) from the
+	 * viewer. Assign a new array to change them; a tab cannot take a built-in tab's id.
+	 */
+	get ribbonAddIns(): readonly RibbonAddInTab[] {
+		return this.#ribbonAddIns;
+	}
+	set ribbonAddIns(value: readonly RibbonAddInTab[]) {
+		this.#assertAlive();
+		this.#ribbonAddIns = [...(value ?? [])];
+		syncRibbonAddIns(this.#toolbar, this.#ribbonAddIns, {
+			panelClass: 'ribbon-content',
+			wrap: (doc, tab, groups) => [commandRow(doc, `${tab.label} commands`, groups)],
+		});
+	}
 	get showToolbar(): boolean {
 		return !this.#toolbar.hidden;
 	}
 	set showToolbar(value: boolean) {
 		this.#assertAlive();
 		this.#toolbar.hidden = !value;
+		this.#titleBar.hidden = !value;
 		this.#root.querySelector<HTMLElement>('.zoom-controls')!.hidden = !value;
 	}
 	get renderWarnings(): readonly string[] {
@@ -352,7 +434,42 @@ export class VisioViewerElement extends BaseElement {
 	}
 	cancelEdit(): void {
 		this.#assertAlive();
-		this.#edit.reset(false);
+		this.controller.cancelEdit();
+	}
+	/** Visio's status bar: Page n of m, then the selection's Width, Height and Angle, and language. */
+	#renderStatus(state: ViewerState): void {
+		const set = (name: string, value: string) =>
+			this.#root.querySelector(`[data-${name}-status]`)!.setAttribute('value', value);
+		const shape = selectedShape(state.document, state.selectedShape, state.pageIndex);
+		const inches = (value: number) => `${+value.toFixed(3)} in.`;
+		const many = state.selectedShapes.length > 1;
+		set(
+			'width',
+			many
+				? `${state.selectedShapes.length} shapes selected`
+				: shape
+					? `Width: ${inches(shape.width)}`
+					: '',
+		);
+		set('height', !many && shape ? `Height: ${inches(shape.height)}` : '');
+		// Visio's Angle is counter-clockwise, in (-180°, 180°].
+		const turn = shape?.rotation
+			? ((((shape.rotation.angle * 180) / Math.PI) % 360) + 360) % 360
+			: 0;
+		const angle = turn > 180 ? turn - 360 : turn;
+		set('angle', !many && shape ? `Angle: ${+angle.toFixed(2)}°` : '');
+		set(
+			'language',
+			state.document
+				? statusLanguage(this.lang || this.ownerDocument.documentElement.lang || navigator.language)
+				: '',
+		);
+	}
+	/** Shape text edits in place on the canvas; compatibility notes live in File > Info. */
+	#reveal(panel: 'edit' | 'notes' | 'selection' | 'format'): void {
+		if (panel === 'edit') this.#edit.start();
+		else if (panel === 'notes') this.#backstage.show('info');
+		else this.#chrome.reveal(panel);
 	}
 	exportVsdx(): ReturnType<ViewerController['exportVsdx']> {
 		this.#assertAlive();
@@ -430,6 +547,9 @@ export class VisioViewerElement extends BaseElement {
 	}
 	connectedCallback(): void {
 		if (this.#disposed) return;
+		// Office Theme: the host's status-bar attribute wins; otherwise the choice saved in Options.
+		const savedTheme = readStatusBarTheme();
+		if (!this.hasAttribute('status-bar') && savedTheme) this.statusBar = savedTheme;
 		if (this.#suspended) this.#disposeInputs = this.#wireInputs();
 		this.#suspended = false;
 		this.#fontEvents = this.ownerDocument.fonts;
@@ -459,10 +579,19 @@ export class VisioViewerElement extends BaseElement {
 		const disposeBackstage = this.#backstage.wire();
 		const disposeMenus = wireContextMenus(this.#root, this.#viewport, this.controller);
 		const disposeTellMe = wireTellMe(this.#root);
+		const disposeGalleries = wireInlineGalleries(this, this.#root);
 		const keyTips = attachKeyTips(this.#root);
 		const disposePanZoom = this.#panZoom.wire();
 		const disposeSizePosition = this.#sizePosition.wire();
 		const disposeProfile = this.#profile.wire();
+		// The title bar's Quick Access Toolbar: Save downloads a copy, Undo and Redo use the history.
+		const quickAccess = (event: Event): void => {
+			const id = (event as CustomEvent<{ command: string }>).detail.command;
+			event.stopPropagation();
+			if (id === 'save') this.#backstage.download();
+			else if (id === 'undo' || id === 'redo') this.#commands.run({ type: 'history', key: id });
+		};
+		this.#titleBar.addEventListener('office-command', quickAccess);
 		const disposeShare = this.#share.wire();
 		const disposeRulers = this.#rulers.wire();
 		const disposeStencil = wireStencil(
@@ -477,9 +606,10 @@ export class VisioViewerElement extends BaseElement {
 		const disposeFind = wireFindBar(this.#findBar, this.controller, () =>
 			this.#viewport.focus({ preventScroll: true }),
 		);
+		// Narrow windows collapse ribbon groups into buttons; add-in tabs are refitted as they change.
+		const overflow = wireRibbonOverflow(this.#toolbar);
 		const disposeReplace = this.#replace.wire();
 		const disposeEdit = this.#edit.wire();
-		const disposeLayers = wireLayerControls(this.#layers, this.controller);
 		const disposeInputs = wireViewerInputs(
 			{
 				viewport: this.#viewport,
@@ -487,6 +617,11 @@ export class VisioViewerElement extends BaseElement {
 			},
 			this.controller,
 			(mode) => this.#fit(mode),
+			(message) => {
+				this.#announcement = message;
+				this.#status.textContent = message;
+			},
+			(character) => this.#commands.tool === 'pointer' && this.#edit.start(character),
 		);
 		return () => {
 			disposeChrome();
@@ -499,17 +634,19 @@ export class VisioViewerElement extends BaseElement {
 			disposeBackstage();
 			disposeMenus();
 			disposeTellMe();
+			disposeGalleries();
 			keyTips.dispose();
 			disposePanZoom();
 			disposeSizePosition();
 			disposeProfile();
+			this.#titleBar.removeEventListener('office-command', quickAccess);
 			disposeShare();
 			disposeRulers();
 			disposeStencil();
 			disposeFind();
+			overflow.destroy();
 			disposeReplace();
 			disposeInputs();
-			disposeLayers();
 			disposeEdit();
 		};
 	}
@@ -535,30 +672,22 @@ export class VisioViewerElement extends BaseElement {
 			this.#lineEndpoints.render(state);
 			this.#rotationHandle.render(state);
 			this.#resizeHandles.render(state);
+			this.#viewport.toggleAttribute(
+				'data-selection-frame',
+				!!this.#viewport.querySelector('[data-resize-overlay], [data-line-endpoint]'),
+			);
 		}
 		if (changed) this.#announcement = undefined;
 		this.#zoomSlider.value = Math.round(state.zoom * 100);
 		this.#zoomSlider.disabled = !page;
-		const inspected = selectedShape(state.document, state.selectedShape, state.pageIndex);
-		const inches = (value: number) => `${+value.toFixed(3)} in`;
-		this.#shapeStatus.setAttribute(
-			'value',
-			state.selectedShapes.length > 1
-				? `${state.selectedShapes.length} shapes selected`
-				: inspected
-					? `Width: ${inches(inspected.width)}  Height: ${inches(inspected.height)}`
-					: '',
-		);
+		this.#renderStatus(state);
+		renderTitleBar(this.#titleBar, state, this.#fileName, this.#profile.profile);
 		for (const button of this.#root.querySelectorAll<HTMLButtonElement>('[data-action]'))
 			button.disabled = !page;
 		renderFindBar(this.#findBar, state);
 		this.#replace.render(state);
 		this.#edit.render(state);
-		if (changed) renderLayerControls(this.#layers, state);
-		else
-			this.#layers.querySelector<HTMLButtonElement>('[data-layer-reset="all"]')!.disabled =
-				state.layerVisibilityOverrides.length === 0;
-		this.#chrome.render(state, this.#notes.children.length);
+		this.#chrome.render(state);
 		this.#commands.render(state);
 		this.#presentation.render(state);
 		this.#backstage.render(state);
@@ -573,11 +702,12 @@ export class VisioViewerElement extends BaseElement {
 				: (state.error?.message ??
 					(state.edit.error ? `Edit rejected: ${editErrorMessage(state.edit.error)}` : undefined) ??
 					this.#announcement ??
-					(page ? `${page.name} · ${page.shapes.length} top-level shapes` : 'No diagram open'));
-		const warnings = (state.document?.diagnostics.length ?? 0) + this.#canvas.warnings.length;
-		this.#diagnostics.textContent = warnings
-			? `${this.#notes.children.length} compatibility notes`
-			: 'Local-only viewing';
+					'');
+		// Routine announcements are for assistive technology; errors also show, as Visio's do.
+		this.#status.parentElement!.toggleAttribute(
+			'data-error',
+			!state.loading && !state.edit.busy && !!(state.error ?? state.edit.error),
+		);
 	}
 }
 export function registerVisioViewer(): void {

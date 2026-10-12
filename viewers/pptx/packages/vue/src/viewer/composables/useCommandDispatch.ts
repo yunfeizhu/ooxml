@@ -1,3 +1,5 @@
+import { DEFAULT_INSERT_CHART_KIND } from 'ooxml-ui/pptx';
+import type { InsertChartKind } from 'ooxml-ui/pptx';
 /**
  * useCommandDispatch: the two "run a command by id" entry points in the title
  * bar, kept out of the SFC because they are lookup tables, not presentation.
@@ -10,8 +12,6 @@
  *    options-configured remainder arrives here.
  */
 import type { TextStyle } from 'pptx-viewer-core';
-import { DEFAULT_INSERT_CHART_KIND } from 'ooxml-ui/pptx';
-import type { InsertChartKind } from 'ooxml-ui/pptx';
 import type { Ref } from 'vue';
 
 import type { ShapePreset } from '../components/EditorToolbar.vue';

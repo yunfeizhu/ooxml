@@ -139,9 +139,8 @@ describe('connectorArrowsPanel', () => {
 		const wrapper = mount(ConnectorArrowsPanel, {
 			props: { element: connector({ strokeColor: '#ff0000' }) },
 		});
-		const select = wrapper
-			.findAll('label.pptx-vue-connector-arrow-field')
-			[index]!.get('pptx-ui-select');
+		const fields = wrapper.findAll('label.pptx-vue-connector-arrow-field');
+		const select = fields[index]!.get('pptx-ui-select');
 		await setControlValue(select, value);
 		const patch = wrapper.emitted('update')?.[0]?.[0] as { shapeStyle: ShapeStyle };
 		expect(patch.shapeStyle[styleKey as keyof ShapeStyle]).toBe(value);

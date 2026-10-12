@@ -10,6 +10,8 @@ export const numericFormulaFunctions = new Set([
 	'BITOR',
 	'BITXOR',
 	'MODULUS',
+	'CEILING',
+	'FLOOR',
 ]);
 /** Numeric-only subset of Microsoft ShapeSheet AND/OR/NOT, BITAND/BITOR/BITXOR and MODULUS.
  * https://learn.microsoft.com/en-us/office/client-developer/visio/modulus-function
@@ -24,6 +26,31 @@ export function evaluateNumericFormulaFunction(
 			return formulaFailure('arity', `Invalid ${name} argument count`);
 	};
 	const scalar = (value: number): VisioFormulaValue => ({ value, unit: 'scalar' });
+	if (name === 'CEILING' || name === 'FLOOR') {
+		// CEILING rounds away from zero and FLOOR towards it, to a multiple (1 when omitted).
+		// https://learn.microsoft.com/en-us/office/client-developer/visio/ceiling-function
+		arity(1, 2);
+		const value = finiteFormulaValue(args[0]!);
+		const step = args[1] ? finiteFormulaValue(args[1]) : { value: 1, unit: 'scalar' as const };
+		if (step.unit !== 'scalar' && step.unit !== value.unit && value.unit !== 'scalar')
+			return formulaFailure('unit', `Invalid ${name} multiple`);
+		if (value.value === 0) return value;
+		if (step.value === 0 || Math.sign(step.value) !== Math.sign(value.value))
+			return formulaFailure('value', `Invalid ${name} multiple`);
+		// A quotient a rounding error away from a whole number is that whole number.
+		const quotient = value.value / step.value;
+		const whole = Math.round(quotient);
+		const count =
+			Math.abs(quotient - whole) < 1e-9
+				? whole
+				: name === 'CEILING'
+					? Math.ceil(quotient)
+					: Math.floor(quotient);
+		return finiteFormulaValue({
+			value: count * step.value,
+			unit: value.unit === 'scalar' ? step.unit : value.unit,
+		});
+	}
 	if (name === 'AND' || name === 'OR' || name === 'NOT') {
 		arity(1, name === 'NOT' ? 1 : 1024);
 		// Microsoft defines any nonzero numeric expression as true, irrespective of its dimension.

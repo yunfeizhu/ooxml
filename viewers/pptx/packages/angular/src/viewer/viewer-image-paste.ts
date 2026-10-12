@@ -1,8 +1,8 @@
 import { computed, DestroyRef, effect, inject } from '@angular/core';
-import type { PptxSlide } from 'pptx-viewer-core';
-
 import { attachEditorImagePaste } from 'ooxml-ui/pptx';
 import type { EditorImagePasteTarget } from 'ooxml-ui/pptx';
+import type { PptxSlide } from 'pptx-viewer-core';
+
 import type { EditorStateService } from './editor-state.service';
 import type { LoadContentService } from './load-content.service';
 

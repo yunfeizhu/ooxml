@@ -6,16 +6,8 @@
  * Document mutation, the file/SmartArt/equation/hyperlink dialogs and the Date/Time
  * picker stay native to the Vue binding.
  */
-import {
-	DEFAULT_INSERT_CHART_KIND,
-	FREEFORM_TOOL_IDS,
-	isDrawingToolVisible,
-} from 'ooxml-ui/pptx';
-import type {
-	FreeformToolKind,
-	InsertChartKind,
-	RibbonInsertRequestEvent,
-} from 'ooxml-ui/pptx';
+import { DEFAULT_INSERT_CHART_KIND, FREEFORM_TOOL_IDS, isDrawingToolVisible } from 'ooxml-ui/pptx';
+import type { FreeformToolKind, InsertChartKind, RibbonInsertRequestEvent } from 'ooxml-ui/pptx';
 import { computed, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 

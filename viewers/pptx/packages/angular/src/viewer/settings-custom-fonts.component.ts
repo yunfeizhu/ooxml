@@ -1,6 +1,5 @@
 import { ChangeDetectionStrategy, Component, input, output, signal } from '@angular/core';
 import { TranslatePipe } from '@ngx-translate/core';
-
 import { CUSTOM_FONT_ACCEPT, registerCustomFont } from 'ooxml-ui/pptx/render/custom-fonts';
 
 /**

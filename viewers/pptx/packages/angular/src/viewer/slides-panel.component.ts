@@ -14,7 +14,6 @@ import {
 } from '@angular/core';
 import { LucidePlus } from '@lucide/angular';
 import { TranslatePipe } from '@ngx-translate/core';
-
 import {
 	computeVirtualRange,
 	EDITOR_THUMBNAIL_WIDTH,
@@ -28,6 +27,7 @@ import {
 	SLIDE_VIRTUALIZATION_THRESHOLD,
 } from 'ooxml-ui/pptx';
 import type { CanvasSize, HiddenSlideCue, SectionContextMenuCommandId } from 'ooxml-ui/pptx';
+
 import { EditorStateService } from './editor-state.service';
 import { SectionContextMenuComponent } from './section-context-menu.component';
 import { SlideCanvasComponent } from './slide-canvas.component';

@@ -1,3 +1,5 @@
+import type { CanvasSize, ShapePresetType } from 'ooxml-ui/pptx';
+import { newTableElement } from 'ooxml-ui/pptx';
 import type { PptxElement } from 'pptx-viewer-core';
 import {
 	createConnectorElement,
@@ -5,8 +7,6 @@ import {
 	createShapeElement,
 	createTextElement,
 } from 'pptx-viewer-core';
-import type { CanvasSize, ShapePresetType } from 'ooxml-ui/pptx';
-import { newTableElement } from 'ooxml-ui/pptx';
 
 /**
  * Insert-element factories for the vanilla editor.

@@ -1,6 +1,6 @@
 import { flushPromises, mount } from '@vue/test-utils';
-import { PptxHandler } from 'pptx-viewer-core';
 import { findElementYMap, reconcileSlidesInYDoc } from 'ooxml-ui/pptx';
+import { PptxHandler } from 'pptx-viewer-core';
 import { describe, expect, it, vi } from 'vitest';
 import { Awareness } from 'y-protocols/awareness';
 import * as Y from 'yjs';

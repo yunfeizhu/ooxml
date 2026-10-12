@@ -31,8 +31,8 @@
 
 import { ChangeDetectionStrategy, Component, computed, inject, input, output } from '@angular/core';
 import { TranslatePipe } from '@ngx-translate/core';
-
 import type { ToolbarActionId } from 'ooxml-ui/pptx';
+
 import { buildMobileMenuRows } from './mobile-menu-rows';
 import type { MobileMenuRow } from './mobile-menu-rows';
 import { MobileSheetComponent } from './mobile-sheet.component';

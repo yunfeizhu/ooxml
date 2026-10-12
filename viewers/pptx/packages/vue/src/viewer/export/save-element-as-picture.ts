@@ -1,8 +1,4 @@
-import {
-	elementPictureFilename,
-	findCanvasElementNode,
-	saveElementAsPicture,
-} from 'ooxml-ui/pptx';
+import { elementPictureFilename, findCanvasElementNode, saveElementAsPicture } from 'ooxml-ui/pptx';
 
 import { renderToCanvas } from '../../lib/canvas-export';
 

@@ -128,12 +128,17 @@ export function group(
 	doc: Document,
 	label: string,
 	children: readonly HTMLElement[],
-	options: { className?: string; launcher?: string } = {},
+	options: { className?: string; launcher?: string; dialog?: string } = {},
 ): HTMLElement {
 	const el = doc.createElement('office-ui-ribbon-group');
 	el.setAttribute('label', label);
 	if (options.className) el.className = options.className;
-	if (options.launcher) {
+	if (options.dialog) {
+		// An available launcher emits office-command `<label>-dialog`; its owner syncs availability.
+		el.setAttribute('launcher', `${label.toLowerCase().replace(/\W+/g, '-')}-dialog`);
+		el.setAttribute('launcher-label', options.dialog);
+		el.title = options.dialog;
+	} else if (options.launcher) {
 		el.setAttribute('launcher', `${label.toLowerCase().replace(/\W+/g, '-')}-dialog`);
 		el.setAttribute('launcher-disabled', '');
 		el.title = `${label} options: not available yet. ${options.launcher}`;

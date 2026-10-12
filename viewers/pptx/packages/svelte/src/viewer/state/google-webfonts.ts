@@ -1,5 +1,5 @@
-import type { PptxEmbeddedFont, PptxSlide } from 'pptx-viewer-core';
 import { resolveGoogleWebfontHref, syncGoogleWebfontStylesheet } from 'ooxml-ui/pptx';
+import type { PptxEmbeddedFont, PptxSlide } from 'pptx-viewer-core';
 
 /**
  * Google Fonts webfont fallback for the Svelte binding.

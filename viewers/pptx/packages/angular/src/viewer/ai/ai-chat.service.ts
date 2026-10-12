@@ -14,7 +14,6 @@
  * loaded `ai` SDK behind it) is scoped to the open assistant.
  */
 import { computed, DestroyRef, inject, Injectable, signal } from '@angular/core';
-
 import {
 	createVanillaChat,
 	isAiAvailable,

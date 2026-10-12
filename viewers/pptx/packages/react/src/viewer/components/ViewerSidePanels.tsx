@@ -1,12 +1,12 @@
+import type { SlideSizeEmu, SlideSizeRescaleMode } from 'ooxml-ui/pptx';
+import { isPanelVisible, scaleSlidesForSizeChange, slideSizeToCanvasPx } from 'ooxml-ui/pptx';
+import type { PptxAiBridge, PptxAiConfig } from 'ooxml-ui/pptx/ai';
 /**
  * ViewerSidePanels: Inspector pane, selection pane, theme editor panel,
  * and theme gallery that appear alongside the slide canvas.
  */
 import { themeColorSchemesEqual } from 'pptx-viewer-core';
 import type { PptxElement, PptxSlide } from 'pptx-viewer-core';
-import type { SlideSizeEmu, SlideSizeRescaleMode } from 'ooxml-ui/pptx';
-import { isPanelVisible, scaleSlidesForSizeChange, slideSizeToCanvasPx } from 'ooxml-ui/pptx';
-import type { PptxAiBridge, PptxAiConfig } from 'ooxml-ui/pptx/ai';
 
 import { ViewerInspector, SelectionPane } from '.';
 import type { AiPanelController } from '../hooks/ai/useAiPanelController';

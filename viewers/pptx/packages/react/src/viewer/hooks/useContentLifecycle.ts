@@ -1,5 +1,5 @@
-import type { PptxHandler, PptxModifyVerifier, PptxSlide } from 'pptx-viewer-core';
 import type { CompatibilityWarningToast, ReadOnlyRecommendation } from 'ooxml-ui/pptx';
+import type { PptxHandler, PptxModifyVerifier, PptxSlide } from 'pptx-viewer-core';
 /**
  * useContentLifecycle: Composes content loading, font injection,
  * serialisation, and autosave into a single hook.

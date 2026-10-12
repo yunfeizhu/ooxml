@@ -1,9 +1,9 @@
-import type { PptxHeaderFooter } from 'pptx-viewer-core';
 import {
 	isHeaderFooterDateTextVisible,
 	isHeaderFooterHeaderTextVisible,
 	isHeaderFooterFooterTextVisible,
 } from 'ooxml-ui/pptx';
+import type { PptxHeaderFooter } from 'pptx-viewer-core';
 import React, { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { LuCalendarDays, LuClock, LuFileText, LuHash, LuText, LuX } from 'react-icons/lu';

@@ -2,6 +2,8 @@ import { defineComponent, h, onBeforeUnmount, onMounted, ref, watch, type PropTy
 import type { Workbook } from '@christophervr/xlsx-core';
 import type {
 	EditorThemeMode,
+	RibbonAddInCommandDetail,
+	RibbonAddInTab,
 	XlsxCollaborationOptions,
 	XlsxCollaborationState,
 	XlsxEditorElement,
@@ -31,6 +33,7 @@ export const SpreadsheetEditor = defineComponent({
 		showToolbar: { type: Boolean, default: true },
 		showFormulaBar: { type: Boolean, default: true },
 		hiddenActions: Array as PropType<readonly string[]>,
+		ribbonAddIns: Array as unknown as PropType<readonly RibbonAddInTab[]>,
 		themeColors: Object as PropType<XlsxThemeColors>,
 		collaboration: Object as PropType<XlsxCollaborationOptions | null>,
 	} satisfies Record<EditorPropKey, unknown>,
@@ -47,6 +50,8 @@ export const SpreadsheetEditor = defineComponent({
 				'dirty-change': (dirty: boolean) => emit('dirty-change', dirty),
 				'readonly-change': (readOnly: boolean) => emit('readonly-change', readOnly),
 				'ribbon-customize': (hiddenActions: string[]) => emit('ribbon-customize', hiddenActions),
+				'office-ribbon-add-in': (detail: RibbonAddInCommandDetail) =>
+					emit('office-ribbon-add-in', detail),
 				'collaboration-change': (state: XlsxCollaborationState) =>
 					emit('collaboration-change', state),
 				ready: (element: XlsxEditorElement) => emit('ready', element),

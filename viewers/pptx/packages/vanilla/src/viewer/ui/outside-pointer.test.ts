@@ -1,4 +1,6 @@
 // @vitest-environment happy-dom
+// @vitest-fresh-modules: the module installs its document listener once per module instance, and a
+// shared worker removes document listeners between files.
 import { describe, expect, it, vi } from 'vitest';
 
 import { onDocumentPointerDown } from './outside-pointer';

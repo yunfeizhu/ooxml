@@ -25,7 +25,6 @@ import {
 	untracked,
 } from '@angular/core';
 import { TranslatePipe } from '@ngx-translate/core';
-
 import { customizeOptionsTabs, isOptionsPageVisible, THEME_CATALOG } from 'ooxml-ui/pptx';
 import type {
 	ThemeCatalogEntry,
@@ -36,6 +35,7 @@ import type {
 } from 'ooxml-ui/pptx';
 import { LOCALE_CATALOG } from 'ooxml-ui/pptx/i18n';
 import type { LocaleCatalogEntry } from 'ooxml-ui/pptx/i18n';
+
 import { AiSettingsSectionComponent } from './ai/ai-settings-section.component';
 import { OptionsAddInsPaneComponent } from './options-add-ins-pane.component';
 import { OptionsPaneComponent } from './options-pane.component';

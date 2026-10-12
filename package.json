@@ -45,9 +45,10 @@
 		"test": "bun run --cwd src/core test",
 		"test:package": "bun run --cwd src/core test:package",
 		"gen:docx-schema-types": "bun run --cwd src/core gen:docx-schema-types",
-		"fmt": "oxfmt",
-		"fmt:check": "oxfmt --check",
+		"fmt": "oxfmt '!viewers/**'",
+		"fmt:check": "oxfmt --check '!viewers/**'",
 		"test:scripts": "node --test 'scripts/*.test.mjs'",
+		"verify": "node scripts/verify.mjs",
 		"check:changelog": "node scripts/check-changelog-sections.mjs",
 		"fleet": "node scripts/fleet.mjs",
 		"release:plan": "node scripts/release-plan.mjs",
@@ -60,8 +61,12 @@
 		"test:suite:files": "node scripts/suite-files-check.mjs"
 	},
 	"devDependencies": {
-		"oxfmt": "0.71.0",
-		"oxlint": "^1.86.0"
+		"oxfmt": "^0.72.0",
+		"oxlint": "^1.87.0"
+	},
+	"overrides": {
+		"argparse": "^2.0.1",
+		"esbuild": "^0.28.2"
 	},
 	"engines": {
 		"node": ">=22"

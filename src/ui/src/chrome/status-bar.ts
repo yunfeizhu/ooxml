@@ -153,15 +153,16 @@ export class OfficeUiStatusBar extends OfficeElement {
 					${repeat(
 						items,
 						(spec) => spec.id,
-						(spec) => html`<span
-							class="item${spec.tone === 'saving' ? ' saving' : ''}${
-								spec.tone === 'error' ? ' error' : ''
-							}${spec.narrowHide ? ' narrow-hide' : ''}"
-							data-item=${spec.id}
-							title=${ifDefined(spec.title)}
-							aria-live=${ifDefined(spec.live ? 'polite' : undefined)}
-							>${spec.text}</span
-						>`,
+						(spec) =>
+							html`<span
+								class="item${spec.tone === 'saving' ? ' saving' : ''}${
+									spec.tone === 'error' ? ' error' : ''
+								}${spec.narrowHide ? ' narrow-hide' : ''}"
+								data-item=${spec.id}
+								title=${ifDefined(spec.title)}
+								aria-live=${ifDefined(spec.live ? 'polite' : undefined)}
+								>${spec.text}</span
+							>`,
 					)}
 				</span>
 				<slot></slot>

@@ -1,4 +1,15 @@
 import type {
+	DeckSavePurpose,
+	InlineTextEditSnapshot,
+	MasterViewTarget,
+	SlideSizeEmu,
+} from 'ooxml-ui/pptx';
+import {
+	buildDeckSaveOptions,
+	resolveSlideSizeSelection,
+	saveDeckWithPassword,
+} from 'ooxml-ui/pptx';
+import type {
 	PptxElement,
 	PptxSlide,
 	PptxHandler,
@@ -17,17 +28,6 @@ import type {
 	ParsedTableStyleMap,
 } from 'pptx-viewer-core';
 import { guidePxToEmu } from 'pptx-viewer-core';
-import type {
-	DeckSavePurpose,
-	InlineTextEditSnapshot,
-	MasterViewTarget,
-	SlideSizeEmu,
-} from 'ooxml-ui/pptx';
-import {
-	buildDeckSaveOptions,
-	resolveSlideSizeSelection,
-	saveDeckWithPassword,
-} from 'ooxml-ui/pptx';
 /**
  * useSerialize: Builds the `serializeSlides` callback that persists the
  * current slide deck (including header/footer, properties, etc.) via the
@@ -194,7 +194,9 @@ export function useSerialize(input: UseSerializeInput): SerializeSlides {
 			const pendingEditId = inlineEditingElementIdRef.current;
 			const reader = inlineEditingReaderRef?.current;
 			const read = reader?.elementId === pendingEditId ? reader.read() : undefined;
-			if (read?.kind === 'unsupported') return null;
+			if (read?.kind === 'unsupported') {
+				return null;
+			}
 			const pendingEditText = read?.snapshot.text ?? inlineEditingTextRef.current;
 			const pendingSnapshot = read?.snapshot ?? inlineEditingSnapshotRef?.current;
 

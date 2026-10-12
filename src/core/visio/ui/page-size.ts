@@ -1,5 +1,6 @@
 import type { VisioPageSizeEdit } from '../edit-commands';
 import type { VisioPage } from '../model';
+import { VISIO_PAPER_SIZES } from '../paper-sizes';
 
 export type VisioPageOrientation = 'portrait' | 'landscape';
 export interface VisioPageSizeState {
@@ -11,10 +12,8 @@ export interface VisioPageSizeState {
 	readonly drawingSizeType?: number;
 	readonly drawingResizeType?: number;
 }
-export const VISIO_PAGE_SIZE_PRESETS = Object.freeze([
-	Object.freeze({ id: 'letter', label: 'Letter', width: 8.5, height: 11 }),
-	Object.freeze({ id: 'a4', label: 'A4', width: 210 / 25.4, height: 297 / 25.4 }),
-]);
+/** Every standard size of the Design > Size gallery, in portrait inches. */
+export const VISIO_PAGE_SIZE_PRESETS = VISIO_PAPER_SIZES;
 const dimension = (value: number) => Number.isFinite(value) && value > 0 && value <= 1e6;
 
 /** Coarse scene state. Source formulas and mode protection remain authoritative. */

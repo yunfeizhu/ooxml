@@ -131,8 +131,8 @@ function useEditorOperations(input: {
 `sendBackward`, `reorder`, and `updateElementText`.
 
 ```ts
-import { ref } from 'vue';
 import { useEditorHistory, useEditorOperations, useLoadContent } from 'pptx-vue-viewer/viewer';
+import { ref } from 'vue';
 
 const { slides } = useLoadContent(() => props.bytes);
 const activeSlideIndex = ref(0);

@@ -1,0 +1,139 @@
+/* Visio's External Data window (docked under the drawing) and the Data tab dialogs. */
+.external-data {
+	position: absolute;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	z-index: 7;
+	display: flex;
+	flex-direction: column;
+	max-height: min(40%, 320px);
+	min-height: 140px;
+	background: var(--_vv-surface);
+	color: var(--_vv-ink);
+	border-top: 1px solid var(--_vv-border);
+	box-shadow: 0 -2px 8px #0002;
+	--office-background: var(--_vv-surface);
+	--office-surface: var(--_vv-secondary);
+	--office-foreground: var(--_vv-ink);
+}
+.external-data[hidden] {
+	display: none;
+}
+/* A wide, short window: a compact title row, and only the grid scrolls. */
+.external-data::part(header) {
+	padding: 4px 8px 4px 12px;
+	border-bottom: 1px solid var(--_vv-border);
+}
+.external-data::part(body) {
+	display: flex;
+	flex-direction: column;
+	padding: 0;
+	overflow: hidden;
+}
+.external-data-bar {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 8px;
+	padding: 6px 12px;
+	border-bottom: 1px solid var(--_vv-border);
+}
+.external-data-bar select,
+.external-data-tools button {
+	font: inherit;
+	font-weight: 400;
+	font-size: 12px;
+	color: inherit;
+	background: var(--_vv-surface);
+	border: 1px solid var(--_vv-border);
+	border-radius: 3px;
+	padding: 3px 8px;
+}
+.external-data-tools {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 6px;
+	margin-left: auto;
+}
+.external-data-tools button:disabled {
+	opacity: 0.5;
+}
+.external-data-hint {
+	margin: 4px 12px;
+	font-size: 12px;
+	color: var(--_vv-muted);
+}
+.external-data-grid {
+	flex: 1;
+	min-height: 0;
+	overflow: auto;
+}
+.external-data table {
+	border-collapse: collapse;
+	font-size: 12px;
+}
+.external-data th,
+.external-data td {
+	padding: 3px 8px;
+	border: 1px solid var(--_vv-border);
+	text-align: left;
+	white-space: nowrap;
+	max-width: 240px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+.external-data th {
+	position: sticky;
+	top: 0;
+	background: var(--_vv-secondary);
+}
+.external-data tbody tr {
+	cursor: grab;
+}
+.external-data tbody tr[aria-selected='true'] {
+	background: var(--_vv-selection, #cfe3fa);
+}
+.external-data tbody tr[data-current] td:first-child {
+	box-shadow: inset 3px 0 0 var(--_vv-accent);
+}
+.shape-data-dialog label,
+.data-import-dialog label,
+.data-graphics-dialog label,
+.data-link-dialog label {
+	display: grid;
+	gap: 4px;
+	min-width: min(360px, 80vw);
+	margin: 0 0 10px;
+}
+.shape-data-dialog label:has(input[type='checkbox']),
+.data-import-dialog label:has(input[type='checkbox']) {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+}
+.shape-data-dialog input:not([type='checkbox']),
+.shape-data-dialog select,
+.data-import-dialog input:not([type='checkbox']),
+.data-import-dialog select,
+.data-graphics-dialog input,
+.data-graphics-dialog select,
+.data-link-dialog select {
+	box-sizing: border-box;
+	width: 100%;
+	padding: 6px;
+	color: inherit;
+	background: var(--_vv-surface);
+	border: 1px solid var(--_vv-border);
+	border-radius: 3px;
+}
+.shape-data-dialog [role='alert'],
+.data-import-dialog [role='alert'],
+.data-graphics-dialog [role='alert'],
+.data-link-dialog [role='alert'] {
+	margin: 0;
+	color: var(--office-error, #b00020);
+}
+.shape-inspector [data-define-shape-data] {
+	margin-top: 8px;
+}

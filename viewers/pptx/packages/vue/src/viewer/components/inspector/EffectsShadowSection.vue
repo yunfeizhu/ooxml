@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import type { PptxElement } from 'pptx-viewer-core';
 import {
 	disableInnerShadowPatch,
 	disableOuterShadowPatch,
@@ -9,6 +8,7 @@ import {
 	updateInnerShadowPatch,
 	updateOuterShadowPatch,
 } from 'ooxml-ui/pptx';
+import type { PptxElement } from 'pptx-viewer-core';
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 

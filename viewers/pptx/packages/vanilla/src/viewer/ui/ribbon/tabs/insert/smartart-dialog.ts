@@ -1,11 +1,6 @@
-import type { SmartArtLayout } from 'pptx-viewer-core';
 import type { DialogFooterAction, SmartArtCategory, SmartArtPreset } from 'ooxml-ui/pptx';
-import {
-	CATEGORIES,
-	modalActiveElement,
-	modalFocusableElements,
-	PRESETS,
-} from 'ooxml-ui/pptx';
+import { CATEGORIES, modalActiveElement, modalFocusableElements, PRESETS } from 'ooxml-ui/pptx';
+import type { SmartArtLayout } from 'pptx-viewer-core';
 
 import type { Translator } from '../../../../i18n';
 import { createEl } from '../../../../render';

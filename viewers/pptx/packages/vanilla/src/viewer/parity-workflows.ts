@@ -1,4 +1,3 @@
-import type { PptxSlide } from 'pptx-viewer-core';
 import {
 	applyAcceptAllSlides,
 	applyAcceptSlide,
@@ -17,6 +16,7 @@ import type {
 	ViewerTheme,
 } from 'ooxml-ui/pptx';
 import type { LocaleCatalogEntry } from 'ooxml-ui/pptx/i18n';
+import type { PptxSlide } from 'pptx-viewer-core';
 
 import type { EditorController } from './editor';
 import type { PrintOptions } from './export/export-print';

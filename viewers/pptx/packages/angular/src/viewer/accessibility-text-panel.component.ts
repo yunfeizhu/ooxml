@@ -1,8 +1,7 @@
 import { ChangeDetectionStrategy, Component, computed, input, output } from '@angular/core';
 import { TranslatePipe } from '@ngx-translate/core';
-import type { PptxElement } from 'pptx-viewer-core';
-
 import { getNonVisualDescriptionFields, shouldShowAccessibilitySection } from 'ooxml-ui/pptx';
+import type { PptxElement } from 'pptx-viewer-core';
 
 /**
  * Alt text / title editor for a plain shape, text box, connector, or any

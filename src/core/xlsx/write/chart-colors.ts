@@ -180,10 +180,10 @@ export function patchChartColors(
 						: undefined;
 				let spPr = first(point, 'spPr', NS.c);
 				if (!xml) {
-					let paint = fillElementOf(spPr);
-					while (paint && spPr) {
-						spPr.removeChild(paint);
-						paint = fillElementOf(spPr);
+					if (spPr) {
+						for (let paint = fillElementOf(spPr); paint; paint = fillElementOf(spPr)) {
+							spPr.removeChild(paint);
+						}
 					}
 					continue;
 				}

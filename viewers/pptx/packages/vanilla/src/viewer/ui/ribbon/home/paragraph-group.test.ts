@@ -1,5 +1,5 @@
-import type { PptxElement } from 'pptx-viewer-core';
 import { buildParagraphs } from 'ooxml-ui/pptx';
+import type { PptxElement } from 'pptx-viewer-core';
 import { describe, expect, it, vi } from 'vitest';
 
 import { readTextFormatState } from '../../../editor/editor-format-mutations';

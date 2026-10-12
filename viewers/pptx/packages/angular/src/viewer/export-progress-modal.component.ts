@@ -25,8 +25,8 @@
 
 import { ChangeDetectionStrategy, Component, computed, input, output } from '@angular/core';
 import { TranslatePipe } from '@ngx-translate/core';
-
 import { clampPercent } from 'ooxml-ui/pptx';
+
 import type { DialogFooterActionSpec } from './dialog-footer.component';
 import { DialogFooterComponent } from './dialog-footer.component';
 

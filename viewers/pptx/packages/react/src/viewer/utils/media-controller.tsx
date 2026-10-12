@@ -1,10 +1,10 @@
-import type { MediaPptxElement } from 'pptx-viewer-core';
 import {
 	mediaPlaybackAttributes,
 	registerCrossSlideAudio,
 	scheduleMediaTrimAndFade,
 	shouldShowMediaFullscreenStopButton,
 } from 'ooxml-ui/pptx';
+import type { MediaPptxElement } from 'pptx-viewer-core';
 import React, { useRef, useEffect, useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 

@@ -1,9 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { EditorState, TextSelection } from 'prosemirror-state';
-import {
-	createCollaborationIdGenerator,
-	repairCollaborativeDocumentIds,
-} from 'ooxml-core/docx/ui';
+import { createCollaborationIdGenerator, repairCollaborativeDocumentIds } from 'ooxml-core/docx/ui';
 import { schema } from './schema';
 
 describe('collaboration document identities', () => {

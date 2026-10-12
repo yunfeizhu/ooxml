@@ -47,7 +47,43 @@ export function tableFilterRange(table: Table): CellRange {
 	};
 }
 
-function patchAutoFilter(doc: Document, root: XmlElement, table: Table, before: CellRange): void {
+/** Matches current columns to their original XML nodes without relying on mutable names. */
+function sourceColumnsForPatch(
+	root: XmlElement,
+	table: Table,
+	names: readonly string[],
+): (XmlElement | undefined)[] {
+	const list = xKid(root, 'tableColumns');
+	const source = list ? xKids(list, 'tableColumn') : [];
+	const byId = new Map(source.map((c) => [Number(c.getAttribute('id')), c]));
+	const byName = new Map(source.map((c) => [(c.getAttribute('name') ?? '').toLowerCase(), c]));
+	const tracked =
+		table.partName !== undefined || table.columns.some((c) => c.sourceId !== undefined);
+	const used = new Set<XmlElement>();
+	return names.map((name, index) => {
+		const id = table.columns[index]?.sourceId;
+		const match =
+			id !== undefined
+				? byId.get(id)
+				: tracked
+					? undefined
+					: source.length === names.length
+						? source[index]
+						: byName.get(name.toLowerCase());
+		if (!match || used.has(match)) return undefined;
+		used.add(match);
+		return match;
+	});
+}
+
+/** Moves criteria with their source columns while preserving unmodelled filter markup. */
+function patchAutoFilter(
+	doc: Document,
+	root: XmlElement,
+	table: Table,
+	before: CellRange,
+	names: readonly string[],
+): void {
 	const existing = xKid(root, 'autoFilter');
 	if (!table.headerRow) {
 		if (existing) root.removeChild(existing);
@@ -56,10 +92,14 @@ function patchAutoFilter(doc: Document, root: XmlElement, table: Table, before: 
 	const filter = existing ?? doc.createElementNS(NS.x, 'autoFilter');
 	const range = tableFilterRange(table);
 	filter.setAttribute('ref', formatRange(range));
-	const width = range.end.col - range.start.col + 1;
+	const list = xKid(root, 'tableColumns');
+	const original = list ? xKids(list, 'tableColumn') : [];
+	const current = new Map(sourceColumnsForPatch(root, table, names).map((c, index) => [c, index]));
 	for (const column of xKids(filter, 'filterColumn')) {
-		const colId = Number(column.getAttribute('colId') ?? '0');
-		if (!(colId < width)) filter.removeChild(column);
+		const old = original[Number(column.getAttribute('colId') ?? '0')];
+		const index = old ? current.get(old) : undefined;
+		if (index === undefined) filter.removeChild(column);
+		else column.setAttribute('colId', num(index));
 	}
 	if (!existing) insertBefore(root, filter, ['sortState', 'tableColumns']);
 	const sort = xKid(filter, 'sortState') ?? xKid(root, 'sortState');
@@ -92,6 +132,7 @@ function patchAutoFilter(doc: Document, root: XmlElement, table: Table, before: 
 
 const COLUMN_CHILD_ORDER = ['calculatedColumnFormula', 'totalsRowFormula', 'xmlColumnPr', 'extLst'];
 
+/** Reuses surviving source column nodes to retain metadata through renames and axis edits. */
 function patchColumns(
 	doc: Document,
 	root: XmlElement,
@@ -105,18 +146,11 @@ function patchColumns(
 		insertBefore(root, list, ['tableStyleInfo', 'extLst']);
 	}
 	const sourceColumns = xKids(list, 'tableColumn');
-	const byName = new Map(
-		sourceColumns.map((c) => [(c.getAttribute('name') ?? '').toLowerCase(), c]),
-	);
-	const sameCount = sourceColumns.length === names.length;
-	const used = new Set<XmlElement>();
 	const ids = new Set<number>();
-	const picked = names.map((name, index) => {
-		const match = sameCount ? sourceColumns[index] : byName.get(name.toLowerCase());
-		if (!match || used.has(match)) return undefined;
-		used.add(match);
+	const picked = sourceColumnsForPatch(root, table, names).map((match) => {
+		if (!match) return undefined;
 		const id = Number(match.getAttribute('id'));
-		if (Number.isInteger(id) && id > 0 && !ids.has(id)) ids.add(id);
+		if (Number.isInteger(id) && id >= 0 && !ids.has(id)) ids.add(id);
 		else match.removeAttribute('id');
 		return match;
 	});
@@ -203,7 +237,7 @@ export function patchTableXml(
 		root.removeAttribute('totalsRowCount');
 		if (!root.hasAttribute('totalsRowShown')) root.setAttribute('totalsRowShown', '0');
 	}
-	patchAutoFilter(doc, root, table, before);
+	patchAutoFilter(doc, root, table, before, names);
 	patchColumns(doc, root, sheet, table, names);
 	patchStyleInfo(doc, root, table);
 	return buildXml(doc);

@@ -84,18 +84,32 @@ describe('independent active master locality review', () => {
 		);
 		await refused(editVsdx(await source(master(extra), instance(override)), [move]));
 	});
+	// A formula the proof cannot follow reads its own shape unless it names another sheet. Every
+	// Visio stencil shape carries some (menus, add-on calls, container lookups).
 	it.each([
 		'SETATREF(User.target,Width)',
 		'SETATREF("User.target")',
 		'INDIRECT("Width")',
 		'UNKNOWN(Width)',
-	])('refuses an unknown active master formula %s', async (formula) => {
+		'IFERROR(CONTAINERSHEETREF(1,"Swimlane")!User.Heading,"")',
+		'UNKNOWN(ThePage!PageScale)',
+	])('admits an opaque active master formula that names no other sheet: %s', async (formula) => {
+		await expect(
+			editVsdx(await source(master(cell('LocPinX', 1, formula.replaceAll('"', '&quot;')))), [move]),
+		).resolves.toHaveProperty('bytes');
+	});
+	it.each([
+		'INDIRECT("Sheet.1!PinX")',
+		'UNKNOWN(Sheet.1!PinX)',
+		'UNKNOWN(Local!PinX)',
+		'UNKNOWN(CONTAINERSHEETREF(1)!PinX)',
+	])('refuses an opaque active master formula that names a sheet: %s', async (formula) => {
 		await refused(
 			editVsdx(await source(master(cell('LocPinX', 1, formula.replaceAll('"', '&quot;')))), [move]),
 		);
 	});
-	it('refuses active master text measurement with inherited text field placeholders', async () => {
-		await refused(
+	it('admits active master text measurement with inherited text field placeholders', async () => {
+		await expect(
 			editVsdx(
 				await source(
 					master(
@@ -106,7 +120,7 @@ describe('independent active master locality review', () => {
 				),
 				[move],
 			),
-		);
+		).resolves.toHaveProperty('bytes');
 	});
 	it('refuses unresolved master Sheet references rather than resolving them against a page ID', async () => {
 		await refused(
@@ -146,10 +160,17 @@ describe('independent active master locality review', () => {
 		);
 		await refused(editVsdx(bytes, [move]));
 	});
-	it('refuses effective text fields inherited from a master Field section', async () => {
-		const field = section('Field', row(0, '', cell('Value', 1)));
+	it('follows text fields inherited from a master Field section', async () => {
+		const field = (formula = '') => section('Field', row(0, '', cell('Value', 1, formula)));
+		await expect(
+			editVsdx(await source(master(cell('TxtWidth', 1, 'TEXTWIDTH(TheText)') + field())), [move]),
+		).resolves.toHaveProperty('bytes');
+		// A field that reads the moved shape still refuses the edit.
 		await refused(
-			editVsdx(await source(master(cell('TxtWidth', 1, 'TEXTWIDTH(TheText)') + field)), [move]),
+			editVsdx(
+				await source(master(cell('TxtWidth', 1, 'TEXTWIDTH(TheText)') + field('Sheet.1!PinX'))),
+				[move],
+			),
 		);
 	});
 	it('resolves named Controls default X references through existing local cells', async () => {

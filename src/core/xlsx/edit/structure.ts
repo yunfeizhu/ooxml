@@ -3,18 +3,30 @@ import { getCell, putCell } from '../cells';
 import type { Worksheet } from '../model';
 import { type EditContext, type RunInfo, sheetAt } from './context';
 import { shiftFormula } from './deps';
+import { assertInsertFits } from './insert-guard';
 import { type Axis, type AxisShift, shiftRange } from './range-math';
 import { rewriteFormulas } from './shift-formulas';
+import { rebaseRulesForDeletion } from './shift-rule-anchors';
 import { shiftSheetContent } from './shift-sheet';
 
+/** Validates an inclusive axis span before opening an edit transaction. */
 function checkSpan(axis: Axis, at: number, count: number): void {
 	const max = axis === 'row' ? MAX_ROW : MAX_COL;
-	if (!Number.isInteger(at) || !Number.isInteger(count) || at < 0 || at > max || count < 1)
+	if (
+		!Number.isInteger(at) ||
+		!Number.isInteger(count) ||
+		at < 0 ||
+		at > max ||
+		count < 1 ||
+		at + count > max + 1
+	)
 		throw new RangeError(`Invalid ${axis} span ${at} + ${count}`);
 }
 
 /** Applies an axis shift to a sheet and every formula in the workbook (no undo step). */
 export function applyAxisShift(ctx: EditContext, sheet: Worksheet, shift: AxisShift): void {
+	assertInsertFits(sheet, shift);
+	rebaseRulesForDeletion(sheet, shift);
 	const spec = { sheet: sheet.name, axis: shift.axis, at: shift.at, count: shift.count };
 	rewriteFormulas(ctx.workbook, (formula, formulaSheet) =>
 		shiftFormula(formula, formulaSheet, spec),
@@ -44,6 +56,7 @@ function inheritFormats(sheet: Worksheet, axis: Axis, at: number, count: number)
 	}
 }
 
+/** Performs one undoable axis edit after its boundary preflight succeeds. */
 function shiftAxis(
 	ctx: EditContext,
 	s: number,
@@ -56,6 +69,7 @@ function shiftAxis(
 	const sheet = sheetAt(ctx.workbook, s);
 	const noun = axis === 'row' ? (count === 1 ? 'row' : 'rows') : count === 1 ? 'column' : 'columns';
 	const shift: AxisShift = { axis, at, count: insert ? count : -count };
+	assertInsertFits(sheet, shift);
 	const info: RunInfo = { sheet: s, structural: true };
 	// Removing a filter changes row visibility, so SUBTOTAL also needs a fresh calculation.
 	if (!sheet.autoFilter || shiftRange(sheet.autoFilter.range, shift))

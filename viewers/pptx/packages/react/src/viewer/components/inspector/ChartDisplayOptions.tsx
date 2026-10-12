@@ -1,5 +1,5 @@
-import type { PptxChartStyle } from 'pptx-viewer-core';
 import { chartDataLabelsTogglePatch } from 'ooxml-ui/pptx';
+import type { PptxChartStyle } from 'pptx-viewer-core';
 import { useTranslation } from 'react-i18next';
 
 import { WebSelect, WebCheckbox } from '../WebControls';

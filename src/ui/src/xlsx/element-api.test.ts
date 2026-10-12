@@ -314,3 +314,43 @@ describe('attributes and properties', () => {
 		expect(element.workbook).toBeNull();
 	});
 });
+
+describe('ribbon add-in tabs', () => {
+	const tab = (run: () => void) => ({
+		id: 'pdf',
+		label: 'PDF',
+		groups: [{ label: 'Create PDF', commands: [{ id: 'create-pdf', label: 'Create PDF', run }] }],
+	});
+
+	it('adds host tabs after the built-in ones, before and after connecting, and reports their commands', () => {
+		const element = document.createElement('xlsx-editor') as InstanceType<typeof XlsxEditorElement>;
+		const run = vi.fn();
+		const heard = vi.fn();
+		element.addEventListener('office-ribbon-add-in', (event) =>
+			heard((event as CustomEvent).detail),
+		);
+		element.ribbonAddIns = [tab(run)];
+		document.body.append(element);
+		const ribbon = element.shadowRoot!.querySelector('office-ui-ribbon')!;
+		const labels = () =>
+			[...ribbon.querySelectorAll<HTMLElement>('[data-ribbon-tab]')].map(
+				(panel) => panel.dataset.label,
+			);
+		expect(labels().at(-1)).toBe('PDF');
+		ribbon.querySelector('[data-add-in-command="create-pdf"]')!.dispatchEvent(
+			new CustomEvent('office-command', {
+				detail: { command: 'create-pdf' },
+				bubbles: true,
+				composed: true,
+			}),
+		);
+		expect(run).toHaveBeenCalledTimes(1);
+		expect(heard).toHaveBeenCalledWith({ tab: 'pdf', command: 'create-pdf' });
+		// A locale change rebuilds Excel's tabs; the host's tab stays.
+		element.locale = 'fr';
+		expect(labels().at(-1)).toBe('PDF');
+		element.ribbonAddIns = [];
+		expect(ribbon.querySelector('[data-add-in]')).toBeNull();
+		element.remove();
+	});
+});

@@ -1,0 +1,84 @@
+/* Tokens: --office-space-*, --office-border, --office-selected, --office-field-border-focus. */
+:host {
+	display: block;
+	color: var(--office-foreground);
+	font: var(--office-font-size-sm) / var(--office-line-height-tight) var(--office-font);
+}
+:host([hidden]) {
+	display: none;
+}
+.grid {
+	display: grid;
+	gap: var(--office-space-1);
+	padding: var(--office-space-1);
+	width: max-content;
+}
+.heading {
+	padding: var(--office-space-0) var(--office-space-1);
+	background: var(--office-selected);
+	color: var(--office-foreground);
+	font-weight: var(--office-font-weight-bold);
+}
+.cells {
+	display: grid;
+	grid-template-columns: repeat(10, var(--office-space-4));
+	gap: var(--office-space-1);
+}
+/* The five variant rows sit flush under one another, as in Office. */
+.variants {
+	display: grid;
+	gap: 0;
+}
+.swatch {
+	box-sizing: border-box;
+	width: var(--office-space-4);
+	height: var(--office-space-4);
+	padding: 0;
+	border: var(--office-border-width) solid var(--office-border);
+	border-radius: 0;
+	background: var(--swatch);
+	cursor: pointer;
+}
+.swatch:hover:not(:disabled),
+.swatch:focus-visible,
+.swatch[aria-checked='true'] {
+	outline: var(--office-space-0) solid var(--office-field-border-focus);
+	outline-offset: var(--office-space-px);
+	position: relative;
+	z-index: 1;
+}
+.command {
+	box-sizing: border-box;
+	display: flex;
+	align-items: center;
+	width: 100%;
+	min-height: var(--office-control-height-md);
+	padding: 0 var(--office-space-2);
+	border: 0;
+	border-radius: var(--office-radius-sm);
+	background: transparent;
+	color: inherit;
+	font: inherit;
+	text-align: start;
+	cursor: pointer;
+}
+.command:hover:not(:disabled),
+.command:focus-visible,
+.command[aria-checked='true'] {
+	background: var(--office-selected);
+	outline: none;
+}
+button:disabled {
+	opacity: 0.4;
+	cursor: not-allowed;
+}
+@media (forced-colors: active) {
+	.swatch {
+		forced-color-adjust: none;
+		border-color: CanvasText;
+	}
+	.swatch:focus-visible,
+	.swatch[aria-checked='true'] {
+		outline-color: Highlight;
+	}
+}

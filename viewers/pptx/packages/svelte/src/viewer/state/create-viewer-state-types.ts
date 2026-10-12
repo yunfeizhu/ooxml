@@ -1,4 +1,3 @@
-import type { PptxSaveFormat, TextSegment } from 'pptx-viewer-core';
 import type {
 	AutosaveDisabledReason,
 	CanvasSize,
@@ -10,6 +9,7 @@ import type {
 	ViewerMode,
 	ViewportFitPadding,
 } from 'ooxml-ui/pptx';
+import type { PptxSaveFormat, TextSegment } from 'pptx-viewer-core';
 
 import type { Translator } from '../../i18n/translator';
 import type { CollaborationController, CollaborationDialogsState } from '../collab';

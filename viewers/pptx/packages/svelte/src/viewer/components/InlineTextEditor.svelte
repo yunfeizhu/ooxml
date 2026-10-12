@@ -9,11 +9,22 @@
 	 * / the shared `remapTextToSegments`), so per-run styles and field metadata
 	 * survive the round trip.
 	 */
- import { attachInlineListController, buildInlineTextCommitPatch, createInlineListSeed, createInlineListModelObserver, initializeInlineListDom, inlineListBodyText, readListActivationSelection, restoreInlineListBodySelection, placeCaretAt, takePendingCaretPoint } from 'ooxml-ui/pptx';
-	import type { InlineListController } from 'ooxml-ui/pptx';
-	import { attachCollaborationInlineEditor } from 'ooxml-ui/pptx';
-	import type { CollaborationInlineEditor } from 'ooxml-ui/pptx';
-	import { onDestroy, onMount, untrack } from 'svelte';
+	import {
+		attachCollaborationInlineEditor,
+		attachInlineListController,
+		buildInlineTextCommitPatch,
+		createInlineListSeed,
+		createInlineListModelObserver,
+		initializeInlineListDom,
+		inlineListBodyText,
+		readListActivationSelection,
+		restoreInlineListBodySelection,
+		placeCaretAt,
+		takePendingCaretPoint,
+	} from 'ooxml-ui/pptx';
+	// oxlint-disable-next-line import/no-duplicates -- type-only imports stay top-level (consistent-type-specifier-style).
+	import type { CollaborationInlineEditor, InlineListController } from 'ooxml-ui/pptx';
+		import { onDestroy, onMount, untrack } from 'svelte';
 
 	import { readEditableText, resolveInlineSurface } from '../editor/inline-text';
 	import { handleInlineFormatShortcut } from './inline-text-editor-shortcuts';
@@ -103,9 +114,9 @@
 		}
 		const read = commitText === null ? undefined : listController?.read();
 		if (connected && read?.kind === 'unsupported' &&
-			(read.reason === 'composition-active' || read.reason === 'input-active')) return;
+			(read.reason === 'composition-active' || read.reason === 'input-active')) {return;}
 		const snapshot = read?.kind === 'supported' ? read.snapshot : undefined;
-		if (connected && !snapshot) commitText = null;
+		if (connected && !snapshot) {commitText = null;}
 		if (commitText !== null && snapshot) {
 			commitText = snapshot.text;
 		}
@@ -226,7 +237,7 @@
 		if (!closed && el) {
 			if (connected) { onretire?.(); close(null); return; }
 			close(readEditableText(el));
-			if (!closed) close(null);
+			if (!closed) {close(null);}
 		}
 	});
 </script>

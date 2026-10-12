@@ -1,6 +1,6 @@
-import type { PptxSlide } from 'pptx-viewer-core';
 import type { SlideBackgroundSize } from 'ooxml-ui/pptx';
 import { getSlideBackgroundStyle } from 'ooxml-ui/pptx';
+import type { PptxSlide } from 'pptx-viewer-core';
 import type { CSSProperties } from 'react';
 
 /**

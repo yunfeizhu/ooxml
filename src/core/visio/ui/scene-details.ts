@@ -21,6 +21,7 @@ export function assertShapeDetails(shape: VisioShape, budget: DetailBudget): voi
 		if ((budget.characters += shape.screenTip.length) > 5_000_000)
 			throw new Error('The scene exceeds shape metadata string limits.');
 	}
+	assertConnectionDetails(shape);
 	const strings = (record: Record<string, unknown>, names: readonly string[], required = false) => {
 		for (const name of names)
 			if ((required || record[name] !== undefined) && typeof record[name] !== 'string')
@@ -58,7 +59,7 @@ export function assertShapeDetails(shape: VisioShape, budget: DetailBudget): voi
 			'prompt',
 			'sortKey',
 		]);
-		booleans(record, ['invisible']);
+		booleans(record, ['invisible', 'dataLinked']);
 		count(row);
 	}
 	for (const row of links) {
@@ -82,4 +83,37 @@ export function assertShapeDetails(shape: VisioShape, budget: DetailBudget): voi
 		strings(target, [key], true);
 		count(row.target);
 	}
+}
+
+const finitePoint = (value: unknown): boolean =>
+	!!value &&
+	typeof value === 'object' &&
+	Number.isFinite((value as { x?: unknown }).x) &&
+	Number.isFinite((value as { y?: unknown }).y);
+/** Connection points, line ends and connector routes are plain bounded numbers and enums. */
+function assertConnectionDetails(shape: VisioShape): void {
+	const points = shape.connectionPoints;
+	if (
+		points !== undefined &&
+		(!Array.isArray(points) ||
+			points.length > 1024 ||
+			points.some(
+				(point) =>
+					!finitePoint(point) ||
+					!Number.isSafeInteger(point.index) ||
+					point.index < 0 ||
+					typeof point.inherited !== 'boolean',
+			))
+	)
+		throw new Error('The scene has invalid connection points.');
+	if (
+		shape.lineEnds !== undefined &&
+		(!finitePoint(shape.lineEnds?.begin) || !finitePoint(shape.lineEnds?.end))
+	)
+		throw new Error('The scene has invalid line ends.');
+	if (
+		shape.connectorRoute !== undefined &&
+		!['right-angle', 'straight', 'curved'].includes(shape.connectorRoute)
+	)
+		throw new Error('The scene has an invalid connector route.');
 }

@@ -10,9 +10,9 @@
  * exactly two tables.
  */
 import { Crosshair, GitMerge, Pin, PinOff, X } from 'lucide-vue-next';
-import type { PptxSlide } from 'pptx-viewer-core';
 import type { PptxAiFocusedTarget } from 'ooxml-ui/pptx/ai';
 import { focusTargetChips, isTwoTableFocus, mergeTablesDirective } from 'ooxml-ui/pptx/ai';
+import type { PptxSlide } from 'pptx-viewer-core';
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 

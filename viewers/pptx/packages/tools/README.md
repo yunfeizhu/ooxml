@@ -51,6 +51,7 @@ The `pptx-viewer-core` engine is a regular dependency, so it installs automatica
 
 ```ts
 import { readFile, writeFile } from 'node:fs/promises';
+
 import { PptxHandler, addSlide, getSlide } from 'pptx-viewer-mcp';
 
 const handler = new PptxHandler();
@@ -120,13 +121,14 @@ Each tool is a plain function: it takes the presentation data in and returns the
 `executeToolWithContext` handles the load and save cycle and, when a collaboration room is supplied, routes changes through a live Y.Doc instead of the disk.
 
 ```ts
+import { readFile, writeFile } from 'node:fs/promises';
+
 import {
 	executeToolWithContext,
 	type ExecutionContext,
 	type FileSystemProvider,
 	replaceText,
 } from 'pptx-viewer-mcp';
-import { readFile, writeFile } from 'node:fs/promises';
 
 const filesystem: FileSystemProvider = {
 	readFile: (p) => readFile(p),

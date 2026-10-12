@@ -1,6 +1,6 @@
-import type { PptxElement, ShapePptxElement } from 'pptx-viewer-core';
 import type { EditPointsElementPatch, FreeformToolKind } from 'ooxml-ui/pptx';
 import { canEditElementPoints } from 'ooxml-ui/pptx';
+import type { PptxElement, ShapePptxElement } from 'pptx-viewer-core';
 
 import type { EditorState } from './editor-state.svelte';
 

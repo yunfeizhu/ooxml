@@ -1,3 +1,4 @@
+import { computeChartLegendLayout } from 'ooxml-ui/pptx';
 /**
  * Regression tests: c:dTable data table (gap 1) and c:legendEntry deletion /
  * text-style (gap 2), reaching Angular through the same vendored shared
@@ -15,7 +16,6 @@
 import type { PptxChartData, PptxElement } from 'pptx-viewer-core';
 import { describe, expect, it } from 'vitest';
 
-import { computeChartLegendLayout } from 'ooxml-ui/pptx';
 import { buildChartViewModel } from './chart-renderer-helpers';
 
 function chartElement(chartData: PptxChartData): PptxElement {

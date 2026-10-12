@@ -1,6 +1,5 @@
 import { check, command, commandRow, group, menu, stack } from './ribbon-parts';
 
-const EDITING_AIDS = 'Needs interactive shape editing aids.';
 const WINDOWS = 'The viewer shows one drawing window.';
 const MACROS = 'Macros and add-ons never run in this viewer.';
 
@@ -27,67 +26,62 @@ export function buildViewPanel(doc: Document, panel: HTMLElement): void {
 					pressed: false,
 				}),
 			]),
-			group(doc, 'Show', [
-				stack(doc, [
-					check(doc, { id: 'ruler', label: 'Ruler', action: { type: 'ruler' } }),
-					check(doc, {
-						id: 'page-breaks',
-						label: 'Page Breaks',
-						unsupported: 'Needs print tiling from the page setup.',
-					}),
-					check(doc, { id: 'grid', label: 'Grid', action: { type: 'grid' } }),
-				]),
-				stack(doc, [
-					check(doc, {
-						id: 'guides',
-						label: 'Guides',
-						unsupported: 'Needs guide shapes from the core.',
-					}),
-					menu(doc, {
-						id: 'task-panes',
-						label: 'Task Panes',
-						icon: 'visioInspectorPane',
-						size: 'small',
-						items: [
-							{
-								id: 'shapes',
-								label: 'Shapes',
-								action: { type: 'pane', pane: 'shapes' },
-								checked: true,
-							},
-							{
-								id: 'inspector',
-								label: 'Inspector',
-								action: { type: 'pane', pane: 'inspector' },
-								checked: true,
-							},
-							{
-								id: 'shape-data',
-								label: 'Shape Data',
-								action: { type: 'reveal', panel: 'selection' },
-							},
-							{ id: 'layers-pane', label: 'Layers', action: { type: 'reveal', panel: 'layers' } },
-							{
-								id: 'notes',
-								label: 'Compatibility Notes',
-								action: { type: 'reveal', panel: 'notes' },
-							},
-							{ id: 'pan-zoom', label: 'Pan & Zoom', action: { type: 'panZoom' }, checked: false },
-							{
-								id: 'size-position',
-								label: 'Size & Position',
-								action: { type: 'sizePosition' },
-								checked: false,
-							},
-							{
-								id: 'drawing-explorer',
-								label: 'Drawing Explorer',
-								unsupported: 'Needs a document tree view.',
-							},
-						],
-					}),
-				]),
-			]),
+			group(
+				doc,
+				'Show',
+				[
+					stack(doc, [
+						check(doc, { id: 'ruler', label: 'Ruler', action: { type: 'ruler' } }),
+						check(doc, { id: 'grid', label: 'Grid', action: { type: 'grid' } }),
+						check(doc, {
+							id: 'page-breaks',
+							label: 'Page Breaks',
+							action: { type: 'page-setup', command: { op: 'page-breaks' } },
+						}),
+					]),
+					stack(doc, [
+						check(doc, { id: 'guides', label: 'Guides', action: { type: 'guides' } }),
+						menu(doc, {
+							id: 'task-panes',
+							label: 'Task Panes',
+							icon: 'visioInspectorPane',
+							size: 'small',
+							items: [
+								{
+									id: 'shapes',
+									label: 'Shapes',
+									action: { type: 'pane', pane: 'shapes' },
+									checked: true,
+								},
+								{
+									id: 'shape-data',
+									label: 'Shape Data',
+									action: { type: 'reveal', panel: 'selection' },
+									checked: false,
+								},
+								{
+									id: 'pan-zoom',
+									label: 'Pan & Zoom',
+									action: { type: 'panZoom' },
+									checked: false,
+								},
+								{
+									id: 'size-position',
+									label: 'Size & Position',
+									action: { type: 'sizePosition' },
+									checked: false,
+								},
+								{
+									id: 'drawing-explorer',
+									label: 'Drawing Explorer',
+									action: { type: 'drawing-explorer' },
+								},
+							],
+						}),
+					]),
+				],
+				{ dialog: 'Ruler & Grid' },
+			),
 			group(doc, 'Zoom', [
 				menu(doc, {
 					id: 'zoom',
@@ -118,16 +112,26 @@ export function buildViewPanel(doc: Document, panel: HTMLElement): void {
 				'Visual Aids',
 				[
 					stack(doc, [
-						check(doc, { id: 'auto-connect', label: 'AutoConnect', unsupported: EDITING_AIDS }),
-						check(doc, { id: 'dynamic-grid', label: 'Dynamic Grid', unsupported: EDITING_AIDS }),
+						check(doc, {
+							id: 'dynamic-grid',
+							label: 'Dynamic Grid',
+							action: { type: 'dynamic-grid' },
+						}),
+						check(doc, {
+							id: 'auto-connect',
+							label: 'AutoConnect',
+							action: { type: 'auto-connect' },
+							checked: true,
+						}),
 						check(doc, {
 							id: 'connection-points',
 							label: 'Connection Points',
-							unsupported: EDITING_AIDS,
+							action: { type: 'connection-points' },
+							checked: true,
 						}),
 					]),
 				],
-				{ launcher: EDITING_AIDS },
+				{ dialog: 'Snap & Glue' },
 			),
 			group(doc, 'Window', [
 				command(doc, { id: 'new-window', label: 'New Window', icon: 'copy', unsupported: WINDOWS }),

@@ -1,6 +1,6 @@
+import { assignUserColor } from 'ooxml-ui/pptx';
 // oxlint-disable react-hooks/rules-of-hooks
 import type { PptxSlide } from 'pptx-viewer-core';
-import { assignUserColor } from 'ooxml-ui/pptx';
 import { describe, expect, it, vi } from 'vitest';
 import { effectScope, nextTick, ref } from 'vue';
 

@@ -1,10 +1,5 @@
 <script setup lang="ts">
 import { GripVertical } from 'lucide-vue-next';
-import type {
-	PptxAnimationTimelineAnchor,
-	PptxElement,
-	PptxElementAnimation,
-} from 'pptx-viewer-core';
 import type { AnimationTimelineRow } from 'ooxml-ui/pptx';
 import {
 	applyAnimationTimelineOrder,
@@ -12,6 +7,11 @@ import {
 	buildAnimationTimelineRows,
 	reorderAnimationTimelineRows,
 } from 'ooxml-ui/pptx';
+import type {
+	PptxAnimationTimelineAnchor,
+	PptxElement,
+	PptxElementAnimation,
+} from 'pptx-viewer-core';
 import { computed, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 

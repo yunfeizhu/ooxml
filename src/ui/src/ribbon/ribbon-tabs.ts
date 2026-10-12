@@ -283,18 +283,19 @@ export class OfficeUiRibbon extends OfficeElement {
 					@dblclick=${this.onTabDoubleClick}
 				>
 					${this.tabs.map(
-						(tab) => html`<button
-							type="button"
-							role="tab"
-							id="tab-${tab.id}"
-							data-tab=${tab.id}
-							data-contextual=${ifDefined(tab.contextual ? '' : undefined)}
-							data-keytip=${ifDefined(tab.keytip)}
-							data-keytip-panel=${ifDefined(tab.keytipPanel)}
-							aria-selected=${String(tab.id === selected)}
-							tabindex=${tab.id === selected ? 0 : -1}
-							>${tab.label}</button
-						>`,
+						(tab) =>
+							html`<button
+								type="button"
+								role="tab"
+								id="tab-${tab.id}"
+								data-tab=${tab.id}
+								data-contextual=${ifDefined(tab.contextual ? '' : undefined)}
+								data-keytip=${ifDefined(tab.keytip)}
+								data-keytip-panel=${ifDefined(tab.keytipPanel)}
+								aria-selected=${String(tab.id === selected)}
+								tabindex=${tab.id === selected ? 0 : -1}
+								>${tab.label}</button
+							>`,
 					)}
 				</div>
 				<slot name="search"></slot>

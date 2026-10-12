@@ -18,6 +18,8 @@ import {
 } from './theme-color';
 
 export interface VisioTheme {
+	/** `a:theme/@name`, when present. */
+	name?: string;
 	colorId: number | undefined;
 	effectId: number | undefined;
 	connectorId: number | undefined;
@@ -95,7 +97,9 @@ export async function loadVisioThemes(
 		const format = themeChild(base, 'fmtScheme');
 		const connector = extension(base, 'fmtConnectorScheme');
 		const fonts = extension(base, 'fontStylesGroup');
+		const name = root.getAttribute('name');
 		result.push({
+			...(name ? { name: name.slice(0, 256) } : {}),
 			colorId: integer(extension(palette, 'schemeID')?.getAttribute('schemeEnum')),
 			effectId: componentId(extension(base, 'fmtSchemeEx')),
 			connectorId: componentId(extension(base, 'fmtConnectorSchemeEx')),

@@ -7,10 +7,11 @@
     ondirtychange?: EditorEventHandlers['dirty-change'];
     onreadonlychange?: EditorEventHandlers['readonly-change'];
     onribboncustomize?: EditorEventHandlers['ribbon-customize'];
+    onribbonaddin?: EditorEventHandlers['office-ribbon-add-in'];
     oncollaborationchange?: EditorEventHandlers['collaboration-change'];
     onready?: EditorEventHandlers['ready'];
   };
-  let { workbook, bytes, src, fileName, readOnly = false, locale = 'en', theme = 'auto', authorName = 'Author', showToolbar = true, showFormulaBar = true, hiddenActions = [], themeColors, collaboration, onworkbookchange, onworkbookerror, onselectionchange, ondirtychange, onreadonlychange, onribboncustomize, oncollaborationchange, onready }: Props = $props();
+  let { workbook, bytes, src, fileName, readOnly = false, locale = 'en', theme = 'auto', authorName = 'Author', showToolbar = true, showFormulaBar = true, hiddenActions = [], ribbonAddIns, themeColors, collaboration, onworkbookchange, onworkbookerror, onselectionchange, ondirtychange, onreadonlychange, onribboncustomize, onribbonaddin, oncollaborationchange, onready }: Props = $props();
   let binding: EditorBinding | undefined;
   const handle = deferredHandle(() => binding);
   // Live `element` and `dirty`, the same handle vocabulary as the other frameworks (`EDITOR_HANDLE_KEYS`).
@@ -20,7 +21,7 @@
   const dirty = $derived(dirtyState);
   function attach(host: HTMLElement, options: Props) {
     const normalized = (value: Props) => ({ ...pickEditorProps(value),
-      ...eventOptions({ 'workbook-change': value.onworkbookchange, 'workbook-error': value.onworkbookerror, 'selection-change': value.onselectionchange, 'dirty-change': value.ondirtychange, 'readonly-change': value.onreadonlychange, 'ribbon-customize': value.onribboncustomize, 'collaboration-change': value.oncollaborationchange, ready: value.onready }) });
+      ...eventOptions({ 'workbook-change': value.onworkbookchange, 'workbook-error': value.onworkbookerror, 'selection-change': value.onselectionchange, 'dirty-change': value.ondirtychange, 'readonly-change': value.onreadonlychange, 'ribbon-customize': value.onribboncustomize, 'office-ribbon-add-in': value.onribbonaddin, 'collaboration-change': value.oncollaborationchange, ready: value.onready }) });
     const tracked = (value: Props) => normalized({ ...value, ondirtychange: (next: boolean) => { dirtyState = next; value.ondirtychange?.(next); } });
     binding = mountEditor(host, tracked(options));
     mountedElement = binding.element;
@@ -43,4 +44,4 @@
   export function getElement() { return binding?.element; }
   export { element, dirty };
 </script>
-<div use:attach={{ workbook, bytes, src, fileName, readOnly, locale, theme, authorName, showToolbar, showFormulaBar, hiddenActions, themeColors, collaboration, onworkbookchange, onworkbookerror, onselectionchange, ondirtychange, onreadonlychange, onribboncustomize, oncollaborationchange, onready }}></div>
+<div use:attach={{ workbook, bytes, src, fileName, readOnly, locale, theme, authorName, showToolbar, showFormulaBar, hiddenActions, ribbonAddIns, themeColors, collaboration, onworkbookchange, onworkbookerror, onselectionchange, ondirtychange, onreadonlychange, onribboncustomize, onribbonaddin, oncollaborationchange, onready }}></div>

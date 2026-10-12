@@ -1,3 +1,4 @@
+import type { RibbonAddInCommandDetail } from 'ooxml-core/ribbon';
 import type { Workbook } from 'ooxml-core/xlsx';
 import type { XlsxCollaborationState } from './collaboration-types';
 
@@ -39,6 +40,8 @@ export interface XlsxEditorEventMap {
 	'dirty-change': { dirty: boolean };
 	/** Sharing started or stopped, the connection changed, or someone joined, left or synced. */
 	'collaboration-change': XlsxCollaborationState;
+	/** A command of a host tab (`ribbonAddIns`) was chosen. */
+	'office-ribbon-add-in': RibbonAddInCommandDetail;
 }
 export type XlsxEditorEventName = keyof XlsxEditorEventMap;
 export type XlsxEditorEventDetail<K extends XlsxEditorEventName> = XlsxEditorEventMap[K];
@@ -56,6 +59,7 @@ export const XLSX_EDITOR_EVENTS = [
 	'sheet-change',
 	'dirty-change',
 	'collaboration-change',
+	'office-ribbon-add-in',
 ] as const satisfies readonly XlsxEditorEventName[];
 
 /** Events a host can cancel with `preventDefault()`. */

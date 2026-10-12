@@ -1,3 +1,4 @@
+import { resolveTransitionDurationMs } from 'ooxml-ui/pptx';
 /**
  * transition-helpers.ts
  *
@@ -18,8 +19,6 @@
  * the overlay no longer consults it.
  */
 import type { PptxSlideTransition } from 'pptx-viewer-core';
-
-import { resolveTransitionDurationMs } from 'ooxml-ui/pptx';
 
 export type {
 	SlideTransitionAnimations,

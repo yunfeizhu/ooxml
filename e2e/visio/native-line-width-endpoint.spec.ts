@@ -2,6 +2,7 @@ import { expect, test } from '@playwright/test';
 import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { nativeSvgLineEndpoints } from './native-line-svg';
+import { openDemo } from './demo-page';
 
 for (const variable of ['VISIO_NATIVE_LINE_WIDTH_BEGIN_DIR', 'VISIO_NATIVE_LINE_WIDTH_END_DIR']) {
 	for (const framework of ['vanilla', 'react', 'vue', 'angular', 'svelte', 'solid']) {
@@ -18,7 +19,10 @@ for (const variable of ['VISIO_NATIVE_LINE_WIDTH_BEGIN_DIR', 'VISIO_NATIVE_LINE_
 					endpointTransform: number[];
 				}[];
 			};
-			await page.goto(framework === 'vanilla' ? '/demo/?sample=1' : `/demo-${framework}/?sample=1`);
+			await openDemo(
+				page,
+				framework === 'vanilla' ? '/demo/?sample=1' : `/demo-${framework}/?sample=1`,
+			);
 			await page.locator('#file').setInputFiles(join(directory!, 'endpoint.vsdx'));
 			await expect(page.locator('#file-name')).toHaveText('endpoint.vsdx');
 			const reference = await nativeSvgLineEndpoints(

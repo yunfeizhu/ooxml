@@ -1,4 +1,3 @@
-import type { PptxElement, PptxSlide } from 'pptx-viewer-core';
 import {
 	isTemplateElementId,
 	masterViewElements,
@@ -7,6 +6,7 @@ import {
 	updateElementInTree,
 } from 'ooxml-ui/pptx';
 import type { MasterViewDocument, MasterViewTarget } from 'ooxml-ui/pptx';
+import type { PptxElement, PptxSlide } from 'pptx-viewer-core';
 
 import type { ViewerState } from '../state';
 

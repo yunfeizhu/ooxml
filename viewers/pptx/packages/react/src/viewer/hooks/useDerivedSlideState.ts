@@ -1,9 +1,3 @@
-import type {
-	PptxPresentationProperties,
-	PptxSlide,
-	PptxSlideMaster,
-	PptxSlideLayout,
-} from 'pptx-viewer-core';
 import type { AuthoredSlideRange } from 'ooxml-ui/pptx';
 import {
 	computeGridSpacingPx as sharedComputeGridSpacingPx,
@@ -12,6 +6,12 @@ import {
 	resolveAuthoredSlideRange,
 	resolveShowSlideIndexes,
 } from 'ooxml-ui/pptx';
+import type {
+	PptxPresentationProperties,
+	PptxSlide,
+	PptxSlideMaster,
+	PptxSlideLayout,
+} from 'pptx-viewer-core';
 /**
  * useDerivedSlideState: Memoised computed values derived from slide and
  * presentation state.  Keeps the orchestrator component slim by hosting

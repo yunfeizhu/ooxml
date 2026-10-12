@@ -5,6 +5,7 @@
  *
  * @module editor-keymap-arrows
  */
+import { arrowKeyDelta } from 'ooxml-core/geometry';
 
 /**
  * Slide pixels an unmodified arrow key moves the selection.
@@ -21,19 +22,7 @@ export const NUDGE_LARGE = 10;
 
 /** Map an arrow key to a nudge delta in slide pixels, or `null` for other keys. */
 export function editorNudgeDelta(key: string, large: boolean): { dx: number; dy: number } | null {
-	const step = large ? NUDGE_LARGE : NUDGE_SMALL;
-	switch (key) {
-		case 'ArrowLeft':
-			return { dx: -step, dy: 0 };
-		case 'ArrowRight':
-			return { dx: step, dy: 0 };
-		case 'ArrowUp':
-			return { dx: 0, dy: -step };
-		case 'ArrowDown':
-			return { dx: 0, dy: step };
-		default:
-			return null;
-	}
+	return arrowKeyDelta(key, large ? NUDGE_LARGE : NUDGE_SMALL);
 }
 
 /**

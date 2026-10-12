@@ -7,7 +7,7 @@ export function chartGradientMarkup(def: ChartSvgGradientDef): string {
 		return `<pattern id="${esc(def.id)}" patternUnits="objectBoundingBox" patternContentUnits="objectBoundingBox" width="1" height="1"><image href="${esc(def.href)}" width="1" height="1" preserveAspectRatio="none"/></pattern>`;
 	const geometry =
 		def.kind === 'linearGradient'
-			? `x1="${def.x1}" y1="${def.y1}" x2="${def.x2}" y2="${def.y2}"`
+			? `${def.gradientUnits ? `gradientUnits="${def.gradientUnits}" ` : ''}x1="${def.x1}" y1="${def.y1}" x2="${def.x2}" y2="${def.y2}"`
 			: `cx="${def.cx}" cy="${def.cy}" r="${def.r}"`;
 	const stops = def.stops
 		.map(

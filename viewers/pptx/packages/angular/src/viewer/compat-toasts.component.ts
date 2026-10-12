@@ -23,12 +23,12 @@ import {
 	output,
 } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-
 import type {
 	CompatibilityWarningToast,
 	CompatToastsRequestEvent,
 	CompatToastsViewState,
 } from 'ooxml-ui/pptx';
+
 import { translationsSignal } from './translations-signal';
 
 @Component({

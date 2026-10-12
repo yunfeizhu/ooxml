@@ -1,8 +1,8 @@
-import type { PptxSlide } from 'pptx-viewer-core';
 import { ProposalStore } from 'ooxml-ui/pptx/ai';
 import type { PptxAiBridge } from 'ooxml-ui/pptx/ai';
 // @vitest-environment happy-dom
 import { translationsEn } from 'ooxml-ui/pptx/i18n';
+import type { PptxSlide } from 'pptx-viewer-core';
 /**
  * AiProposalCard tests: a staged proposal renders its diff summary, and Accept /
  * Reject route through the real {@link ProposalStore}. Accept must reach the

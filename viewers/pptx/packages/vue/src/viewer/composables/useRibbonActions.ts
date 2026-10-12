@@ -1,11 +1,3 @@
-import { hasTextProperties } from 'pptx-viewer-core';
-import type {
-	PptxElement,
-	PptxSlide,
-	PptxTableCellStyle,
-	TablePptxElement,
-	TextStyle,
-} from 'pptx-viewer-core';
 import type { AlignEdge, ChangeCaseMode, InlineTextEditSnapshot } from 'ooxml-ui/pptx';
 import {
 	readEditableText,
@@ -18,6 +10,14 @@ import {
 	updateTextSegmentStyle,
 	withCellStyle,
 } from 'ooxml-ui/pptx';
+import { hasTextProperties } from 'pptx-viewer-core';
+import type {
+	PptxElement,
+	PptxSlide,
+	PptxTableCellStyle,
+	TablePptxElement,
+	TextStyle,
+} from 'pptx-viewer-core';
 import { computed } from 'vue';
 import type { ComputedRef, Ref } from 'vue';
 

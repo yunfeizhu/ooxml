@@ -14,7 +14,6 @@
  * @module viewer/run-program-notice-store
  */
 import { signal } from '@angular/core';
-
 import { buildRunProgramNotice } from 'ooxml-ui/pptx';
 import type { RunProgramNotice } from 'ooxml-ui/pptx';
 

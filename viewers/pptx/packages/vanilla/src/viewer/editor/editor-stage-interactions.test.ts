@@ -1,3 +1,9 @@
+import {
+	createCollaborationLivePatcher,
+	createSnapshotTextPositions,
+	reconcileSlidesInYDoc,
+} from 'ooxml-ui/pptx';
+import type { YjsFactories } from 'ooxml-ui/pptx';
 /**
  * Stage-interaction tests for the touch inline-editing paths: a touch
  * double-tap opens the inline text editor (native dblclick never fires for
@@ -5,12 +11,6 @@
  * instead of dropping the typed text.
  */
 import type { PptxElement } from 'pptx-viewer-core';
-import {
-	createCollaborationLivePatcher,
-	createSnapshotTextPositions,
-	reconcileSlidesInYDoc,
-} from 'ooxml-ui/pptx';
-import type { YjsFactories } from 'ooxml-ui/pptx';
 import { describe, expect, it, vi } from 'vitest';
 import * as Y from 'yjs';
 

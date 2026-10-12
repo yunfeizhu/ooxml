@@ -1,5 +1,6 @@
-import type { RibbonContextualTabId } from 'ooxml-ui/pptx';
+import type { RibbonAddInTab, RibbonContextualTabId } from 'ooxml-ui/pptx';
 import {
+	RIBBON_ADD_IN_TAB_ATTR,
 	RIBBON_CONTEXTUAL_TAB_ATTR,
 	contextualTabLabelKey,
 	resolveScreenTip,
@@ -20,6 +21,10 @@ export interface RibbonTabBarProps {
 	activeContextual: RibbonContextualTabId | null;
 	onSelectSection: (id: ToolbarSection) => void;
 	onSelectContextual: (id: RibbonContextualTabId) => void;
+	/** The host's tabs (`ribbonAddIns`), shown after the fixed tabs. */
+	addInTabs?: readonly RibbonAddInTab[];
+	activeAddIn?: string | null;
+	onSelectAddIn?: (id: string) => void;
 	/** Right-side tab-row content (Record / Share, the compact toggle). */
 	children?: React.ReactNode;
 }
@@ -30,7 +35,7 @@ const TAB_UNDERLINE =
 	'after:absolute after:-bottom-px after:left-0 after:right-0 after:h-[2.5px] after:bg-primary';
 
 /**
- * The ribbon tab row: the fixed tabs, then the contextual tabs the selection
+ * The ribbon tab row: the fixed tabs, the host's add-in tabs, then the contextual tabs the selection
  * brings up (PowerPoint's Shape Format, Picture Format, ...), drawn in the
  * accent colour so they read as selection-scoped.
  */
@@ -65,6 +70,28 @@ export function RibbonTabBar(p: RibbonTabBarProps): React.ReactElement {
 						)}
 					>
 						{t(s.labelKey)}
+					</button>
+				);
+			})}
+			{(p.addInTabs ?? []).map((tab) => {
+				const selected = p.activeAddIn === tab.id;
+				return (
+					<button
+						key={tab.id}
+						type='button'
+						role='tab'
+						aria-selected={selected}
+						{...{ [RIBBON_ADD_IN_TAB_ATTR]: tab.id }}
+						title={resolveScreenTip(viewerOptions, tab.label)}
+						onClick={() => p.onSelectAddIn?.(tab.id)}
+						className={cn(
+							TAB_BASE,
+							selected
+								? `text-foreground ${TAB_UNDERLINE}`
+								: 'text-muted-foreground hover:text-foreground hover:bg-accent/30',
+						)}
+					>
+						{tab.label}
 					</button>
 				);
 			})}

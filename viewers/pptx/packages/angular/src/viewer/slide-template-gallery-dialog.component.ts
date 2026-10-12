@@ -23,9 +23,9 @@ import {
 	computed,
 } from '@angular/core';
 import { TranslatePipe } from '@ngx-translate/core';
-
 import { SLIDE_TEMPLATES } from 'ooxml-ui/pptx';
 import type { SlideTemplateId } from 'ooxml-ui/pptx';
+
 import type { DialogFooterActionSpec } from './dialog-footer.component';
 import { DialogFooterComponent } from './dialog-footer.component';
 import { ModalDialogComponent } from './modal-dialog.component';

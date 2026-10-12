@@ -129,8 +129,8 @@ that html2canvas cannot render.
 ## Example: save-as from your own UI
 
 ```tsx
-import { useRef } from 'react';
 import { PowerPointViewer, type PowerPointViewerHandle } from 'pptx-react-viewer';
+import { useRef } from 'react';
 
 export function DeckWithDownload({ content }: { content: Uint8Array }) {
 	const viewerRef = useRef<PowerPointViewerHandle>(null);

@@ -1,3 +1,9 @@
+import {
+	ACTION_INDICATOR_CLASS,
+	LINK_TOOLTIP_CLASS,
+	LINK_TOOLTIP_HOST_CLASS,
+	prepareExportClone,
+} from 'ooxml-ui/pptx';
 // @vitest-environment happy-dom
 /**
  * On-canvas action affordances, and who counts as an element.
@@ -16,12 +22,6 @@
  *    same slide.
  */
 import type { PptxElement } from 'pptx-viewer-core';
-import {
-	ACTION_INDICATOR_CLASS,
-	LINK_TOOLTIP_CLASS,
-	LINK_TOOLTIP_HOST_CLASS,
-	prepareExportClone,
-} from 'ooxml-ui/pptx';
 import React, { act } from 'react';
 import { createRoot } from 'react-dom/client';
 import type { Root } from 'react-dom/client';

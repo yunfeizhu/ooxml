@@ -20,14 +20,13 @@ import {
 } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { TranslateService } from '@ngx-translate/core';
-import { map, merge, startWith } from 'rxjs';
-
 import type {
 	NotesInlineCommand,
 	NotesParagraphCommand,
 	NotesToolbarRequestEvent,
 	NotesToolbarViewState,
 } from 'ooxml-ui/pptx';
+import { map, merge, startWith } from 'rxjs';
 
 @Component({
 	selector: 'pptx-notes-toolbar',

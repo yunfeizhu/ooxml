@@ -191,7 +191,9 @@
 	{#if tiling}
 		<div class="pptx-svelte-image-tile" style={tileStyle}></div>
 	{:else if processedSrc}
-		<img src={processedSrc} alt="" style={imgStyle} />
+		<!-- Not draggable: the browser's own image drag would cancel the pointer
+		     stream of the editor's move gesture. -->
+		<img src={processedSrc} alt="" draggable="false" style={imgStyle} />
 		{#if colorWash}
 			<div
 				class="pptx-svelte-image-color-wash"

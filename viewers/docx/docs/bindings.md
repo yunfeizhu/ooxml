@@ -118,6 +118,7 @@ because only the host knows whether the Blob was persisted. Every adapter expose
 | `showThumbnails` (`show-thumbnails`) | `false` | Left rail of page thumbnails. Thumbnails need Print Layout; in Draft view the rail says so instead of listing pages.                                                                                                                                                                                  |
 | `showToolbar` (`show-toolbar`)       | `true`  | `show-toolbar="false"` hides the ribbon; the title bar and status bar remain.                                                                                                                                                                                                                         |
 | `hiddenActions`                      | `[]`    | Ribbon controls to hide by stable kebab-case id (`RIBBON_ACTION_IDS`, e.g. `'bold'`, `'insert-table'`, `'track-changes'`, `'paste'`, `'word-count'`); empty groups and tabs hide too. A colour button and its dropdown caret hide together. Unknown ids are ignored. Ids do not change with `locale`. |
+| `ribbonAddIns`                       | none    | Tabs the host adds after the built-in ones; see [Ribbon add-in tabs](#ribbon-add-in-tabs).                                                                                                                                                                                                            |
 
 **Deprecated:** before ids existed `hiddenActions` took the English control label (`'Bold'`,
 `'Insert table'`). Those `LegacyRibbonLabel` strings are still accepted for one more release: they
@@ -128,3 +129,40 @@ keyed by command type), so they are unchanged.
 `page-change` (`{ page, pageCount }`) fires from Print Layout only. Pagination comes from this
 editor's own layout engine and is an approximation, not Word's pagination; the status bar and
 rail tooltips say so.
+
+## Ribbon add-in tabs
+
+A host can add its own ribbon tabs after Word's own, as an Office add-in does.
+`ribbonAddIns` takes plain data and is a prop of every binding; a chosen command
+runs its `run` callback and is reported through `onRibbonAddIn` (Vue
+`office-ribbon-add-in`, Angular `ribbonAddIn`, Svelte `onribbonaddin`) with
+`{ tab, command }`.
+
+```tsx
+const tabs = [
+	{
+		id: 'reports',
+		label: 'Reports',
+		groups: [
+			{
+				label: 'Export',
+				commands: [
+					{ id: 'export', label: 'Export', icon: 'save', run: () => exportReport() },
+					{ id: 'options', label: 'Options', size: 'small' },
+					{ id: 'send', label: 'Send', items: [{ id: 'send-mail', label: 'By mail' }] },
+				],
+			},
+		],
+	},
+];
+
+<WordEditor ribbonAddIns={tabs} onRibbonAddIn={({ tab, command }) => track(tab, command)} />;
+```
+
+`size: 'small'` commands fill columns of three and `items` makes a drop-down.
+Passing an equal descriptor again, as a framework does on every render, keeps
+the panels and only replaces the callbacks; leaving the prop out removes the
+tabs. A tab cannot take the id of a built-in tab, and its commands never reach
+the editor's own command handling. The same descriptor (`RibbonAddInTab`, from
+`ooxml-core/ribbon`, re-exported by every framework package) works in the Word,
+Excel, PowerPoint and Visio editors. No add-in tab ships with the editor.

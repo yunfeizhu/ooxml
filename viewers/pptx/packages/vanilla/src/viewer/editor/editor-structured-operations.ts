@@ -1,6 +1,6 @@
+import { withCellText } from 'ooxml-ui/pptx';
 import type { PptxElement } from 'pptx-viewer-core';
 import { hasTextProperties } from 'pptx-viewer-core';
-import { withCellText } from 'ooxml-ui/pptx';
 
 import type { Store, ViewerState } from '../state';
 import {

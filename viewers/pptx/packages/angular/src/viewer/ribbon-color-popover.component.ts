@@ -8,9 +8,9 @@
 import { NgClass, NgTemplateOutlet } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject, input, output } from '@angular/core';
 import { TranslatePipe } from '@ngx-translate/core';
+import type { ThemeColorPickerCommit } from 'ooxml-ui/pptx';
 import type { PptxThemeColorRef } from 'pptx-viewer-core';
 
-import type { ThemeColorPickerCommit } from 'ooxml-ui/pptx';
 import { AnchoredPopupDirective } from './anchored-popup.directive';
 import { RecentColorsRowComponent } from './recent-colors-row.component';
 import { RecentColorsService } from './recent-colors.service';

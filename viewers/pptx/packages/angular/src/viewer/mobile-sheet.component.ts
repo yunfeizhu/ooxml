@@ -36,7 +36,6 @@ import {
 	viewChild,
 } from '@angular/core';
 import { TranslatePipe } from '@ngx-translate/core';
-
 import { activateModalFocus } from 'ooxml-ui/pptx';
 
 /** Drag-down distance in pixels that triggers dismissal. */

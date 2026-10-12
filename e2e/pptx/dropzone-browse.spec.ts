@@ -39,7 +39,8 @@ async function gotoLanding(page: Page): Promise<void> {
 	// dropzone (the only place #file-input exists) never mounts.
 	await resetTabSession(page);
 	await page.goto('/');
-	await expect(dropzone(page)).toBeVisible();
+	// The first request after a dev server starts (or restarts) also pays its dependency optimize.
+	await expect(dropzone(page)).toBeVisible({ timeout: 30_000 });
 	await expect(page.locator('#file-input')).toBeAttached();
 }
 

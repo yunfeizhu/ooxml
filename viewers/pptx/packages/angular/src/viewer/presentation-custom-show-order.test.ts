@@ -1,3 +1,4 @@
+import type { ShowOrderCustomShow } from 'ooxml-ui/pptx';
 /**
  * presentation-custom-show-order.test.ts: the show-order helpers, the show
  * navigator and the presenter console's "next slide" preview must all resolve
@@ -12,7 +13,6 @@
 import type { PptxSlide } from 'pptx-viewer-core';
 import { describe, expect, it } from 'vitest';
 
-import type { ShowOrderCustomShow } from 'ooxml-ui/pptx';
 import {
 	firstVisibleIndex,
 	hasVisibleSlideAfter,

@@ -5,15 +5,7 @@ import type {
 	TableStyleConditionalFormatting,
 	TableStyleDefinition,
 } from './table-model';
-import {
-	children,
-	first,
-	getW,
-	named,
-	parseXml,
-	type XmlDocument,
-	type XmlElement,
-} from './xml';
+import { children, first, getW, named, parseXml, type XmlDocument, type XmlElement } from './xml';
 import { parseRunProperties } from './run-properties';
 import { parseOnOff } from './simple-types';
 import { parseShadingFill, parseShadingThemeFill, parseTableBorders } from './table-borders';

@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import type { PptxAfterAnimationAction } from 'pptx-viewer-core';
 import { AFTER_ANIMATION_VALUES } from 'ooxml-ui/pptx';
+import type { PptxAfterAnimationAction } from 'pptx-viewer-core';
 import { useI18n } from 'vue-i18n';
 
 import { injectRecentColors } from '../../composables/recent-colors-context';

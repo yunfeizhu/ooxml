@@ -21,8 +21,6 @@
  * found geometrically from the slide-space press point.
  */
 
-import type { PptxElement } from 'pptx-viewer-core';
-
 import {
 	drillSelectionForClick,
 	drillSelectionForDoubleClick,
@@ -33,6 +31,8 @@ import {
 	slideSpaceElement,
 	slideSpaceMembers,
 } from 'ooxml-ui/pptx';
+import type { PptxElement } from 'pptx-viewer-core';
+
 import type { Box } from './drag-resize';
 
 /** A point in slide px (stage coordinates, zoom already divided out). */

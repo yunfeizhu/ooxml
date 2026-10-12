@@ -1,6 +1,6 @@
 import { mount } from '@vue/test-utils';
-import type { PptxElement } from 'pptx-viewer-core';
 import { getOleTypeColor } from 'ooxml-ui/pptx';
+import type { PptxElement } from 'pptx-viewer-core';
 import { describe, expect, it, vi } from 'vitest';
 
 import OleRenderer from './OleRenderer.vue';

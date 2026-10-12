@@ -41,8 +41,7 @@ export class ViewerClipboard {
 			: this.hasPromiseWrite() || typeof this.clipboard?.writeText === 'function';
 	}
 	private baseReason(state: ViewerState): string {
-		if (!state.edit.sourceAvailable)
-			return 'Open a .vsdx file. Model-only documents are read only.';
+		if (!state.edit.sourceAvailable) return 'Open a .vsdx file.';
 		if (state.loading || state.edit.busy || this.#pending)
 			return 'Wait for the current operation to finish.';
 		if (!state.document?.pages[state.pageIndex]) return 'Open a page before using the clipboard.';
@@ -58,7 +57,7 @@ export class ViewerClipboard {
 				(shape) => !visioSelectionIsOnPage(shape, page.id) || !visioClipboardShape(page, shape.id),
 			)
 		)
-			return 'Copy requires ordinary local two-dimensional shapes on the current page without masters, groups, layers, or connections.';
+			return 'Copy does not take lines, connectors, pictures, groups made here, drawn shapes on a layer or with glue, shapes on a locked layer or shapes glued to another shape.';
 		if (state.clipboard.error) return editErrorMessage(state.clipboard.error);
 		return '';
 	}

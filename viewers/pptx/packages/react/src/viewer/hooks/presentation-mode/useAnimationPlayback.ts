@@ -1,4 +1,3 @@
-import type { PptxSlide } from 'pptx-viewer-core';
 import type { PlaybackContext } from 'ooxml-ui/pptx';
 import {
 	advanceMainSequence,
@@ -10,6 +9,7 @@ import {
 	resolveMediaBookmarkTimesMs,
 	resolveMediaTimeNodeElementIds,
 } from 'ooxml-ui/pptx';
+import type { PptxSlide } from 'pptx-viewer-core';
 import { useRef, useState, useCallback, useEffect } from 'react';
 
 import type { PresentationAnimationRuntime } from '../../types';

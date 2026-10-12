@@ -1,6 +1,6 @@
+import { mergeCells as mergeCellsActual, splitCell as splitCellActual } from 'ooxml-ui/pptx';
 import type { PptxElement, PptxTableData, TablePptxElement, XmlObject } from 'pptx-viewer-core';
 import { updateMergeAttrsInRawXml as updateMergeAttrsInRawXmlActual } from 'pptx-viewer-core';
-import { mergeCells as mergeCellsActual, splitCell as splitCellActual } from 'ooxml-ui/pptx';
 import { describe, it, expect, vi } from 'vitest';
 
 import { mergeCells, splitCell } from '../utils/table-merge-utils';

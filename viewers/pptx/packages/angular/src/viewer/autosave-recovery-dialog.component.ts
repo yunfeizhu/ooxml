@@ -14,8 +14,8 @@
 
 import { ChangeDetectionStrategy, Component, computed, inject, input, output } from '@angular/core';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
-
 import type { AutosaveRecoveryPrompt } from 'ooxml-ui/pptx';
+
 import { DialogFooterComponent } from './dialog-footer.component';
 import type { DialogFooterActionSpec } from './dialog-footer.component';
 import { ModalDialogComponent } from './modal-dialog.component';

@@ -1,3 +1,18 @@
+import type { ElementBoxPatch } from 'ooxml-ui/pptx';
+import {
+	applyFormatToElement,
+	buildDeckSaveOptions,
+	buildSaveSlides,
+	cloneSlides,
+	cloneTemplateElementsBySlideId,
+	copyFormatFromElement,
+	overlayInlineTextSnapshot,
+	overlayMasterViewInlineSnapshot,
+	EditorHistory,
+	resolveSlideSizeSelection,
+	saveDeckWithPassword,
+	updateSlideNotes,
+} from 'ooxml-ui/pptx';
 import type {
 	PptxAppProperties,
 	PptxCoreProperties,
@@ -17,21 +32,6 @@ import type {
 	TextStyle,
 } from 'pptx-viewer-core';
 import { duplicateElement } from 'pptx-viewer-core';
-import type { ElementBoxPatch } from 'ooxml-ui/pptx';
-import {
-	applyFormatToElement,
-	buildDeckSaveOptions,
-	buildSaveSlides,
-	cloneSlides,
-	cloneTemplateElementsBySlideId,
-	copyFormatFromElement,
-	overlayInlineTextSnapshot,
-	overlayMasterViewInlineSnapshot,
-	EditorHistory,
-	resolveSlideSizeSelection,
-	saveDeckWithPassword,
-	updateSlideNotes,
-} from 'ooxml-ui/pptx';
 
 import type { Store, ViewerState } from '../state';
 import {

@@ -79,19 +79,33 @@ export async function deleteOldestAutosaveEntry(): Promise<boolean> {
 	});
 }
 
+/**
+ * The timestamp of the last snapshot THIS page wrote for each key. The store is shared by every
+ * tab, so a snapshot is "someone else's" unless it is in here; a page does not need the copy of
+ * its own work back (see {@link wasWrittenByThisPage}).
+ */
+const ownWrites = new Map<string, number>();
+
+/** True when this page itself wrote the snapshot for `key` stamped `timestamp`. */
+export function wasWrittenByThisPage(key: string, timestamp: number): boolean {
+	return ownWrites.get(key) === timestamp;
+}
+
 function putAutosaveRecord(filePath: string, data: Uint8Array): Promise<boolean> {
 	return openAutosaveDb().then(
 		(db) =>
 			new Promise<boolean>((resolve, reject) => {
 				const tx = db.transaction(AUTOSAVE_STORE_NAME, 'readwrite');
 				const store = tx.objectStore(AUTOSAVE_STORE_NAME);
+				const timestamp = Date.now();
 				store.put({
 					key: filePath,
 					data,
-					timestamp: Date.now(),
+					timestamp,
 					size: data.byteLength,
 				});
 				tx.oncomplete = () => {
+					ownWrites.set(filePath, timestamp);
 					db.close();
 					resolve(true);
 				};

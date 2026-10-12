@@ -4,13 +4,34 @@ import { cells, numeric, isLineSheet, assertLengthTransformCells } from './edit-
 import { fail } from './package-common';
 import type { VisioGeometryEdit } from './edit-commands';
 
-/** Prove a local 2D sheet tree without masters, lines or foreign objects; returns its IDs. */
+/**
+ * Stencil instances proved to be 2D shapes of a resolvable master (`groupInstances`). Their
+ * cells live in the master, so the local-cache proof below takes them as one opaque member.
+ */
+const stencilMembers = new WeakSet<Element>();
+export const markStencilMember = (shape: Element): void => void stencilMembers.add(shape);
+export const isStencilMember = (shape: Element): boolean => stencilMembers.has(shape);
+
+/** Prove a local 2D sheet tree without unproved masters, lines or foreign objects; returns its IDs. */
 export function proveLocalShapeTree(top: Element, check: () => void): Set<string> {
 	const pending = [top],
 		ids = new Set<string>();
 	while (pending.length) {
 		check();
 		const shape = pending.pop()!;
+		if (stencilMembers.has(shape)) {
+			const inner = [shape];
+			while (inner.length) {
+				const node = inner.pop()!;
+				const id = attribute(node, 'ID');
+				if (!id || ids.has(id) || ids.size >= 10000)
+					fail('UNSUPPORTED_GEOMETRY_EDIT', 'A stencil shape in the group has invalid sheet IDs.');
+				ids.add(id);
+				for (const container of children(node, 'Shapes'))
+					inner.push(...children(container, 'Shape'));
+			}
+			continue;
+		}
 		const id = attribute(shape, 'ID');
 		const local = cells(shape),
 			containers = children(shape, 'Shapes');

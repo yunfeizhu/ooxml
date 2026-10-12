@@ -68,6 +68,7 @@ import type {
 	PowerPointViewerAPI,
 	SlideTemplateId,
 	ThemeCatalogEntry,
+	RibbonAddInTab,
 	ToolbarActionId,
 	ViewerCustomization,
 	ViewerMode,
@@ -166,6 +167,7 @@ import { RecentColorsService } from './recent-colors.service';
 import { RehearseTimingsComponent } from './rehearse-timings.component';
 import { RemoteSelectionOverlayComponent } from './remote-selection-overlay.component';
 import { Rendering3DService } from './rendering-3d.service';
+import { RibbonAddInsService } from './ribbon-add-ins.service';
 import {
 	nextRibbonScope,
 	RibbonCustomizationStyleDirective,
@@ -1559,6 +1561,16 @@ export class PowerPointViewerComponent
 	 * (`hideRibbonTab`, `lockSetting`, ...).
 	 */
 	readonly customization = input<ViewerCustomization | undefined>(undefined);
+	/**
+	 * Ribbon tabs the host adds after Help, as an Office add-in does. Each
+	 * command runs its `run` callback and dispatches a bubbling
+	 * `office-ribbon-add-in` DOM event (`{ tab, command }`) from the viewer. A
+	 * tab cannot take the id of a built-in tab, and a drop-down (`items`) is
+	 * drawn as its items. The desktop ribbon shows them; the phone chrome does not.
+	 */
+	readonly ribbonAddIns = input<readonly RibbonAddInTab[] | undefined>(undefined);
+	/** Hands the input to the ribbon (see `RibbonAddInsService`). */
+	protected readonly ribbonAddInsService = inject(RibbonAddInsService).bind(this.ribbonAddIns);
 	/**
 	 * Zero-based slide shown after each load, clamped into the deck. Default
 	 * `0`. Changing it later does not move the current slide; it applies to

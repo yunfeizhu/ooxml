@@ -1,10 +1,10 @@
-import type { PptxElement } from 'pptx-viewer-core';
 import {
 	isEditableMotionPath,
 	motionPathEndPixel,
 	motionPathToSvgD,
 	setMotionPathEnd,
 } from 'ooxml-ui/pptx';
+import type { PptxElement } from 'pptx-viewer-core';
 import React, { useCallback, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 

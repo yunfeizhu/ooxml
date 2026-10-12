@@ -1,3 +1,4 @@
+import { slideSpaceMembers, visibleTemplateElements } from 'ooxml-ui/pptx';
 import type {
 	PptxElement,
 	PptxHandoutMaster,
@@ -6,7 +7,6 @@ import type {
 	PptxSlideLayout,
 	PptxSlideMaster,
 } from 'pptx-viewer-core';
-import { slideSpaceMembers, visibleTemplateElements } from 'ooxml-ui/pptx';
 /**
  * useDerivedElementState: Memoised element and master-view derived state.
  *

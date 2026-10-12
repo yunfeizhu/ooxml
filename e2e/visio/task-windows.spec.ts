@@ -1,9 +1,10 @@
 import { test, expect } from '@playwright/test';
 import { taskPane, zoomPreset } from './ribbon';
+import { openDemo } from './demo-page';
 
 test('closed Shapes window leaves a strip that reopens it', async ({ page }) => {
 	await page.setViewportSize({ width: 1440, height: 900 });
-	await page.goto('/demo/?sample=1');
+	await openDemo(page);
 	const viewer = page.locator('visio-viewer');
 	await expect(viewer.locator('svg.paper')).toHaveCount(1);
 	const strip = viewer.getByRole('button', { name: 'Open Shapes' });
@@ -19,7 +20,7 @@ test('closed Shapes window leaves a strip that reopens it', async ({ page }) => 
 
 test('Pan & Zoom outlines the visible area and pans the drawing window', async ({ page }) => {
 	await page.setViewportSize({ width: 1440, height: 900 });
-	await page.goto('/demo/?sample=1');
+	await openDemo(page);
 	const viewer = page.locator('visio-viewer');
 	await expect(viewer.locator('svg.paper')).toHaveCount(1);
 	await zoomPreset(viewer, 200);

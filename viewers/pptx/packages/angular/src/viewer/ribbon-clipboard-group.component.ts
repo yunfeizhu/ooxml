@@ -14,10 +14,10 @@ import {
 	output,
 } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import type { PptxElement } from 'pptx-viewer-core';
-
 import { clipboardHomeControls } from 'ooxml-ui/pptx';
 import type { RibbonHomeRequestEvent } from 'ooxml-ui/pptx';
+import type { PptxElement } from 'pptx-viewer-core';
+
 import { EditorStateService } from './editor-state.service';
 
 @Component({

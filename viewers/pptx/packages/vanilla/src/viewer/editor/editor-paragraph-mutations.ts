@@ -1,10 +1,10 @@
-import type { PptxElement, TextSegment, TextStyle } from 'pptx-viewer-core';
 import {
 	getInlineEditorSelectionResult,
 	remapTextToSegments,
 	toggleSelectionBullets,
 } from 'ooxml-ui/pptx';
 import type { InlineTextEditSnapshot } from 'ooxml-ui/pptx';
+import type { PptxElement, TextSegment, TextStyle } from 'pptx-viewer-core';
 
 import { canFormatText, readTextFormatState } from './editor-format-mutations';
 import { currentInlineEditorText } from './inline-text-editor';

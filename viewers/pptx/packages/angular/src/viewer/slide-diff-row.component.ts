@@ -16,8 +16,8 @@
 import { ChangeDetectionStrategy, Component, computed, input, output, signal } from '@angular/core';
 import { LucideCheck, LucideChevronDown, LucideChevronRight, LucideX } from '@lucide/angular';
 import { TranslatePipe } from '@ngx-translate/core';
-
 import type { CanvasSize, SlideDiff } from 'ooxml-ui/pptx';
+
 import { SlideDiffChangesComponent } from './slide-diff-changes.component';
 import { changeCountLabel, slideNumberOf, statusLabel } from './slide-diff-helpers';
 import { SlideDiffThumbnailsComponent } from './slide-diff-thumbnails.component';

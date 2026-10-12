@@ -1,3 +1,4 @@
+import type { ZoomNavigationTarget } from 'ooxml-ui/pptx';
 /**
  * Unit tests for `ZoomNavigationService`.
  *
@@ -7,7 +8,6 @@
  */
 import { describe, expect, it, vi } from 'vitest';
 
-import type { ZoomNavigationTarget } from 'ooxml-ui/pptx';
 import { ZoomNavigationService } from './zoom-navigation.service';
 
 function target(overrides: Partial<ZoomNavigationTarget> = {}): ZoomNavigationTarget {

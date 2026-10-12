@@ -1,3 +1,4 @@
+import { READING_VIEW_ATTR, READING_VIEW_COUNTER_ATTR } from 'ooxml-ui/pptx';
 /**
  * Reading View, Svelte binding.
  *
@@ -8,7 +9,6 @@
  * WINDOWED view rather than quietly becoming a second slide show.
  */
 import type { PptxSlide } from 'pptx-viewer-core';
-import { READING_VIEW_ATTR, READING_VIEW_COUNTER_ATTR } from 'ooxml-ui/pptx';
 import { flushSync, mount, unmount } from 'svelte';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 

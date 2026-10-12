@@ -28,8 +28,6 @@
  */
 
 import { computed, inject, Injectable, signal } from '@angular/core';
-import type { PptxCustomShow, PptxSlide } from 'pptx-viewer-core';
-
 import {
 	firstShowSlideIndex,
 	generateCustomShowId,
@@ -38,6 +36,8 @@ import {
 	resolveShowSlideIndexes,
 } from 'ooxml-ui/pptx';
 import type { AuthoredSlideRange, CustomShow, ShowOrderCustomShow } from 'ooxml-ui/pptx';
+import type { PptxCustomShow, PptxSlide } from 'pptx-viewer-core';
+
 import {
 	activeCustomShowMembership,
 	customShowsFromDeck,

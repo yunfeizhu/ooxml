@@ -94,6 +94,13 @@ export function normalizeVisioPageGeometry(
 				gradient.radius = distance(gradient.radius, ratio);
 			}
 		}
+		for (const point of [
+			...(shape.connectionPoints ?? []),
+			...(shape.lineEnds ? [shape.lineEnds.begin, shape.lineEnds.end] : []),
+		]) {
+			point.x = distance(point.x, ratio);
+			point.y = distance(point.y, ratio);
+		}
 		shape.text.width = distance(shape.text.width, ratio);
 		shape.text.height = distance(shape.text.height, ratio);
 		shape.text.transform = matrix(shape.text.transform, ratio);

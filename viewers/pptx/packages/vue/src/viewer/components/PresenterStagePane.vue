@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { PRESENTER_CONSOLE_CLASSES, PRESENTER_RAIL_LABEL_KEYS } from 'ooxml-ui/pptx';
+import type { PresentationZoomState } from 'ooxml-ui/pptx';
 /**
  * PresenterStagePane - the left 70% of the presenter console: the current
  * slide, scaled to fit and zoomable, plus PowerPoint's "Slide n of m" badge.
@@ -9,8 +11,6 @@
  * tool owns the pointer, in which case the host annotates instead.
  */
 import type { PptxSlide } from 'pptx-viewer-core';
-import { PRESENTER_CONSOLE_CLASSES, PRESENTER_RAIL_LABEL_KEYS } from 'ooxml-ui/pptx';
-import type { PresentationZoomState } from 'ooxml-ui/pptx';
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 

@@ -70,3 +70,19 @@ window.addEventListener('storage', (event) => {
 		document.documentElement.dataset.theme = resolve(event.newValue);
 });
 ```
+
+## Status bar theme
+
+The status bar is neutral by default, like the other editors in the suite. Desktop Visio's
+"Colorful" Office theme fills it with the product colour instead. There are three ways to choose:
+
+- **The user**: File > Options > General > Office Theme (Colorful or White). The choice is kept
+  on the device.
+- **The host**: the `status-bar` attribute (`colorful` or `neutral`), or the `statusBar` property,
+  on `<visio-viewer>`. A host's attribute wins over the saved choice.
+- **Any colours**: `--vv-status-background` and `--vv-status-ink` recolour the bar in either theme.
+
+```html
+<visio-viewer status-bar="colorful"></visio-viewer>
+<visio-viewer style="--vv-status-background: #1b5e20; --vv-status-ink: #fff"></visio-viewer>
+```

@@ -1,3 +1,9 @@
+import type {
+	PptxAiChatStore,
+	PptxAiChatSummary,
+	PptxAiStoredChat,
+	PptxAiUIMessage,
+} from 'ooxml-ui/pptx/ai';
 /**
  * AiHistoryService tests: the signal facade over the shared chat-history
  * controller. Bypasses TestBed (the service is a plain class); a fake in-memory
@@ -5,12 +11,6 @@
  */
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-import type {
-	PptxAiChatStore,
-	PptxAiChatSummary,
-	PptxAiStoredChat,
-	PptxAiUIMessage,
-} from 'ooxml-ui/pptx/ai';
 import { AiHistoryService } from './ai-history.service';
 
 function userMessage(text: string): PptxAiUIMessage {

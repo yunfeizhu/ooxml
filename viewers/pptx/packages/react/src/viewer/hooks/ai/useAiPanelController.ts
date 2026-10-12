@@ -1,3 +1,5 @@
+import type { AiChangeBatch, PptxAiFocusedTarget, ToolCanvasTarget } from 'ooxml-ui/pptx/ai';
+import { computeFocusTargets } from 'ooxml-ui/pptx/ai';
 /**
  * useAiPanelController: owns the AI panel's open state and its "scope" (the
  * focused targets + a prefilled composer directive) so PowerPointViewer can
@@ -14,8 +16,6 @@
  *     the tool references (see {@link flashToolTarget}).
  */
 import type { PptxElement } from 'pptx-viewer-core';
-import type { AiChangeBatch, PptxAiFocusedTarget, ToolCanvasTarget } from 'ooxml-ui/pptx/ai';
-import { computeFocusTargets } from 'ooxml-ui/pptx/ai';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 export interface UseAiPanelControllerInput {

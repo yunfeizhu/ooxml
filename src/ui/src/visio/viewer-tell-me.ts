@@ -23,7 +23,8 @@ function ribbonCommands(root: ShadowRoot): OfficeSearchCommand[] {
 	for (const node of root.querySelectorAll<HTMLElement>('.toolbar [command]')) {
 		const id = node.getAttribute('command')!;
 		const label = node.getAttribute('label');
-		if (!label || seen.has(id)) continue;
+		// Add-in tabs belong to the host: their ids are not this viewer's commands.
+		if (!label || seen.has(id) || node.closest('[data-add-in]')) continue;
 		seen.add(id);
 		const disabled = node.hasAttribute('disabled') || node.hasAttribute('main-disabled');
 		commands.push({

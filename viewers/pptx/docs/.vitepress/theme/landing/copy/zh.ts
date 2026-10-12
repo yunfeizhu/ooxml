@@ -163,7 +163,11 @@ export const zh: LandingCopy = {
 			{
 				title: '社区',
 				links: [
-					{ text: 'GitHub', href: 'https://github.com/ChristopherVR/ooxml/tree/main/viewers/pptx', external: true },
+					{
+						text: 'GitHub',
+						href: 'https://github.com/ChristopherVR/ooxml/tree/main/viewers/pptx',
+						external: true,
+					},
 					{
 						text: 'npm',
 						href: 'https://www.npmjs.com/package/pptx-react-viewer',

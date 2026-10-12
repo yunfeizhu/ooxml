@@ -11,6 +11,43 @@ import { type AxisShift, shiftIndex } from './range-math';
 
 const XM = 'http://schemas.microsoft.com/office/excel/2006/main';
 
+/** Reports page breaks and extension ranges that an insertion would push beyond the grid. */
+export function hasPreservedOverflow(
+	sheet: Worksheet,
+	shift: AxisShift,
+	clipped: (range: CellRange) => boolean,
+	banded: boolean,
+): boolean {
+	const keys = banded ? ['extLst'] : [shift.axis === 'row' ? 'rowBreaks' : 'colBreaks', 'extLst'];
+	for (const key of keys)
+		for (const xml of sheet.preserved.get(key) ?? []) {
+			if (!xml.includes(key === 'extLst' ? 'sqref' : 'brk')) continue;
+			let root: XmlElement;
+			try {
+				root = parseXml(xml).documentElement;
+			} catch {
+				// Malformed, unhandled markup remains verbatim, as it does in the shift writer.
+				continue;
+			}
+			if (key === 'extLst') {
+				if (
+					descendants(root, XM, 'sqref').some((node) =>
+						parseSqref(node.textContent ?? '').some(clipped),
+					)
+				)
+					return true;
+			} else if (
+				elements(root).some(
+					(node) =>
+						node.localName === 'brk' &&
+						shiftIndex(Number(node.getAttribute('id') ?? '0'), shift) === undefined,
+				)
+			)
+				return true;
+		}
+	return false;
+}
+
 /** Rewrites one formula; `formulaSheet` is the sheet unqualified references point at. */
 type Rewrite = (formula: string, formulaSheet: string) => string;
 

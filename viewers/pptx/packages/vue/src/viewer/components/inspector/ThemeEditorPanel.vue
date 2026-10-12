@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import type { PptxTheme } from 'pptx-viewer-core';
 import { themeEditorLabels } from 'ooxml-ui/pptx';
 import type { ThemeEditorApplyEvent, ThemeEditorEdit } from 'ooxml-ui/pptx';
+import type { PptxTheme } from 'pptx-viewer-core';
 import { toRaw } from 'vue';
 import { useI18n } from 'vue-i18n';
 

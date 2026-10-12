@@ -131,8 +131,8 @@ The binary is also installed as **`pptx-tools`** after a global install (`npm i 
 To embed the server programmatically rather than via the CLI, use the factory from the `/mcp` entry point:
 
 ```ts
-import { createServer } from 'pptx-viewer-mcp/mcp';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
+import { createServer } from 'pptx-viewer-mcp/mcp';
 
 const server = createServer(); // McpServer with all 67 tools registered
 await server.connect(new StdioServerTransport());
@@ -143,6 +143,8 @@ await server.connect(new StdioServerTransport());
 `executeToolWithContext` wraps the **load → tool → save** cycle and, when a live collaboration room is available, routes the change through a Y.Doc instead of (or in addition to) disk:
 
 ```ts
+import { readFile, writeFile } from 'node:fs/promises';
+
 import {
 	executeToolWithContext,
 	replaceText,
@@ -150,7 +152,6 @@ import {
 	type FileSystemProvider,
 	type CollaborationProvider,
 } from 'pptx-viewer-mcp';
-import { readFile, writeFile } from 'node:fs/promises';
 
 // Minimal file-system-only provider
 const filesystem: FileSystemProvider = {

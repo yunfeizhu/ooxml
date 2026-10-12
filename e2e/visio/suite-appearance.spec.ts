@@ -1,5 +1,6 @@
 import { test, expect } from '@playwright/test';
 import { taskPane } from './ribbon';
+import { openDemo } from './demo-page';
 
 for (const theme of ['light', 'dark'] as const) {
 	for (const width of [1440, 768, 390]) {
@@ -9,7 +10,7 @@ for (const theme of ['light', 'dark'] as const) {
 				(value) => localStorage.setItem('vitepress-theme-appearance', value),
 				theme,
 			);
-			await page.goto('/demo/?sample=1');
+			await openDemo(page);
 			const viewer = page.locator('visio-viewer');
 			await expect(viewer.locator('.viewport > svg')).toBeVisible();
 			await expect(page.locator('html')).toHaveAttribute('data-theme', theme);
@@ -34,12 +35,14 @@ for (const theme of ['light', 'dark'] as const) {
 			expect(colors.accent).toBe(theme === 'light' ? 'rgb(57, 85, 163)' : 'rgb(139, 159, 240)');
 			expect(colors.width).toBeLessThanOrEqual(width);
 			expect(colors.height).toBe(844);
-			if (width > 760) await taskPane(viewer, 'Inspector');
+			// Task panes are closed until asked for; Shape Data opens inside the window.
 			await expect(viewer.locator('.inspector-pane')).toBeHidden();
-			await taskPane(viewer, 'Inspector');
-			await viewer.locator('.edit-controls summary').click();
-			await viewer.getByLabel('Selected shape text', { exact: true }).scrollIntoViewIfNeeded();
-			await expect(viewer.getByLabel('Selected shape text', { exact: true })).toBeInViewport();
+			await taskPane(viewer, 'Shape Data');
+			await expect(viewer.locator('.inspector-pane')).toBeInViewport();
+			await viewer
+				.locator('.inspector-pane')
+				.getByRole('button', { name: 'Close Shape Data', exact: true })
+				.click();
 			await viewer.getByRole('tab', { name: 'Home', exact: true }).click();
 			await viewer.getByRole('tab', { name: 'Architecture', exact: true }).click();
 			await expect(viewer.locator('.viewport > svg')).toHaveAttribute('aria-label', 'Architecture');

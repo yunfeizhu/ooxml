@@ -1,5 +1,3 @@
-import { hasTextProperties } from 'pptx-viewer-core';
-import type { PptxElement, TextSegment } from 'pptx-viewer-core';
 import {
 	buildParagraphs,
 	followingText,
@@ -13,6 +11,8 @@ import type {
 	PlaceholderPromptDescriptor,
 	RenderParagraph,
 } from 'ooxml-ui/pptx';
+import { hasTextProperties } from 'pptx-viewer-core';
+import type { PptxElement, TextSegment } from 'pptx-viewer-core';
 import React from 'react';
 
 import type { ElementAnimationState } from './animation-timeline';
@@ -260,6 +260,7 @@ function renderBulletMarker(
 				contentEditable={false}
 				src={picture.src}
 				alt={picture.accessibleLabel}
+				draggable={false}
 				style={{
 					width: picture.sizePx,
 					height: picture.sizePx,

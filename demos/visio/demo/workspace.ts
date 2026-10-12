@@ -2,8 +2,7 @@ import { compatibilityNotes, compatibilityText } from '../../../viewers/visio/sr
 import type { ViewerCallbacks } from 'ooxml-ui/visio';
 import type { MountedViewer } from 'ooxml-ui/visio';
 import type { VisioDocument } from 'ooxml-core/visio';
-import { demoDocument } from 'ooxml-core/visio/ui';
-import { sharedSampleBytes } from './shared-sample';
+import { createSampleVsdx, demoDocument } from 'ooxml-core/visio/ui';
 import { wireWorkspaceShell } from './workspace-shell';
 import { wireWorkspaceTheme } from './workspace-theme';
 
@@ -16,22 +15,19 @@ export type WorkspaceViewer = Pick<
 export interface Workspace {
 	/** Pass these to the viewer, through the binding's own event API. */
 	readonly events: ViewerCallbacks;
-	/** The drawing to start with (the sample). */
+	/** What the binding mounts with; `attach` replaces it with the editable sample package. */
 	readonly initialDocument: VisioDocument;
 	/**
-	 * Connect the mounted viewer. `setDocument` gives the binding a new `document` property, the way
-	 * that framework updates props (state, signals, inputs); `destroy` tears the binding down.
+	 * Connect the mounted viewer; `destroy` tears the binding down. Every drawing, the sample
+	 * included, then opens through the viewer's `load`, so the binding's `document` prop stays the
+	 * initial placeholder.
 	 */
-	attach(
-		viewer: WorkspaceViewer,
-		setDocument: (document: VisioDocument) => void,
-		destroy?: () => void,
-	): void;
+	attach(viewer: WorkspaceViewer, destroy?: () => void): void;
 }
 
 /**
  * The demo workspace around the viewer: title bar, start screen, file opening, drag and drop, the
- * sample template, theme and the document report. Framework-neutral: every framework demo mounts
+ * sample template, theme and the state values the tests read. Framework-neutral: every framework demo mounts
  * the viewer with its own binding and attaches it here, so all six demos behave the same.
  */
 export function createWorkspace(doc: Document = document): Workspace {
@@ -41,12 +37,11 @@ export function createWorkspace(doc: Document = document): Workspace {
 		errorBox = get('error');
 	const disposeTheme = wireWorkspaceTheme(doc);
 	let viewer: WorkspaceViewer | undefined;
-	let setDocument: (document: VisioDocument) => void = () => {};
 	let destroyViewer: () => void = () => {};
 	let requestId = 0;
 	const revealWorkspace = wireWorkspaceShell(doc, {
 		browse: () => get<HTMLInputElement>('file').click(),
-		sample: () => loadSample(),
+		sample: () => void loadSample(),
 	});
 
 	function refreshEditState(): void {
@@ -106,18 +101,34 @@ export function createWorkspace(doc: Document = document): Workspace {
 			errorBox.textContent = cause instanceof Error ? cause.message : String(cause);
 		}
 	}
-	function loadSample(): void {
+	/**
+	 * The sample is a real VSDX built by the core, so it is source-backed: it can be edited, saved
+	 * and shared like any opened file. (The bare `demoDocument` model is only the mount placeholder.)
+	 */
+	async function loadSample(fromBackstage = false): Promise<void> {
 		if (!viewer) return;
-		++requestId;
+		const request = ++requestId;
+		viewer.controller.cancelLoad();
 		errorBox.hidden = true;
-		// A fresh object, so every binding sees a changed `document` property.
-		setDocument({ ...demoDocument });
-		fileName.textContent = 'Sample workflow';
-		revealWorkspace();
-		refreshEditState();
-		refreshNotes();
-		viewer.fit();
-		viewer.element.closeBackstage();
+		try {
+			const file = new File([(await createSampleVsdx()) as BlobPart], 'Sample workflow.vsdx');
+			if (request !== requestId) return;
+			await viewer.load(file);
+			if (request !== requestId) return;
+			fileName.textContent = 'Sample workflow';
+			revealWorkspace();
+			refreshEditState();
+			refreshNotes();
+			viewer.fit();
+			if (fromBackstage) viewer.element.closeBackstage();
+		} catch (cause) {
+			if (request !== requestId) return;
+			errorBox.hidden = false;
+			errorBox.textContent = cause instanceof Error ? cause.message : String(cause);
+		} finally {
+			// Browser tests wait for this before acting, so they never race the sample load.
+			doc.body.dataset.sample = request === requestId ? 'loaded' : 'superseded';
+		}
 	}
 
 	const events: ViewerCallbacks = {
@@ -141,17 +152,9 @@ export function createWorkspace(doc: Document = document): Workspace {
 		},
 	};
 
-	function attach(
-		mounted: WorkspaceViewer,
-		set: (document: VisioDocument) => void,
-		destroy: () => void = () => {},
-	): void {
+	function attach(mounted: WorkspaceViewer, destroy: () => void = () => {}): void {
 		viewer = mounted;
-		setDocument = set;
 		destroyViewer = destroy;
-		const report = doc.querySelector<HTMLElement>('.workspace-footer')!;
-		report.slot = 'workspace-footer';
-		mounted.element.append(report);
 		/** The sample is offered as a template in the viewer's File > New page. */
 		const template = doc.createElement('button');
 		template.type = 'button';
@@ -162,7 +165,7 @@ export function createWorkspace(doc: Document = document): Workspace {
 		const description = doc.createElement('span');
 		description.textContent = 'A two-page release diagram.';
 		template.append(title, description);
-		template.addEventListener('click', () => loadSample());
+		template.addEventListener('click', () => void loadSample(true));
 		mounted.element.append(template);
 		const unsubscribe = mounted.controller.subscribe(() => refreshEditState());
 		const input = get<HTMLInputElement>('file');
@@ -182,10 +185,6 @@ export function createWorkspace(doc: Document = document): Workspace {
 		if (shareRoom && shareField) {
 			shareField.value = shareRoom;
 			shareRoot?.querySelector<HTMLButtonElement>('[data-share="start"]')?.click();
-			// The built-in sample is a model without package bytes, which a session cannot share, so the
-			// window that asks for the sample opens a small real VSDX instead and the others adopt it.
-			if (new URL(view.location.href).searchParams.get('sample') === '1')
-				void openFile(new File([sharedSampleBytes() as BlobPart], 'shared-sample.vsdx'));
 		}
 		view.addEventListener('pagehide', (event) => {
 			if (event.persisted) {
@@ -201,6 +200,12 @@ export function createWorkspace(doc: Document = document): Workspace {
 			if (event.persisted) mounted.fit();
 		});
 		refreshNotes();
+		// A demo that starts on the sample (`?sample=1` or the embedded landing frame) replaces the
+		// mount placeholder with the editable package; any file opened meanwhile wins. A window that
+		// joins a share session without asking for the sample adopts the session's drawing instead.
+		const params = new URL(view.location.href).searchParams;
+		if (params.get('sample') === '1' || (params.get('embed') === '1' && !shareRoom))
+			void loadSample();
 		view.requestAnimationFrame(() => mounted.fit());
 		if (view.parent !== view)
 			view.parent.postMessage({ type: 'visio-viewer-ready' }, view.location.origin);

@@ -133,3 +133,6 @@ docs/public/_video-tmp/
 # Scratch output of the OpenXML parity audit (agent findings, not shipped)
 /.parity-audit/
 
+
+# Warm e2e dev servers (bun e2e-servers.ts start): pids and logs
+.e2e-servers/

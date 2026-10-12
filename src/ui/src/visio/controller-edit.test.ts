@@ -144,8 +144,8 @@ it('reentrant source replacement on edit commit suppresses obsolete event', asyn
 it('model-only and destroyed controllers cannot edit/save', async () => {
 	const viewer = setup();
 	viewer.setDocument(demoDocument);
-	await expect(viewer.undo()).rejects.toThrow('Load');
-	expect(() => viewer.exportVsdx()).toThrow('Load');
+	await expect(viewer.undo()).rejects.toThrow('Open a .vsdx file');
+	expect(() => viewer.exportVsdx()).toThrow('Open a .vsdx file');
 	viewer.destroy();
 	await expect(viewer.redo()).rejects.toThrow('destroyed');
 	expect(() => viewer.exportVsdx()).toThrow('destroyed');

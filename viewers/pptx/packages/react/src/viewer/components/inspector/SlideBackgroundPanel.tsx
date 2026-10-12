@@ -1,9 +1,9 @@
-import type { PptxSlide, PptxSlideMaster } from 'pptx-viewer-core';
 import {
 	resolveTemplateBackgroundRows,
 	slideBackgroundClearPatch,
 	slideBackgroundClearState,
 } from 'ooxml-ui/pptx';
+import type { PptxSlide, PptxSlideMaster } from 'pptx-viewer-core';
 import React, { useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { LuX } from 'react-icons/lu';

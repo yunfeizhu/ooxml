@@ -1,11 +1,9 @@
-/** Core error codes remain visible for a refused transaction; document content is plain text. */
+/**
+ * What a refused edit says to the user: the plain reason. The stable code stays on the error
+ * (`error.code`) for programs; it is not shown in the interface. Document content is plain text.
+ */
 export function editErrorMessage(error: unknown): string {
-	const message = error instanceof Error ? error.message : String(error);
-	const code =
-		error && typeof error === 'object' && 'code' in error && typeof error.code === 'string'
-			? error.code.slice(0, 256)
-			: undefined;
-	return code ? `${code}: ${message}` : message;
+	return error instanceof Error ? error.message : String(error);
 }
 
 /** Superseded worker/load operations are cancellation, not a refused document edit. */

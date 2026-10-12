@@ -1,5 +1,6 @@
 // Compatibility exports: all document operations are owned by OOXML core.
 import { apiToolsChartTools as operations } from 'ooxml-core/pptx/automation';
+
 export type UpdateChartParams = operations.UpdateChartParams;
 export const updateChart = operations.updateChart;
 export type AddChartSeriesParams = operations.AddChartSeriesParams;

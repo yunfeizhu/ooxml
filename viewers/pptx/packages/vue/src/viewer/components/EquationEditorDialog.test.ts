@@ -1,6 +1,6 @@
 import { mount } from '@vue/test-utils';
-import type { PptxElement, TextSegment } from 'pptx-viewer-core';
 import { convertLatexToOmml } from 'ooxml-ui/pptx';
+import type { PptxElement, TextSegment } from 'pptx-viewer-core';
 import { afterEach, describe, expect, it } from 'vitest';
 
 import { allButtons } from './dialog-footer.test-support';

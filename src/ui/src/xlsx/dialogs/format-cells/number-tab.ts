@@ -1,17 +1,7 @@
 // Format Cells > Number: the category list, each category's options and a live sample formatted
 // by the core's formatValue.
 import { BUILTIN_NUMBER_FORMATS, type CellValue, formatValue } from 'ooxml-core/xlsx';
-import {
-	checkbox,
-	el,
-	field,
-	listBox,
-	numberInput,
-	row,
-	select,
-	text,
-	textInput,
-} from '../fields';
+import { checkbox, el, field, listBox, numberInput, row, select, text, textInput } from '../fields';
 import {
 	CATEGORIES,
 	type CategoryId,

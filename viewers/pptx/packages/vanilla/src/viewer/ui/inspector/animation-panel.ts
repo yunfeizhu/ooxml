@@ -1,13 +1,3 @@
-import type {
-	PptxAnimationPreset,
-	PptxAnimationRepeatMode,
-	PptxAnimationSequence,
-	PptxAnimationTimelineAnchor,
-	PptxAnimationTimingCurve,
-	PptxAnimationTrigger,
-	PptxElement,
-	PptxElementAnimation,
-} from 'pptx-viewer-core';
 import type { AnimationGroup } from 'ooxml-ui/pptx';
 import {
 	buildAnimationTimelineRows,
@@ -21,6 +11,16 @@ import {
 	SEQUENCE_VALUES,
 	TRIGGER_VALUES,
 } from 'ooxml-ui/pptx';
+import type {
+	PptxAnimationPreset,
+	PptxAnimationRepeatMode,
+	PptxAnimationSequence,
+	PptxAnimationTimelineAnchor,
+	PptxAnimationTimingCurve,
+	PptxAnimationTrigger,
+	PptxElement,
+	PptxElementAnimation,
+} from 'pptx-viewer-core';
 
 import { playAnimationPreview } from '../../animation';
 import type { Translator } from '../../i18n';

@@ -8,15 +8,7 @@ import {
 	patchRowProperties,
 	patchTableMargins,
 } from './write-table-properties';
-import {
-	children,
-	first,
-	isElement,
-	makeW,
-	named,
-	type XmlDocument,
-	type XmlElement,
-} from './xml';
+import { children, first, isElement, makeW, named, type XmlDocument, type XmlElement } from './xml';
 
 type ParagraphWriter = (
 	doc: XmlDocument,

@@ -29,7 +29,7 @@ it('formats every rich row through real controls while preserving text markers a
 		[true, true],
 	]);
 	expect(ui.button('bold').getAttribute('pressed')).toBe('true');
-	ui.press('font-color-red');
+	ui.pickColor('font', '#ff0000');
 	await ui.done();
 	expect(ui.shape().text.runs.every((run) => run.color === '#ff0000')).toBe(true);
 	const savedXml = await (
@@ -98,10 +98,10 @@ it('guards size steps on mixed-size runs while the absolute size picker remains 
 it('applies font color, strike, bullets, indent and justify through the ribbon and source bytes', async () => {
 	const ui = await setup();
 	ui.selection();
-	ui.press('font-color-red');
+	ui.pickColor('font', '#ff0000');
 	await ui.done();
 	expect(ui.shape().text.color).toBe('#ff0000');
-	expect(ui.button('font-color-red').getAttribute('checked')).toBe('true');
+	expect(ui.grid('font').value).toBe('#ff0000');
 	ui.press('font-color');
 	await ui.done();
 	expect(ui.shape().text.color).toBe('#ff0000');
@@ -189,13 +189,13 @@ it('sets mixed-selection toggles together and preserves all selected targets thr
 	expect(
 		ui.controller.state.document!.pages[0]!.shapes.every((shape) => !shape.text.runs[0]?.bold),
 	).toBe(true);
-	ui.press('fill-blue');
+	ui.pickColor('fill', '#0070c0');
 	await ui.done();
 	expect(ui.edits.at(-1)).toHaveLength(2);
 	expect(
-		ui.controller.state.document!.pages[0]!.shapes.every((shape) => shape.style.fill === '#4472c4'),
+		ui.controller.state.document!.pages[0]!.shapes.every((shape) => shape.style.fill === '#0070c0'),
 	).toBe(true);
-	expect(ui.button('fill-blue').getAttribute('checked')).toBe('true');
+	expect(ui.grid('fill').value).toBe('#0070c0');
 	ui.dispose();
 	ui.controller.destroy();
 });
@@ -214,13 +214,15 @@ it('refuses the whole incompatible selection instead of editing its primary shap
 			text: 'Second',
 		},
 	]);
-	ui.shape().masterId = 'unsupported-master';
+	ui.shape().layerIds = ['unsupported-layer'];
 	ui.controller.selectShapes([
 		{ id: '1', name: 'First', pageId: '1' },
 		{ id: '2', name: 'Second', pageId: '1' },
 	]);
 	expect(ui.button('strikethrough').disabled).toBe(true);
-	expect(ui.button('fill-blue').disabled).toBe(true);
+	expect(
+		ui.root.querySelector<HTMLElement & { disabled: boolean }>('[data-menu="fill"]')!.disabled,
+	).toBe(true);
 	const count = ui.edits.length;
 	ui.commands.run({ type: 'text-toggle', property: 'strikethrough' });
 	expect(ui.edits).toHaveLength(count);
@@ -273,13 +275,38 @@ it('preserves the complete source when a later target refuses an atomic formatti
 		{ id: '1', name: 'First', pageId: '1' },
 		{ id: '2', name: 'Locked', pageId: '1' },
 	]);
-	expect(ui.button('font-color-red').disabled).toBe(false);
-	ui.press('font-color-red');
+	expect(ui.button('font-color').disabled).toBe(false);
+	ui.pickColor('font', '#ff0000');
 	await ui.done();
 	expect(ui.controller.state.edit.error).toBeDefined();
 	expect(ui.controller.exportVsdx().bytes).toEqual(bytes);
 	expect(ui.controller.state.edit.canUndo).toBe(false);
 	expect(ui.controller.state.selectedShapes).toHaveLength(2);
+	ui.dispose();
+	ui.controller.destroy();
+});
+
+it('rotates the text block a quarter turn at a time, as Rotate Text in Visio', async () => {
+	const ui = await setup();
+	expect(ui.button('rotate-text').disabled).toBe(true);
+	ui.selection();
+	expect(ui.button('rotate-text').disabled).toBe(false);
+	const angle = () => {
+		const t = ui.shape().text.transform;
+		return Math.round((Math.atan2(t[1], t[0]) * 180) / Math.PI);
+	};
+	const size = { width: ui.shape().text.width, height: ui.shape().text.height };
+	expect(angle()).toBe(0);
+	const turns: number[] = [];
+	for (let turn = 0; turn < 4; ++turn) {
+		ui.press('rotate-text');
+		await ui.done();
+		turns.push(angle());
+		// Recorded from Visio: TxtAngle gains 90 deg; TxtWidth, TxtHeight and the pin stay.
+		expect(ui.shape().text.width).toBeCloseTo(size.width);
+		expect(ui.shape().text.height).toBeCloseTo(size.height);
+	}
+	expect(turns.map((value) => (value + 360) % 360)).toEqual([90, 180, 270, 0]);
 	ui.dispose();
 	ui.controller.destroy();
 });

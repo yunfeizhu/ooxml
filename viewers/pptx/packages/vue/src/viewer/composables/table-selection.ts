@@ -1,6 +1,6 @@
-import type { PptxTableData } from 'pptx-viewer-core';
 import type { CellCoord, CellRect } from 'ooxml-ui/pptx';
 import { computeSelectionRect, isCellInRect, rectToCells } from 'ooxml-ui/pptx';
+import type { PptxTableData } from 'pptx-viewer-core';
 import type { ComputedRef, InjectionKey, Ref } from 'vue';
 import { computed, inject, provide } from 'vue';
 

@@ -4,7 +4,11 @@ import { join } from 'node:path';
 import { parseVsdx } from '../parser';
 import { editVsdx } from '../edit';
 import { demoDocument } from './demo-document';
-import { visioLocalRotationShape, visioQuarterTurnCommand } from './shape-rotation';
+import {
+	visioLocalRotationShape,
+	visioQuarterTurnCommand,
+	visioRotationShape,
+} from './shape-rotation';
 it('shares local rotation admission and preserves the sign at half-turn boundaries', () => {
 	const page = structuredClone(demoDocument.pages[0]!);
 	const shape = page.shapes[0]!;
@@ -20,7 +24,8 @@ it('shares local rotation admission and preserves the sign at half-turn boundari
 	for (const unsupported of [
 		{ kind: 'connector' as const },
 		{ kind: 'group' as const },
-		{ masterId: '0' },
+		{ masterId: '0', kind: 'connector' as const },
+		{ masterId: '0', layerIds: ['locked'] },
 		{ hidden: true },
 		{ width: 0 },
 		{ height: 0 },
@@ -31,6 +36,17 @@ it('shares local rotation admission and preserves the sign at half-turn boundari
 		expect(visioLocalRotationShape(scene, shape.id)).toBeUndefined();
 		expect(visioQuarterTurnCommand(scene, shape.id, 'left')).toBeUndefined();
 	}
+	// A one-shape stencil instance is not a local shape (it cannot be grouped) but does rotate,
+	// also on its stencil's unlocked layer.
+	const instance = { ...shape, masterId: '0', layerIds: ['0'] };
+	const stencil = {
+		...page,
+		shapes: [instance],
+		layers: [{ id: '0', name: 'Flowchart', visible: true, printable: true, locked: false }],
+	};
+	expect(visioLocalRotationShape(stencil, shape.id)).toBeUndefined();
+	expect(visioRotationShape(stencil, shape.id)).toBe(instance);
+	expect(visioQuarterTurnCommand(stencil, shape.id, 'left')).toBeDefined();
 	expect(
 		visioLocalRotationShape(
 			{
@@ -53,8 +69,16 @@ it('admits local nested groups for rotation while retaining leaf-only flip admis
 	expect(visioLocalRotationShape(page, outer.id)).toBe(outer);
 	expect(visioLocalRotationShape(page, outer.id, false)).toBeUndefined();
 	expect(visioQuarterTurnCommand(page, outer.id, 'left')!.angle).toBe(Math.PI / 2);
+	// A stencil shape inside the group stays an instance and turns with it; a stencil connector
+	// or a stencil shape at the top level is not a group made here.
 	leaf.masterId = '1';
+	expect(visioLocalRotationShape(page, outer.id)).toBe(outer);
+	leaf.kind = 'connector';
 	expect(visioLocalRotationShape(page, outer.id)).toBeUndefined();
+	leaf.kind = 'shape';
+	outer.masterId = '2';
+	expect(visioLocalRotationShape(page, outer.id)).toBeUndefined();
+	delete outer.masterId;
 	delete leaf.masterId;
 	page.connectors = [{ fromShapeId: leaf.id, toShapeId: 'x', fromCell: 'BeginX', toCell: 'PinX' }];
 	expect(visioLocalRotationShape(page, outer.id)).toBeUndefined();

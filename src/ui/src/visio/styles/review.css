@@ -1,0 +1,131 @@
+/* Review and Process: the Comments pane, the Issues window, Shape Reports and canvas markers. */
+.review-pane {
+	display: flex;
+	flex: 0 0 300px;
+	flex-direction: column;
+	width: 300px;
+	min-width: 0;
+	overflow: auto;
+	border-left: 1px solid var(--_vv-border);
+	background: var(--_vv-secondary);
+}
+.review-pane[hidden] {
+	display: none;
+}
+.comments-pane-host office-ui-comments-pane {
+	flex: 1;
+	min-height: 0;
+}
+.issues-pane .pane-close {
+	min-height: 24px;
+	padding: 0 6px;
+	background: transparent;
+	border: 0;
+}
+.issues-summary,
+.issues-note {
+	margin: 8px 10px;
+}
+.issues-note {
+	color: var(--_vv-muted);
+	font-size: 11px;
+}
+.issues-list {
+	display: grid;
+	gap: 4px;
+	margin: 0;
+	padding: 0 10px;
+	list-style: none;
+}
+.issues-list button {
+	display: grid;
+	width: 100%;
+	gap: 2px;
+	text-align: start;
+}
+.issue-where {
+	color: var(--_vv-muted);
+	font-size: 11px;
+}
+.issues-ignored {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	margin: 8px 10px 0;
+}
+.issues-ignored input {
+	min-height: 0;
+}
+.paper [data-comment-marker] {
+	cursor: pointer;
+}
+.paper [data-comment-marker] path {
+	fill: var(--_vv-accent);
+	stroke: white;
+	stroke-width: 1;
+}
+.paper [data-comment-marker][data-resolved] path {
+	fill: var(--_vv-muted);
+}
+.paper [data-comment-marker] text {
+	fill: white;
+	font:
+		600 10px 'Segoe UI',
+		Arial,
+		sans-serif;
+	text-anchor: middle;
+	dominant-baseline: middle;
+}
+.shape-report-dialog label,
+.link-existing-dialog label {
+	display: grid;
+	gap: 4px;
+	min-width: min(360px, 80vw);
+	margin: 0 0 12px;
+}
+.shape-report-dialog select,
+.link-existing-dialog select {
+	padding: 6px;
+	color: inherit;
+	background: var(--_vv-surface);
+	border: 1px solid var(--_vv-border);
+	border-radius: 3px;
+}
+.shape-report-table {
+	max-width: min(860px, 86vw);
+	max-height: min(420px, 60vh);
+	overflow: auto;
+	border: 1px solid var(--_vv-border);
+}
+.shape-report-table table {
+	border-collapse: collapse;
+	font-size: 11px;
+}
+.shape-report-table th,
+.shape-report-table td {
+	max-width: 240px;
+	padding: 3px 6px;
+	overflow: hidden;
+	text-align: start;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	border-bottom: 1px solid var(--_vv-border);
+}
+.shape-report-table th {
+	position: sticky;
+	top: 0;
+	background: var(--_vv-surface);
+}
+.link-existing-dialog [role='alert'] {
+	margin: 0;
+	color: var(--office-error, #b00020);
+}
+@media (max-width: 760px) {
+	.review-pane {
+		position: absolute;
+		inset: 0 0 0 auto;
+		z-index: 4;
+		width: min(320px, 100%);
+		box-shadow: -8px 0 24px #0002;
+	}
+}

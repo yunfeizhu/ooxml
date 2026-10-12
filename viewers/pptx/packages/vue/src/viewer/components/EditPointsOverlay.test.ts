@@ -1,6 +1,6 @@
 import { mount } from '@vue/test-utils';
-import type { PptxElement, ShapePptxElement } from 'pptx-viewer-core';
 import type { EditPointsElementPatch } from 'ooxml-ui/pptx';
+import type { PptxElement, ShapePptxElement } from 'pptx-viewer-core';
 import { describe, expect, it, vi } from 'vitest';
 
 import EditPointsOverlay from './EditPointsOverlay.vue';

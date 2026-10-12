@@ -1,12 +1,6 @@
 import JSZip from 'jszip';
 import { describe, expect, it } from 'vitest';
-import {
-	createDocument,
-	loadDocx,
-	saveDocx,
-	resolveRunFormatting,
-	type Ligatures,
-} from './index';
+import { createDocument, loadDocx, saveDocx, resolveRunFormatting, type Ligatures } from './index';
 import { LIGATURE_VALUES, WORD_2010_NS, writeLigatures } from './ligatures';
 import { parseXml, WORD_NS } from './xml';
 import { runHasUnknownProperties } from './write-run-validation';

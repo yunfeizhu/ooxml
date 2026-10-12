@@ -1,4 +1,3 @@
-import type { MergeShapeOperation, PptxElement } from 'pptx-viewer-core';
 import type { AlignEdge, ToolbarActionId } from 'ooxml-ui/pptx';
 import {
 	arrangeAlignAction,
@@ -12,6 +11,7 @@ import {
 	parseCropValue,
 	strokeWidthOf,
 } from 'ooxml-ui/pptx';
+import type { MergeShapeOperation, PptxElement } from 'pptx-viewer-core';
 
 import type { Translator } from '../../../i18n';
 import { createEl } from '../../../render';

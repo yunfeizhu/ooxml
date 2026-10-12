@@ -25,7 +25,6 @@
  * @module composables/useAnimationPlayback
  */
 
-import type { PptxSlide } from 'pptx-viewer-core';
 import {
 	advanceMainSequence,
 	clearPlaybackTimers,
@@ -37,6 +36,7 @@ import {
 	scheduleAutoAdvanceChain,
 } from 'ooxml-ui/pptx';
 import type { BuildRafHandle, ElementAnimationState, PlaybackContext } from 'ooxml-ui/pptx';
+import type { PptxSlide } from 'pptx-viewer-core';
 import { onScopeDispose, ref, shallowRef, toValue, watch } from 'vue';
 import type { MaybeRefOrGetter, Ref } from 'vue';
 

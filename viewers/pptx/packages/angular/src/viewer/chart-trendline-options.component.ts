@@ -20,6 +20,7 @@ import {
 	CUSTOM_ELEMENTS_SCHEMA,
 } from '@angular/core';
 import { TranslatePipe } from '@ngx-translate/core';
+import { TRENDLINE_SUPPORTED_TYPES, TRENDLINE_TYPE_OPTIONS } from 'ooxml-ui/pptx';
 import type {
 	ChartPptxElement,
 	PptxChartSeries,
@@ -27,7 +28,6 @@ import type {
 	PptxChartType,
 } from 'pptx-viewer-core';
 
-import { TRENDLINE_SUPPORTED_TYPES, TRENDLINE_TYPE_OPTIONS } from 'ooxml-ui/pptx';
 import { setSeriesTrendline } from './chart-advanced-helpers';
 import { CHART_EDITOR_STYLES } from './chart-editor-styles';
 import { boolFromEvent, selectValue } from './chart-event-helpers';

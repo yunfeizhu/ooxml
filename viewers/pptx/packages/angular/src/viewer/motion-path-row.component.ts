@@ -28,8 +28,8 @@ import {
 	CUSTOM_ELEMENTS_SCHEMA,
 } from '@angular/core';
 import { TranslatePipe } from '@ngx-translate/core';
-
 import { motionPathPresetIdForPath } from 'ooxml-ui/pptx';
+
 import { isSelectControl } from './control-event-targets';
 import { MOTION_PATH_COLUMNS } from './motion-path-columns';
 

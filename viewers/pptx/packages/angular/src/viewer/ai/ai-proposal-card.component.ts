@@ -9,7 +9,6 @@
 import { ChangeDetectionStrategy, Component, computed, input, output } from '@angular/core';
 import { LucideCheck, LucideX } from '@lucide/angular';
 import { TranslatePipe } from '@ngx-translate/core';
-
 import { humanizeDiffLine } from 'ooxml-ui/pptx/ai';
 import type { ProposalView } from 'ooxml-ui/pptx/ai';
 

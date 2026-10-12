@@ -1,7 +1,7 @@
-import type { PptxElement } from 'pptx-viewer-core';
-
 import { prepareElementForInsertion } from 'ooxml-ui/pptx';
 import type { ElementInsertionTarget } from 'ooxml-ui/pptx';
+import type { PptxElement } from 'pptx-viewer-core';
+
 import type { EditorStateService } from './editor-state.service';
 
 /** Public insertion uses the same synchronous commit and editor transaction as the canvas. */

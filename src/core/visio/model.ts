@@ -1,5 +1,10 @@
+import type { VisioPageLayout } from './page-layout';
+import type { VisioSnapGlue } from './snap-glue';
 import type { VisioForeignVector } from './foreign-vector';
 import type { VisioHyperlink, VisioShapeData } from './shape-metadata';
+import type { VisioComment } from './comments';
+export type { VisioComment } from './comments';
+import type { VisioDataRecordset } from './data-recordsets';
 
 /** Visio's internal distance unit is the inch; angles are radians. */
 export type VisioMatrix = readonly [number, number, number, number, number, number];
@@ -67,6 +72,21 @@ export interface VisioShadow {
 	offsetY: number;
 	blur: number;
 }
+/** A glow around the shape outline; size is the glow radius in inches. */
+export interface VisioGlow {
+	color: string;
+	opacity: number;
+	size: number;
+}
+/** A mirrored copy below the shape, fading from `opacity` to clear over `size` of its height. */
+export interface VisioReflection {
+	opacity: number;
+	/** Fraction (0-1] of the shape height shown. */
+	size: number;
+	/** Gap below the shape and blur radius, in inches. */
+	distance: number;
+	blur: number;
+}
 export interface VisioStyle {
 	fill: string;
 	/** Supported normalized gradient; fill remains the solid fallback color. */
@@ -102,7 +122,13 @@ export interface VisioStyle {
 	endArrow: number;
 	startArrowSize?: number;
 	endArrowSize?: number;
+	/** Saved corner rounding radius in inches (already applied to the geometry); absent when 0. */
+	rounding?: number;
 	shadow?: VisioShadow;
+	glow?: VisioGlow;
+	/** Soft edge radius in inches. */
+	softEdges?: number;
+	reflection?: VisioReflection;
 }
 export interface VisioTextRun {
 	text: string;
@@ -116,6 +142,23 @@ export interface VisioTextRun {
 	underline: boolean;
 	/** Single native Strikethru decoration; double strikethrough is separate. */
 	strikethrough?: boolean;
+	/** Char.Letterspace in inches; omitted when zero. */
+	letterSpacing?: number;
+	/** Char.Pos; omitted for normal baseline text. */
+	position?: 'superscript' | 'subscript';
+	/** Char.Case display transform; the stored text keeps its own case. */
+	textCase?: 'all-caps' | 'initial-caps' | 'small-caps';
+	/** Char.LangID, a Windows language identifier; omitted when unset or zero. */
+	language?: number;
+}
+/** A text field's span in plainText. Display text is evaluated where supported. */
+export interface VisioTextField {
+	start: number;
+	end: number;
+	/** The cached text stored in the source <fld> element (source-backed edits compare it). */
+	cached: string;
+	/** The Field row's Value formula, when it has one. */
+	formula?: string;
 }
 export interface VisioParagraph {
 	/** UTF-16 offsets into plainText. End excludes the paragraph's newline. */
@@ -140,11 +183,18 @@ export interface VisioText {
 	italic?: boolean;
 	underline?: boolean;
 	strikethrough?: boolean;
+	/** Default character extras (Char row 0), as on VisioTextRun. */
+	letterSpacing?: number;
+	position?: 'superscript' | 'subscript';
+	textCase?: 'all-caps' | 'initial-caps' | 'small-caps';
+	language?: number;
 	/** Optional backdrop behind laid-out text, not the complete shape rectangle. */
 	backgroundColor?: string;
 	backgroundOpacity?: number;
 	runs: VisioTextRun[];
 	paragraphs?: VisioParagraph[];
+	/** Text fields (<fld>), in text order. Omitted when the text has none. */
+	fields?: VisioTextField[];
 	fontFamily: string;
 	fontSize: number;
 	color: string;
@@ -238,7 +288,32 @@ export interface VisioShape {
 	hyperlinks?: VisioHyperlink[];
 	/** Cached Comment cell text, which Visio shows as the shape's ScreenTip. Inert plain text. */
 	screenTip?: string;
+	/** A container or callout (User.msvStructureType) with its members or target, when known. */
+	structure?: VisioShapeStructure;
+	/** Connection rows in local y-up coordinates; `index` is the zero-based row IX. */
+	connectionPoints?: VisioConnectionPoint[];
+	/** A 1D shape's begin and end points in local y-up coordinates. */
+	lineEnds?: { begin: VisioLocalPoint; end: VisioLocalPoint };
+	/** A dynamic connector's route from its ShapeRouteStyle and ConLineRouteExt caches. */
+	connectorRoute?: 'right-angle' | 'straight' | 'curved';
+	/**
+	 * A two-dimensional shape Visio lays out and routes around (ObjType 1). Visio marks a shape
+	 * placeable when a dynamic connector is glued to it; right-angle connectors avoid these only.
+	 */
+	placeable?: boolean;
 }
+export interface VisioLocalPoint {
+	x: number;
+	y: number;
+}
+export interface VisioConnectionPoint extends VisioLocalPoint {
+	index: number;
+	/** True when the row comes from the shape's master rather than the shape itself. */
+	inherited: boolean;
+}
+export type VisioShapeStructure =
+	| { type: 'container'; memberIds: string[] }
+	| { type: 'callout'; targetId?: string; leaderId?: string };
 export interface VisioConnection {
 	fromShapeId: string;
 	toShapeId: string;
@@ -246,6 +321,42 @@ export interface VisioConnection {
 	toCell: string;
 	fromPart?: number;
 	toPart?: number;
+}
+/** Cached Print Properties and drawing scale of a PageSheet. Every field is optional. */
+export interface VisioPageSetup {
+	/** PageScale and DrawingScale in internal inches: `pageScale` on paper equals `drawingScale`. */
+	readonly pageScale?: number;
+	readonly drawingScale?: number;
+	/** DrawingScale display unit (`FT`, `MM`, ...), as saved. */
+	readonly drawingScaleUnit?: string;
+	/** PrintPageOrientation: 0 same as printer, 1 portrait, 2 landscape. */
+	readonly printPageOrientation?: 0 | 1 | 2;
+	/** PaperKind: the Windows DMPAPER code of the printer paper. */
+	readonly paperKind?: number;
+	/** Print margins in inches (PageLeftMargin and the others), only when all four are cached. */
+	readonly margins?: {
+		readonly left: number;
+		readonly right: number;
+		readonly top: number;
+		readonly bottom: number;
+	};
+	/** Print zoom (ScaleX), where 1 prints at 100%. */
+	readonly printZoom?: number;
+}
+/** The theme a page uses, for the Design tab. Colours are `#rrggbb`. */
+export interface VisioPageTheme {
+	name: string;
+	/** Set when the theme part is one of the built-in themes this package writes. */
+	builtIn?: string;
+	/** Selected variant, 0-3. */
+	variant: number;
+	/** Accent 1-6. */
+	accents: string[];
+	/** The theme's Light (`lt1`) and Dark (`dk1`) colours, when it has them. */
+	light?: string;
+	dark?: string;
+	/** Each variant's seven variant colours. */
+	variants: string[][];
 }
 export interface VisioPage {
 	id: string;
@@ -256,6 +367,10 @@ export interface VisioPage {
 	 * source-backed geometry edits continue to accept drawing inches. Omitted means 1.
 	 */
 	drawingToPageScale?: number;
+	/** Cached print and drawing-scale settings; absent when none are usable. */
+	pageSetup?: VisioPageSetup;
+	/** Stored line jump, grid and ruler cells; `visioPageLayout(page)` adds Visio's defaults. */
+	layout?: Partial<VisioPageLayout>;
 	name: string;
 	width: number;
 	height: number;
@@ -264,11 +379,43 @@ export interface VisioPage {
 	shapes: VisioShape[];
 	connectors: VisioConnection[];
 	layers?: VisioLayer[];
+	theme?: VisioPageTheme;
+}
+/** One master of the drawing's document stencil (visio/masters). */
+export interface VisioMaster {
+	id: string;
+	/** The local name, or the universal one when there is none. */
+	name: string;
+	nameU?: string;
+	/** The master page size in inches. */
+	width: number;
+	height: number;
+	/** Top-level shapes in the master; an instance inherits the only one. */
+	rootCount: number;
+	/** A 1-D master (a connector or a line), which is glued or stretched rather than dropped. */
+	oneDimensional: boolean;
+	/**
+	 * A 1-D master whose transform follows its ends the way Visio's Dynamic connector does: it can
+	 * be dropped as a connector with two free ends. Other lines and connectors cannot.
+	 */
+	dynamicConnector?: boolean;
+	/** The master's shapes drawn alone, for a preview; empty when they could not be resolved. */
+	shapes: VisioShape[];
 }
 export interface VisioDocument {
 	format: 'vsdx' | 'vsd';
+	/** The document stencil: visible masters in file order. Absent when the drawing has none. */
+	masters?: VisioMaster[];
+	/** File names of the stencils docked in the drawing window when it was saved (no folders). */
+	stencils?: string[];
 	/** Existing source FaceNames available for conservative source-backed font edits. */
 	fontFamilies?: readonly string[];
+	/** Saved external data (DataRecordSets): cached rows and shape links. Never refreshed here. */
+	dataRecordsets?: VisioDataRecordset[];
+	/** Stored Snap & Glue settings; `visioSnapGlue(document)` adds Visio's defaults. */
+	snapGlue?: Partial<VisioSnapGlue>;
 	pages: VisioPage[];
 	diagnostics: VisioDiagnostic[];
+	/** Review comments (visio/comments.xml) and read-only Visio 2010 annotations. */
+	comments?: VisioComment[];
 }

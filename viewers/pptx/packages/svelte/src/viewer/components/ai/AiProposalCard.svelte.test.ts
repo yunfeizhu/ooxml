@@ -1,6 +1,6 @@
-import type { PptxSlide } from 'pptx-viewer-core';
 import type { PptxAiBridge } from 'ooxml-ui/pptx/ai';
 import { ProposalStore } from 'ooxml-ui/pptx/ai';
+import type { PptxSlide } from 'pptx-viewer-core';
 import { mount, unmount } from 'svelte';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 

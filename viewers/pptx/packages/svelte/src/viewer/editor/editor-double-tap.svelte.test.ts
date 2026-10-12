@@ -1,6 +1,6 @@
-import type { PptxElement, PptxTableData } from 'pptx-viewer-core';
 import { createCollaborationLivePatcher } from 'ooxml-ui/pptx';
 import type { CollaborationInlineEditor } from 'ooxml-ui/pptx';
+import type { PptxElement, PptxTableData } from 'pptx-viewer-core';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import type { EditorControllerDeps } from './editor-controller-deps';
@@ -100,7 +100,11 @@ describe('svelte canvas touch double-tap', () => {
 		};
 		controller.editingId = 'a';
 		let accepted:
-			| { elementId: string; text: string; textSegments: { text: string; style: {} }[] }
+			| {
+					elementId: string;
+					text: string;
+					textSegments: { text: string; style: Record<string, never> }[];
+			  }
 			| undefined = {
 			elementId: 'a',
 			text: 'Accepted peer text',
@@ -156,7 +160,7 @@ describe('svelte canvas touch double-tap', () => {
 		controller.editingId = 'layout-title';
 		expect(controller.inlineCollaboration).toBeUndefined();
 		controller.editingId = 'a';
-		expect(controller.inlineCollaboration).toEqual({ patcher, slideId: 's1' });
+		expect(controller.inlineCollaboration).toStrictEqual({ patcher, slideId: 's1' });
 	});
 
 	it('a single tap selects the element without entering edit mode', () => {

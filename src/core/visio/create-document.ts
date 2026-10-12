@@ -5,11 +5,17 @@ import { VISIO_NS } from './sheet';
 import { setCell } from './edit-geometry-cells';
 import { DEFAULTS, fail } from './package-common';
 import { writeEditedPackage } from './edit-package';
+import { VISIO_STENCIL_FILES, type VisioBuiltInStencilId } from './stencil-windows';
 
 export interface CreateVsdxOptions {
 	/** Physical page inches. The initial drawing scale is 1:1. */
 	width?: number;
 	height?: number;
+	/**
+	 * Built-in stencils docked in the drawing window, in order, as Visio records the stencils a
+	 * template opens. They are written as Stencil windows naming Visio's own stencil files.
+	 */
+	stencils?: readonly VisioBuiltInStencilId[];
 }
 
 function element(parent: Element, name: string, attributes: Record<string, string> = {}): Element {
@@ -176,6 +182,21 @@ export async function createVsdx(options: CreateVsdxOptions = {}): Promise<Uint8
 		ContainerType: 'Page',
 		Page: '0',
 		ViewScale: '-1',
+	});
+	const stencils = [...new Set(options.stencils ?? [])];
+	if (stencils.some((id) => !Object.hasOwn(VISIO_STENCIL_FILES, id)))
+		fail('INVALID_EDIT', 'Unknown built-in stencil.');
+	stencils.forEach((id, index) => {
+		const window = element(windows, 'Window', {
+			ID: String(index + 1),
+			WindowType: 'Stencil',
+			// Docked in the Shapes window; the first one is the stencil that is showing.
+			WindowState: index ? '1025' : '67109889',
+			Document: VISIO_STENCIL_FILES[id],
+			ParentWindow: '0',
+		});
+		element(window, 'StencilGroup').textContent = '10';
+		element(window, 'StencilGroupPos').textContent = String(index + 1);
 	});
 	put('visio/windows.xml', buildXml(windows));
 	return writeEditedPackage(parts, DEFAULTS.maxInputBytes, deadline, check);

@@ -1,8 +1,8 @@
 import { NgStyle } from '@angular/common';
 import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
-
 import { buildTextBuildSpec, textBuildSpanStyle } from 'ooxml-ui/pptx';
 import type { ElementAnimationState, TextBuildSpec } from 'ooxml-ui/pptx';
+
 import type { StyleMap } from './element-style';
 import type { Paragraph, TextRun } from './paragraph-view';
 import { SlideTextRunComponent } from './slide-text-run.component';
@@ -54,6 +54,7 @@ const NEWLINE_RUN = '\n';
 							class="pptx-ng-bullet-image"
 							[src]="para.bulletPicture.src"
 							[alt]="para.bulletPicture.accessibleLabel"
+							draggable="false"
 							[style.width.px]="para.bulletPicture.sizePx"
 							[style.height.px]="para.bulletPicture.sizePx"
 							style="

@@ -25,12 +25,7 @@ import {
 	soleChild,
 } from './omml-to-latex-helpers';
 import type { LatexEmitter } from './omml-to-latex-layout';
-import {
-	delimiterToLatex,
-	eqArrToLatex,
-	matrixToLatex,
-	naryToLatex,
-} from './omml-to-latex-layout';
+import { delimiterToLatex, eqArrToLatex, matrixToLatex, naryToLatex } from './omml-to-latex-layout';
 
 function childrenToLatex(node: XmlRecord | undefined): string {
 	if (!node || typeof node !== 'object') {

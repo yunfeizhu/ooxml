@@ -37,7 +37,6 @@ import {
 	input,
 	output,
 } from '@angular/core';
-
 import type {
 	ContextMenuRequestEvent,
 	ContextMenuViewState,
@@ -48,6 +47,7 @@ import {
 	contextMenuViewItems,
 	customizeCanvasContextMenuEntries,
 } from 'ooxml-ui/pptx';
+
 import type { MenuTranslate } from './context-menu-translate';
 import { injectMenuTranslate } from './context-menu-translate';
 import type { CanvasContextMenuActions } from './slide-canvas-context-menu-dispatch';

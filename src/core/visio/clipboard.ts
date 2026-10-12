@@ -16,6 +16,10 @@ import {
 	assertClipboardResourceReferences,
 } from './clipboard-resources';
 import { assertClipboardFormulaScope, assertClipboardXmlLimits } from './clipboard-xml';
+import { assertInstanceClipboardScope, masterIdentities } from './edit-instance-clipboard';
+import { planInstanceCopy } from './edit-instance-duplicate';
+import { pageShapes, shapeIsStructural, stencilInstance } from './edit-instance-shape';
+import { masterTemplate } from './edit-text-scope';
 import {
 	clipboardId,
 	snapshotVisioClipboard,
@@ -60,15 +64,32 @@ export async function captureVisioClipboard(
 	if (!path) fail('EDIT_TARGET_NOT_FOUND', 'Clipboard page does not exist.');
 	const root = await visioXml(pkg, path, 'PageContents');
 	const document = await visioXml(pkg, (await related(pkg, '', 'document'))!, 'VisioDocument');
-	await assertShapeOrderPackageScope(pkg, check);
+	const template = masterTemplate(pkg);
+	// Copying a container or a list is the one case where container lookups elsewhere matter.
+	let structural = false;
+	for (const id of selected) {
+		const shape = pageShapes(root).find((item) => attribute(item, 'ID') === id);
+		structural ||= !shape || (await shapeIsStructural(shape, template));
+	}
+	await assertShapeOrderPackageScope(pkg, check, structural);
 	const evaluate = createVisioCellEvaluator(
 		indexCells(new Map([[pageId, root]]), { check }),
 		{ check },
 		true,
 	);
 	const chosen = new Set(selected);
+	const masterIds = new Set<string>();
 	for (const id of selected) {
 		check();
+		// A stencil shape is captured as it is: an instance that names its master.
+		const stencil = await stencilInstance(root, id, template, 'UNSUPPORTED_CLIPBOARD');
+		if (stencil) {
+			await planInstanceCopy(pkg, pageId, root, stencil, 0, 0, 'UNSUPPORTED_CLIPBOARD');
+			assertClipboardResourceReferences(stencil.instance, document);
+			assertInstanceClipboardScope(stencil.instance, chosen);
+			masterIds.add(attribute(stencil.instance, 'Master')!);
+			continue;
+		}
 		const source = admitted(root, id);
 		assertCloneLeaf(source);
 		assertUnlayeredShape(source, document);
@@ -96,6 +117,7 @@ export async function captureVisioClipboard(
 			.filter((node) => chosen.has(attribute(node, 'ID')!))
 			.map((node) => ({ shapeId: attribute(node, 'ID')!, xml: buildXml(node) })),
 		resources: await clipboardResources(pkg),
+		...(masterIds.size ? { masters: await masterIdentities(pkg, [...masterIds]) } : {}),
 	});
 	serializeVisioClipboard(snapshot);
 	assertClipboardXmlLimits(snapshot, check);

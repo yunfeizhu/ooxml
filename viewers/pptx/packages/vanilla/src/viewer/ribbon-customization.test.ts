@@ -1,4 +1,4 @@
-import { afterEach, describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { createPptxViewer } from './PptxViewer';
 import type { PptxViewerInstance, PptxViewerOptions } from './types';
@@ -71,5 +71,43 @@ describe('vanilla ribbon group / control customisation', () => {
 		expect(styles[0].textContent).toContain('[data-ribbon-control="home.font.bold"]');
 		viewer.showRibbonGroup('home.editing');
 		expect(customizationStyles(container)[0].textContent).not.toContain('home.editing');
+	});
+});
+
+describe('vanilla host ribbon tabs', () => {
+	const reports = (run: () => void) => [
+		{
+			id: 'reports',
+			label: 'Reports',
+			groups: [{ label: 'Export', commands: [{ id: 'export', label: 'Export', run }] }],
+		},
+	];
+
+	it('takes them as an option, survives a chrome rebuild and changes live', () => {
+		const run = vi.fn();
+		const heard = vi.fn();
+		const { container, viewer } = mount({ editable: true, ribbonAddIns: reports(run) });
+		container.addEventListener('office-ribbon-add-in', (event) =>
+			heard((event as CustomEvent).detail),
+		);
+		const tab = () => container.querySelector<HTMLButtonElement>('[data-ribbon-add-in-tab]');
+		expect(tab()?.textContent).toBe('Reports');
+		// A customisation change rebuilds the whole chrome: the host tab is still there.
+		viewer.hideRibbonTab('draw');
+		expect(tab()?.textContent).toBe('Reports');
+		tab()!.click();
+		expect(tab()!.getAttribute('aria-selected')).toBe('true');
+		container
+			.querySelector('pptx-ui-ribbon-add-in pptx-ui-ribbon-command')!
+			.shadowRoot!.querySelector('button')!
+			.click();
+		expect(run).toHaveBeenCalledOnce();
+		expect(heard).toHaveBeenCalledWith({ tab: 'reports', command: 'export' });
+		viewer.setRibbonAddIns([]);
+		expect(tab()).toBeNull();
+		expect(container.querySelector('pptx-ui-ribbon-add-in')).toBeNull();
+		expect(
+			container.querySelectorAll('[data-pptx-chrome="ribbon-tabs"] [aria-selected="true"]'),
+		).toHaveLength(1);
 	});
 });

@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { fontHomeControls, homeSnapshotTranslator } from 'ooxml-ui/pptx';
+import type { ChangeCaseMode, RibbonHomeRequestEvent } from 'ooxml-ui/pptx';
 /**
  * FontHomeControls: Home > Font character strip plus character spacing, change
  * case and the font / highlight colour popovers. Everything renders in the
@@ -7,8 +9,6 @@
  * typed event that TextSection turns into the undoable edit.
  */
 import type { PptxThemeColorRef, TextStyle } from 'pptx-viewer-core';
-import { fontHomeControls, homeSnapshotTranslator } from 'ooxml-ui/pptx';
-import type { ChangeCaseMode, RibbonHomeRequestEvent } from 'ooxml-ui/pptx';
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 

@@ -1,6 +1,6 @@
-import type { PptxElement, PptxSlide } from 'pptx-viewer-core';
 import type { CanvasSize, ShapePresetType } from 'ooxml-ui/pptx';
 import { mapSlideElements } from 'ooxml-ui/pptx';
+import type { PptxElement, PptxSlide } from 'pptx-viewer-core';
 
 /**
  * Element insertion for the Svelte editor.

@@ -12,7 +12,7 @@ export const DIALOG_CSS = `
 	border: 1px solid var(--xve-border, #c8c6c4); background: var(--xve-secondary, #fff); color: inherit; font: inherit; }
 .xve-btn:hover:not(:disabled) { background: var(--xve-accent, #f3f2f1); }
 .xve-btn:focus-visible, .xve-input:focus-visible, .xve-tab:focus-visible, .xve-listbox:focus-visible,
-	.xve-swatch:focus-visible, .xve-tile:focus-visible { outline: 2px solid var(--xve-ring, #217346); outline-offset: 1px; }
+	.xve-tile:focus-visible { outline: 2px solid var(--xve-ring, #217346); outline-offset: 1px; }
 .xve-btn-primary { background: var(--xve-primary, #217346); color: var(--xve-primary-foreground, #fff);
 	border-color: var(--xve-primary, #217346); }
 .xve-btn-primary:hover:not(:disabled) { background: var(--xve-primary, #1b5e38); filter: brightness(.95); }
@@ -42,9 +42,6 @@ textarea.xve-input { resize: vertical; }
 .xve-option[aria-selected="true"] { background: var(--xve-selection, #cce8d6); color: inherit; }
 .xve-sample { min-height: 40px; display: flex; align-items: center; justify-content: center; padding: 6px;
 	border: 1px solid var(--xve-border, #e1dfdd); background: var(--xve-sheet-bg, #fff); color: #000; overflow: hidden; }
-.xve-swatches { display: grid; grid-template-columns: repeat(10, 18px); gap: 3px; }
-.xve-swatch { width: 18px; height: 18px; border: 1px solid #c8c6c4; padding: 0; cursor: pointer; border-radius: 2px; }
-.xve-swatch[aria-pressed="true"] { outline: 2px solid var(--xve-primary, #217346); outline-offset: 1px; }
 .xve-tiles { display: grid; grid-template-columns: repeat(auto-fill, minmax(84px, 1fr)); gap: 6px; }
 .xve-tile { display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 6px; cursor: pointer;
 	border: 1px solid var(--xve-border, #e1dfdd); border-radius: var(--xve-radius, 4px); background: transparent; color: inherit; font: inherit; }

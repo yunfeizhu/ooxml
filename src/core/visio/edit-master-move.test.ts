@@ -4,7 +4,7 @@ import { parseXml } from '../xml/index';
 import { editVsdx, type VisioEdit } from './edit';
 import { parseVsdx } from './parser';
 import { VisioPackageError } from './package-common';
-import { cell, fixture, rectangle, section, row, shape } from './test-fixtures';
+import { cell, fixture, rectangle, section, shape } from './test-fixtures';
 
 const locks = ['LockMoveX', 'LockMoveY', 'LockWidth', 'LockHeight', 'LockAspect', 'LockDelete'];
 const dimensions = (inherited = false) =>
@@ -94,11 +94,8 @@ describe('proven local master rotation-pin moves', () => {
 		expect(scene.pages[0]!.shapes[0]!.transform.slice(4)).toEqual([3.5, 4.5]);
 		expect(bytes).toEqual(snapshot);
 	});
-	it('keeps unsupported resize and deletion atomic even after an admitted move', async () => {
-		for (const edit of [
-			{ type: 'resize-shape' as const, pageId: '0', shapeId: '1', width: 4, height: 4 },
-			{ type: 'delete-shape' as const, pageId: '0', shapeId: '1' },
-		])
+	it('keeps unsupported deletion atomic even after an admitted move', async () => {
+		for (const edit of [{ type: 'delete-shape' as const, pageId: '0', shapeId: '1' }])
 			expect((await rejected(await source(), [command(), edit])).code).toBe(
 				'UNSUPPORTED_GEOMETRY_EDIT',
 			);
@@ -211,20 +208,36 @@ describe('proven local master rotation-pin moves', () => {
 			}),
 		);
 	});
-	it('refuses direct and transitive inherited dependencies without globally exempting pin references', async () => {
-		for (const extra of [
-			cell('TxtPinX', 2, 'PinX'),
-			section('User', row(0, '', cell('Value', 2, 'PinX'))),
-			section(
-				'User',
-				'<Row N="A">' +
-					cell('Value', 2, 'PinX') +
-					'</Row><Row N="B">' +
-					cell('Value', 2, 'User.A') +
-					'</Row>',
-			),
-		])
-			await rejected(await source({ template: dimensions() + rectangle + extra }));
+	it('recomputes direct and transitive inherited dependencies of a moved pin', async () => {
+		// The pin-only proof refuses these; the instance path then refreshes the inherited caches,
+		// as Visio does, instead of refusing the move.
+		for (const [extra, caches] of [
+			[cell('TxtPinX', 2, 'PinX'), ['<Cell N="TxtPinX" V="5" U="IN" F="Inh"/>']],
+			[
+				section(
+					'User',
+					'<Row N="A">' +
+						cell('Value', 2, 'PinX') +
+						'</Row><Row N="B">' +
+						cell('Value', 2, 'User.A') +
+						'</Row>',
+				),
+				[
+					'<Row N="A"><Cell N="Value" V="5" F="Inh"/></Row>',
+					'<Row N="B"><Cell N="Value" V="5" F="Inh"/></Row>',
+				],
+			],
+		] as const) {
+			const result = await editVsdx(await source({ template: dimensions() + rectangle + extra }), [
+				command(),
+			]);
+			const page = await (
+				await JSZip.loadAsync(result.bytes)
+			)
+				.file('visio/pages/page1.xml')!
+				.async('string');
+			for (const cache of caches) expect(page).toContain(cache);
+		}
 	});
 	it('refuses local, other-instance and page cache dependencies on a master pin', async () => {
 		const dependency = section(

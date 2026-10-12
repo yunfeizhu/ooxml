@@ -3,8 +3,6 @@ import type { ViewerController } from './controller';
 import { contextMenu } from './ribbon-parts';
 import { pointerShapeTarget } from './viewer-shape-target';
 
-const ARRANGE = 'Needs core container edits.';
-
 /** Visio's shape and page context menus; commands the core lacks are shown disabled. */
 export function createContextMenus(doc: Document): HTMLElement[] {
 	return [
@@ -59,7 +57,12 @@ export function createContextMenus(doc: Document): HTMLElement[] {
 				action: { type: 'grouping', operation: 'ungroup' },
 				keys: ['Control+Shift+U', 'Ctrl+Shift+U'],
 			},
-			{ id: 'ctx-container', label: 'Container', icon: 'rectangle', unsupported: ARRANGE },
+			{
+				id: 'ctx-container',
+				label: 'Container',
+				icon: 'rectangle',
+				action: { type: 'diagram-part', part: 'container', style: 'classic' },
+			},
 			{
 				id: 'ctx-bring-to-front',
 				label: 'Bring to Front',
@@ -102,14 +105,14 @@ export function createContextMenus(doc: Document): HTMLElement[] {
 				id: 'ctx-format',
 				label: 'Format Shape',
 				icon: 'fill',
-				action: { type: 'paint-properties' },
+				action: { type: 'format-shape-pane' },
 			},
 			'-',
 			{
 				id: 'ctx-comment',
 				label: 'Add Comment',
 				icon: 'message',
-				unsupported: 'Needs core comments.',
+				action: { type: 'review', command: 'new-comment' },
 			},
 		]),
 		contextMenu(doc, 'page', 'Page', [
@@ -140,7 +143,7 @@ export function createContextMenus(doc: Document): HTMLElement[] {
 				id: 'ctx-page-comment',
 				label: 'Add Comment',
 				icon: 'message',
-				unsupported: 'Needs core comments.',
+				action: { type: 'review', command: 'page-comment' },
 			},
 		]),
 	];

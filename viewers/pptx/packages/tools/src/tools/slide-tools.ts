@@ -1,5 +1,6 @@
 // Compatibility exports: all document operations are owned by OOXML core.
 import { apiToolsSlideTools as operations } from 'ooxml-core/pptx/automation';
+
 export type GetSlideResult = operations.GetSlideResult;
 export const getSlide = operations.getSlide;
 export type AddSlideParams = operations.AddSlideParams;

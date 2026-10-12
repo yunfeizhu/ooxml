@@ -256,6 +256,7 @@
 				class:pptx-svelte-media-dim={fallback.dimPoster}
 				src={view.posterSrc}
 				alt=""
+				draggable="false"
 			/>
 			<!-- Authoring-canvas chrome only; `data-pptx-media-chrome` is the neutral
 			     marker `e2e/media-transition-chrome.spec.ts` asserts the absence of. -->

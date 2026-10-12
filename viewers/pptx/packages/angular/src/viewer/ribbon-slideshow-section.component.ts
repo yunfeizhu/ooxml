@@ -7,13 +7,13 @@ import {
 	output,
 } from '@angular/core';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
-
 import type {
 	RibbonCommandRequestEvent,
 	SlideShowOptionsChangeEvent,
 	ToolbarActionId,
 } from 'ooxml-ui/pptx';
 import { SLIDE_SHOW_COMMAND_GROUPS, SLIDE_SHOW_OPTIONS } from 'ooxml-ui/pptx';
+
 import { LoadContentService } from './load-content.service';
 import { SubtitleSettingsControlComponent } from './subtitle-settings-control.component';
 import { toolbarVisibility } from './toolbar-visibility';

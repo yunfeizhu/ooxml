@@ -1,3 +1,4 @@
+import { listMediaBookmarkOptions, selectedBookmarkOptionValue } from 'ooxml-ui/pptx';
 /**
  * The "On bookmark" trigger's bookmark picker for the vanilla animation panel:
  * every (media element, bookmark) pair on the slide, from shared's
@@ -5,7 +6,6 @@
  * `onMediaBookmark`.
  */
 import type { PptxElement, PptxElementAnimation } from 'pptx-viewer-core';
-import { listMediaBookmarkOptions, selectedBookmarkOptionValue } from 'ooxml-ui/pptx';
 
 import type { Translator } from '../../i18n';
 import { animSelect } from './animation-panel-fields';

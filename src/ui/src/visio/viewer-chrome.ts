@@ -1,27 +1,23 @@
 import type { VisioDocument } from 'ooxml-core/visio';
 import type { OfficeTab } from '../controls';
 import type { ViewerController, ViewerState } from './controller';
-import { editControlsTemplate } from './viewer-edit-controls';
-import { layerControlsTemplate } from './viewer-layer-controls';
 
 /**
  * Static workspace markup (legacy; migrate to builders when next changed). The ribbon, Shapes
  * window, page tabs and status bar are built by their own modules. Visio keeps pages in the
- * bottom tabs and the All pages list, so there is no page pane. Labels are inserted as text.
+ * bottom tabs and the All pages list, so there is no page pane. The right task pane shows one
+ * view at a time (Shape Data, or Format Shape, which builds its own view), and starts closed.
  */
 export const viewerChromeTemplate = `<div class="workspace">
   <div class="viewport" tabindex="0" role="region" aria-label="Diagram canvas"></div>
-  <aside id="inspector-pane" class="inspector-pane" aria-label="Drawing inspector">
-    <div class="pane-heading"><span>Inspector</span><span class="inspector-kind">Drawing</span><button class="pane-close" type="button" data-chrome="inspector" aria-label="Close inspector">×</button></div>
-    <div class="inspector-body">
-      <section class="inspector-card document-card" aria-label="Current page"><h2>Current page</h2><p class="current-page-name" data-page-name>No diagram open</p><dl><dt>Size</dt><dd data-page-size>No page</dd><dt>Shapes</dt><dd data-page-shapes>No shapes</dd></dl></section>
-      <p class="selection-hint">Select a shape on the canvas to see its data and links.</p>
-      <details class="shape-inspector inspector-card" hidden><summary>Selected shape</summary><div></div></details>
-      ${editControlsTemplate}${layerControlsTemplate}
-      <details class="notes inspector-card"><summary>Compatibility notes</summary><ul></ul></details>
-    </div>
-  </aside>
+  <office-ui-task-pane id="inspector-pane" class="inspector-pane" label="Shape Data" hidden>
+    <section class="shape-inspector" data-pane-view="selection"><p class="selection-hint">No Shape Data</p><div></div></section>
+  </office-ui-task-pane>
 </div>`;
+
+/** The titles Visio gives the task pane views. */
+const PANE_TITLES = { selection: 'Shape Data', format: 'Format Shape' } as const;
+export type PaneView = keyof typeof PANE_TITLES;
 
 export type TaskPane = 'shapes' | 'inspector';
 
@@ -35,7 +31,7 @@ export class ViewerChrome {
 	#tools: HTMLDetailsElement;
 	#inspector: HTMLElement;
 	#panes: Record<TaskPane, HTMLElement>;
-	#notes: HTMLDetailsElement;
+	#view: PaneView = 'selection';
 	#responsive: MediaQueryList | undefined;
 	#compact: MediaQueryList | undefined;
 	/** Panes the user showed or hid; responsive defaults leave them alone afterwards. */
@@ -48,7 +44,6 @@ export class ViewerChrome {
 		this.#tools = root.querySelector('.ribbon-tools')!;
 		this.#inspector = root.querySelector('.inspector-pane')!;
 		this.#panes = { shapes: root.querySelector('.shapes-pane')!, inspector: this.#inspector };
-		this.#notes = root.querySelector('.notes')!;
 	}
 	wire(): () => void {
 		const view = this.#root.ownerDocument.defaultView;
@@ -77,9 +72,9 @@ export class ViewerChrome {
 			{ ...options, capture: true },
 		);
 		const responsive = () => {
-			// Visio's defaults: the Shapes window on wide screens, the inspector unless on a phone.
+			// Visio's default: the Shapes window on wide screens; task panes open on request.
 			if (!this.#manual.has('shapes')) this.#setPane('shapes', !this.#responsive?.matches);
-			if (!this.#manual.has('inspector')) this.#setPane('inspector', !compact?.matches);
+			if (!this.#manual.has('inspector')) this.#setPane('inspector', false);
 		};
 		responsive();
 		this.#responsive?.addEventListener('change', responsive, options);
@@ -91,7 +86,15 @@ export class ViewerChrome {
 				if (!button || button.disabled) return;
 				const action = button.dataset.chrome;
 				if (action === 'inspector' || action === 'shapes') this.togglePane(action);
-				if (action === 'notes') this.reveal('notes');
+			},
+			options,
+		);
+		this.#inspector.addEventListener(
+			'office-pane-close',
+			() => {
+				this.#manual.add('inspector');
+				this.#setPane('inspector', false);
+				this.#root.querySelector<HTMLElement>('.viewport')?.focus({ preventScroll: true });
 			},
 			options,
 		);
@@ -117,7 +120,6 @@ export class ViewerChrome {
 		);
 		// The shared ribbon selects tabs itself; phones close the Tools sheet as Visio does.
 		this.#root.addEventListener('office-ribbon-select', () => this.closeCompactTools(), options);
-		this.#notes.addEventListener('toggle', () => this.#syncNotes(), options);
 		return () => events.abort();
 	}
 	showTab(tab: string): void {
@@ -135,7 +137,7 @@ export class ViewerChrome {
 		this.#setPane(pane, Boolean(this.#panes[pane].hidden));
 	}
 	/** A ribbon command or menu item by its stable id (the first match wins). */
-	#command(name: string): HTMLElement & { disabled: boolean } {
+	#command(name: string): (HTMLElement & { disabled: boolean }) | null {
 		return this.#root.querySelector(`[command="${name}"]`)!;
 	}
 	#setPane(pane: TaskPane, visible: boolean): void {
@@ -144,45 +146,36 @@ export class ViewerChrome {
 			for (const other of Object.keys(this.#panes) as TaskPane[])
 				if (other !== pane) {
 					this.#panes[other].hidden = true;
-					this.#command(other).setAttribute('checked', 'false');
+					this.#command(other)?.setAttribute('checked', 'false');
 				}
 		this.#panes[pane].hidden = !visible;
-		this.#command(pane).setAttribute('checked', String(visible));
+		this.#command(pane)?.setAttribute('checked', String(visible));
+		this.#command('shape-data')?.setAttribute(
+			'checked',
+			String(!this.#inspector.hidden && this.#view === 'selection'),
+		);
 		// Visio keeps a minimised Shapes strip on wide screens so the window can be reopened.
 		if (pane === 'shapes') {
 			const strip = this.#root.querySelector<HTMLElement>('.shapes-strip');
 			if (strip) strip.hidden = visible || !!this.#compact?.matches;
 		}
-		this.#syncNotes();
 	}
-	#syncNotes(): void {
-		this.#root
-			.querySelector('.notes-strip button')!
-			.setAttribute('aria-expanded', String(!this.#inspector.hidden && this.#notes.open));
-	}
-	/** Open an inspector disclosure; text editing may focus the text field directly (F2). */
-	reveal(kind: 'notes' | 'selection' | 'edit' | 'layers', focusText = false): void {
+	/** Show a task pane view (Shape Data, Format Shape) and move focus into it. */
+	reveal(kind: PaneView): void {
 		if (this.#compact?.matches) this.#tools.open = false;
+		this.#view = kind;
+		for (const view of this.#inspector.querySelectorAll<HTMLElement>('[data-pane-view]'))
+			view.toggleAttribute('data-active', view.dataset.paneView === kind);
+		this.#inspector.setAttribute('label', PANE_TITLES[kind]);
 		this.#manual.add('inspector');
 		this.#setPane('inspector', true);
-		const selector =
-			kind === 'notes'
-				? '.notes'
-				: kind === 'edit'
-					? '.edit-controls'
-					: kind === 'layers'
-						? '.layer-controls'
-						: '.shape-inspector';
-		const panel = this.#root.querySelector<HTMLDetailsElement>(selector)!;
-		if (panel.hidden) return;
-		panel.open = true;
-		const text = panel.querySelector<HTMLTextAreaElement>('textarea');
-		if (focusText && text && !text.disabled) text.focus();
-		else panel.querySelector('summary')!.focus();
-		panel.scrollIntoView?.({ block: 'nearest', inline: 'nearest' });
-		this.#syncNotes();
+		const panel = this.#inspector.querySelector<HTMLElement>(`[data-pane-view="${kind}"]`)!;
+		(
+			panel.querySelector<HTMLElement>('input:not(:disabled), button:not(:disabled), a[href]') ??
+			this.#inspector
+		).focus();
 	}
-	render(state: ViewerState, noteCount: number): void {
+	render(state: ViewerState): void {
 		const page = state.document?.pages[state.pageIndex];
 		const doc = this.#root.ownerDocument;
 		if (state.document !== this.#document) {
@@ -257,21 +250,7 @@ export class ViewerChrome {
 				'value',
 				page ? `Page ${state.pageIndex + 1} of ${state.document!.pages.length}` : '',
 			);
-		this.#root.querySelector('[data-page-name]')!.textContent = page?.name ?? 'No diagram open';
-		this.#root.querySelector('[data-page-size]')!.textContent = page
-			? `${page.width} × ${page.height} in`
-			: 'No page';
-		this.#root.querySelector('[data-page-shapes]')!.textContent = page
-			? `${page.shapes.length} top-level`
-			: 'No shapes';
+		// The Shape Data window says so when nothing with data is selected, as in Visio.
 		this.#root.querySelector<HTMLElement>('.selection-hint')!.hidden = !!state.selectedShape;
-		const layers = Boolean(this.#root.querySelector<HTMLDetailsElement>('.layer-controls')!.hidden);
-		this.#command('shape-data').disabled = !state.selectedShape;
-		this.#command('layer-properties').disabled = layers;
-		this.#command('layers-pane').disabled = layers;
-		this.#command('notes').disabled = noteCount === 0;
-		this.#root.querySelector<HTMLButtonElement>('.notes-strip button')!.disabled = noteCount === 0;
-		this.#root.querySelector('[data-note-count]')!.textContent = noteCount ? ` · ${noteCount}` : '';
-		this.#syncNotes();
 	}
 }

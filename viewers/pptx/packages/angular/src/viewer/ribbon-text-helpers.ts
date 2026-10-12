@@ -1,12 +1,3 @@
-/**
- * ribbon-text-helpers.ts: shared text-style helpers for the ribbon's Font and
- * Paragraph control groups (split out of {@link RibbonComponent} so both the
- * {@link RibbonFontControlsComponent} and {@link RibbonParagraphControlsComponent}
- * mutate the selection's `textStyle` through the same code path).
- */
-import { hasTextProperties } from 'pptx-viewer-core';
-import type { PptxElement, TextStyle } from 'pptx-viewer-core';
-
 import {
 	buildInlineListStylePatch,
 	getInlineEditorSelectionResult,
@@ -20,6 +11,15 @@ import { textStylePatch } from 'ooxml-ui/pptx/render/inspector-helpers';
 import { remapTextToSegments } from 'ooxml-ui/pptx/render/remap-text';
 import type { ChangeCaseMode } from 'ooxml-ui/pptx/render/text-case-transform';
 import { transformTextCase } from 'ooxml-ui/pptx/render/text-case-transform';
+/**
+ * ribbon-text-helpers.ts: shared text-style helpers for the ribbon's Font and
+ * Paragraph control groups (split out of {@link RibbonComponent} so both the
+ * {@link RibbonFontControlsComponent} and {@link RibbonParagraphControlsComponent}
+ * mutate the selection's `textStyle` through the same code path).
+ */
+import { hasTextProperties } from 'pptx-viewer-core';
+import type { PptxElement, TextStyle } from 'pptx-viewer-core';
+
 import type { EditorStateService } from './editor-state.service';
 
 /**

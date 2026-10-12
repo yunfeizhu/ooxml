@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import type { PptxChartAxisFormatting } from 'pptx-viewer-core';
 import { EDITABLE_AXIS_ROWS, GRIDLINE_DASH_OPTIONS } from 'ooxml-ui/pptx';
+import type { PptxChartAxisFormatting } from 'pptx-viewer-core';
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 

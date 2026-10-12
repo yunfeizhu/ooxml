@@ -69,6 +69,7 @@ const LEGEND_SWATCH_SIZE = 10;
 						@if (def.kind === 'linearGradient') {
 							<linearGradient
 								[attr.id]="def.id"
+								[attr.gradientUnits]="def.gradientUnits"
 								[attr.x1]="def.x1"
 								[attr.y1]="def.y1"
 								[attr.x2]="def.x2"

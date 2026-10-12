@@ -19,9 +19,6 @@ import {
 	input,
 } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import type { PptxElement, PptxSlide } from 'pptx-viewer-core';
-import { hasShapeProperties } from 'pptx-viewer-core';
-
 import {
 	arrangeShapeHomeControls,
 	canCropElement,
@@ -43,6 +40,9 @@ import type {
 	RibbonHomeRequestEvent,
 	ToolbarActionId,
 } from 'ooxml-ui/pptx';
+import type { PptxElement, PptxSlide } from 'pptx-viewer-core';
+import { hasShapeProperties } from 'pptx-viewer-core';
+
 import { EditorStateService } from './editor-state.service';
 import { canGroupSelected } from './group-lock-guard';
 import { LoadContentService } from './load-content.service';

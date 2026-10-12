@@ -1,3 +1,11 @@
+import {
+	ensureBarFacePicturePixelSampled,
+	getBarFacePicturePixelSampleVersion,
+	getCachedBarFacePicturePixelColor,
+	resetBarFacePicturePixelCacheForTests,
+	resolveUntargetedBarFaceFill,
+	subscribeBarFacePicturePixelSamples,
+} from 'ooxml-ui/pptx';
 /**
  * Regression test for the async first-pixel colour sample cache
  * (`chart-bar3d-face-picture-sample.ts`) reaching `ChartRendererComponent`.
@@ -15,14 +23,6 @@
 import type { ChartPptxElement, PptxChartData } from 'pptx-viewer-core';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-import {
-	ensureBarFacePicturePixelSampled,
-	getBarFacePicturePixelSampleVersion,
-	getCachedBarFacePicturePixelColor,
-	resetBarFacePicturePixelCacheForTests,
-	resolveUntargetedBarFaceFill,
-	subscribeBarFacePicturePixelSamples,
-} from 'ooxml-ui/pptx';
 import { buildChartViewModel } from './chart-renderer-helpers';
 
 const IMAGE_URL = 'data:image/png;base64,angular-sample-test-image';

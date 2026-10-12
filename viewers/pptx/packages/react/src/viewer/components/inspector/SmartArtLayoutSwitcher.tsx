@@ -1,6 +1,6 @@
+import { smartArtLayoutSwitchPatch } from 'ooxml-ui/pptx';
 import type { PptxSmartArtData, SmartArtLayoutType } from 'pptx-viewer-core';
 import { SWITCHABLE_LAYOUT_TYPES } from 'pptx-viewer-core';
-import { smartArtLayoutSwitchPatch } from 'ooxml-ui/pptx';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 

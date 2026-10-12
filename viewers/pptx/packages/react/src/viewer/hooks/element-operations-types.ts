@@ -1,3 +1,4 @@
+import type { InlineTextEditSnapshot, MasterViewTarget } from 'ooxml-ui/pptx';
 import type {
 	PptxElement,
 	PptxHandoutMaster,
@@ -7,7 +8,6 @@ import type {
 	ShapeStyle,
 	TextStyle,
 } from 'pptx-viewer-core';
-import type { InlineTextEditSnapshot, MasterViewTarget } from 'ooxml-ui/pptx';
 
 import type { ChangeCaseMode } from '../utils/text-case-transform';
 import type { EditorHistoryResult } from './useEditorHistory';

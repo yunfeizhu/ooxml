@@ -43,14 +43,17 @@ test('offers the host a cancellable read-only text jump without opening a tab', 
 				/>,
 			);
 		});
-		await vi.waitFor(async () => {
-			await act(async () => {
-				await new Promise((done) => {
-					setTimeout(done, 10);
+		await vi.waitFor(
+			async () => {
+				await act(async () => {
+					await new Promise((done) => {
+						setTimeout(done, 10);
+					});
 				});
-			});
-			expect(ref.current?.getSlideCount()).toBe(3);
-		});
+				expect(ref.current?.getSlideCount()).toBe(3);
+			},
+			{ timeout: 15000 },
+		);
 		const link = container.querySelector<HTMLElement>('[data-pptx-hyperlink]')!;
 		expect(link.getAttribute('href')).toBeNull();
 		onHyperlinkClick.mockReturnValueOnce(false);

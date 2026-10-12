@@ -179,20 +179,21 @@ export class TeamsAddTabDialog extends LitElement {
 							<p>Pin content to # ${this.contextName} so everyone in the channel can find it.</p>
 							<div class="apps">
 								${APPS.map(
-									(entry, index) => html`<button
-										type="button"
-										class="app"
-										aria-label=${`Choose ${entry.label}`}
-										?data-first-app=${index === 0}
-										?autofocus=${index === 0}
-										@click=${() => this.choose(entry.id)}
-									>
-										<span class="badge" data-kind=${entry.kind ?? 'other'}>${entry.letter}</span
-										><strong>${entry.label}</strong>
-										<small
-											>${entry.kind ? this.availableLabel(entry.kind) : 'Add a web address'}</small
+									(entry, index) =>
+										html`<button
+											type="button"
+											class="app"
+											aria-label=${`Choose ${entry.label}`}
+											?data-first-app=${index === 0}
+											?autofocus=${index === 0}
+											@click=${() => this.choose(entry.id)}
 										>
-									</button>`,
+											<span class="badge" data-kind=${entry.kind ?? 'other'}>${entry.letter}</span
+											><strong>${entry.label}</strong>
+											<small
+												>${entry.kind ? this.availableLabel(entry.kind) : 'Add a web address'}</small
+											>
+										</button>`,
 								)}
 							</div>
 							<p class="hint">File tabs use files already shared in this channel.</p>

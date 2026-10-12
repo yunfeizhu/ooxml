@@ -9,10 +9,7 @@ export { TeamsSettings, defineTeamsSettings, parseIceLines } from './teams-setti
 export { TeamsController } from './controller';
 export { TeamsChannelTab, defineTeamsChannelTab } from './channel-tab';
 export { TeamsFilesPanel, defineTeamsFilesPanel } from './files-panel';
-export {
-	TeamsPresentationPreview,
-	defineTeamsPresentationPreview,
-} from './presentation-preview';
+export { TeamsPresentationPreview, defineTeamsPresentationPreview } from './presentation-preview';
 export {
 	TeamsContentPreview,
 	defineTeamsContentPreview,

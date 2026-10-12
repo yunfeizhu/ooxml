@@ -1,3 +1,4 @@
+import type { RibbonAddInTab } from 'ooxml-ui/pptx';
 import type { PptxElement } from 'pptx-viewer-core';
 
 import type {
@@ -51,6 +52,11 @@ export interface Ribbon {
 	 * remaining tab).
 	 */
 	setHiddenOptionTabs(tabIds: readonly string[]): void;
+	/**
+	 * Show the host's ribbon tabs after Help (`ribbonAddIns`). A tab that takes a built-in id is
+	 * left out; removing the tab that is showing falls back to the default tab.
+	 */
+	setRibbonAddIns(tabs: readonly RibbonAddInTab[]): void;
 	/** Leave the File backstage and show the normal default ribbon tab. */
 	showDefaultTab(): void;
 	/** Apply Options > General ScreenTip style to the tab-bar tooltips. */

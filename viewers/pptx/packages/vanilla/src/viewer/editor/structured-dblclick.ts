@@ -1,5 +1,5 @@
-import { hasTextProperties } from 'pptx-viewer-core';
 import { canDrillDown } from 'ooxml-ui/pptx';
+import { hasTextProperties } from 'pptx-viewer-core';
 
 import type { ViewerState } from '../state';
 import { findActiveElement } from './editor-active-elements';

@@ -1,3 +1,8 @@
+import type {
+	CompatibilityWarningToast,
+	ReadOnlyRecommendation,
+	SlideSizeEmu,
+} from 'ooxml-ui/pptx';
 import { PptxHandler } from 'pptx-viewer-core';
 import type {
 	PptxAppProperties,
@@ -22,11 +27,6 @@ import type {
 	PptxViewProperties,
 	ParsedTableStyleMap,
 } from 'pptx-viewer-core';
-import type {
-	CompatibilityWarningToast,
-	ReadOnlyRecommendation,
-	SlideSizeEmu,
-} from 'ooxml-ui/pptx';
 // @vitest-environment happy-dom
 /**
  * Regression harness for the "AI theme colour change freezes the renderer" bug.

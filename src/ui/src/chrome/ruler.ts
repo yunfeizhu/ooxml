@@ -33,7 +33,9 @@ export interface RulerMarkerEventDetail {
  * and says where zero is: `origin` is the CSS-pixel offset of zero from the ruler's start edge,
  * `scale` the CSS pixels per unit (96 at 100% for inches). `orientation="vertical"` draws a
  * side ruler; `direction="reverse"` makes values grow toward the start edge, as Visio's
- * vertical ruler grows upward from the page bottom.
+ * vertical ruler grows upward from the page bottom. `density` (1 by default) is the share of the
+ * subdivisions shown: 0.5 draws every second tick and 0.25 every fourth (Visio's Normal and
+ * Coarse ruler subdivisions).
  *
  * Page rulers add: `extent` (the ruler's own length in px, as long as the page), `marginStart` /
  * `marginEnd` (shaded margin bands), `zoom` (the ruler is shown at that CSS zoom) and
@@ -50,6 +52,7 @@ export class OfficeUiRuler extends OfficeElement {
 		origin: { type: Number },
 		scale: { type: Number },
 		direction: { type: String },
+		density: { type: Number },
 		extent: { type: Number },
 		marginStart: { type: Number },
 		marginEnd: { type: Number },
@@ -62,6 +65,7 @@ export class OfficeUiRuler extends OfficeElement {
 	declare origin: number;
 	declare scale: number;
 	declare direction: string;
+	declare density: number;
 	declare extent: number;
 	declare marginStart: number;
 	declare marginEnd: number;
@@ -79,6 +83,7 @@ export class OfficeUiRuler extends OfficeElement {
 		this.origin = 0;
 		this.scale = 96;
 		this.direction = '';
+		this.density = 1;
 		this.extent = 0;
 		this.marginStart = 0;
 		this.marginEnd = 0;
@@ -203,7 +208,8 @@ export class OfficeUiRuler extends OfficeElement {
 		context.font = `${style?.fontSize || OFFICE_TOKENS['--office-font-size-3xs']} ${style?.fontFamily || OFFICE_TOKENS['--office-font']}`;
 		const origin = Number.isFinite(this.origin) ? this.origin : 0;
 		const unit = Math.max(1, Number.isFinite(this.scale) ? this.scale : 96);
-		const divisions = rulerDivisions(unit);
+		const density = this.density > 0 && this.density <= 1 ? this.density : 1;
+		const divisions = Math.max(1, Math.round(rulerDivisions(unit) * density));
 		const step = unit / divisions;
 		const sign = reverse ? -1 : 1;
 		// Every tick index whose position falls inside the ruler, with one spare at each end.
@@ -258,13 +264,14 @@ export class OfficeUiRuler extends OfficeElement {
 				: nothing;
 		return html`${band('start', this.marginStart)}${band('end', this.marginEnd)}<canvas
 			></canvas>${this.markers.map(
-				(marker) => html`<div
-					class="marker ${marker.edge === 'top' ? 'top' : 'bottom'}"
-					data-marker=${marker.name}
-					style="${vertical ? 'top' : 'left'}:${marker.position}px"
-					aria-label=${marker.label ?? nothing}
-					@pointerdown=${(event: PointerEvent) => this.dragMarker(event, marker.name)}
-				></div>`,
+				(marker) =>
+					html`<div
+						class="marker ${marker.edge === 'top' ? 'top' : 'bottom'}"
+						data-marker=${marker.name}
+						style="${vertical ? 'top' : 'left'}:${marker.position}px"
+						aria-label=${marker.label ?? nothing}
+						@pointerdown=${(event: PointerEvent) => this.dragMarker(event, marker.name)}
+					></div>`,
 			)}`;
 	}
 }

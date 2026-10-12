@@ -9,7 +9,7 @@
 	},
 	"devDependencies": {
 		"@types/node": "^24.0.0",
-		"emf-converter": "4.8.21",
-		"vite": "^8.3.2"
+		"emf-converter": "4.11.2",
+		"vite": "^8.3.3"
 	}
 }

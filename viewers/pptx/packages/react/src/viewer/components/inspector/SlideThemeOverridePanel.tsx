@@ -1,3 +1,4 @@
+import { schemaLabel, THEME_COLOR_SLOT_LABEL_KEYS } from 'ooxml-ui/pptx';
 import type { PptxSlide, PptxTheme, ColorMapAliasKey } from 'pptx-viewer-core';
 import {
 	applyThemeOverrideToSlide,
@@ -5,7 +6,6 @@ import {
 	DEFAULT_COLOR_MAP,
 	THEME_COLOR_SCHEME_KEYS,
 } from 'pptx-viewer-core';
-import { schemaLabel, THEME_COLOR_SLOT_LABEL_KEYS } from 'ooxml-ui/pptx';
 import React, { useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 

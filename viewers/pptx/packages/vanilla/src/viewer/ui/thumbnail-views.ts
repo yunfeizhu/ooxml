@@ -1,4 +1,3 @@
-import type { PptxSlide, PptxSlideMaster } from 'pptx-viewer-core';
 import {
 	EDITOR_THUMBNAIL_WIDTH,
 	editorThumbnailHeight,
@@ -7,6 +6,7 @@ import {
 	hiddenSlideCue,
 } from 'ooxml-ui/pptx';
 import type { CanvasSize } from 'ooxml-ui/pptx';
+import type { PptxSlide, PptxSlideMaster } from 'pptx-viewer-core';
 
 import type { Translator } from '../i18n';
 import { createEl } from '../render';

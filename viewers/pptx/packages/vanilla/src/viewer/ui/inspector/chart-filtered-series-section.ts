@@ -1,3 +1,4 @@
+import { hideChartSeries, restoreFilteredSeries, setDataLabelsRangeCache } from 'ooxml-ui/pptx';
 /**
  * chart-filtered-series-section.ts: PowerPoint's "Chart Filters" series
  * show/hide plus the per-series "Value From Cells" label cache editor,
@@ -20,11 +21,6 @@
  * when there is nothing to show, matching the React component returning null.
  */
 import type { PptxChartData } from 'pptx-viewer-core';
-import {
-	hideChartSeries,
-	restoreFilteredSeries,
-	setDataLabelsRangeCache,
-} from 'ooxml-ui/pptx';
 
 import type { Translator } from '../../i18n';
 

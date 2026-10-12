@@ -1,5 +1,5 @@
-import type { PptxElement, ShapePptxElement } from 'pptx-viewer-core';
 import { isEditPointsEnabled } from 'ooxml-ui/pptx';
+import type { PptxElement, ShapePptxElement } from 'pptx-viewer-core';
 import { useCallback, useMemo } from 'react';
 
 import type { OutlineAuthoringProps } from '../components/canvas/OutlineAuthoringLayer';

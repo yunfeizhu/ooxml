@@ -2,6 +2,8 @@ import path from 'path';
 
 import { defineConfig } from 'vitest/config';
 
+import { isolationProjects } from '../../scripts/vitest-isolation.mjs';
+
 export default defineConfig({
 	server: { fs: { allow: [path.resolve(__dirname, '../../../..')] } },
 	resolve: {
@@ -26,7 +28,7 @@ export default defineConfig({
 	test: {
 		globals: true,
 		maxWorkers: 4,
-		include: ['src/**/*.test.{ts,tsx}'],
+		projects: isolationProjects('react', __dirname, 'node'),
 		setupFiles: ['./web-controls.test-setup.ts'],
 	},
 });

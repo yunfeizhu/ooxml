@@ -1,3 +1,4 @@
+import { ACTION_INDICATOR_CLASS, LINK_TOOLTIP_CLASS, LINK_TOOLTIP_HOST_CLASS } from 'ooxml-ui/pptx';
 /**
  * On-canvas action affordances, Svelte side.
  *
@@ -8,11 +9,6 @@
  * type, and never during a running show.
  */
 import type { PptxElement, PptxSlide } from 'pptx-viewer-core';
-import {
-	ACTION_INDICATOR_CLASS,
-	LINK_TOOLTIP_CLASS,
-	LINK_TOOLTIP_HOST_CLASS,
-} from 'ooxml-ui/pptx';
 import { flushSync, mount, unmount } from 'svelte';
 import { afterEach, describe, expect, it } from 'vitest';
 

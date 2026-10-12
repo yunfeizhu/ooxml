@@ -1,5 +1,3 @@
-import type { PptxElement, TextSegment, TextStyle } from 'pptx-viewer-core';
-import { hasTextProperties } from 'pptx-viewer-core';
 import type { InlineTextEditSnapshot, NormAutofitShrinkResult } from 'ooxml-ui/pptx';
 import {
 	reconcileInlineListSnapshot,
@@ -7,6 +5,8 @@ import {
 	resolveInlineEditAutoFitHeight,
 	resolveInlineEditNormAutofitShrink,
 } from 'ooxml-ui/pptx';
+import type { PptxElement, TextSegment, TextStyle } from 'pptx-viewer-core';
+import { hasTextProperties } from 'pptx-viewer-core';
 
 /** Remap edited plain text back onto the element's original segments. */
 export function remapInlineText(

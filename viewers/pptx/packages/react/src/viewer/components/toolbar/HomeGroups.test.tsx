@@ -1,3 +1,4 @@
+import { registerPptxWebControls } from 'ooxml-ui/pptx';
 // @vitest-environment happy-dom
 /**
  * Home > Slides, Drawing triggers and Arrange: the shared `pptx-ui-ribbon-home-*`
@@ -5,7 +6,6 @@
  * and document edits.
  */
 import type { PptxElement } from 'pptx-viewer-core';
-import { registerPptxWebControls } from 'ooxml-ui/pptx';
 import React, { act } from 'react';
 import { createRoot } from 'react-dom/client';
 import type { Root } from 'react-dom/client';

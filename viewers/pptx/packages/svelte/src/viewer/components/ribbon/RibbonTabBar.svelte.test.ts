@@ -57,8 +57,8 @@ describe('ribbonTabBar hiddenActions', () => {
 		const part = (name: string) =>
 			actions.shadowRoot!.querySelector<HTMLButtonElement>(`[part="${name}"]`)!;
 		expect(record).not.toBeNull();
-		expect(part('share').hidden).toBe(false);
-		expect(part('comments').hidden).toBe(false);
+		expect(part('share').hidden).toBeFalsy();
+		expect(part('comments').hidden).toBeFalsy();
 		expect(part('comments').querySelector('.badge')?.textContent).toBe('2');
 		record?.click();
 		part('share').click();
@@ -88,6 +88,6 @@ describe('ribbonTabBar hiddenActions', () => {
 
 		expect(target.querySelector('.pptx-svelte-ribbon-record')).toBeNull();
 		const actions = target.querySelector('pptx-ui-ribbon-actions')!;
-		expect(actions.shadowRoot!.querySelector<HTMLElement>('[part="share"]')!.hidden).toBe(true);
+		expect(actions.shadowRoot!.querySelector<HTMLElement>('[part="share"]')!.hidden).toBeTruthy();
 	});
 });

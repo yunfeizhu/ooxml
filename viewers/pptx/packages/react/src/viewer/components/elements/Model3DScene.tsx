@@ -12,9 +12,9 @@
  * @module Model3DScene
  */
 
-import type { Model3DSceneData } from 'pptx-viewer-core';
 import { mountModel3D } from 'ooxml-ui/pptx';
 import type { Model3DHandle } from 'ooxml-ui/pptx';
+import type { Model3DSceneData } from 'pptx-viewer-core';
 import React, { useRef, useEffect } from 'react';
 
 // ---------------------------------------------------------------------------

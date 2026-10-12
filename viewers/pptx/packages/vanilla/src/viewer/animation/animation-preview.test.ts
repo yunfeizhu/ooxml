@@ -1,5 +1,5 @@
-import type { PptxElementAnimation } from 'pptx-viewer-core';
 import { motionPathPresetById } from 'ooxml-ui/pptx';
+import type { PptxElementAnimation } from 'pptx-viewer-core';
 import { afterEach, describe, expect, it } from 'vitest';
 
 import { buildAnimationPreview, playAnimationPreview } from './animation-preview';

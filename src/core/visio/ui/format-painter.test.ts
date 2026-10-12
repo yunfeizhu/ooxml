@@ -91,7 +91,7 @@ describe('Format Painter commands', () => {
 			pages: [
 				{
 					id: '0',
-					contents: `<Shapes>${shape('1', size + cell('EndArrow', 4) + '<Text>a</Text>') + shape('2', size, 'Master="9"')}</Shapes>`,
+					contents: `<Shapes>${shape('1', size + cell('EndArrow', 4) + '<Text>a</Text>') + shape('2', size + `<Shapes>${shape('3', size)}</Shapes>`, 'Type="Group"') + shape('4', size, 'Master="9"')}</Shapes>`,
 				},
 			],
 		});
@@ -100,6 +100,8 @@ describe('Format Painter commands', () => {
 		const snapshot = visioFormatPainterSnapshot(document, page, '1')!;
 		expect(snapshot.skipped).toContain('arrowheads');
 		expect(visioFormatPainterEdits(page, snapshot, ['2'])).toBeUndefined();
+		// A stencil shape takes pasted formatting as local values over its master.
+		expect(visioFormatPainterEdits(page, snapshot, ['4'])).toBeDefined();
 		expect(visioFormatPainterEdits(page, snapshot, [])).toBeUndefined();
 		expect(visioFormatPainterSnapshot(document, page, 'missing')).toBeUndefined();
 		expect(VISIO_FORMAT_PAINTER_LIMITS).not.toContain('—');

@@ -7,7 +7,6 @@ import {
 	OnChanges,
 	OnDestroy,
 } from '@angular/core';
-
 import { attachRotateHandlePlacement, elementIdSelector } from 'ooxml-ui/pptx';
 
 /** Keep the mounted Rotate control reachable without changing its gesture handlers. */

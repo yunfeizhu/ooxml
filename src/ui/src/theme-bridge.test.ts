@@ -7,7 +7,20 @@ describe('themeBridge', () => {
 			'--office-accent': 'var(--brand)',
 			'--office-border': '',
 		});
-		expect(css).toBe(':host {\n\t--office-accent: var(--brand);\n}\n');
+		expect(css.startsWith(':host {\n\t--office-accent: var(--brand);\n')).toBe(true);
+		expect(css).not.toContain('--office-border:');
+	});
+
+	it('declares the tokens derived from a mapped one again, so they follow the product', () => {
+		// The page theme resolves `--office-select-background` on :root; without this a light
+		// viewer on a dark system painted its selects with the page's dark background.
+		const css = themeBridge(':host > *', { '--office-background': 'var(--surface)' });
+		expect(css).toContain('--office-select-background: var(--office-background, #ffffff);');
+		expect(css).toContain('--office-field-background: var(--office-background, #ffffff);');
+		// Through another derived token too.
+		expect(css).toContain('--office-popover: var(--office-background, #ffffff);');
+		expect(css).toContain('--office-select-option-active:');
+		expect(css).not.toContain('--office-field-border:');
 	});
 });
 

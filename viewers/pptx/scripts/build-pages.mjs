@@ -35,8 +35,12 @@ function run(command, args, cwd, env = process.env) {
 		stdio: 'inherit',
 		shell: process.platform === 'win32' && command === 'bun',
 	});
-	if (result.error) throw result.error;
-	if (result.status !== 0) throw new Error(`${command} ${args.join(' ')} failed in ${cwd}`);
+	if (result.error) {
+		throw result.error;
+	}
+	if (result.status !== 0) {
+		throw new Error(`${command} ${args.join(' ')} failed in ${cwd}`);
+	}
 }
 
 run('bun', ['run', 'docs:build'], docs);

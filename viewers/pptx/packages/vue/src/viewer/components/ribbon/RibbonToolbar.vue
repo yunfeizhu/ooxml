@@ -23,6 +23,7 @@ import type { RibbonContextualTabId } from 'ooxml-ui/pptx';
 import { computed, inject, onBeforeUnmount, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 
+import { useRibbonAddInTabs } from '../../composables/ribbon-add-ins';
 import { useToolbarVisibility } from '../../composables/useToolbarVisibility';
 import { useResolvedCustomization } from '../../composables/useViewerCustomization';
 import { ViewerOptionsKey } from '../../composables/useViewerOptionsStore';
@@ -37,6 +38,7 @@ import FileSection from './FileSection.vue';
 import HomeSection from './HomeSection.vue';
 import InsertSection from './InsertSection.vue';
 import type { RibbonProps } from './ribbon-types';
+import RibbonAddInSection from './RibbonAddInSection.vue';
 import RibbonTabBar from './RibbonTabBar.vue';
 import RibbonTailSections from './RibbonTailSections.vue';
 import TextSection from './TextSection.vue';
@@ -71,6 +73,15 @@ const activeContextualTab = computed(() =>
 		? (s.value as RibbonContextualTabId)
 		: null,
 );
+/**
+ * The host's add-in tabs (`ribbonAddIns`). Showing one is local state, as in React: any other
+ * tab clears it, and losing it falls back to Home.
+ */
+const addIns = useRibbonAddInTabs(() => props.onSetToolbarSection('home'));
+function selectSection(section: Parameters<RibbonProps['onSetToolbarSection']>[0]): void {
+	addIns.select(null);
+	props.onSetToolbarSection(section);
+}
 /** The Text group shows on both the Home and Text tabs (mirrors React). */
 const showText = computed(() => s.value === 'home' || s.value === 'text');
 /**
@@ -119,7 +130,10 @@ onBeforeUnmount(() => detachOverflow?.());
 			:toolbar-section="s"
 			:visible-tabs="visibleTabs"
 			:contextual-tabs="contextualTabs"
-			:on-set-toolbar-section="props.onSetToolbarSection"
+			:add-in-tabs="addIns.visible.value"
+			:active-add-in="addIns.active.value?.id ?? null"
+			:on-select-add-in="addIns.select"
+			:on-set-toolbar-section="selectSection"
 			:can-edit="props.canEdit"
 			:on-enter-rehearsal-mode="props.onEnterRehearsalMode"
 			:on-set-mode="props.onSetMode"
@@ -142,180 +156,183 @@ onBeforeUnmount(() => detachOverflow?.());
 			v-show="props.isCompactToolbarOpen"
 			class="flex min-h-[82px] items-center gap-0 overflow-x-auto px-1 py-0.5 max-md:min-h-0 max-md:px-1 max-md:py-0.5 flex-nowrap [&>*]:shrink-0"
 		>
-			<FileSection
-				v-if="s === 'file'"
-				:file-name="props.fileName"
-				:on-close="() => props.onSetToolbarSection('home')"
-				:on-create-presentation="props.onCreatePresentation"
-				:on-open-file="props.onOpenFile"
-				:on-open-recent-file="props.onOpenRecentFile"
-				:on-export-png="props.onExportPng"
-				:on-export-pdf="props.onExportPdf"
-				:on-export-video="props.onExportVideo"
-				:on-export-gif="props.onExportGif"
-				:on-export-json="props.onExportJson"
-				:on-save-as-pptx="props.onSaveAsPptx"
-				:on-save-as-ppsx="props.onSaveAsPpsx"
-				:on-save-as-pptm="props.onSaveAsPptm"
-				:on-save-as-ppt="props.onSaveAsPpt"
-				:has-macros="props.hasMacros"
-				:on-copy-slide-as-image="props.onCopySlideAsImage"
-				:on-print="props.onPrint"
-				:on-open-settings="props.onOpenSettings"
-				:on-open-share-dialog="props.onOpenShareDialog"
-				:on-open-document-properties="props.onOpenDocumentProperties"
-				:on-open-password-protection="props.onOpenPasswordProtection"
-				:on-open-font-embedding="props.onOpenFontEmbedding"
-				:on-open-digital-signatures="props.onOpenDigitalSignatures"
-				:on-open-version-history="props.onToggleVersionHistory"
-				:hidden-actions="props.hiddenActions"
-				:recent-presentations-count="props.recentPresentationsCount"
-			/>
+			<RibbonAddInSection v-if="addIns.active.value" :tab="addIns.active.value" />
+			<template v-else>
+				<FileSection
+					v-if="s === 'file'"
+					:file-name="props.fileName"
+					:on-close="() => props.onSetToolbarSection('home')"
+					:on-create-presentation="props.onCreatePresentation"
+					:on-open-file="props.onOpenFile"
+					:on-open-recent-file="props.onOpenRecentFile"
+					:on-export-png="props.onExportPng"
+					:on-export-pdf="props.onExportPdf"
+					:on-export-video="props.onExportVideo"
+					:on-export-gif="props.onExportGif"
+					:on-export-json="props.onExportJson"
+					:on-save-as-pptx="props.onSaveAsPptx"
+					:on-save-as-ppsx="props.onSaveAsPpsx"
+					:on-save-as-pptm="props.onSaveAsPptm"
+					:on-save-as-ppt="props.onSaveAsPpt"
+					:has-macros="props.hasMacros"
+					:on-copy-slide-as-image="props.onCopySlideAsImage"
+					:on-print="props.onPrint"
+					:on-open-settings="props.onOpenSettings"
+					:on-open-share-dialog="props.onOpenShareDialog"
+					:on-open-document-properties="props.onOpenDocumentProperties"
+					:on-open-password-protection="props.onOpenPasswordProtection"
+					:on-open-font-embedding="props.onOpenFontEmbedding"
+					:on-open-digital-signatures="props.onOpenDigitalSignatures"
+					:on-open-version-history="props.onToggleVersionHistory"
+					:hidden-actions="props.hiddenActions"
+					:recent-presentations-count="props.recentPresentationsCount"
+				/>
 
-			<HomeSection
-				v-if="s === 'home'"
-				:can-edit="props.canEdit"
-				:clipboard-payload="props.clipboardPayload"
-				:format-painter-active="props.formatPainterActive"
-				:can-activate-format-painter="props.canActivateFormatPainter"
-				:on-copy="props.onCopy"
-				:on-cut="props.onCut"
-				:on-paste="props.onPaste"
-				:on-toggle-format-painter="props.onToggleFormatPainter"
-				:layout-options="props.layoutOptions"
-				:current-layout-path="props.currentLayoutPath"
-				:load-layout-previews="props.loadLayoutPreviews"
-				:on-insert-slide-from-layout="props.onInsertSlideFromLayout"
-				:on-insert-slide-from-template="props.onInsertSlideFromTemplate"
-				:template-scheme="props.templateScheme"
-				:on-apply-layout="props.onApplyLayout"
-				:on-reset-slide="props.onResetSlide"
-				:on-add-section="props.onAddSection"
-				:selected-element="props.selectedElement"
-			/>
+				<HomeSection
+					v-if="s === 'home'"
+					:can-edit="props.canEdit"
+					:clipboard-payload="props.clipboardPayload"
+					:format-painter-active="props.formatPainterActive"
+					:can-activate-format-painter="props.canActivateFormatPainter"
+					:on-copy="props.onCopy"
+					:on-cut="props.onCut"
+					:on-paste="props.onPaste"
+					:on-toggle-format-painter="props.onToggleFormatPainter"
+					:layout-options="props.layoutOptions"
+					:current-layout-path="props.currentLayoutPath"
+					:load-layout-previews="props.loadLayoutPreviews"
+					:on-insert-slide-from-layout="props.onInsertSlideFromLayout"
+					:on-insert-slide-from-template="props.onInsertSlideFromTemplate"
+					:template-scheme="props.templateScheme"
+					:on-apply-layout="props.onApplyLayout"
+					:on-reset-slide="props.onResetSlide"
+					:on-add-section="props.onAddSection"
+					:selected-element="props.selectedElement"
+				/>
 
-			<InsertSection
-				v-if="s === 'insert'"
-				:can-edit="props.canEdit"
-				:new-shape-type="props.newShapeType"
-				:on-set-new-shape-type="props.onSetNewShapeType"
-				:on-add-text-box="props.onAddTextBox"
-				:on-add-shape="props.onAddShape"
-				:on-add-table="props.onAddTable"
-				:on-add-chart="props.onAddChart"
-				:on-add-smart-art="props.onAddSmartArt"
-				:on-add-equation="props.onAddEquation"
-				:on-add-action-button="props.onAddActionButton"
-				:on-insert-field="props.onInsertField"
-				:on-open-header-footer="props.onOpenHeaderFooter"
-				:on-open-image-picker="props.onOpenImagePicker"
-				:on-open-media-picker="props.onOpenMediaPicker"
-				:has-selection="Boolean(props.selectedElement)"
-				:on-open-hyperlink-dialog="props.onOpenHyperlinkDialog"
-			/>
+				<InsertSection
+					v-if="s === 'insert'"
+					:can-edit="props.canEdit"
+					:new-shape-type="props.newShapeType"
+					:on-set-new-shape-type="props.onSetNewShapeType"
+					:on-add-text-box="props.onAddTextBox"
+					:on-add-shape="props.onAddShape"
+					:on-add-table="props.onAddTable"
+					:on-add-chart="props.onAddChart"
+					:on-add-smart-art="props.onAddSmartArt"
+					:on-add-equation="props.onAddEquation"
+					:on-add-action-button="props.onAddActionButton"
+					:on-insert-field="props.onInsertField"
+					:on-open-header-footer="props.onOpenHeaderFooter"
+					:on-open-image-picker="props.onOpenImagePicker"
+					:on-open-media-picker="props.onOpenMediaPicker"
+					:has-selection="Boolean(props.selectedElement)"
+					:on-open-hyperlink-dialog="props.onOpenHyperlinkDialog"
+				/>
 
-			<TextSection
-				v-if="showText"
-				:can-edit="props.canEdit"
-				:selected-element="props.selectedElement"
-				:table-editor-state="props.tableEditorState"
-				:on-update-text-style="props.onUpdateTextStyle"
-				:on-transform-text-case="props.onTransformTextCase"
-				:theme-fonts="props.themeFonts"
-				:embedded-font-families="props.embeddedFontFamilies"
-				:custom-font-families="props.customFontFamilies"
-			/>
+				<TextSection
+					v-if="showText"
+					:can-edit="props.canEdit"
+					:selected-element="props.selectedElement"
+					:table-editor-state="props.tableEditorState"
+					:on-update-text-style="props.onUpdateTextStyle"
+					:on-transform-text-case="props.onTransformTextCase"
+					:theme-fonts="props.themeFonts"
+					:embedded-font-families="props.embeddedFontFamilies"
+					:custom-font-families="props.customFontFamilies"
+				/>
 
-			<DrawingGroup
-				v-if="s === 'home'"
-				:can-edit="props.canEdit"
-				:selected-element="props.selectedElement"
-				:new-shape-type="props.newShapeType"
-				:on-set-new-shape-type="props.onSetNewShapeType"
-				:on-add-shape="props.onAddShape"
-				:on-move-layer="props.onMoveLayer"
-				:on-move-layer-to-edge="props.onMoveLayerToEdge"
-				:on-update-element-style="props.onUpdateElementStyle"
-			/>
+				<DrawingGroup
+					v-if="s === 'home'"
+					:can-edit="props.canEdit"
+					:selected-element="props.selectedElement"
+					:new-shape-type="props.newShapeType"
+					:on-set-new-shape-type="props.onSetNewShapeType"
+					:on-add-shape="props.onAddShape"
+					:on-move-layer="props.onMoveLayer"
+					:on-move-layer-to-edge="props.onMoveLayerToEdge"
+					:on-update-element-style="props.onUpdateElementStyle"
+				/>
 
-			<EditingSection
-				v-if="s === 'home'"
-				:on-toggle-find-replace="props.onToggleFindReplace"
-				:on-select-all="props.onSelectAll"
-			/>
+				<EditingSection
+					v-if="s === 'home'"
+					:on-toggle-find-replace="props.onToggleFindReplace"
+					:on-select-all="props.onSelectAll"
+				/>
 
-			<DrawSection
-				:can-edit="props.canEdit"
-				v-if="s === 'draw'"
-				:active-tool="props.activeTool"
-				:drawing-color="props.drawingColor"
-				:drawing-width="props.drawingWidth"
-				:on-set-active-tool="props.onSetActiveTool"
-				:on-set-drawing-color="props.onSetDrawingColor"
-				:on-set-drawing-width="props.onSetDrawingWidth"
-			/>
+				<DrawSection
+					:can-edit="props.canEdit"
+					v-if="s === 'draw'"
+					:active-tool="props.activeTool"
+					:drawing-color="props.drawingColor"
+					:drawing-width="props.drawingWidth"
+					:on-set-active-tool="props.onSetActiveTool"
+					:on-set-drawing-color="props.onSetDrawingColor"
+					:on-set-drawing-width="props.onSetDrawingWidth"
+				/>
 
-			<ArrangeSection
-				v-if="s === 'home' || s === 'arrange'"
-				:can-edit="props.canEdit"
-				:selected-element="props.selectedElement"
-				:selected-count="props.selectedCount"
-				:selection-groupable="props.selectionGroupable"
-				:on-align-elements="props.onAlignElements"
-				:on-distribute-elements="props.onDistributeElements"
-				:can-distribute="props.canDistribute"
-				:on-flip="props.onFlip"
-				:on-move-layer="props.onMoveLayer"
-				:on-move-layer-to-edge="props.onMoveLayerToEdge"
-				:on-group-elements="props.onGroupElements"
-				:on-ungroup-element="props.onUngroupElement"
-				:on-update-element-style="props.onUpdateElementStyle"
-				:on-duplicate="props.onDuplicate"
-				:on-delete="props.onDelete"
-				:format-painter-active="props.formatPainterActive"
-				:on-toggle-format-painter="props.onToggleFormatPainter"
-				:can-activate-format-painter="props.canActivateFormatPainter"
-				:hidden-actions="props.hiddenActions"
-			/>
+				<ArrangeSection
+					v-if="s === 'home' || s === 'arrange'"
+					:can-edit="props.canEdit"
+					:selected-element="props.selectedElement"
+					:selected-count="props.selectedCount"
+					:selection-groupable="props.selectionGroupable"
+					:on-align-elements="props.onAlignElements"
+					:on-distribute-elements="props.onDistributeElements"
+					:can-distribute="props.canDistribute"
+					:on-flip="props.onFlip"
+					:on-move-layer="props.onMoveLayer"
+					:on-move-layer-to-edge="props.onMoveLayerToEdge"
+					:on-group-elements="props.onGroupElements"
+					:on-ungroup-element="props.onUngroupElement"
+					:on-update-element-style="props.onUpdateElementStyle"
+					:on-duplicate="props.onDuplicate"
+					:on-delete="props.onDelete"
+					:format-painter-active="props.formatPainterActive"
+					:on-toggle-format-painter="props.onToggleFormatPainter"
+					:can-activate-format-painter="props.canActivateFormatPainter"
+					:hidden-actions="props.hiddenActions"
+				/>
 
-			<DesignSection
-				v-if="s === 'design'"
-				:can-edit="props.canEdit"
-				:on-toggle-theme-gallery="props.onToggleThemeGallery"
-				:is-theme-gallery-open="props.isThemeGalleryOpen"
-				:on-toggle-theme-editor="props.onToggleThemeEditor"
-				:is-theme-editor-open="props.isThemeEditorOpen"
-				:on-open-document-properties="props.onOpenDocumentProperties"
-				:on-open-slide-size="props.onOpenSlideSize"
-				:on-toggle-inspector="props.onToggleInspector"
-				:is-inspector-pane-open="props.isInspectorPaneOpen"
-			/>
+				<DesignSection
+					v-if="s === 'design'"
+					:can-edit="props.canEdit"
+					:on-toggle-theme-gallery="props.onToggleThemeGallery"
+					:is-theme-gallery-open="props.isThemeGalleryOpen"
+					:on-toggle-theme-editor="props.onToggleThemeEditor"
+					:is-theme-editor-open="props.isThemeEditorOpen"
+					:on-open-document-properties="props.onOpenDocumentProperties"
+					:on-open-slide-size="props.onOpenSlideSize"
+					:on-toggle-inspector="props.onToggleInspector"
+					:is-inspector-pane-open="props.isInspectorPaneOpen"
+				/>
 
-			<TransitionsSection
-				v-if="s === 'transitions'"
-				:is-inspector-pane-open="props.isInspectorPaneOpen"
-				:on-toggle-inspector="props.onToggleInspector"
-				:can-edit="props.canEdit"
-				:active-slide="props.activeSlide"
-				:on-transition-change="props.onTransitionChange"
-				:on-apply-transition-to-all="props.onApplyTransitionToAll"
-			/>
+				<TransitionsSection
+					v-if="s === 'transitions'"
+					:is-inspector-pane-open="props.isInspectorPaneOpen"
+					:on-toggle-inspector="props.onToggleInspector"
+					:can-edit="props.canEdit"
+					:active-slide="props.activeSlide"
+					:on-transition-change="props.onTransitionChange"
+					:on-apply-transition-to-all="props.onApplyTransitionToAll"
+				/>
 
-			<AnimationsSection
-				v-if="s === 'animations'"
-				:can-edit="props.canEdit"
-				:selected-element="props.selectedElement"
-				:active-slide="props.activeSlide"
-				:is-inspector-pane-open="props.isInspectorPaneOpen"
-				:on-toggle-inspector="props.onToggleInspector"
-				:on-open-animation-panel="props.onOpenAnimationPanel"
-				:on-add-animation="props.onAddAnimation"
-				:on-remove-animation="props.onRemoveAnimation"
-			/>
+				<AnimationsSection
+					v-if="s === 'animations'"
+					:can-edit="props.canEdit"
+					:selected-element="props.selectedElement"
+					:active-slide="props.activeSlide"
+					:is-inspector-pane-open="props.isInspectorPaneOpen"
+					:on-toggle-inspector="props.onToggleInspector"
+					:on-open-animation-panel="props.onOpenAnimationPanel"
+					:on-add-animation="props.onAddAnimation"
+					:on-remove-animation="props.onRemoveAnimation"
+				/>
 
-			<RibbonTailSections v-bind="props" />
+				<RibbonTailSections v-bind="props" />
 
-			<ContextualTabSection v-if="activeContextualTab" :tab="activeContextualTab" />
+				<ContextualTabSection v-if="activeContextualTab" :tab="activeContextualTab" />
+			</template>
 		</div>
 	</div>
 </template>

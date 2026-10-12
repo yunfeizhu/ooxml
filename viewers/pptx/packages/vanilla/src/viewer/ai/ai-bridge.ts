@@ -9,7 +9,6 @@
  * for the SDK when the chat panel is actually opened.
  */
 
-import type { PptxData, PptxHandler, PptxSlide, PptxTheme } from 'pptx-viewer-core';
 import type {
 	PptxAiBridge,
 	PptxAiDataUpdater,
@@ -20,6 +19,7 @@ import type {
 	PptxAiSlidesUpdater,
 } from 'ooxml-ui/pptx/ai';
 import { applyElementUpdate, deckDataFieldChanged } from 'ooxml-ui/pptx/ai';
+import type { PptxData, PptxHandler, PptxSlide, PptxTheme } from 'pptx-viewer-core';
 
 import type { EditorController } from '../editor';
 import type { Store, ViewerState } from '../state';

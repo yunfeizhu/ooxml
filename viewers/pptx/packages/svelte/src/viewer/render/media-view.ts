@@ -1,5 +1,5 @@
-import type { MediaPptxElement } from 'pptx-viewer-core';
 import { getImageSrc, getOnlineVideoEmbed } from 'ooxml-ui/pptx';
+import type { MediaPptxElement } from 'pptx-viewer-core';
 
 export { registerCrossSlideAudio } from 'ooxml-ui/pptx';
 

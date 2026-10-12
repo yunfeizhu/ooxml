@@ -1,5 +1,5 @@
-import type { ElementAction, ElementActionType } from 'pptx-viewer-core';
 import { canCommitActionType, ELEMENT_ACTION_TYPE_OPTIONS, toSlideIndex } from 'ooxml-ui/pptx';
+import type { ElementAction, ElementActionType } from 'pptx-viewer-core';
 
 import type { Translator } from '../../i18n';
 import { createInspectorSelect, createInspectorCheckbox } from './controls-extra';

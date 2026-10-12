@@ -1,11 +1,13 @@
 import { test, expect } from '@playwright/test';
 import { createVsdxFixture } from './fixture.mjs';
+import { openDemo } from './demo-page';
+import { ribbonGroup } from './ribbon';
 
 test('Change Shape replaces the selected outline from the Basic Shapes gallery and undoes', async ({
 	page,
 }) => {
 	await page.setViewportSize({ width: 1440, height: 1000 });
-	await page.goto('/demo/?sample=1');
+	await openDemo(page);
 	const viewer = page.locator('visio-viewer');
 	await expect(page.locator('#file-name')).toHaveText('Sample workflow');
 	await page.locator('#file').setInputFiles({
@@ -27,6 +29,7 @@ test('Change Shape replaces the selected outline from the Basic Shapes gallery a
 	await expect(trigger).toBeEnabled();
 	const before = await added.innerHTML();
 
+	await ribbonGroup(viewer, 'Editing');
 	await trigger.click();
 	const popup = viewer.locator('[data-gallery-popup="change-shape"]');
 	await expect(popup).toBeVisible();

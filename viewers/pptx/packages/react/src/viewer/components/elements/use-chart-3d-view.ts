@@ -1,3 +1,11 @@
+import { applyChart3DDrag, applyChart3DSelect, resolveChartThreeViewSpec } from 'ooxml-ui/pptx';
+import type {
+	Chart3DFlags,
+	Chart3DSelectionBridge,
+	ChartPartRef,
+	ThreeViewDragDetail,
+	ThreeViewSpec,
+} from 'ooxml-ui/pptx';
 /**
  * React-side glue between a chart element's `<pptx-three-view>` and this
  * binding's chart-part selection / value-commit path. Everything that
@@ -11,18 +19,6 @@
  * @module use-chart-3d-view
  */
 import type { ChartPptxElement, PptxElement } from 'pptx-viewer-core';
-import {
-	applyChart3DDrag,
-	applyChart3DSelect,
-	resolveChartThreeViewSpec,
-} from 'ooxml-ui/pptx';
-import type {
-	Chart3DFlags,
-	Chart3DSelectionBridge,
-	ChartPartRef,
-	ThreeViewDragDetail,
-	ThreeViewSpec,
-} from 'ooxml-ui/pptx';
 import { useMemo } from 'react';
 
 import type { ChartPartSelection } from '../chart-part-selection';

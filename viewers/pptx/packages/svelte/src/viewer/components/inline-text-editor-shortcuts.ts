@@ -1,11 +1,6 @@
-import type { PptxElement } from 'pptx-viewer-core';
-import {
-	fontSizeOf,
-	mapEditorKey,
-	mapInlineTextFormatKey,
-	stepFontSizePt,
-} from 'ooxml-ui/pptx';
+import { fontSizeOf, mapEditorKey, mapInlineTextFormatKey, stepFontSizePt } from 'ooxml-ui/pptx';
 import type { EditorKeyInput } from 'ooxml-ui/pptx';
+import type { PptxElement } from 'pptx-viewer-core';
 
 import { setFontSizePatch, toggleTextFlagPatch } from '../editor/editor-format-mutations';
 import { setAlignPatch } from '../editor/editor-paragraph-mutations';

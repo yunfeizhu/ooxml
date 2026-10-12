@@ -1,3 +1,8 @@
+import {
+	commentMentionQuery,
+	insertCommentMention,
+	matchCommentMentionAuthors,
+} from 'ooxml-ui/pptx';
 /**
  * CommentMentionTextarea: a plain `<textarea>` plus the `@`-mention
  * typeahead, shared by the new-comment box and the reply form.
@@ -8,11 +13,6 @@
  * maps the result onto the textarea and a floating suggestion list.
  */
 import type { PptxCommentMention, PptxModernCommentAuthor } from 'pptx-viewer-core';
-import {
-	commentMentionQuery,
-	insertCommentMention,
-	matchCommentMentionAuthors,
-} from 'ooxml-ui/pptx';
 import React, { useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 

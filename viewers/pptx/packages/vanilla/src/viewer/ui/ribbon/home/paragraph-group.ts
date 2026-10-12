@@ -1,4 +1,3 @@
-import type { TextStyle } from 'pptx-viewer-core';
 import type { RibbonGalleryId } from 'ooxml-ui/pptx';
 import {
 	homeGalleryControls,
@@ -8,6 +7,7 @@ import {
 	registerPptxWebControls,
 	withHomeGalleries,
 } from 'ooxml-ui/pptx';
+import type { TextStyle } from 'pptx-viewer-core';
 
 import type { TextFormatState } from '../../../editor/editor-format-mutations';
 import type { Translator } from '../../../i18n';

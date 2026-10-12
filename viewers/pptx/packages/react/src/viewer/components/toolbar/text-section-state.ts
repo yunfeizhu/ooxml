@@ -1,3 +1,11 @@
+import {
+	elementBulletKind,
+	selectionBulletKind,
+	getInlineEditorSelectionResult,
+	getSelectionTextStyleFlags,
+	TEXT_DECORATION_FLAGS,
+} from 'ooxml-ui/pptx';
+import type { ElementBulletKind, SelectionTextStyleFlags, TextDecorationFlag } from 'ooxml-ui/pptx';
 /**
  * Pure state readers for the ribbon's TextSection (Home > Font / Paragraph):
  * what the toggles show as pressed and what a click decides from. The
@@ -6,18 +14,6 @@
  */
 import type { PptxElement, TextStyle } from 'pptx-viewer-core';
 import { hasTextProperties } from 'pptx-viewer-core';
-import {
-	elementBulletKind,
-	selectionBulletKind,
-	getInlineEditorSelectionResult,
-	getSelectionTextStyleFlags,
-	TEXT_DECORATION_FLAGS,
-} from 'ooxml-ui/pptx';
-import type {
-	ElementBulletKind,
-	SelectionTextStyleFlags,
-	TextDecorationFlag,
-} from 'ooxml-ui/pptx';
 
 import type { TableCellEditorState } from '../../types';
 

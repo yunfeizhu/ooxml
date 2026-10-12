@@ -163,6 +163,54 @@ export async function visibleTextMatches(page: Page, pattern: RegExp): Promise<n
  * Poll until text matching `pattern` is actually visible, resolving `false` on
  * timeout instead of throwing so a parity spec can report the gap by name.
  */
+/**
+ * Start watching the page for visible text matching `pattern` and return a check that resolves
+ * `true` once it has been on screen, `false` on timeout. Unlike polling after the action, the
+ * watcher is installed before it, so a modal that is only up for a few frames (a fast export)
+ * cannot be missed between two polls.
+ */
+export async function watchProgress(
+	page: Page,
+	pattern: RegExp,
+): Promise<(timeoutMs: number) => Promise<boolean>> {
+	const key = `__progressSeen${Math.random().toString(36).slice(2)}`;
+	await page.evaluate(
+		({ key, source, flags }) => {
+			const regex = new RegExp(source, flags);
+			const w = window as unknown as Record<string, boolean>;
+			w[key] = false;
+			const matching = () =>
+				[...document.querySelectorAll('body *')].filter(
+					(element) =>
+						element.children.length === 0 &&
+						regex.test(element.textContent ?? '') &&
+						element.checkVisibility(),
+				);
+			// What is already on screen (the Export card itself) does not count as progress UI.
+			const before = new WeakSet<Element>(matching());
+			new MutationObserver(() => {
+				if (!w[key] && matching().some((element) => !before.has(element))) w[key] = true;
+			}).observe(document.body, {
+				childList: true,
+				subtree: true,
+				characterData: true,
+				attributes: true,
+			});
+		},
+		{ key, source: pattern.source, flags: pattern.flags },
+	);
+	return (timeoutMs) =>
+		page
+			.waitForFunction((k) => (window as unknown as Record<string, boolean>)[k] === true, key, {
+				timeout: timeoutMs,
+				polling: 'raf',
+			})
+			.then(
+				() => true,
+				() => false,
+			);
+}
+
 export async function progressAppears(
 	page: Page,
 	pattern: RegExp,

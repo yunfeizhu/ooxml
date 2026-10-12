@@ -1,3 +1,4 @@
+import type { FontEmbeddingDescriptor } from 'ooxml-ui/pptx';
 /**
  * Types for the {@link useViewerDialogs} hook.
  *
@@ -8,7 +9,6 @@
  * @module viewer-dialog-types
  */
 import type { PptxSlide, PptxPresentationProperties } from 'pptx-viewer-core';
-import type { FontEmbeddingDescriptor } from 'ooxml-ui/pptx';
 
 import type { CanvasSize } from '../types';
 import type { ViewerMode } from '../types-core';

@@ -1,9 +1,9 @@
-import type { PptxComment } from 'pptx-viewer-core';
 import {
 	COMMENT_MENTION_ATTRIBUTE,
 	COMMENT_MENTION_CLASS,
 	commentTextSegments,
 } from 'ooxml-ui/pptx';
+import type { PptxComment } from 'pptx-viewer-core';
 
 /**
  * Fill an element with a comment body, highlighting its `@`-mentions.

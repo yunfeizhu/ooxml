@@ -15,9 +15,9 @@
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
 
+import { canCommitActionType } from 'ooxml-ui/pptx';
 import { describe, expect, it } from 'vitest';
 
-import { canCommitActionType } from 'ooxml-ui/pptx';
 import {
 	displayedActionType,
 	NO_PENDING_ACTION_TYPE,

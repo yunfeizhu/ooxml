@@ -1,5 +1,5 @@
-import type { PptxSlide } from 'pptx-viewer-core';
 import { findInSlides, replaceInSlides, replaceMatch } from 'ooxml-ui/pptx';
+import type { PptxSlide } from 'pptx-viewer-core';
 
 import type { Store, ViewerState } from '../state';
 import type { EditorOps } from './editor-operations';

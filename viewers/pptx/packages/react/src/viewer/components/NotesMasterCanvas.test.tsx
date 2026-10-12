@@ -1,6 +1,6 @@
+import { translationsEn } from 'ooxml-ui/pptx/i18n';
 // @vitest-environment happy-dom
 import type { PptxNotesMaster } from 'pptx-viewer-core';
-import { translationsEn } from 'ooxml-ui/pptx/i18n';
 import React, { act } from 'react';
 import { createRoot } from 'react-dom/client';
 import type { Root } from 'react-dom/client';

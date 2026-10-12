@@ -21,6 +21,12 @@ import {
 	CUSTOM_ELEMENTS_SCHEMA,
 } from '@angular/core';
 import { TranslatePipe } from '@ngx-translate/core';
+import {
+	ERROR_BAR_SUPPORTED_TYPES,
+	ERROR_BAR_TYPE_OPTIONS,
+	ERROR_BAR_VALTYPE_OPTIONS,
+	ERROR_BAR_VALUE_TYPES,
+} from 'ooxml-ui/pptx';
 import type {
 	ChartPptxElement,
 	PptxChartErrBars,
@@ -28,12 +34,6 @@ import type {
 	PptxChartType,
 } from 'pptx-viewer-core';
 
-import {
-	ERROR_BAR_SUPPORTED_TYPES,
-	ERROR_BAR_TYPE_OPTIONS,
-	ERROR_BAR_VALTYPE_OPTIONS,
-	ERROR_BAR_VALUE_TYPES,
-} from 'ooxml-ui/pptx';
 import { setSeriesErrorBars } from './chart-advanced-helpers';
 import { CHART_EDITOR_STYLES } from './chart-editor-styles';
 import { numFromEvent, selectValue } from './chart-event-helpers';

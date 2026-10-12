@@ -32,10 +32,10 @@
  * still get the English fallback.
  */
 import type { TranslateService } from '@ngx-translate/core';
-import type { PptxSlide, TextSegment } from 'pptx-viewer-core';
-
 import { nextPresentedSlide, notesSegmentsToSpans } from 'ooxml-ui/pptx';
 import type { AuthoredSlideRange, ShowOrderCustomShow } from 'ooxml-ui/pptx';
+import type { PptxSlide, TextSegment } from 'pptx-viewer-core';
+
 import type { StyleMap } from './element-style';
 import { cssObjectToStyleMap } from './table-renderer-helpers';
 

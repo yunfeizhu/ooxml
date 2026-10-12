@@ -1,0 +1,82 @@
+name: Links
+
+# Checks the links in the repository's own Markdown (READMEs, docs, community files) weekly, and
+# keeps one issue labelled `broken-links` listing the dead ones. Weekly rather than per PR because
+# links break when other sites change, not when this repository does. The viewers' docs sites
+# have their own checks.
+on:
+  schedule:
+    - cron: '47 5 * * 3' # weekly
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+
+      - name: Check the links
+        id: lychee
+        uses: lycheeverse/lychee-action@e7477775783ea5526144ba13e8db5eec57747ce8 # v2.9.0
+        with:
+          # Rate limits and bot walls (npm, LinkedIn and the like) are not broken links.
+          args: >-
+            --no-progress --max-retries 3 --timeout 30
+            --accept '100..=103,200..=299,403,429'
+            --exclude-path node_modules
+            --exclude '^https://github\.com/ChristopherVR/ooxml/(compare|edit|new)/'
+            --exclude '^https?://(localhost|127\.0\.0\.1)'
+            './*.md' '.github/**/*.md' 'docs/**/*.md' 'src/**/README.md' 'apps/**/README.md' 'mcp/**/*.md'
+          output: lychee/out.md
+          fail: false
+          token: ${{ github.token }}
+
+      - name: Keep the broken-links issue up to date
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9
+        env:
+          EXIT_CODE: ${{ steps.lychee.outputs.exit_code }}
+        with:
+          script: |
+            const fs = require('node:fs');
+            const broken = process.env.EXIT_CODE !== '0';
+            const [existing] = await github.paginate(github.rest.issues.listForRepo, {
+              ...context.repo,
+              labels: 'broken-links',
+              state: 'open',
+              per_page: 100,
+            });
+            if (broken) {
+              // An issue body holds at most 65,536 characters.
+              const report = fs.readFileSync('lychee/out.md', 'utf8').slice(0, 60_000);
+              const body = `The weekly link check found dead links. Run: ${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}\n\n${report}`;
+              if (existing) {
+                await github.rest.issues.update({ ...context.repo, issue_number: existing.number, body });
+              } else {
+                await github.rest.issues.create({
+                  ...context.repo,
+                  title: 'Broken links in the documentation',
+                  labels: ['broken-links', 'documentation'],
+                  body,
+                });
+              }
+            } else if (existing) {
+              await github.rest.issues.createComment({
+                ...context.repo,
+                issue_number: existing.number,
+                body: 'The latest link check found no dead links.',
+              });
+              await github.rest.issues.update({
+                ...context.repo,
+                issue_number: existing.number,
+                state: 'closed',
+                state_reason: 'completed',
+              });
+            }

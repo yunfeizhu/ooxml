@@ -1,10 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import {
-	computeListLabels,
-	createDocument,
-	ensureListDefinition,
-	type Paragraph,
-} from './index';
+import { computeListLabels, createDocument, ensureListDefinition, type Paragraph } from './index';
 
 describe('multilevel list definitions', () => {
 	it('numbers 1., 1.1. and 1.1.1. for the multilevel kind and 1. a) i. for outline', () => {

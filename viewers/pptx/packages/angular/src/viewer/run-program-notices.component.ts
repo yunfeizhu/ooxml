@@ -21,9 +21,9 @@
 import { NgStyle } from '@angular/common';
 import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
 import { TranslatePipe } from '@ngx-translate/core';
-
 import { canUseClipboard } from 'ooxml-ui/pptx';
 import type { RunProgramNotice } from 'ooxml-ui/pptx';
+
 import { RUN_PROGRAM_NOTICE_STACK_STYLE } from './presentation-overlay-chrome-styles';
 
 @Component({

@@ -1,13 +1,13 @@
-import type {
-	PptxCommentAuthor,
-	PptxCommentMention,
-	PptxModernCommentAuthor,
-} from 'pptx-viewer-core';
 import {
 	commentMentionQuery,
 	insertCommentMention,
 	matchCommentMentionAuthors,
 } from 'ooxml-ui/pptx';
+import type {
+	PptxCommentAuthor,
+	PptxCommentMention,
+	PptxModernCommentAuthor,
+} from 'pptx-viewer-core';
 
 import type { Translator } from '../i18n';
 import { createEl } from '../render';

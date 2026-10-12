@@ -16,9 +16,9 @@
 // Node rather than the package-wide happy-dom: nothing here renders, and the
 // save path is pure ZIP/XML work.
 import JSZip from 'jszip';
-import { PptxHandler } from 'pptx-viewer-core';
 import { SLIDE_SIZE_PRESETS, slideSizeFromPreset, slideSizeToCanvasPx } from 'ooxml-ui/pptx';
 import type { SlideSizePreset } from 'ooxml-ui/pptx';
+import { PptxHandler } from 'pptx-viewer-core';
 import { describe, expect, it } from 'vitest';
 import { effectScope, nextTick, ref } from 'vue';
 

@@ -1,7 +1,7 @@
 import { mount } from '@vue/test-utils';
+import { motionPathPresetById } from 'ooxml-ui/pptx';
 import type { PptxElement, PptxElementAnimation } from 'pptx-viewer-core';
 import { ENTRANCE_PRESETS, EXIT_PRESETS, ooxmlToPresetName } from 'pptx-viewer-core';
-import { motionPathPresetById } from 'ooxml-ui/pptx';
 import { describe, expect, it } from 'vitest';
 
 import AnimationPanel from './AnimationPanel.vue';

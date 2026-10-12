@@ -60,7 +60,8 @@ describe('undo history of row and column shifts', () => {
 	for (const [name, op] of ops)
 		it(`${name}: undo restores and redo reapplies the exact workbook`, () => {
 			const { wb, s } = richWorkbook();
-			putCell(wb.sheets[0]!, 1_048_575, 0, { value: 'edge' });
+			const edge = name.startsWith('insert') ? 1_048_573 : 1_048_575;
+			putCell(wb.sheets[0]!, edge, 0, { value: 'edge' });
 			const before = snapshot(wb);
 			op(s);
 			const after = snapshot(wb);
@@ -73,13 +74,13 @@ describe('undo history of row and column shifts', () => {
 			expect(snapshot(wb)).toEqual(before);
 		});
 
-	it('restores cells an insert pushes off the bottom of the sheet', () => {
+	it('refuses to push cells off the sheet without creating an undo step', () => {
 		const { wb, s } = richWorkbook();
 		putCell(wb.sheets[0]!, 1_048_575, 2, { value: 'last', formula: 'B2' });
 		const before = snapshot(wb);
-		s.insertRows(0, 0, 1);
-		expect(wb.sheets[0]?.rows.get(1_048_575)).toBeUndefined();
-		s.undo();
+		const undoLabel = s.undoLabel();
+		expect(() => s.insertRows(0, 0, 1)).toThrow(/pushed off/);
+		expect(s.undoLabel()).toBe(undoLabel);
 		expect(snapshot(wb)).toEqual(before);
 	});
 

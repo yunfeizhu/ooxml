@@ -22,8 +22,6 @@
 
 import { ChangeDetectionStrategy, Component, computed, input, output } from '@angular/core';
 import { TranslatePipe } from '@ngx-translate/core';
-import type { ChartPptxElement } from 'pptx-viewer-core';
-
 import type { ChartUserShapeRow, ChartUserShapeRowPatch } from 'ooxml-ui/pptx';
 import {
 	createDefaultChartUserShape,
@@ -39,6 +37,8 @@ import {
 	withChartUserShapeRowTextUpdated,
 	withChartUserShapeRowUpdated,
 } from 'ooxml-ui/pptx';
+import type { ChartPptxElement } from 'pptx-viewer-core';
+
 import { patchChartData } from './chart-data-helpers';
 import { CHART_EDITOR_STYLES } from './chart-editor-styles';
 import type {

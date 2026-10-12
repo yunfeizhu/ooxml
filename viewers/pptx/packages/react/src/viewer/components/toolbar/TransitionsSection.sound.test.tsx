@@ -1,3 +1,4 @@
+import { EFFECT_SOUND_CATALOGUE, registerPptxWebControls } from 'ooxml-ui/pptx';
 // @vitest-environment happy-dom
 /**
  * The Transitions ribbon tab's Sound picker: it used to be a permanently
@@ -9,7 +10,6 @@
  * carries.
  */
 import type { PptxSlide, PptxSlideTransition } from 'pptx-viewer-core';
-import { EFFECT_SOUND_CATALOGUE, registerPptxWebControls } from 'ooxml-ui/pptx';
 import React, { act } from 'react';
 import { createRoot } from 'react-dom/client';
 import type { Root } from 'react-dom/client';

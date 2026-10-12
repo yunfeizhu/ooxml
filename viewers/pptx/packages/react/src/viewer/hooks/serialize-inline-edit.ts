@@ -1,15 +1,11 @@
-import { hasTextProperties } from 'pptx-viewer-core';
-import type { PptxElement, PptxSlide } from 'pptx-viewer-core';
 import {
 	overlayInlineTextSnapshot,
 	overlayMasterViewInlineSnapshot,
 	remapTextToSegments,
 } from 'ooxml-ui/pptx';
-import type {
-	InlineTextEditSnapshot,
-	MasterViewDocument,
-	MasterViewTarget,
-} from 'ooxml-ui/pptx';
+import type { InlineTextEditSnapshot, MasterViewDocument, MasterViewTarget } from 'ooxml-ui/pptx';
+import { hasTextProperties } from 'pptx-viewer-core';
+import type { PptxElement, PptxSlide } from 'pptx-viewer-core';
 
 interface InlineSaveDocument extends MasterViewDocument {
 	slides: PptxSlide[];

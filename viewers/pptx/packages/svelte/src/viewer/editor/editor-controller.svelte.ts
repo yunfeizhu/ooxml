@@ -1,4 +1,3 @@
-import type { PptxElement } from 'pptx-viewer-core';
 import type {
 	ConnectorEndpointKind,
 	GestureController,
@@ -29,6 +28,7 @@ import {
 	slideSpaceElement,
 	withConnectorEndpointUpdate,
 } from 'ooxml-ui/pptx';
+import type { PptxElement } from 'pptx-viewer-core';
 
 import { readTableCellTarget } from './context-menu-dispatch';
 import type { AdjustGestureController } from './editor-adjust-gesture';

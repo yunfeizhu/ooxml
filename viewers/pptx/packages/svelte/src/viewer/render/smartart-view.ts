@@ -1,4 +1,3 @@
-import type { PptxSmartArtNode, SmartArtPptxElement, SmartArtStyle } from 'pptx-viewer-core';
 import type {
 	ElementAnimationState,
 	RenderedNode,
@@ -20,6 +19,7 @@ import {
 	resolveRevealedSmartArtNodes,
 	styleShadowFilter,
 } from 'ooxml-ui/pptx';
+import type { PptxSmartArtNode, SmartArtPptxElement, SmartArtStyle } from 'pptx-viewer-core';
 
 import { styleToString } from '../style';
 

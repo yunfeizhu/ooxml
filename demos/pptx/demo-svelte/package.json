@@ -13,13 +13,13 @@
 		"@ai-sdk/svelte": "^5.0.127",
 		"@lucide/svelte": "^1.52.0",
 		"ai": "^7.0.127",
-		"emf-converter": "4.8.21",
+		"emf-converter": "4.11.2",
 		"fast-xml-parser": "^5.11.2",
 		"jszip": "^3.10.2",
 		"pptx-svelte-viewer": "workspace:*",
 		"pptx-viewer-core": "workspace:*",
 		"pptx-viewer-locales": "workspace:*",
-		"svelte": "^5.57.1",
+		"svelte": "^5.57.2",
 		"y-webrtc": "^10.3.0",
 		"y-websocket": "^3.1.0",
 		"yjs": "^13.6.33"
@@ -30,6 +30,6 @@
 		"@types/node": "^26.6.4",
 		"tailwindcss": "^4.3.3",
 		"typescript": "6.0.3",
-		"vite": "^8.3.2"
+		"vite": "^8.3.3"
 	}
 }

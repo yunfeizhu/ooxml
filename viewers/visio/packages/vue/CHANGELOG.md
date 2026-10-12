@@ -7,6 +7,24 @@ A release listed with no entries carried no Conventional Commit in this package'
 scope: scripts/release-plan.mjs releases whenever any published file changes, not only on
 conventional commits.
 
+## [0.7.1](https://github.com/ChristopherVR/ooxml/releases/tag/visio-vue-viewer@0.7.1) - 2026-10-11
+
+### Styling
+
+- Fix the oxfmt and oxlint warnings in the viewers ([db0314f](https://github.com/ChristopherVR/ooxml/commit/db0314f319e3d0508960872260792215477d9ca5))
+
+## [0.7.0](https://github.com/ChristopherVR/ooxml/releases/tag/visio-vue-viewer@0.7.0) - 2026-10-10
+
+### Features
+
+- **visio:** Make ribbon add-in tabs a prop and event of every binding ([6e6a157](https://github.com/ChristopherVR/ooxml/commit/6e6a157bbced977145d428e2ca01168e0a413deb))
+
+## [0.6.2](https://github.com/ChristopherVR/ooxml/releases/tag/visio-vue-viewer@0.6.2) - 2026-10-09
+
+### Dependencies
+
+- **deps:** Bump the production-minor-and-patch group with 5 updates ([#42](https://github.com/ChristopherVR/ooxml/issues/42)) ([fda493e](https://github.com/ChristopherVR/ooxml/commit/fda493e2697908c477ce845019d9c2fe8b591ab2))
+
 ## [0.6.1](https://github.com/ChristopherVR/ooxml/releases/tag/visio-vue-viewer@0.6.1) - 2026-10-08
 
 ### Documentation

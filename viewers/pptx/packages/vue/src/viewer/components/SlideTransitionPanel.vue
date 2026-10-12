@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import type { PptxSlide, PptxSlideTransition, PptxTransitionType } from 'pptx-viewer-core';
 import { SLIDE_TRANSITION_OPTIONS, TRANSITION_SPEED_OPTIONS } from 'ooxml-ui/pptx';
+import type { PptxSlide, PptxSlideTransition, PptxTransitionType } from 'pptx-viewer-core';
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 

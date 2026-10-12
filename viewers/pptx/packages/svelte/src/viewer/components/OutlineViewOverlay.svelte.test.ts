@@ -1,3 +1,4 @@
+import { OUTLINE_LEVEL_ATTR, OUTLINE_ROW_ATTR, OUTLINE_VIEW_ATTR } from 'ooxml-ui/pptx';
 /**
  * Outline view, Svelte binding.
  *
@@ -14,7 +15,6 @@
  * reactive props object it would never re-render with the deck it just produced.
  */
 import type { PptxElement, PptxSlide } from 'pptx-viewer-core';
-import { OUTLINE_LEVEL_ATTR, OUTLINE_ROW_ATTR, OUTLINE_VIEW_ATTR } from 'ooxml-ui/pptx';
 import { flushSync, mount, unmount } from 'svelte';
 import { afterEach, describe, expect, it } from 'vitest';
 

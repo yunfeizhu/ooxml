@@ -13,7 +13,8 @@ export default defineConfig((options) => ({
 	dts: { emitDtsOnly: true },
 	deps: {
 		neverBundle: [
-			'pptx-viewer-core', /^ooxml-ui(\/|$)/,
+			'pptx-viewer-core',
+			/^ooxml-ui(\/|$)/,
 			'three',
 			/^three\//u,
 			'dompurify',

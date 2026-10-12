@@ -12,8 +12,9 @@ This page walks through four common flows end to end. Each is self-contained and
 Use `PptxHandler.create()` to start a new deck, build slides with the fluent slide builder, then `save()` to bytes.
 
 ```ts
-import { PptxHandler } from 'pptx-viewer-core';
 import { writeFile } from 'node:fs/promises';
+
+import { PptxHandler } from 'pptx-viewer-core';
 
 const { handler, data, createSlide } = await PptxHandler.create({
 	title: 'My Presentation',
@@ -44,8 +45,9 @@ await writeFile('presentation.pptx', output);
 Construct a `PptxHandler`, `load()` an `ArrayBuffer`, walk the [data model](/guide/data-model), mutate it, and `save()`.
 
 ```ts
-import { PptxHandler } from 'pptx-viewer-core';
 import { readFile, writeFile } from 'node:fs/promises';
+
+import { PptxHandler } from 'pptx-viewer-core';
 
 const handler = new PptxHandler();
 const buffer = await readFile('presentation.pptx');
@@ -80,8 +82,9 @@ await writeFile('output.pptx', output);
 `PptxMarkdownConverter` turns parsed `PptxData` into Markdown, optionally extracting media into a folder.
 
 ```ts
-import { PptxHandler, PptxMarkdownConverter } from 'pptx-viewer-core';
 import { readFile } from 'node:fs/promises';
+
+import { PptxHandler, PptxMarkdownConverter } from 'pptx-viewer-core';
 
 const handler = new PptxHandler();
 const buffer = await readFile('presentation.pptx');
@@ -108,8 +111,8 @@ The `PowerPointViewer` component renders a deck from a `Uint8Array` and can run 
 ![The editable viewer with ribbon, thumbnails, and inspector](/docs-shots/editor.jpg)
 
 ```tsx
-import { useState } from 'react';
 import { PowerPointViewer } from 'pptx-react-viewer/viewer';
+import { useState } from 'react';
 
 function App() {
 	const [content, setContent] = useState<Uint8Array>();

@@ -1,9 +1,5 @@
 import type { ToolbarActionId } from 'ooxml-ui/pptx';
-import {
-	EMPTY_RESOLVED_CUSTOMIZATION,
-	isActionHidden,
-	isDialogAvailable,
-} from 'ooxml-ui/pptx';
+import { EMPTY_RESOLVED_CUSTOMIZATION, isActionHidden, isDialogAvailable } from 'ooxml-ui/pptx';
 
 import type { Translator } from '../../i18n';
 import { createEl } from '../../render';

@@ -94,6 +94,7 @@ const legendItems = computed(() => computeChartLegendLayout(props.vm));
 				<linearGradient
 					v-if="def.kind === 'linearGradient'"
 					:id="def.id"
+					:gradientUnits="def.gradientUnits"
 					:x1="def.x1"
 					:y1="def.y1"
 					:x2="def.x2"

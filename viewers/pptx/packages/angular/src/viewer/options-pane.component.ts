@@ -18,7 +18,6 @@ import {
 	output,
 } from '@angular/core';
 import { TranslatePipe } from '@ngx-translate/core';
-
 import { clampOptionNumber } from 'ooxml-ui/pptx';
 import type {
 	ViewerOptionPrimitive,
@@ -27,6 +26,7 @@ import type {
 	ViewerOptionsGroupId,
 	ViewerOptionsTabDefinition,
 } from 'ooxml-ui/pptx';
+
 import { OPTIONS_PANE_STYLES } from './options-pane-styles';
 
 /** One dialog-level option edit (group + key + new primitive value). */

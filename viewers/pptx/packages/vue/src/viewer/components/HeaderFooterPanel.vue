@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { X } from 'lucide-vue-next';
-import type { PptxHeaderFooter } from 'pptx-viewer-core';
 /**
  * HeaderFooterPanel: edit the presentation's header/footer placeholders.
  *
@@ -26,6 +25,7 @@ import {
 	isHeaderFooterHeaderTextVisible,
 	patchHeaderFooterDraft,
 } from 'ooxml-ui/pptx';
+import type { PptxHeaderFooter } from 'pptx-viewer-core';
 import { computed, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 

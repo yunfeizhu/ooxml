@@ -1,10 +1,11 @@
 import { test, expect } from '@playwright/test';
+import { openDemo } from './demo-page';
 
 // Browser raster regression of the bounded SVG contract, not native Visio sizing.
 test('code-5 arrows paint both endpoint directions and preserve the inward base in export', async ({
 	page,
 }) => {
-	await page.goto('/demo/?sample=1');
+	await openDemo(page);
 	const result = await page.evaluate(async () => {
 		const load = (path: string) => import(/* @vite-ignore */ path);
 		const { demoDocument, renderPage, exportPageSvg } = await load('/test-api.js');

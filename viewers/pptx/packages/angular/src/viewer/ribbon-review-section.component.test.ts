@@ -1,9 +1,9 @@
 import { TestBed } from '@angular/core/testing';
 import { BrowserTestingModule, platformBrowserTesting } from '@angular/platform-browser/testing';
 import { TranslateService } from '@ngx-translate/core';
+import { registerPptxWebControls } from 'ooxml-ui/pptx';
 import { afterEach, beforeAll, describe, expect, it, vi } from 'vitest';
 
-import { registerPptxWebControls } from 'ooxml-ui/pptx';
 import { RibbonReviewSectionComponent } from './ribbon-review-section.component';
 
 registerPptxWebControls();

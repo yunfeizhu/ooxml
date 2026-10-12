@@ -282,36 +282,37 @@ export class TeamsFilesPanel extends LitElement {
 						${
 							files.length
 								? files.map(
-										(file) => html`<tr>
-											<td>
-												<div class="file-name">
-													<span class="badge" data-kind=${file.kind}
-														>${{ docx: 'W', xlsx: 'X', pptx: 'P', vsdx: 'V', other: 'F' }[file.kind]}</span
-													>
-													<button
-														class="file-open"
-														type="button"
-														aria-label=${`Open ${file.name}`}
-														title=${file.name}
-														?disabled=${!file.url}
-														@click=${() => this.emit('open', file)}
-													>
-														${file.name}
-													</button>
-												</div>
-											</td>
-											<td><time>${new Date(file.ts).toLocaleDateString()}</time></td>
-											<td>${file.author}</td>
-											<td>
-												${file.channelName ? `# ${file.channelName}` : `# ${this.channelName}`}
-											</td>
-											<td>
-												<teams-file-actions
-													.file=${file}
-													.client=${this.client}
-												></teams-file-actions>
-											</td>
-										</tr>`,
+										(file) =>
+											html`<tr>
+												<td>
+													<div class="file-name">
+														<span class="badge" data-kind=${file.kind}
+															>${{ docx: 'W', xlsx: 'X', pptx: 'P', vsdx: 'V', other: 'F' }[file.kind]}</span
+														>
+														<button
+															class="file-open"
+															type="button"
+															aria-label=${`Open ${file.name}`}
+															title=${file.name}
+															?disabled=${!file.url}
+															@click=${() => this.emit('open', file)}
+														>
+															${file.name}
+														</button>
+													</div>
+												</td>
+												<td><time>${new Date(file.ts).toLocaleDateString()}</time></td>
+												<td>${file.author}</td>
+												<td>
+													${file.channelName ? `# ${file.channelName}` : `# ${this.channelName}`}
+												</td>
+												<td>
+													<teams-file-actions
+														.file=${file}
+														.client=${this.client}
+													></teams-file-actions>
+												</td>
+											</tr>`,
 									)
 								: html`<tr>
 										<td colspan="5" class="none">

@@ -21,6 +21,15 @@
  */
 
 import {
+	addChartCategory,
+	addChartSeries,
+	patchChartData as sharedPatchChartData,
+	removeChartCategory,
+	removeChartSeries,
+	setChartCategoryLabel,
+	setChartCellValue,
+} from 'ooxml-ui/pptx';
+import {
 	chartDataChangeType,
 	chartDataUpdatePoint,
 	setChartAxisGridlineStyle,
@@ -43,16 +52,6 @@ import type {
 	PptxChartStyle,
 	PptxChartType,
 } from 'pptx-viewer-core';
-
-import {
-	addChartCategory,
-	addChartSeries,
-	patchChartData as sharedPatchChartData,
-	removeChartCategory,
-	removeChartSeries,
-	setChartCategoryLabel,
-	setChartCellValue,
-} from 'ooxml-ui/pptx';
 
 // Re-export core primitives so callers can import everything from one place.
 export { chartDataChangeType, chartDataUpdatePoint };

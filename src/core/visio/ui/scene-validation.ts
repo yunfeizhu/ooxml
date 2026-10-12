@@ -2,12 +2,16 @@ import { assertVisioFillGradient } from './gradient-details';
 import {
 	inspectVisioRasterImage,
 	VISIO_RASTER_IMAGE_LIMITS,
+	VISIO_COMMENT_LIMIT,
+	VISIO_COMMENT_TEXT_LIMIT,
 	type VisioDocument,
 	type VisioShape,
 	type VisioImage,
 } from '../index';
 import { assertShapeDetails } from './scene-details';
+import { assertSceneDataRecordsets } from './scene-data';
 import { ForeignVectorBudget } from './foreign-vector-budget';
+import { assertRunExtras, assertTextFields } from './scene-validation-text';
 
 export const MAX_INPUT_BYTES = 32 * 1024 * 1024;
 const MAX_DIMENSION = 10_000;
@@ -18,6 +22,30 @@ function finite(value: number, label: string, min = -MAX_DIMENSION, max = MAX_DI
 }
 function member(value: unknown, choices: readonly unknown[], label: string): void {
 	if (!choices.includes(value)) throw new Error(`The scene has an invalid ${label}.`);
+}
+/** Review comments: bounded plain strings only. */
+function assertViewableComments(comments: VisioDocument['comments']): void {
+	if (comments === undefined) return;
+	if (!Array.isArray(comments) || comments.length > VISIO_COMMENT_LIMIT)
+		throw new Error('The scene has an invalid comment list.');
+	let characters = 0;
+	const text = (value: unknown, limit: number, optional = false) => {
+		if (optional && value === undefined) return;
+		if (typeof value !== 'string' || value.length > limit)
+			throw new Error('The scene has an invalid comment.');
+		characters += value.length;
+	};
+	for (const comment of comments) {
+		text(comment.id, 256);
+		text(comment.pageId, 256);
+		text(comment.shapeId, 256, true);
+		text(comment.author, 256);
+		text(comment.initials, 64, true);
+		text(comment.date, 64, true);
+		text(comment.editDate, 64, true);
+		text(comment.text, VISIO_COMMENT_TEXT_LIMIT);
+	}
+	if (characters > 2_000_000) throw new Error('The scene exceeds aggregate comment limits.');
 }
 /** Defensive display limits also protect callers supplying their own typed scenes. */
 export function assertViewableDocument(model: VisioDocument): void {
@@ -55,11 +83,13 @@ export function assertViewableDocument(model: VisioDocument): void {
 			throw new Error('The scene has an invalid font family list.');
 		for (const family of model.fontFamilies) label(family, 1024);
 	}
+	assertSceneDataRecordsets(model);
 	for (const diagnostic of model.diagnostics) {
 		label(diagnostic.code, 256);
 		label(diagnostic.message);
 		member(diagnostic.severity, ['info', 'warning'], 'diagnostic severity');
 	}
+	assertViewableComments(model.comments);
 
 	const pageIds = new Set<string>();
 	const stack: Array<{ shape: VisioShape; depth: number; ids: Set<string> }> = [];
@@ -77,6 +107,25 @@ export function assertViewableDocument(model: VisioDocument): void {
 			label(layer.name);
 			for (const flag of [layer.visible, layer.printable, layer.locked])
 				member(flag, [true, false], 'layer flag');
+		}
+		if (page.theme !== undefined) {
+			label(page.theme.name, 256);
+			if (page.theme.builtIn !== undefined) label(page.theme.builtIn, 64);
+			member(page.theme.variant, [0, 1, 2, 3], 'theme variant');
+			const colors = [
+				page.theme.accents,
+				...(page.theme.variants ?? []),
+				[page.theme.light, page.theme.dark].filter((color) => color !== undefined),
+			];
+			if (!Array.isArray(page.theme.variants) || page.theme.variants.length > 4)
+				throw new Error('The scene has an invalid theme variant list.');
+			for (const list of colors)
+				if (
+					!Array.isArray(list) ||
+					list.length > 7 ||
+					list.some((color) => typeof color !== 'string' || !/^#[0-9a-f]{6}$/i.test(color))
+				)
+					throw new Error('The scene has invalid theme colours.');
 		}
 		finite(page.width, 'page width', 0.001);
 		finite(page.height, 'page height', 0.001);
@@ -118,6 +167,8 @@ export function assertViewableDocument(model: VisioDocument): void {
 		label(shape.text.color, 256);
 		if (shape.text.opacity !== undefined) finite(shape.text.opacity, 'text opacity', 0, 1);
 		if (shape.text.backgroundColor) label(shape.text.backgroundColor, 256);
+		assertRunExtras(shape.text);
+		assertTextFields(shape.text);
 		if (shape.text.backgroundOpacity !== undefined)
 			finite(shape.text.backgroundOpacity, 'text background opacity', 0, 1);
 		assertShapeDetails(shape, detailBudget);
@@ -174,6 +225,22 @@ export function assertViewableDocument(model: VisioDocument): void {
 			finite(shadow.offsetY, 'shadow offset', -1000, 1000);
 			finite(shadow.blur, 'shadow blur', 0, 10);
 		}
+		const glow = shape.style.glow;
+		if (glow !== undefined) {
+			if (typeof glow.color !== 'string' || !/^#[0-9a-f]{6}$/i.test(glow.color))
+				throw new Error('The scene has an invalid glow color.');
+			finite(glow.opacity, 'glow opacity', 0, 1);
+			finite(glow.size, 'glow size', 0, 10);
+		}
+		if (shape.style.softEdges !== undefined) finite(shape.style.softEdges, 'soft edge size', 0, 10);
+		if (shape.style.rounding !== undefined) finite(shape.style.rounding, 'corner rounding', 0, 100);
+		const reflection = shape.style.reflection;
+		if (reflection !== undefined) {
+			finite(reflection.opacity, 'reflection opacity', 0, 1);
+			finite(reflection.size, 'reflection size', 0, 1);
+			finite(reflection.distance, 'reflection distance', 0, 10);
+			finite(reflection.blur, 'reflection blur', 0, 10);
+		}
 		finite(shape.style.lineOpacity, 'line opacity', 0, 1);
 		if (shape.style.lineDashDotLength !== undefined)
 			finite(shape.style.lineDashDotLength, 'line dash dot length', 0, 1_000_000);
@@ -227,6 +294,7 @@ export function assertViewableDocument(model: VisioDocument): void {
 			label(run.fontFamily, 1024);
 			label(run.color, 256);
 			if (run.opacity !== undefined) finite(run.opacity, 'text run opacity', 0, 1);
+			assertRunExtras(run);
 			if (typeof run.text !== 'string') throw new Error('The scene has invalid run text.');
 			textBytes += run.text.length;
 			++runCount;

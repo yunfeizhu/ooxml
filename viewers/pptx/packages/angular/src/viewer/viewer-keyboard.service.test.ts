@@ -13,10 +13,10 @@
  */
 
 import { Injector, signal } from '@angular/core';
+import { textFontSizePtToPx } from 'ooxml-ui/pptx';
 import type { PptxElement, PptxSlide } from 'pptx-viewer-core';
 import { describe, expect, it, vi } from 'vitest';
 
-import { textFontSizePtToPx } from 'ooxml-ui/pptx';
 import { EditorStateService } from './editor-state.service';
 import { ViewerDialogsService } from './viewer-dialogs.service';
 import { ViewerDocumentPropertiesService } from './viewer-document-properties.service';

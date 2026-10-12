@@ -16,8 +16,6 @@
  * `updateElementInTree` writes it back into the group's coordinate space.
  */
 
-import type { PptxElement } from 'pptx-viewer-core';
-
 import {
 	moveElementBy as moveTopLevelElementBy,
 	resizeElement as resizeTopLevelElement,
@@ -26,6 +24,7 @@ import {
 	updateElementById as updateTopLevelElementById,
 	updateElementInTree,
 } from 'ooxml-ui/pptx';
+import type { PptxElement } from 'pptx-viewer-core';
 
 export {
 	deleteElementsByIds,

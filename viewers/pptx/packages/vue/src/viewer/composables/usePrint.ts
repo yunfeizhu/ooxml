@@ -1,4 +1,3 @@
-import type { PptxHandoutMaster, PptxSlide } from 'pptx-viewer-core';
 import {
 	buildHandoutsHtml,
 	buildNotesHtml,
@@ -11,6 +10,7 @@ import {
 	openPendingPrintWindow,
 	openPrintWindow as sharedOpenPrintWindow,
 } from 'ooxml-ui/pptx';
+import type { PptxHandoutMaster, PptxSlide } from 'pptx-viewer-core';
 import { inject, ref } from 'vue';
 import type { Ref } from 'vue';
 

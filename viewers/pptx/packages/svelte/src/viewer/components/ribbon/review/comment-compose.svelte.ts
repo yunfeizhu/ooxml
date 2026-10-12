@@ -1,9 +1,9 @@
-import type { PptxCommentMention, PptxModernCommentAuthor } from 'pptx-viewer-core';
 import {
 	commentMentionQuery,
 	insertCommentMention,
 	matchCommentMentionAuthors,
 } from 'ooxml-ui/pptx';
+import type { PptxCommentMention, PptxModernCommentAuthor } from 'pptx-viewer-core';
 
 /**
  * CommentComposeState: the `@`-mention typeahead over ONE comment/reply

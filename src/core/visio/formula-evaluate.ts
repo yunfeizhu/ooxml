@@ -25,6 +25,7 @@ const supported = new Set([
 	'ABS',
 	'MIN',
 	'MAX',
+	'BOUND',
 	'SQRT',
 	'SIN',
 	'COS',
@@ -44,10 +45,28 @@ const staticUnsupported = new Set([
 	'FONT',
 	// Page-name lookup has explicit arguments but returns a string, outside numeric evaluation.
 	'PAGENAME',
+	// Text-field functions read document properties or the clock, never ShapeSheet cells.
+	// https://learn.microsoft.com/en-us/office/client-developer/visio/now-function
+	'NOW',
+	'DOCCREATION',
+	'DOCLASTSAVE',
+	'DOCLASTEDIT',
+	'DOCLASTPRINT',
+	'TITLE',
+	'SUBJECT',
+	'CREATOR',
+	'KEYWORDS',
+	'DESCRIPTION',
+	'CATEGORY',
+	'COMPANY',
+	'MANAGER',
 	// POLYLINE encodes explicitly supplied geometry data; affected expressions
 	// still require the geometry evaluator and are rejected by numeric recalculation.
 	// https://learn.microsoft.com/en-us/office/client-developer/visio/polyline-function
 	'POLYLINE',
+	// NURBS likewise carries explicit control points (curved connectors write literal ones).
+	// https://learn.microsoft.com/en-us/office/client-developer/visio/nurbs-function
+	'NURBS',
 	'ROUND',
 	'INT',
 	'MOD',
@@ -59,8 +78,6 @@ const staticUnsupported = new Set([
 	'ASIN',
 	'ACOS',
 	'ATAN',
-	'CEILING',
-	'FLOOR',
 	'TRUNC',
 	'AND',
 	'OR',
@@ -99,6 +116,9 @@ const dynamic = new Set([
 	'PARENT',
 	'PAR',
 ]);
+/** A function the analyser classifies by name, whether or not it can evaluate it. */
+export const isClassifiedVisioFunction = (name: string): boolean =>
+	supported.has(name) || staticUnsupported.has(name) || dynamic.has(name);
 export interface VisioFormulaAnalysis {
 	references: VisioFormulaReference[];
 	unsupportedFunctions: string[];
@@ -219,9 +239,38 @@ export function evaluateVisioFormula(
 				unit: result.unit,
 			});
 		}
-		if (node.kind === 'binary')
-			return binary(node.operator, evaluate(node.left, depth + 1), evaluate(node.right, depth + 1));
+		if (node.kind === 'binary') {
+			let left = evaluate(node.left, depth + 1),
+				right = evaluate(node.right, depth + 1);
+			if (limits.bareLengths && (node.operator === '+' || node.operator === '-')) {
+				if (left.unit === 'length' && right.unit === 'scalar' && node.right.kind === 'number')
+					right = { ...right, unit: 'length' };
+				else if (right.unit === 'length' && left.unit === 'scalar' && node.left.kind === 'number')
+					left = { ...left, unit: 'length' };
+			}
+			return binary(node.operator, left, right);
+		}
 		const name = node.name;
+		if ((name === 'TEXTWIDTH' || name === 'TEXTHEIGHT') && limits.text) {
+			const text = node.args[0];
+			const count = node.args.length;
+			if (
+				text?.kind !== 'reference' ||
+				text.reference.shapeId !== undefined ||
+				text.reference.cell.toLowerCase() !== 'thetext' ||
+				count > 2 ||
+				(name === 'TEXTHEIGHT' && count !== 2)
+			)
+				return formulaFailure('unsupported', `Unsupported ${name} arguments`);
+			const limit = count === 2 ? evaluate(node.args[1]!, depth + 1) : undefined;
+			if (limit && limit.unit !== 'length' && limit.unit !== 'scalar')
+				return formulaFailure('unit', `${name} requires a length`);
+			const value =
+				name === 'TEXTWIDTH' ? limits.text.width(limit?.value) : limits.text.height(limit!.value);
+			if (value === undefined)
+				return formulaFailure('unsupported', 'The text cannot be measured reliably');
+			return finite({ value, unit: 'length' });
+		}
 		if (!supported.has(name)) return formulaFailure('unsupported', `Unsupported function ${name}`);
 		const arity = (min: number, max = min) => {
 			if (node.args.length < min || node.args.length > max)
@@ -269,6 +318,33 @@ export function evaluateVisioFormula(
 				};
 			}
 			return finite(result);
+		}
+		if (name === 'BOUND') {
+			// BOUND(value, type, ignore1, min1, max1, ...): control handles of stencil shapes use it.
+			// https://learn.microsoft.com/en-us/office/client-developer/visio/bound-function
+			if (node.args.length < 5 || (node.args.length - 2) % 3 !== 0 || node.args.length > 302)
+				return formulaFailure('arity', 'Invalid BOUND argument count');
+			const value = arg(0),
+				type = arg(1);
+			if (type.unit !== 'scalar' || (type.value !== 0 && type.value !== 2))
+				return formulaFailure('unsupported', 'Exclusive BOUND ranges are not evaluated');
+			if (type.value === 2) return value;
+			let nearest: number | undefined;
+			let unit = value.unit;
+			for (let index = 2; index < node.args.length; index += 3) {
+				if (arg(index).value !== 0) continue;
+				const a = arg(index + 1),
+					b = arg(index + 2);
+				unit = compatible({ value: value.value, unit }, a);
+				unit = compatible({ value: value.value, unit }, b);
+				const low = Math.min(a.value, b.value),
+					high = Math.max(a.value, b.value);
+				if (value.value >= low && value.value <= high) return finite({ value: value.value, unit });
+				const edge = value.value < low ? low : high;
+				if (nearest === undefined || Math.abs(edge - value.value) < Math.abs(nearest - value.value))
+					nearest = edge;
+			}
+			return finite({ value: nearest ?? value.value, unit });
 		}
 		if (name === 'ATAN2') {
 			arity(2);

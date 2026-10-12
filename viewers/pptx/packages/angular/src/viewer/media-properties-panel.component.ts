@@ -8,14 +8,14 @@ import {
 	CUSTOM_ELEMENTS_SCHEMA,
 } from '@angular/core';
 import { TranslatePipe } from '@ngx-translate/core';
-import type { MediaBookmark, MediaPptxElement, PptxElement } from 'pptx-viewer-core';
-
 import {
 	mediaTrimEndAbsoluteMs,
 	mediaTrimEndMsFromAbsoluteMs,
 	mediaTrimResetPatch,
 	mediaTrimResetState,
 } from 'ooxml-ui/pptx';
+import type { MediaBookmark, MediaPptxElement, PptxElement } from 'pptx-viewer-core';
+
 import { LoadContentService } from './load-content.service';
 import { MediaPreviewComponent } from './media-preview.component';
 import { appendMediaBookmark } from './media-properties-helpers';

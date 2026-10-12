@@ -11,12 +11,12 @@
 	 * is CSS-scaled, and a ruler inside it would scale its strokes and labels
 	 * with the zoom instead of tracking it.
 	 */
-	import type { InspectorSectionAnchor } from 'ooxml-ui/pptx';
 	import { RULER_THICKNESS, scrollInspectorSectionIntoView, updateViewerPreference } from 'ooxml-ui/pptx';
+	// oxlint-disable-next-line import/no-duplicates -- type-only imports stay top-level (consistent-type-specifier-style).
+	import type { InspectorSectionAnchor, PasteSpecialFormat } from 'ooxml-ui/pptx';
 	import { tick } from 'svelte';
 
 	import type { PptxLayoutOption, PptxLayoutPreview } from 'pptx-viewer-core';
-	import type { PasteSpecialFormat } from 'ooxml-ui/pptx';
 
 	import { saveContextMenuElementAsPicture } from '../export/save-element-as-picture';
 	import { rasterizePastedElementAsPicture } from '../export/rasterize-picture';
@@ -106,9 +106,9 @@
 		}
 		chromeUi.inspectorOpen = true;
 		chromeUi.setInspectorTab('properties');
-		void tick().then(() => {
-			requestAnimationFrame(() => scrollInspectorSectionIntoView(document, anchor));
-		});
+		void tick().then(() =>
+			requestAnimationFrame(() => scrollInspectorSectionIntoView(document, anchor)),
+		);
 	}
 
 	// -- Empty-canvas context menu ------------------------------------------
@@ -137,12 +137,8 @@
 	/** Opens the canvas menu's Layout gallery, fetching layouts + artwork on first open. */
 	function openCanvasLayoutGallery(x: number, y: number): void {
 		canvasLayoutGalleryAnchor = { x, y };
-		void editor.slidesOps.availableLayouts().then((options) => {
-			canvasLayoutOptions = options;
-		});
-		void editor.slidesOps.layoutPreviews().then((previews) => {
-			canvasLayoutPreviews = previews;
-		});
+		void editor.slidesOps.availableLayouts().then((options) => (canvasLayoutOptions = options));
+		void editor.slidesOps.layoutPreviews().then((previews) => (canvasLayoutPreviews = previews));
 	}
 
 	function onCanvasLayoutSelect(layout: PptxLayoutOption): void {

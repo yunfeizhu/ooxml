@@ -1,4 +1,3 @@
-import type { PptxElement } from 'pptx-viewer-core';
 import type { EditPointsCommandId, EditPointsElementPatch } from 'ooxml-ui/pptx';
 import {
 	attachOverlayKeyboard,
@@ -7,6 +6,7 @@ import {
 	EditPointsSession,
 	overlayPointerInput,
 } from 'ooxml-ui/pptx';
+import type { PptxElement } from 'pptx-viewer-core';
 import React, { useEffect, useReducer, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 

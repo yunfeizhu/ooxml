@@ -28,7 +28,7 @@ describe('every framework exposes the shared handle vocabulary', () => {
 		const handle = createRef<EditorHandle>();
 		const root = createRoot(host);
 		root.render(createElement(StrictMode, null, createElement(ReactEditor, { ref: handle })));
-		await new Promise((resolve) => setTimeout(resolve, 0));
+		await new Promise((done) => setTimeout(done, 0));
 		expect(missing(handle.current!)).toEqual([]);
 		expect(handle.current!.dirty).toBe(false);
 		root.unmount();
@@ -62,7 +62,10 @@ describe('every framework exposes the shared handle vocabulary', () => {
 	});
 	it('Svelte', () => {
 		// The component is compiled by the package build, not here; check what it exports instead.
-		const source = readFileSync(resolve(process.cwd(), 'packages/bindings/src/WordEditor.svelte'), 'utf8');
+		const source = readFileSync(
+			resolve(process.cwd(), 'packages/bindings/src/WordEditor.svelte'),
+			'utf8',
+		);
 		const { js } = compile(source, { filename: 'WordEditor.svelte', generate: 'client' });
 		const exported = /var \$\$exports = \{([\s\S]*?)\};/.exec(js.code)?.[1] ?? '';
 		for (const key of EDITOR_HANDLE_KEYS)

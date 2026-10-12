@@ -13,10 +13,10 @@ import type { OutputEmitterRef, Provider, StaticProvider } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { BrowserTestingModule, platformBrowserTesting } from '@angular/platform-browser/testing';
 import { TranslateService } from '@ngx-translate/core';
-import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
-
 import { filterVisibleTabs, TOOLBAR_TABS } from 'ooxml-ui/pptx';
 import type { ViewerCustomization, ViewerOptionsToggleControl } from 'ooxml-ui/pptx';
+import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
+
 import { EditorContextMenuComponent } from './editor-context-menu.component';
 import { EditorStateService } from './editor-state.service';
 import { OptionsPaneComponent } from './options-pane.component';

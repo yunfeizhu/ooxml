@@ -77,12 +77,7 @@ type DemoContent = Uint8Array | ArrayBuffer;
 				height: 100dvh;
 				width: 100vw;
 				overflow: hidden;
-				font-family:
-					system-ui,
-					-apple-system,
-					'Segoe UI',
-					Roboto,
-					sans-serif;
+				font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
 			}
 			.demo-viewer-host {
 				height: 100dvh;

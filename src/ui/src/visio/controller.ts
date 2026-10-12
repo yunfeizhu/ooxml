@@ -6,7 +6,13 @@ import {
 	type VsdxExportResult,
 } from 'ooxml-core/visio/ui';
 import { createWorkerEditor, snapshotEdits, type CancellableEditor } from './worker-editor';
-import { MAX_INPUT_BYTES } from 'ooxml-core/visio/ui';
+import {
+	MAX_INPUT_BYTES,
+	visioCalloutCommand,
+	visioContainerCommand,
+	visioWithContainerMembers,
+} from 'ooxml-core/visio/ui';
+import type { VisioCalloutStyle, VisioContainerStyle } from 'ooxml-core/visio';
 import {
 	loadVisio,
 	createVsdx,
@@ -537,8 +543,11 @@ export class ViewerController {
 		this.#assertAlive();
 		const revision = this.#revision;
 		const state = this.#state;
-		const pageId = state.document?.pages[state.pageIndex]?.id;
-		const selected = new Set(state.selectedShapes.map((shape) => shape.id));
+		const page = state.document?.pages[state.pageIndex];
+		const pageId = page?.id;
+		const ids = state.selectedShapes.map((shape) => shape.id);
+		// Members of a selected container move with it, as in Visio.
+		const selected = new Set(page ? visioWithContainerMembers(page, ids) : ids);
 		const commands = snapshotEdits(edits);
 		if (this.#destroyed || revision !== this.#revision)
 			throw new DOMException('The selection edit was superseded or cancelled.', 'AbortError');
@@ -571,29 +580,35 @@ export class ViewerController {
 		const commands = snapshotEdits(edits);
 		if (this.#destroyed || revision !== this.#revision) throw creationCancelled();
 		this.#creation.require(token);
+		const creates = commands.filter((command) =>
+			[
+				'create-rectangle',
+				'create-ellipse',
+				'create-line',
+				'create-text-box',
+				'create-path',
+				'insert-picture',
+				'insert-master-instance',
+				'drop-stencil-master',
+			].includes(command.type),
+		);
+		const created = new Set(
+			creates.map((command) => ('shapeId' in command ? command.shapeId : '')),
+		);
 		if (
-			!commands.length ||
+			!creates.length ||
 			commands.some(
 				(command) =>
-					![
-						'create-rectangle',
-						'create-ellipse',
-						'create-line',
-						'create-text-box',
-						'create-path',
-						'insert-picture',
-					].includes(command.type) ||
+					!('pageId' in command) ||
 					command.pageId !== context.pageId ||
-					!('shapeId' in command),
+					!('shapeId' in command) ||
+					// Besides creations, only the new shapes' own formatting (a stencil's style) rides along.
+					(!creates.includes(command) &&
+						(command.type !== 'format-shape' || !created.has(command.shapeId))),
 			)
 		)
 			throw new Error('Creation edits must create shapes on the captured current page.');
-		const shapeIds = Object.freeze(
-			commands.map((command) => {
-				if (!('shapeId' in command)) throw new Error('Creation requires shape IDs.');
-				return command.shapeId;
-			}),
-		);
+		const shapeIds = Object.freeze([...created]);
 		return this.#mutate(
 			'edit',
 			commands,
@@ -650,6 +665,33 @@ export class ViewerController {
 		return this.#mutate('edit', snapshotEdits([command]), undefined, {
 			pageId: page.id,
 			shapeIds: Object.freeze(shapeIds),
+		});
+	}
+	/** Insert > Container or Callout for the selection as one edit; the new part is selected. */
+	async insertDiagramPart(
+		part:
+			| { kind: 'container'; style: VisioContainerStyle }
+			| { kind: 'callout'; style: VisioCalloutStyle },
+	): Promise<void> {
+		this.#assertAlive();
+		const page = this.#state.document?.pages[this.#state.pageIndex];
+		const selected = this.#state.selectedShapes;
+		if (!page || !selected.every((shape) => visioSelectionIsOnPage(shape, page.id)))
+			throw new Error('Select shapes on the current page first.');
+		const ids = selected.map((shape) => shape.id);
+		const command =
+			part.kind === 'container'
+				? visioContainerCommand(page, ids, part.style)
+				: visioCalloutCommand(page, ids, part.style);
+		if (!command)
+			throw new Error(
+				part.kind === 'container'
+					? 'Select top-level shapes on this page to contain.'
+					: 'Select one two-dimensional shape for the callout.',
+			);
+		return this.#mutate('edit', snapshotEdits([command]), undefined, {
+			pageId: page.id,
+			shapeIds: Object.freeze([command.shapeId]),
 		});
 	}
 	captureClipboardToken(): ViewerClipboardToken {
@@ -770,7 +812,7 @@ export class ViewerController {
 	exportVsdx(): VsdxExportResult {
 		this.#assertAlive();
 		if (!this.#history || this.#sourceFormat !== 'vsdx' || this.#state.document?.format !== 'vsdx')
-			throw new Error('Load a VSDX file before downloading a source-backed copy.');
+			throw new Error('Open a .vsdx file before downloading a copy.');
 		if (this.#state.edit.busy || this.#state.loading)
 			throw new Error('Wait for the current document operation before downloading.');
 		return this.#history.export();
@@ -927,7 +969,7 @@ export class ViewerController {
 		this.#assertAlive();
 		const history = this.#history;
 		if (!history || this.#sourceFormat !== 'vsdx' || this.#state.document?.format !== 'vsdx')
-			throw new Error('Load a VSDX file before editing. Model-only documents are read only.');
+			throw new Error('Open a .vsdx file before editing.');
 		if (this.#state.loading || this.#state.edit.busy)
 			throw new Error('Another document operation is in progress.');
 		const target =

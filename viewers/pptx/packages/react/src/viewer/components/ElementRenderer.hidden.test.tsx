@@ -1,3 +1,4 @@
+import { translationsEn } from 'ooxml-ui/pptx/i18n';
 // @vitest-environment happy-dom
 /**
  * The Selection Pane's hide toggle must actually hide the shape.
@@ -14,7 +15,6 @@
  * model, not the rendered tree, so it is unaffected).
  */
 import type { PptxElement, PptxSlide } from 'pptx-viewer-core';
-import { translationsEn } from 'ooxml-ui/pptx/i18n';
 import React, { act } from 'react';
 import { createRoot } from 'react-dom/client';
 import type { Root } from 'react-dom/client';

@@ -1,6 +1,7 @@
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 
+import { DEFAULT_ROUND_RECT_ADJUSTMENT } from 'ooxml-ui/pptx';
 /**
  * The shape-adjustment (amber diamond) handles.
  *
@@ -16,7 +17,6 @@ import { join } from 'node:path';
 import type { PptxElement } from 'pptx-viewer-core';
 import { describe, expect, it } from 'vitest';
 
-import { DEFAULT_ROUND_RECT_ADJUSTMENT } from 'ooxml-ui/pptx';
 import { computeSingleSelected } from './selection-geometry';
 import {
 	beginShapeAdjustmentDrag,

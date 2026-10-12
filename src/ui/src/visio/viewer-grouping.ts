@@ -20,17 +20,16 @@ export class ViewerGrouping {
 		private readonly edit: (run: () => Promise<void>, message: string) => void,
 	) {}
 	private reason(state: ViewerState, operation: Operation): string {
-		if (!state.edit.sourceAvailable)
-			return 'Open a .vsdx file to group shapes. Model-only documents are read only.';
+		if (!state.edit.sourceAvailable) return 'Open a .vsdx file to group shapes.';
 		if (state.loading || state.edit.busy) return 'Wait for the current operation to finish.';
 		const page = state.document?.pages[state.pageIndex];
 		if (!page || state.selectedShapes.some((shape) => !visioSelectionIsOnPage(shape, page.id)))
 			return 'Select shapes on the current page.';
 		const ids = state.selectedShapes.map((shape) => shape.id);
 		if (operation === 'group' && !visioGroupCommand(page, ids))
-			return 'Select two or more local, unglued top-level shapes without masters, lines or layers.';
+			return 'Select two or more top-level shapes that are not lines or connectors, have no connector glued to them and are not on a locked layer.';
 		if (operation === 'ungroup' && !visioUngroupCommand(page, ids))
-			return 'Select one local, unglued group.';
+			return 'Select one group that was made here and has no connector glued to its shapes.';
 		return '';
 	}
 	run(operation: Operation): void {

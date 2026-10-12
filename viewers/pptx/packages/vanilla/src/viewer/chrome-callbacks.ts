@@ -1,10 +1,3 @@
-import type {
-	ParsedTableStyleMap,
-	PptxPresentationProperties,
-	PptxSaveFormat,
-	PptxSlideTransition,
-	TextSegment,
-} from 'pptx-viewer-core';
 import {
 	EMPTY_RESOLVED_CUSTOMIZATION,
 	FREEFORM_TOOL_IDS,
@@ -16,6 +9,13 @@ import type {
 	RibbonTransitionDraft,
 	ViewerOptionsStore,
 } from 'ooxml-ui/pptx';
+import type {
+	ParsedTableStyleMap,
+	PptxPresentationProperties,
+	PptxSaveFormat,
+	PptxSlideTransition,
+	TextSegment,
+} from 'pptx-viewer-core';
 
 import type { EditActions } from './editor/editor-edit-ops';
 import type { FindReplaceActions } from './editor/editor-find-replace-actions';

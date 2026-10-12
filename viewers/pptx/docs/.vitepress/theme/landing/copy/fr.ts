@@ -164,7 +164,11 @@ export const fr: LandingCopy = {
 			{
 				title: 'Communaute',
 				links: [
-					{ text: 'GitHub', href: 'https://github.com/ChristopherVR/ooxml/tree/main/viewers/pptx', external: true },
+					{
+						text: 'GitHub',
+						href: 'https://github.com/ChristopherVR/ooxml/tree/main/viewers/pptx',
+						external: true,
+					},
 					{
 						text: 'npm',
 						href: 'https://www.npmjs.com/package/pptx-react-viewer',

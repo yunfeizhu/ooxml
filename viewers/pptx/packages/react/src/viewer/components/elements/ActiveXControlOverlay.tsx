@@ -1,3 +1,4 @@
+import { getActiveXControlOverlayView } from 'ooxml-ui/pptx';
 /**
  * ActiveX control overlay.
  *
@@ -14,7 +15,6 @@
  * maps the returned view onto JSX.
  */
 import type { PptxActiveXControl } from 'pptx-viewer-core';
-import { getActiveXControlOverlayView } from 'ooxml-ui/pptx';
 
 import type { CanvasSize } from '../../types';
 
@@ -65,6 +65,7 @@ export function ActiveXControlOverlay({
 							alt={view.label}
 							title={`ActiveX control: ${view.label}`}
 							className='absolute'
+							draggable={false}
 							style={{ left: view.left, top: view.top, width: view.width, height: view.height }}
 						/>
 					);

@@ -38,6 +38,8 @@ export function comparable(value: unknown): unknown {
 			(key, value) => {
 				// Sheet titles in app.xml are derived from the sheets on save (openpyxl omits them).
 				if (key === 'headingPairs' || key === 'titlesOfParts') return undefined;
+				// Table-column ids record read provenance; newly created columns have none.
+				if (key === 'sourceId') return undefined;
 				if (key === 'preserved' && value instanceof Map)
 					return [...value].filter(([name]) => !String(name).startsWith('source:'));
 				if (value instanceof Map) return [...value].sort((a, b) => Number(a[0]) - Number(b[0]));

@@ -1,4 +1,5 @@
 import type { VisioTextRun } from 'ooxml-core/visio';
+import { runDisplaySize, runDisplayText, sameRunExtras } from './text-run-style';
 export interface TextLine {
 	runs: VisioTextRun[];
 	width: number;
@@ -119,7 +120,16 @@ export class TextLayoutBudget {
 		// Long tokens are measured once but not retained in cache. Style and function are part of the key.
 		const key =
 			text.length <= 256
-				? JSON.stringify([run.fontFamily, run.fontSize, run.bold, run.italic, text])
+				? JSON.stringify([
+						run.fontFamily,
+						run.fontSize,
+						run.bold,
+						run.italic,
+						run.letterSpacing,
+						run.position,
+						run.textCase,
+						text,
+					])
 				: undefined;
 		const cache = this.cache.byMeasure.get(measure);
 		const cached = key === undefined ? undefined : cache?.get(key);
@@ -147,9 +157,12 @@ export const measureBrowserText: MeasureText = (text, run) => {
 			typeof CanvasRenderingContext2D === 'undefined'
 				? null
 				: document.createElement('canvas').getContext('2d');
-	if (!canvas) return Array.from(text).length * run.fontSize * 0.55;
-	canvas.font = `${run.italic ? 'italic ' : ''}${run.bold ? 'bold ' : ''}${run.fontSize * 96}px ${JSON.stringify(run.fontFamily)}`;
-	return canvas.measureText(text).width / 96;
+	const count = Array.from(text).length;
+	const spacing = (run.letterSpacing ?? 0) * count;
+	const size = runDisplaySize(run);
+	if (!canvas) return Math.max(0, count * size * 0.55 + spacing);
+	canvas.font = `${run.italic ? 'italic ' : ''}${run.textCase === 'small-caps' ? 'small-caps ' : ''}${run.bold ? 'bold ' : ''}${size * 96}px ${JSON.stringify(run.fontFamily)}`;
+	return Math.max(0, canvas.measureText(runDisplayText(text, run)).width / 96 + spacing);
 };
 
 /** Rendering-only greedy wrapping. Inject one budget across shapes to bound total UI-thread work. */
@@ -188,7 +201,8 @@ export function wrapText(
 			last.bold === run.bold &&
 			last.italic === run.italic &&
 			last.underline === run.underline &&
-			!!last.strikethrough === !!run.strikethrough
+			!!last.strikethrough === !!run.strikethrough &&
+			sameRunExtras(last, run)
 		)
 			last.text += text;
 		else {

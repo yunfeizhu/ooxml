@@ -1,5 +1,5 @@
-import type { PptxElement } from 'pptx-viewer-core';
 import { motionPathFor } from 'ooxml-ui/pptx';
+import type { PptxElement } from 'pptx-viewer-core';
 
 import type { Translator } from '../i18n';
 import type { Store, ViewerState } from '../state';

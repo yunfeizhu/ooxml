@@ -1,6 +1,6 @@
+import { rebuildDrawingShapesIfCleared, resolvePalette } from 'ooxml-ui/pptx';
 import { updateSmartArtNodeText } from 'pptx-viewer-core';
 import type { PptxElement, PptxSmartArtData } from 'pptx-viewer-core';
-import { rebuildDrawingShapesIfCleared, resolvePalette } from 'ooxml-ui/pptx';
 import { provide } from 'vue';
 
 import { SmartArtNodeEditKey } from './smartart-node-edit';

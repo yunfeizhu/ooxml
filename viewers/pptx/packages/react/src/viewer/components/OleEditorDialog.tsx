@@ -1,3 +1,4 @@
+import { buildOleContentUpdatePatch, buildOleEditDialogDescriptor } from 'ooxml-ui/pptx';
 import type {
 	OleNestedDeckSlideDetail,
 	OlePptxElement,
@@ -13,7 +14,6 @@ import {
 	getOleSheetGrid,
 	replaceOleFile,
 } from 'pptx-viewer-core';
-import { buildOleContentUpdatePatch, buildOleEditDialogDescriptor } from 'ooxml-ui/pptx';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { LuX } from 'react-icons/lu';

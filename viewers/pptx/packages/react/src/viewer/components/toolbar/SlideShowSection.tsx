@@ -1,6 +1,6 @@
-import type { PptxPresentationProperties } from 'pptx-viewer-core';
 import type { ToolbarActionId, RibbonControlId } from 'ooxml-ui/pptx';
 import { SLIDE_SHOW_COMMAND_GROUPS } from 'ooxml-ui/pptx';
+import type { PptxPresentationProperties } from 'pptx-viewer-core';
 import React, { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 

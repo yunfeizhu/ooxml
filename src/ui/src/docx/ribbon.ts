@@ -99,8 +99,10 @@ export function setRibbonLocale(root: HTMLElement, value: string): void {
 	root.dataset.editorLocale = locale;
 	localizeElement(root, locale);
 	// The tab row is drawn by the shared ribbon from the panels' labels, so translate those.
+	// A host's add-in tab keeps the label the host gave it.
 	for (const panel of panelsOf(root))
-		panel.dataset.label = translate(locale, `tab.${panel.dataset.ribbonTab}` as LocalizationKey);
+		if (!('addIn' in panel.dataset))
+			panel.dataset.label = translate(locale, `tab.${panel.dataset.ribbonTab}` as LocalizationKey);
 	root.setAttribute('file-label', translate(locale, 'File'));
 	root.setAttribute('collapse-label', translate(locale, 'Collapse the ribbon'));
 	syncSelectTitles(root);

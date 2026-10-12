@@ -1,4 +1,12 @@
 <script setup lang="ts">
+import type { ConnectorArrowControl } from 'ooxml-ui/pptx';
+import {
+	canInteractWithElement,
+	CONNECTOR_ARROW_CONTROLS,
+	connectorArrowPatch,
+	connectorArrowValue,
+	schemaLabel,
+} from 'ooxml-ui/pptx';
 /**
  * ConnectorArrowsPanel: a connector's arrowheads, at parity with React's
  * `inspector/ConnectorArrowsSection.tsx`.
@@ -16,14 +24,6 @@
  */
 import type { PptxElement, ShapeStyle } from 'pptx-viewer-core';
 import { hasShapeProperties } from 'pptx-viewer-core';
-import type { ConnectorArrowControl } from 'ooxml-ui/pptx';
-import {
-	canInteractWithElement,
-	CONNECTOR_ARROW_CONTROLS,
-	connectorArrowPatch,
-	connectorArrowValue,
-	schemaLabel,
-} from 'ooxml-ui/pptx';
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 

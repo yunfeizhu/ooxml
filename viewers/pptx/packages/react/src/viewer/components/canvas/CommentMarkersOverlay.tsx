@@ -1,3 +1,4 @@
+import { buildCommentMarkers, COMMENT_MARKER_SIZE } from 'ooxml-ui/pptx';
 /**
  * Comment marker dots rendered on top of the slide canvas.
  *
@@ -7,7 +8,6 @@
  * binding (Vue, Angular, Svelte, Vanilla).
  */
 import type { PptxComment } from 'pptx-viewer-core';
-import { buildCommentMarkers, COMMENT_MARKER_SIZE } from 'ooxml-ui/pptx';
 import { useTranslation } from 'react-i18next';
 
 import type { CanvasSize } from '../../types';

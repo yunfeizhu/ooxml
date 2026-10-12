@@ -7,8 +7,6 @@ import {
 	input,
 } from '@angular/core';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
-import type { PptxElement, ShapeStyle } from 'pptx-viewer-core';
-
 import type { RibbonHomeRequestEvent } from 'ooxml-ui/pptx';
 import {
 	drawingHomeControls,
@@ -19,6 +17,8 @@ import {
 	shapeOutlineChange,
 	withHomeGalleries,
 } from 'ooxml-ui/pptx';
+import type { PptxElement, ShapeStyle } from 'pptx-viewer-core';
+
 import { newPresetShapeElement } from './editor-insert';
 import { EditorStateService } from './editor-state.service';
 import { LoadContentService } from './load-content.service';

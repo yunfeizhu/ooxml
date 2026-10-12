@@ -1,9 +1,3 @@
-import type {
-	MediaPptxElement,
-	ParsedTableStyleMap,
-	PptxHandler,
-	PptxSlide,
-} from 'pptx-viewer-core';
 import {
 	applyImagePathPatches,
 	collectAnimationSoundPaths,
@@ -14,6 +8,12 @@ import {
 	resolveTableStyleImageUrls,
 	resolveTextFillBlipUrls,
 } from 'ooxml-ui/pptx';
+import type {
+	MediaPptxElement,
+	ParsedTableStyleMap,
+	PptxHandler,
+	PptxSlide,
+} from 'pptx-viewer-core';
 
 /**
  * Pure async helpers for the load pipeline, ported from the Vue binding's

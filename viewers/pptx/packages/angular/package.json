@@ -1,6 +1,6 @@
 {
 	"name": "pptx-angular-viewer",
-	"version": "4.30.3",
+	"version": "4.33.1",
 	"description": "pptx-viewer for Angular: a PowerPoint viewer and editor component to render, edit, and export PPTX slides in the browser.",
 	"keywords": [
 		"angular",
@@ -95,7 +95,7 @@
 		"html2canvas-pro": "^2.5.1",
 		"jspdf": "^4.2.1",
 		"jszip": "^3.10.2",
-		"ooxml-ui": "^1.4.1",
+		"ooxml-ui": "^1.8.3",
 		"opentype.js": "^2.0.0",
 		"pptx-viewer-core": "workspace:*",
 		"tslib": "^2.8.1",

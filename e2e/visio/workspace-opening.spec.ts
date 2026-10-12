@@ -1,12 +1,13 @@
 import { test, expect } from '@playwright/test';
 import { loadSampleTemplate, openFind, taskPane } from './ribbon';
 import { createVsdxFixture } from './fixture.mjs';
+import { openDemo } from './demo-page';
 
 test('mobile Tools exposes Visio groups, opens Find and edits text with F2', async ({ page }) => {
 	await page.setViewportSize({ width: 390, height: 844 });
-	await page.goto('/demo/?sample=1');
+	await openDemo(page);
 	const viewer = page.locator('visio-viewer');
-	await viewer.locator('[data-shape-id="s1"]').click();
+	await viewer.locator('[data-shape-id="1"]').click();
 	const tools = viewer.locator('.ribbon-tools>summary');
 	await tools.click();
 	for (const name of ['Pointer Tool', 'Find', 'Layers'])
@@ -21,10 +22,14 @@ test('mobile Tools exposes Visio groups, opens Find and edits text with F2', asy
 	await expect(search).toHaveValue('');
 	await page.keyboard.press('Escape');
 	await expect(viewer.locator('.find-bar')).toBeHidden();
+	// F2 edits the selected shape's text in place; Esc keeps it.
+	await viewer.locator('.viewport').focus();
 	await page.keyboard.press('F2');
-	await expect(viewer.locator('.inspector-pane')).toBeVisible();
-	await expect(viewer.getByLabel('Selected shape text', { exact: true })).toBeVisible();
-	await viewer.getByRole('button', { name: 'Close inspector' }).click();
+	const editor = viewer.locator('#edit-text');
+	await expect(editor).toBeFocused();
+	await expect(editor).toHaveValue('Start with an idea');
+	await editor.press('Escape');
+	await expect(editor).toHaveCount(0);
 });
 
 test('mobile documentation menu keeps the heading near the top and navigates sections', async ({
@@ -34,7 +39,8 @@ test('mobile documentation menu keeps the heading near the top and navigates sec
 	await page.goto('/getting-started.html');
 	const title = await page.locator('.vp-doc h1').boundingBox();
 	expect(title!.y).toBeLessThan(260);
-	await page.getByRole('button', { name: 'Menu', exact: true }).click();
+	// VitePress 2 has a navigation hamburger too; this is the page's sidebar menu.
+	await page.locator('button.menu[aria-controls="VPSidebarNav"]').click();
 	await page
 		.getByRole('navigation', { name: 'Sidebar Navigation' })
 		.getByRole('link', { name: 'Architecture', exact: true })
@@ -73,7 +79,7 @@ test('opening screen supports browse cancellation, rejected input and repeated s
 	await expect(viewer.locator('.backstage')).toBeHidden();
 });
 
-test('mobile local file opens into bounded canvas and inspector can close and survive resize', async ({
+test('mobile local file opens into bounded canvas and a task pane can close and survive resize', async ({
 	page,
 }) => {
 	await page.setViewportSize({ width: 390, height: 844 });
@@ -87,14 +93,14 @@ test('mobile local file opens into bounded canvas and inspector can close and su
 	await expect(page.locator('#file-name')).toHaveText('local.vsdx');
 	const viewer = page.locator('visio-viewer');
 	await expect(viewer.locator('.inspector-pane')).toBeHidden();
-	await taskPane(viewer, 'Inspector');
+	await taskPane(viewer, 'Shape Data');
 	await expect(viewer.locator('.inspector-pane')).toBeVisible();
-	await viewer.getByRole('button', { name: 'Close inspector', exact: true }).click();
+	await viewer.getByRole('button', { name: 'Close Shape Data', exact: true }).click();
 	await page.setViewportSize({ width: 1440, height: 900 });
 	await expect(viewer.locator('.inspector-pane')).toBeHidden();
-	await taskPane(viewer, 'Inspector');
+	await taskPane(viewer, 'Shape Data');
 	await page.setViewportSize({ width: 390, height: 844 });
 	await expect(viewer.locator('.inspector-pane')).toBeVisible();
-	await viewer.getByRole('button', { name: 'Close inspector', exact: true }).click();
+	await viewer.getByRole('button', { name: 'Close Shape Data', exact: true }).click();
 	expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(390);
 });

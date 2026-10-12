@@ -16,14 +16,19 @@ import { themeColor } from './theme-resolve';
 
 /** Theme colour slots offered by the gallery: 0 is Dark 1, 2-7 are Accent 1-6. */
 export const VISIO_QUICK_STYLE_COLORS = [0, 2, 3, 4, 5, 6, 7] as const;
-export type VisioQuickStyleColor = (typeof VISIO_QUICK_STYLE_COLORS)[number];
+/** Variant colours 1-7 of the page's theme variant (MS-VSDX QuickStyleFillColor 100-106). */
+export const VISIO_QUICK_STYLE_VARIANT_COLORS = [100, 101, 102, 103, 104, 105, 106] as const;
+export type VisioQuickStyleColor =
+	| (typeof VISIO_QUICK_STYLE_COLORS)[number]
+	| (typeof VISIO_QUICK_STYLE_VARIANT_COLORS)[number];
 export interface VisioQuickStyle {
 	color: VisioQuickStyleColor;
 	/** Theme style matrix 1 (subtle) to 6 (intense). */
 	matrix: number;
 }
 export const isVisioQuickStyleColor = (value: unknown): value is VisioQuickStyleColor =>
-	(VISIO_QUICK_STYLE_COLORS as readonly unknown[]).includes(value);
+	(VISIO_QUICK_STYLE_COLORS as readonly unknown[]).includes(value) ||
+	(VISIO_QUICK_STYLE_VARIANT_COLORS as readonly unknown[]).includes(value);
 
 /** Outer shadow presets named by the direction the shadow falls. */
 export const VISIO_SHADOW_PRESETS = [
@@ -83,7 +88,13 @@ export function visioFallbackQuickStyle(style: VisioQuickStyle): {
 	line: string;
 	font: string;
 } {
-	const base = OFFICE_FALLBACK[style.color]!;
+	// Built-in theme variant 0 maps variant colours 1-6 to Accent 1-6 and colour 7 to Dark 2.
+	const base =
+		style.color >= 100
+			? style.color === 106
+				? '#44546a'
+				: OFFICE_FALLBACK[style.color - 98]!
+			: OFFICE_FALLBACK[style.color]!;
 	const dark = OFFICE_FALLBACK[0]!,
 		light = OFFICE_FALLBACK[1]!;
 	switch (style.matrix) {

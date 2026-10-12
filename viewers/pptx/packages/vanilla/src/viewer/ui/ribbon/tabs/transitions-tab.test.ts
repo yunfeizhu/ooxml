@@ -1,10 +1,10 @@
-import type { PptxSlideTransition } from 'pptx-viewer-core';
 import type { RibbonTransitionDraft } from 'ooxml-ui/pptx';
 import {
 	EFFECT_SOUND_CATALOGUE,
 	EMPTY_RIBBON_TRANSITION_DRAFT,
 	TRANSITION_PREVIEW_ATTR,
 } from 'ooxml-ui/pptx';
+import type { PptxSlideTransition } from 'pptx-viewer-core';
 import type { Mock } from 'vitest';
 import { describe, expect, it, vi } from 'vitest';
 

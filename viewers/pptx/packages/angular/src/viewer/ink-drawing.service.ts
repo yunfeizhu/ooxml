@@ -14,9 +14,9 @@
  */
 
 import { Injectable, signal } from '@angular/core';
+import { findEraserHitElementId } from 'ooxml-ui/pptx';
 import type { InkPptxElement, PptxElement } from 'pptx-viewer-core';
 
-import { findEraserHitElementId } from 'ooxml-ui/pptx';
 import {
 	buildLiveInkStrokeView,
 	pointFromPointerEvent,

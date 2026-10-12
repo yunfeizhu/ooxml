@@ -17,13 +17,11 @@ for (const framework of FRAMEWORKS)
 			const source = original.sheets[0]!.drawings[0]!;
 			if (source.kind !== 'chart') throw new Error('Missing source chart');
 			const expected = chartView(original, 0, source, () => []).titleText!;
-			await page
-				.locator('#landing-file')
-				.setInputFiles({
-					name,
-					mimeType: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-					buffer,
-				});
+			await page.locator('#landing-file').setInputFiles({
+				name,
+				mimeType: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+				buffer,
+			});
 			const host = editor(page);
 			await expect(host.getByText(name, { exact: true })).toBeVisible();
 			const spans = host.locator('.xg-chart svg tspan[data-chart-title-run]');

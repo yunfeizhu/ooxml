@@ -1,4 +1,3 @@
-import type { PptxElement } from 'pptx-viewer-core';
 import {
 	beginCropDrag,
 	CROP_HANDLE_ARIA_KEY,
@@ -9,6 +8,7 @@ import {
 	toElementAxes,
 } from 'ooxml-ui/pptx';
 import type { CropDragStart, CropElementUpdate, CropHandleId } from 'ooxml-ui/pptx';
+import type { PptxElement } from 'pptx-viewer-core';
 
 import type { Translator } from '../i18n';
 import type { Store, ViewerState } from '../state';

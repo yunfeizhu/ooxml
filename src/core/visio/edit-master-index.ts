@@ -60,15 +60,24 @@ export function masterCells(
 						: undefined);
 				const ix = index ?? '0',
 					r = rowName ?? (prefix === 'Controls' ? `Row_${Number(ix) + 1}` : ix);
+				// Formulas count Scratch, Controls and Connections rows from one (Scratch.Y1 is the
+				// row with IX 0) and say Connections for the Connection section; geometry rows
+				// already carry their one-based index.
+				const numbered = ['Controls', 'Scratch', 'Connection'].includes(prefix);
 				add(
-					name === 'Geometry' || ['Controls', 'Scratch', 'Connection'].includes(prefix)
+					name === 'Geometry'
 						? `${prefix}.${n}${ix}`
-						: n === 'Value' && ['User', 'Prop'].includes(name)
-							? `${prefix}.${r}`
-							: `${prefix}.${r}.${n}`,
+						: numbered
+							? `${prefix === 'Connection' ? 'Connections' : prefix}.${n}${Number(ix) + 1}`
+							: n === 'Value' && ['User', 'Prop'].includes(name)
+								? `${prefix}.${r}`
+								: `${prefix}.${r}.${n}`,
 					node,
 				);
 				if (name !== 'Geometry') add(`${prefix}.${r}.${n}`, node);
+				// Formulas (Visio's point glue among them) name connection points from one.
+				if (prefix === 'Connection' && index !== undefined)
+					add(`Connections.${n}${Number(ix) + 1}`, node);
 				if (prefix === 'Controls' && n === 'X') add(`${prefix}.${r}`, node);
 				if (name !== 'Geometry' && index !== undefined) add(`${prefix}.$row${ix}.${n}`, node);
 			}

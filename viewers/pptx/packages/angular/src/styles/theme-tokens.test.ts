@@ -13,14 +13,13 @@
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
 
-import { describe, expect, it } from 'vitest';
-
 // `../internal/shared`, never the bare `pptx-viewer-shared`: that package is
 // private and unpublished, and its source is vendored into `internal/shared-src`
 // at build time. The bare specifier resolves on a developer machine through the
 // workspace link and fails in CI, where this test is the only Angular file that
 // used it.
 import { defaultCssVars } from 'ooxml-ui/pptx';
+import { describe, expect, it } from 'vitest';
 
 const css = readFileSync(path.join(import.meta.dirname, 'theme.css'), 'utf8');
 

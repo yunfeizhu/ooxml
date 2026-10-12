@@ -6,9 +6,9 @@
 	native to this binding.
 -->
 <script setup lang="ts">
-import type { PptxElement, PptxSlide } from 'pptx-viewer-core';
 import { playAnimationRibbonPreview } from 'ooxml-ui/pptx';
 import type { AnimationApplyGroup, RibbonAnimationsRequestEvent } from 'ooxml-ui/pptx';
+import type { PptxElement, PptxSlide } from 'pptx-viewer-core';
 import { computed, onBeforeUnmount, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 

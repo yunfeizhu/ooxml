@@ -1,5 +1,3 @@
-import type { PptxElement } from 'pptx-viewer-core';
-import { updateSmartArtNodeText, setSmartArtNodeStyle } from 'pptx-viewer-core';
 import {
 	buildSmartArtA11y,
 	canDrillDown,
@@ -12,6 +10,8 @@ import {
 	rebuildDrawingShapesIfCleared,
 } from 'ooxml-ui/pptx';
 import type { ElementAnimationState } from 'ooxml-ui/pptx';
+import type { PptxElement } from 'pptx-viewer-core';
+import { updateSmartArtNodeText, setSmartArtNodeStyle } from 'pptx-viewer-core';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 

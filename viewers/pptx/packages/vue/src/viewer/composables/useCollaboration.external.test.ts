@@ -1,5 +1,3 @@
-import type { PptxSlide } from 'pptx-viewer-core';
-import { PptxHandler } from 'pptx-viewer-core';
 import type {
 	CollabLoadOrigin,
 	CollaborationConfig,
@@ -7,6 +5,8 @@ import type {
 	ExternalCollaborationSnapshot,
 } from 'ooxml-ui/pptx';
 import { readSlidesFromYDoc, reconcileSlidesInYDoc } from 'ooxml-ui/pptx';
+import type { PptxSlide } from 'pptx-viewer-core';
+import { PptxHandler } from 'pptx-viewer-core';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { effectScope, nextTick, ref, shallowRef } from 'vue';
 import * as Y from 'yjs';

@@ -10,12 +10,21 @@
  * here is unchanged from before the split, so `PowerPointViewerComponent`'s
  * bindings to `<pptx-ribbon>` did not need to change.
  */
-import { ChangeDetectionStrategy, Component, inject, input, output, signal } from '@angular/core';
+import {
+	ChangeDetectionStrategy,
+	Component,
+	CUSTOM_ELEMENTS_SCHEMA,
+	inject,
+	input,
+	output,
+	signal,
+} from '@angular/core';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
-import type { PptxElement } from 'pptx-viewer-core';
-
 import { homeLaunchers } from 'ooxml-ui/pptx';
 import type { AccountAuthConfig, ToolbarActionId } from 'ooxml-ui/pptx';
+import type { PptxElement } from 'pptx-viewer-core';
+
+import { RibbonAddInsService } from './ribbon-add-ins.service';
 import { RibbonContentSecondaryComponent } from './ribbon-content-secondary.component';
 import { RibbonContentComponent } from './ribbon-content.component';
 import { createRibbonTabState } from './ribbon-contextual-tabs';
@@ -23,6 +32,7 @@ import type { DrawToolState } from './ribbon-draw-section.component';
 import { RibbonOverflowDirective } from './ribbon-overflow.directive';
 import { RibbonPrimaryRowComponent } from './ribbon-primary-row.component';
 import { RibbonTabListComponent } from './ribbon-tab-list.component';
+import type { RibbonTab } from './ribbon-types';
 import { injectResolvedCustomization } from './viewer-customization.service';
 
 @Component({
@@ -37,6 +47,8 @@ import { injectResolvedCustomization } from './viewer-customization.service';
 		RibbonContentSecondaryComponent,
 		RibbonOverflowDirective,
 	],
+	// The host's add-in tab is drawn by the shared `pptx-ui-ribbon-add-in` element.
+	schemas: [CUSTOM_ELEMENTS_SCHEMA],
 	template: `
 		<div
 			role="toolbar"
@@ -81,6 +93,9 @@ import { injectResolvedCustomization } from './viewer-customization.service';
 			<pptx-ribbon-tab-list
 				[activeTab]="activeTab()"
 				[contextualTabs]="contextualTabs()"
+				[addInTabs]="addInTabs()"
+				[activeAddIn]="activeAddIn()?.id ?? null"
+				(selectAddIn)="selectAddIn($event)"
 				[canEdit]="canEdit()"
 				[collabConnected]="collabConnected()"
 				[connectedCount]="connectedCount()"
@@ -88,7 +103,7 @@ import { injectResolvedCustomization } from './viewer-customization.service';
 				[commentCount]="commentCount()"
 				[ribbonExpanded]="ribbonExpanded()"
 				[hiddenActions]="hiddenActions()"
-				(selectTab)="activeTab.set($event)"
+				(selectTab)="selectTab($event)"
 				(record)="record.emit()"
 				(share)="share.emit()"
 				(toggleComments)="comments.emit()"
@@ -101,7 +116,11 @@ import { injectResolvedCustomization } from './viewer-customization.service';
 				class="flex min-h-[82px] flex-nowrap items-center gap-0 overflow-x-auto px-1 py-0.5 [&>*]:shrink-0"
 				[style.display]="ribbonExpanded() ? null : 'none'"
 			>
+				@if (activeAddIn(); as addIn) {
+					<pptx-ui-ribbon-add-in [tab]="addIn"></pptx-ui-ribbon-add-in>
+				}
 				<pptx-ribbon-content
+					[style.display]="activeAddIn() ? 'none' : null"
 					[activeTab]="activeTab()"
 					[slideIndex]="slideIndex()"
 					[slideCount]="slideCount()"
@@ -113,7 +132,7 @@ import { injectResolvedCustomization } from './viewer-customization.service';
 					[hasMacros]="hasMacros()"
 					[hiddenActions]="hiddenActions()"
 					[accountAuth]="accountAuth()"
-					(selectTab)="activeTab.set($event)"
+					(selectTab)="selectTab($event)"
 					(find)="find.emit()"
 					(share)="share.emit()"
 					(openFile)="openFile.emit()"
@@ -144,6 +163,7 @@ import { injectResolvedCustomization } from './viewer-customization.service';
 					(openSettings)="requestSettings()"
 				/>
 				<pptx-ribbon-content-secondary
+					[style.display]="activeAddIn() ? 'none' : null"
 					[activeTab]="activeTab()"
 					[slideIndex]="slideIndex()"
 					[slideCount]="slideCount()"
@@ -396,6 +416,29 @@ export class RibbonComponent {
 	);
 	protected readonly activeTab = this.tabState.activeTab;
 	protected readonly contextualTabs = this.tabState.contextualTabs;
+
+	/**
+	 * The host's add-in tabs (`ribbonAddIns`). Optional so a ribbon composed without the viewer's
+	 * providers still renders.
+	 */
+	private readonly addIns = inject(RibbonAddInsService, { optional: true });
+	protected readonly addInTabs = () => this.addIns?.visible() ?? [];
+	protected readonly activeAddIn = () => this.addIns?.active() ?? null;
+
+	/** A fixed or contextual tab was chosen: the host tab, if one was showing, steps aside. */
+	protected selectTab(tab: RibbonTab): void {
+		this.addIns?.select(null);
+		this.activeTab.set(tab);
+	}
+
+	/**
+	 * A host tab was chosen. The fixed tab underneath moves to Home, so removing the host tab
+	 * later lands there, as in the other bindings.
+	 */
+	protected selectAddIn(id: string): void {
+		this.activeTab.set('home');
+		this.addIns?.select(id);
+	}
 
 	/** Ribbon content expanded (true) vs collapsed to just the tab bar (false). */
 	protected readonly ribbonExpanded = signal(true);

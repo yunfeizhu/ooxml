@@ -9,7 +9,6 @@ import {
 	signal,
 } from '@angular/core';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
-
 import {
 	BACKSTAGE_NAV,
 	BACKSTAGE_TEMPLATES,
@@ -28,6 +27,7 @@ import type {
 	BackstageRecentFile,
 	ToolbarActionId,
 } from 'ooxml-ui/pptx';
+
 import { AccountPageComponent } from './account-page.component';
 import { BackstageNavIconComponent } from './backstage-nav-icon.component';
 import { injectResolvedCustomization } from './viewer-customization.service';

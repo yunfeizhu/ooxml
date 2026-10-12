@@ -1,6 +1,6 @@
 import { mount } from '@vue/test-utils';
-import type { PptxSlide, PptxSlideTransition } from 'pptx-viewer-core';
 import { SLIDE_TRANSITION_OPTIONS } from 'ooxml-ui/pptx';
+import type { PptxSlide, PptxSlideTransition } from 'pptx-viewer-core';
 import { describe, expect, it } from 'vitest';
 
 import { setControlValue } from './inspector/test-control-value';

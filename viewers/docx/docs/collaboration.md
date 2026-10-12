@@ -32,11 +32,11 @@ There is also a [single-page demo](/demo/collaboration.html){target="_self"} wit
 
 ## What is and is not supported
 
-| Supported                                                        | Not supported                                                                    |
-| ---------------------------------------------------------------- | -------------------------------------------------------------------------------- |
-| Ordered, validated ProseMirror step batches through an authority | A hosted server, networking, authentication or persistence (the host owns these) |
-| Yjs text/formatting merging, relative cursors, comment threads and local undo | Concurrent editing of styles, numbering definitions and notes outside the body |
-| A reference in-memory authority for tests and the local demo     | Structural table commands while collaborating                                    |
+| Supported                                                                     | Not supported                                                                    |
+| ----------------------------------------------------------------------------- | -------------------------------------------------------------------------------- |
+| Ordered, validated ProseMirror step batches through an authority              | A hosted server, networking, authentication or persistence (the host owns these) |
+| Yjs text/formatting merging, relative cursors, comment threads and local undo | Concurrent editing of styles, numbering definitions and notes outside the body   |
+| A reference in-memory authority for tests and the local demo                  | Structural table commands while collaborating                                    |
 
 ## Yjs mode
 
@@ -49,20 +49,23 @@ contract, not an authentication token or an automatic package checksum.
 import { createCollabSession, transportProvider } from 'ooxml-core/collab';
 
 const session = createCollabSession({
-  roomId,
-  provider: transportProvider({ transport }), // Application-owned transport
-  user: { name: 'Ada', role: 'collaborator' },
+	roomId,
+	provider: transportProvider({ transport }), // Application-owned transport
+	user: { name: 'Ada', role: 'collaborator' },
 });
 if (!session.synced) {
-  await new Promise<void>((resolve) => {
-    const off = session.on('synced', (synced) => {
-      if (synced) { off(); resolve(); }
-    });
-  });
+	await new Promise<void>((resolve) => {
+		const off = session.on('synced', (synced) => {
+			if (synced) {
+				off();
+				resolve();
+			}
+		});
+	});
 }
 editor.startYjsCollaboration(session, {
-  documentId: sourcePackageId,
-  initializeIfEmpty: designatedCreator,
+	documentId: sourcePackageId,
+	initializeIfEmpty: designatedCreator,
 });
 editor.publishPresence({ name: 'Ada', color: '#2563eb' });
 ```

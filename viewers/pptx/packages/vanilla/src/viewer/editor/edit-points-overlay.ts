@@ -1,9 +1,4 @@
-import type { PptxElement } from 'pptx-viewer-core';
-import type {
-	EditPointsCommandId,
-	EditPointsElementPatch,
-	EditPointsView,
-} from 'ooxml-ui/pptx';
+import type { EditPointsCommandId, EditPointsElementPatch, EditPointsView } from 'ooxml-ui/pptx';
 import {
 	attachOverlayKeyboard,
 	EDIT_POINTS_STYLE,
@@ -11,6 +6,7 @@ import {
 	EditPointsSession,
 	overlayPointerInput,
 } from 'ooxml-ui/pptx';
+import type { PptxElement } from 'pptx-viewer-core';
 
 import type { Translator } from '../i18n';
 import { createSvgEl, setSvgAttrs } from '../render';

@@ -1,5 +1,5 @@
-import type { PptxElement, PptxSlide } from 'pptx-viewer-core';
 import type { PresentationActionRunner } from 'ooxml-ui/pptx';
+import type { PptxElement, PptxSlide } from 'pptx-viewer-core';
 import { describe, expect, it, vi } from 'vitest';
 
 import { isSwipeAdvanceBlocked, resolvePresentationStageClick } from './presentation-advance-gate';

@@ -340,8 +340,12 @@ test.describe('dense panels at 360x640: resize in place', () => {
 		const opened = await openAiPanel(page);
 		test.skip(!opened, 'AI toggle not present in this build');
 		const panel = aiPanel(page);
-		const before = await controlNameSet(panel);
-		expect(before.size, 'AI panel: expected controls at desktop width').toBeGreaterThan(0);
+		// The panel mounts its controls a beat after it opens, which a loaded machine stretches.
+		await expect
+			.poll(async () => (await controlNameSet(panel)).size, {
+				message: 'AI panel: expected controls at desktop width',
+			})
+			.toBeGreaterThan(0);
 
 		await page.setViewportSize(PHONE);
 		await page.waitForTimeout(300);

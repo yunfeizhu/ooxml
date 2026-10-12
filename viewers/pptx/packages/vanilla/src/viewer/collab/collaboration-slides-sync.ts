@@ -1,3 +1,5 @@
+import type { CollaborationConfig, YDocLike, YjsFactories } from 'ooxml-ui/pptx';
+import { reconcileSlidesInYDoc, readSlidesFromYDoc } from 'ooxml-ui/pptx';
 /**
  * collaboration-slides-sync.ts: local<->remote slide synchronization for the
  * vanilla viewer's collaboration session.
@@ -10,8 +12,6 @@
  * `applyRemoteSlides` at the right moments.
  */
 import type { PptxSlide } from 'pptx-viewer-core';
-import type { CollaborationConfig, YDocLike, YjsFactories } from 'ooxml-ui/pptx';
-import { reconcileSlidesInYDoc, readSlidesFromYDoc } from 'ooxml-ui/pptx';
 
 import { clampSlideIndex } from '../state';
 import type { Store, ViewerState } from '../state';

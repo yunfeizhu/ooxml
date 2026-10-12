@@ -1,7 +1,3 @@
-/* oxlint-disable eslint/one-var -- pervasive pre-existing pattern in this file
-   (many independent short-lived `const`s per handler); merging them isn't a
-   style choice here. */
-import type { PptxSlide, PptxData } from 'pptx-viewer-core';
 /**
  * usePrintHandlers -- Print dialog and print-with-settings logic for
  * slides, notes, handouts, and outline layouts.
@@ -28,6 +24,10 @@ import {
 	openPendingPrintWindow,
 	resolveImageResolutionScale,
 } from 'ooxml-ui/pptx';
+/* oxlint-disable eslint/one-var -- pervasive pre-existing pattern in this file
+   (many independent short-lived `const`s per handler); merging them isn't a
+   style choice here. */
+import type { PptxSlide, PptxData } from 'pptx-viewer-core';
 import { useState } from 'react';
 import type { RefObject } from 'react';
 import { useTranslation } from 'react-i18next';

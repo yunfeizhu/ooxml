@@ -18,14 +18,10 @@ import {
 	output,
 } from '@angular/core';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
+import type { RibbonHomeRequestEvent, ToolbarActionId } from 'ooxml-ui/pptx';
+import { arrangeAlignAction, arrangeHomeControls, arrangePainterHomeControls } from 'ooxml-ui/pptx';
 import type { PptxElement } from 'pptx-viewer-core';
 
-import type { RibbonHomeRequestEvent, ToolbarActionId } from 'ooxml-ui/pptx';
-import {
-	arrangeAlignAction,
-	arrangeHomeControls,
-	arrangePainterHomeControls,
-} from 'ooxml-ui/pptx';
 import { EditorStateService } from './editor-state.service';
 import { homeLanguage, homeTranslator } from './ribbon-home-lang';
 import { RibbonShapeExtrasComponent } from './ribbon-shape-extras.component';

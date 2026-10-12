@@ -111,11 +111,11 @@ Supported background content and validated raster images are embedded. Fonts are
 
 ## Properties and events
 
-| Surface    | Current contract                                                                                                                       |
-| ---------- | -------------------------------------------------------------------------------------------------------------------------------------- |
-| Properties | `document`, `pageIndex`, `zoom`, `showToolbar`                                                                                         |
-| Events     | `document-load`, `document-change`, `document-error`, `page-change`, `zoom-change`, `shape-select`                                     |
-| Lifecycle  | `update`, `load`, `fit`, `exportSvg`, `createPrintSnapshot`, `replacePlainText`, `undo`, `redo`, `cancelEdit`, `exportVsdx`, `destroy` |
+| Surface    | Current contract                                                                                                                               |
+| ---------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| Properties | `document`, `pageIndex`, `zoom`, `showToolbar`, `ribbonAddIns`                                                                                 |
+| Events     | `document-load`, `document-change`, `document-error`, `page-change`, `zoom-change`, `shape-select`, `selection-change`, `office-ribbon-add-in` |
+| Lifecycle  | `update`, `load`, `fit`, `exportSvg`, `createPrintSnapshot`, `replacePlainText`, `undo`, `redo`, `cancelEdit`, `exportVsdx`, `destroy`         |
 
 Mount after the host exists and call `destroy()` when the framework view unmounts. Repeated destruction is safe. Partial updates leave omitted properties unchanged. The full reference is the [viewer API](/api).
 

@@ -25,6 +25,16 @@ import {
 } from '@angular/core';
 import { LucideArrowDown, LucideArrowUp } from '@lucide/angular';
 import { TranslatePipe } from '@ngx-translate/core';
+import type { ThemeColorPickerCommit } from 'ooxml-ui/pptx';
+import {
+	applyTableStyleDelete,
+	applyTableStyleMapChange,
+	elementLockTogglePatch,
+	isElementLocked,
+	rebuildDrawingShapesIfCleared,
+	resolvePalette,
+	textFontSizePtToPx,
+} from 'ooxml-ui/pptx';
 import type {
 	ChartPptxElement,
 	MediaPptxElement,
@@ -39,16 +49,6 @@ import type {
 } from 'pptx-viewer-core';
 import { hasShapeProperties, hasTextProperties } from 'pptx-viewer-core';
 
-import type { ThemeColorPickerCommit } from 'ooxml-ui/pptx';
-import {
-	applyTableStyleDelete,
-	applyTableStyleMapChange,
-	elementLockTogglePatch,
-	isElementLocked,
-	rebuildDrawingShapesIfCleared,
-	resolvePalette,
-	textFontSizePtToPx,
-} from 'ooxml-ui/pptx';
 import { AccessibilityTextPanelComponent } from './accessibility-text-panel.component';
 import { ActionSettingsPanelComponent } from './action-settings-panel.component';
 import { AnimationAuthorPanelComponent } from './animation-author-panel.component';

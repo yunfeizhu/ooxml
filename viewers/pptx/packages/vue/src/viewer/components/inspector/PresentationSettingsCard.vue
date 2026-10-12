@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import type { PptxPresentationProperties } from 'pptx-viewer-core';
 import {
 	printPropertiesFrameSlides,
 	printPropertiesSlidesPerPage,
 	withFrameSlides,
 	withSlidesPerPage,
 } from 'ooxml-ui/pptx';
+import type { PptxPresentationProperties } from 'pptx-viewer-core';
 import { useI18n } from 'vue-i18n';
 
 /**

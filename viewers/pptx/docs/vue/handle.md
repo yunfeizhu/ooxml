@@ -40,8 +40,8 @@ the same API surface; React reaches it through `forwardRef` + `PowerPointViewerH
 `defineExpose`, Angular through public component methods.
 
 ```ts
-import type { PowerPointViewerExpose } from 'pptx-vue-viewer';
 import type { ViewerMode, PowerPointViewerAPI } from 'pptx-viewer-shared';
+import type { PowerPointViewerExpose } from 'pptx-vue-viewer';
 ```
 
 ## Methods

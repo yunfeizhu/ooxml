@@ -16,7 +16,7 @@
 		"@angular/platform-browser": "^22.2.1",
 		"@ngx-translate/core": "^18.0.0",
 		"ai": "^7.0.127",
-		"emf-converter": "4.8.21",
+		"emf-converter": "4.11.2",
 		"fast-xml-parser": "^5.11.2",
 		"html2canvas-pro": "^2.5.1",
 		"jspdf": "^4.2.1",
@@ -33,6 +33,6 @@
 		"@angular/compiler": "^22.2.1",
 		"@angular/compiler-cli": "^22.2.1",
 		"typescript": "6.0.3",
-		"vite": "^8.3.2"
+		"vite": "^8.3.3"
 	}
 }

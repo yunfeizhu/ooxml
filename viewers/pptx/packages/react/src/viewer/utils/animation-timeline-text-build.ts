@@ -3,8 +3,4 @@
  * (`render/animation-timeline-text-build`).
  */
 export type { TextBuildSegmentCounts } from 'ooxml-ui/pptx';
-export {
-	countTextSegments,
-	TEXT_BUILD_ID_SEP,
-	expandTextBuildAnimations,
-} from 'ooxml-ui/pptx';
+export { countTextSegments, TEXT_BUILD_ID_SEP, expandTextBuildAnimations } from 'ooxml-ui/pptx';

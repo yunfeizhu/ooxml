@@ -1,10 +1,10 @@
-import type { PptxElement } from 'pptx-viewer-core';
-import { hasShapeProperties } from 'pptx-viewer-core';
 import {
 	elementContainerHeightStyle,
 	MEDIA_FULLSCREEN_OVERLAY_STYLE,
 	paintedElementSize,
 } from 'ooxml-ui/pptx';
+import type { PptxElement } from 'pptx-viewer-core';
+import { hasShapeProperties } from 'pptx-viewer-core';
 import React from 'react';
 import type { CSSProperties } from 'react';
 

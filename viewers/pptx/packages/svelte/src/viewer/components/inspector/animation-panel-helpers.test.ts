@@ -1,9 +1,9 @@
+import { reorderAnimationTo } from 'ooxml-ui/pptx';
+import { translationsEn } from 'ooxml-ui/pptx/i18n';
 /* oxlint-disable eslint/one-var -- each `it` block below declares its own
    independent fixture locals; merging unrelated declarations across these
    test cases would hurt readability, not help it. */
 import type { PptxElement, PptxElementAnimation } from 'pptx-viewer-core';
-import { reorderAnimationTo } from 'ooxml-ui/pptx';
-import { translationsEn } from 'ooxml-ui/pptx/i18n';
 import { describe, expect, it } from 'vitest';
 
 import {

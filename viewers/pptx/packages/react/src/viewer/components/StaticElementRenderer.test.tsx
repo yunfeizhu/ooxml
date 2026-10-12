@@ -1,5 +1,5 @@
-import type { PptxElement, PptxSlide } from 'pptx-viewer-core';
 import { translationsEn } from 'ooxml-ui/pptx/i18n';
+import type { PptxElement, PptxSlide } from 'pptx-viewer-core';
 import React from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it, vi } from 'vitest';

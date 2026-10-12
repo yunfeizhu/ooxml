@@ -1,3 +1,10 @@
+import type {
+	AiCanvasHighlight,
+	AiChangeBatch,
+	PptxAiFocusedTarget,
+	ToolCanvasTarget,
+} from 'ooxml-ui/pptx/ai';
+import { computeFocusTargets } from 'ooxml-ui/pptx/ai';
 /**
  * useAiPanelController: owns the AI panel's "scope" (the focused targets + a
  * prefilled composer directive) plus the two on-canvas highlight sources that
@@ -14,13 +21,6 @@
  *     the tool references (see {@link flashToolTarget}).
  */
 import type { PptxElement } from 'pptx-viewer-core';
-import type {
-	AiCanvasHighlight,
-	AiChangeBatch,
-	PptxAiFocusedTarget,
-	ToolCanvasTarget,
-} from 'ooxml-ui/pptx/ai';
-import { computeFocusTargets } from 'ooxml-ui/pptx/ai';
 import { computed, onScopeDispose, ref } from 'vue';
 import type { ComputedRef, Ref } from 'vue';
 

@@ -19,8 +19,6 @@
 
 import { Injectable, inject, signal } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import type { PptxHandoutMaster, PptxSlide } from 'pptx-viewer-core';
-
 import {
 	DEFAULT_CANVAS_HEIGHT,
 	DEFAULT_CANVAS_WIDTH,
@@ -29,6 +27,8 @@ import {
 	openPendingPrintWindow,
 	openPrintWindow,
 } from 'ooxml-ui/pptx';
+import type { PptxHandoutMaster, PptxSlide } from 'pptx-viewer-core';
+
 import { addSvgSlideFrame, exportSlideToSvg } from './export-svg';
 import {
 	DEFAULT_PRINT_SETTINGS,

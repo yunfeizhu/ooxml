@@ -1,4 +1,3 @@
-import type { PptxBar3DShape, PptxChartData } from 'pptx-viewer-core';
 import {
 	BAR3D_SHAPE_OPTIONS,
 	bar3DShapePatch,
@@ -7,6 +6,7 @@ import {
 	SURFACE_WIREFRAME_OPTIONS,
 	surfaceWireframePatch,
 } from 'ooxml-ui/pptx';
+import type { PptxBar3DShape, PptxChartData } from 'pptx-viewer-core';
 import { useTranslation } from 'react-i18next';
 
 import { WebSelect } from '../WebControls';

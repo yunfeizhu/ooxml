@@ -1,3 +1,4 @@
+import type { RibbonAddInCommandDetail, RibbonAddInTab } from '../../ribbon/index';
 import type { VisioDocument } from '../index';
 
 export interface ViewerProperties {
@@ -5,6 +6,8 @@ export interface ViewerProperties {
 	pageIndex: number;
 	zoom: number;
 	showToolbar: boolean;
+	/** Tabs the host adds after Help, as an Office add-in does. */
+	ribbonAddIns: readonly RibbonAddInTab[];
 }
 /** A page-scoped shape identity. Omitted pageId means the currently displayed page. */
 export interface VisioShapeSelection {
@@ -25,6 +28,8 @@ export interface ViewerEvents {
 	'shape-select': VisioShapeSelection | null;
 	/** Ordered immutable selection; the first entry is the primary selectedShape. */
 	'selection-change': readonly VisioShapeSelection[];
+	/** A command of a host tab (`ribbonAddIns`) was chosen. */
+	'office-ribbon-add-in': RibbonAddInCommandDetail;
 }
 export type ViewerCallbacks = {
 	[K in keyof ViewerEvents]?: (detail: ViewerEvents[K]) => void;
@@ -34,6 +39,7 @@ export const propertyKeys = [
 	'pageIndex',
 	'zoom',
 	'showToolbar',
+	'ribbonAddIns',
 ] as const satisfies readonly (keyof ViewerProperties)[];
 export const eventKeys = [
 	'document-load',
@@ -43,6 +49,7 @@ export const eventKeys = [
 	'zoom-change',
 	'shape-select',
 	'selection-change',
+	'office-ribbon-add-in',
 ] as const satisfies readonly (keyof ViewerEvents)[];
 // Adding a contract member must also update the inventories used by every adapter.
 const allProperties: Record<

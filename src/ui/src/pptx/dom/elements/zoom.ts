@@ -90,6 +90,7 @@ export const renderZoomElement: ElementRenderer = (element, zIndex, context) => 
 				const image = createEl(doc, 'img');
 				image.src = tile.imageSrc;
 				image.alt = tile.ariaLabel;
+				image.setAttribute('draggable', 'false');
 				image.style.cssText = 'width:100%;height:100%;object-fit:contain';
 				tileElement.appendChild(image);
 			} else {

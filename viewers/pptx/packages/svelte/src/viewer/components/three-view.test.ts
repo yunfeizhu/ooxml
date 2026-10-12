@@ -1,5 +1,5 @@
-import type { PptxChartData, PptxElement, PptxSmartArtData } from 'pptx-viewer-core';
 import type { PptxThreeViewElement, Rendering3DFlags } from 'ooxml-ui/pptx';
+import type { PptxChartData, PptxElement, PptxSmartArtData } from 'pptx-viewer-core';
 import { flushSync, mount, unmount } from 'svelte';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 

@@ -1,4 +1,3 @@
-import type { PptxElement } from 'pptx-viewer-core';
 import type { CropDragStart, CropElementUpdate, CropHandleId } from 'ooxml-ui/pptx';
 import {
 	beginCropDrag,
@@ -8,6 +7,7 @@ import {
 	panCropImage,
 	toElementAxes,
 } from 'ooxml-ui/pptx';
+import type { PptxElement } from 'pptx-viewer-core';
 import React, { useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 

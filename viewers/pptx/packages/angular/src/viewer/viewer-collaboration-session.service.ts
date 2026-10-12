@@ -17,10 +17,10 @@
 
 /* oxlint-disable eslint/one-var -- pre-existing throughout this file; independent concerns, not one statement */
 import { computed, inject, Injectable, signal } from '@angular/core';
-import type { PptxHandlerSaveOptions, PptxSlide } from 'pptx-viewer-core';
-
 import type { ActiveSessionUserDescriptor } from 'ooxml-ui/pptx';
 import { buildActiveSessionUsers } from 'ooxml-ui/pptx';
+import type { PptxHandlerSaveOptions, PptxSlide } from 'pptx-viewer-core';
+
 import type { BroadcastConfig } from './broadcast-helpers';
 import { buildBroadcastViewerUrl } from './broadcast-helpers';
 import { CollaborationService } from './collaboration.service';

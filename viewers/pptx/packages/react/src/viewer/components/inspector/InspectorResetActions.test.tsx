@@ -2,6 +2,9 @@
 /**
  * #398: the inspector reset and clear actions share one gating contract
  * (`inspector-reset-actions` in pptx-viewer-shared) across all five bindings.
+ *
+ * @vitest-own-worker: it finds buttons by raw i18n key, which only render while the (global)
+ * react-i18next instance is uninitialized, and a shared worker may have initialized it.
  */
 import type { MediaPptxElement, PptxChartData, PptxSlide } from 'pptx-viewer-core';
 import React, { act } from 'react';

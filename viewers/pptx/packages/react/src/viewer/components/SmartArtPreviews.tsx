@@ -1,9 +1,9 @@
-import type { SmartArtLayout } from 'pptx-viewer-core';
 import {
 	buildSmartArtPreviewElement,
 	SMARTART_PREVIEW_ELEMENT_HEIGHT,
 	SMARTART_PREVIEW_ELEMENT_WIDTH,
 } from 'ooxml-ui/pptx';
+import type { SmartArtLayout } from 'pptx-viewer-core';
 import React from 'react';
 
 import { SmartArtRenderer } from './elements/SmartArtRenderer';

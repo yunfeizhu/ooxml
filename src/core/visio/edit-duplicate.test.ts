@@ -205,7 +205,9 @@ describe('source-preserving shape duplication', () => {
 		['guarded pins', local('1', '', '', cell('PinX', 2, 'GUARD(2)')), 'EDIT_PROTECTED_CELL'],
 		['stale pins', local('1', '', '', cell('PinX', 2, '3')), 'EDIT_PROTECTED_CELL'],
 		['reference pins', local('1', '', '', cell('PinX', 2, 'Width')), 'EDIT_PROTECTED_CELL'],
-		['master shape', local('1', '', 'Master="1"'), 'UNSUPPORTED_GEOMETRY_EDIT'],
+		// A stencil shape is copied as an instance (edit-instance-shape.test.ts); this one names a
+		// master the drawing does not have.
+		['shape of a missing master', local('1', '', 'Master="1"'), 'UNSUPPORTED_DUPLICATE'],
 		['group', local('1', '<Shapes/>', 'Type="Group"'), 'UNSUPPORTED_GEOMETRY_EDIT'],
 		['foreign shape', local('1', '<ForeignData/>'), 'UNSUPPORTED_GEOMETRY_EDIT'],
 		['one-dimensional', local('1', cell('OneD', 1)), 'UNSUPPORTED_GEOMETRY_EDIT'],
@@ -214,6 +216,27 @@ describe('source-preserving shape duplication', () => {
 		[
 			'dynamic lookup',
 			local('1', user('Dynamic', 0, 'CONTAINERSHEETREF(1)')),
+			'EDIT_UNKNOWN_DEPENDENCY',
+		],
+		[
+			'container with lookups in the drawing',
+			local(
+				'1',
+				section(
+					'User',
+					`<Row N="msvStructureType">${cell('Value', 0)}</Row><Row N="Dynamic">${cell('Value', 0, 'CONTAINERCOUNT()')}</Row>`,
+				),
+			),
+			'UNSUPPORTED_SHAPE_ORDER',
+		],
+		[
+			'reference built from text',
+			local('1', user('Dynamic', 0, 'INDIRECT(&quot;Sheet.9!Width&quot;)')),
+			'UNSUPPORTED_SHAPE_ORDER',
+		],
+		[
+			'unknown function',
+			local('1', user('Dynamic', 0, 'NOSUCHFUNCTION(1)')),
 			'UNSUPPORTED_SHAPE_ORDER',
 		],
 		[

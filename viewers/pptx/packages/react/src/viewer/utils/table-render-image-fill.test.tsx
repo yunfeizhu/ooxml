@@ -1,10 +1,10 @@
+import { translationsEn } from 'ooxml-ui/pptx/i18n';
 /**
  * Table cell image fill (`a:tcPr/a:blipFill`) and an explicitly-zeroed cell
  * margin must both render, through the same shared `tableCellCss` cascade
  * `table-render-data-banding.test.tsx` exercises for banding.
  */
 import type { PptxTableCellStyle, TablePptxElement } from 'pptx-viewer-core';
-import { translationsEn } from 'ooxml-ui/pptx/i18n';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it, vi } from 'vitest';
 

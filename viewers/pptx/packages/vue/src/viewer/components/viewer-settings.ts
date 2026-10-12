@@ -3,9 +3,5 @@
  * The source of truth lives in pptx-viewer-shared so every binding presents
  * the same settings and keyboard shortcut reference.
  */
-export {
-	DEFAULT_VIEWER_SETTINGS,
-	SETTING_TOGGLES,
-	SHORTCUT_REFERENCE_ITEMS,
-} from 'ooxml-ui/pptx';
+export { DEFAULT_VIEWER_SETTINGS, SETTING_TOGGLES, SHORTCUT_REFERENCE_ITEMS } from 'ooxml-ui/pptx';
 export type { SettingToggleSpec, ShortcutReferenceItem, ViewerSettings } from 'ooxml-ui/pptx';

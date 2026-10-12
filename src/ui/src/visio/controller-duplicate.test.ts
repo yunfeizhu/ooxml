@@ -291,6 +291,6 @@ it('refuses busy and model-only duplication and leaves rejected edits untouched'
 	await operation;
 	controller.setDocument(controller.state.document);
 	controller.selectAll();
-	await expect(controller.duplicateSelection()).rejects.toThrow('Model-only');
+	await expect(controller.duplicateSelection()).rejects.toThrow('Open a .vsdx file');
 	controller.destroy();
 });

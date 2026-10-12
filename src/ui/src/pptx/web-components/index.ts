@@ -40,6 +40,7 @@ import {
 	definePptxRibbonHomeSlides,
 } from './ribbon-home';
 import { definePptxRibbonInsert } from './ribbon-insert';
+import { definePptxRibbonAddIn } from './ribbon-add-in';
 import { definePptxRibbonSection } from './ribbon-section';
 import { definePptxRibbonTransitions } from './ribbon-transitions';
 import { definePptxRibbonView } from './ribbon-view';
@@ -87,6 +88,7 @@ export type {
 export type { PptxUiRibbonInsertElement, RibbonInsertRequestEvent } from './ribbon-insert';
 export type { PptxUiRibbonViewElement, RibbonViewRequestEvent } from './ribbon-view';
 export type { PptxUiRibbonSectionElement } from './ribbon-section';
+export type { PptxUiRibbonAddInElement } from './ribbon-add-in';
 export type { PptxUiRibbonGalleryElement, RibbonGalleryPickEvent } from './ribbon-gallery';
 export type { GalleryTranslate } from './ribbon-gallery';
 export type { RibbonToggleRequestEvent } from './office-alias-types';
@@ -158,6 +160,7 @@ const controls = [
 	['pptx-ui-ribbon-transitions', definePptxRibbonTransitions],
 	['pptx-ui-ribbon-group', definePptxRibbonGroup],
 	['pptx-ui-ribbon-section', definePptxRibbonSection],
+	['pptx-ui-ribbon-add-in', definePptxRibbonAddIn],
 	['pptx-ui-ribbon-gallery', definePptxRibbonGallery],
 	['pptx-ui-ribbon-toggle', definePptxRibbonToggle],
 	['pptx-ui-status-bar', definePptxStatusBar],

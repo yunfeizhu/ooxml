@@ -1,6 +1,6 @@
-import type { PptxElementAnimation } from 'pptx-viewer-core';
 import { buildAnimationRibbonPreview } from 'ooxml-ui/pptx';
 import type { AnimationPreviewDescriptor } from 'ooxml-ui/pptx';
+import type { PptxElementAnimation } from 'pptx-viewer-core';
 
 interface ActivePreview {
 	element: HTMLElement;

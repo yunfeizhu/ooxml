@@ -1,16 +1,4 @@
-/**
- * collaboration-remote-sync.ts: observe the shared Y.Doc for remote slide
- * changes and apply them into the editable slides. Extracted from
- * `collaboration.svelte.ts` to keep that class within the file-size budget;
- * holds no state of its own, only callbacks into the controller's fields.
- */
-import type { PptxSlide } from 'pptx-viewer-core';
-import type {
-	CollabLoadOrigin,
-	CollaborationConfig,
-	YDocLike,
-	YjsFactories,
-} from 'ooxml-ui/pptx';
+import type { CollabLoadOrigin, CollaborationConfig, YDocLike, YjsFactories } from 'ooxml-ui/pptx';
 import {
 	LOCAL_SYNC_ORIGIN,
 	observeYDocSlides,
@@ -18,6 +6,13 @@ import {
 	reconcileSlidesInYDoc,
 	shouldRoomSlidesReplaceLoad,
 } from 'ooxml-ui/pptx';
+/**
+ * collaboration-remote-sync.ts: observe the shared Y.Doc for remote slide
+ * changes and apply them into the editable slides. Extracted from
+ * `collaboration.svelte.ts` to keep that class within the file-size budget;
+ * holds no state of its own, only callbacks into the controller's fields.
+ */
+import type { PptxSlide } from 'pptx-viewer-core';
 
 export interface ObserveRemoteDeps {
 	isApplyingRemote: () => boolean;

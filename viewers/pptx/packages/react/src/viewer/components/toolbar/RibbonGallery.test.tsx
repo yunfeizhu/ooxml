@@ -1,3 +1,5 @@
+import type { RibbonGalleryPlacement } from 'ooxml-ui/pptx';
+import { CONTEXTUAL_TAB_GROUPS } from 'ooxml-ui/pptx';
 // @vitest-environment happy-dom
 /**
  * The React ribbon galleries and contextual tabs.
@@ -8,8 +10,6 @@
  * `updateElementById` out.
  */
 import type { PptxElement } from 'pptx-viewer-core';
-import type { RibbonGalleryPlacement } from 'ooxml-ui/pptx';
-import { CONTEXTUAL_TAB_GROUPS } from 'ooxml-ui/pptx';
 import React, { act, useRef, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import type { Root } from 'react-dom/client';

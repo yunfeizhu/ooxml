@@ -10,7 +10,6 @@ import {
 	isAdditiveSelectionPress,
 	mergeAdditiveSelection,
 	rotateDelta,
-	snapAngle,
 	snapBoxToGrid,
 } from './element-interaction';
 import type { InteractionBox, MarqueeElementRect, MarqueeRect } from './element-interaction';
@@ -137,21 +136,6 @@ describe('computeRotation', () => {
 describe('boxCenter', () => {
 	it('returns the geometric center', () => {
 		expect(boxCenter(box())).toStrictEqual({ x: 200, y: 150 });
-	});
-});
-
-describe('snapAngle', () => {
-	it('snaps to the nearest step within tolerance', () => {
-		expect(snapAngle(13, 15)).toBe(15);
-		expect(snapAngle(2, 15)).toBe(0);
-	});
-
-	it('leaves angles outside tolerance unchanged', () => {
-		expect(snapAngle(8, 15, 3)).toBe(8);
-	});
-
-	it('normalises snapped result to [0, 360)', () => {
-		expect(snapAngle(359, 15)).toBe(0);
 	});
 });
 

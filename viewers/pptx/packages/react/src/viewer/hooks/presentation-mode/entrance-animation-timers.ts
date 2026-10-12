@@ -1,6 +1,6 @@
-import type { PptxSlide } from 'pptx-viewer-core';
 import type { PlaybackContext, PresentationAnimationController } from 'ooxml-ui/pptx';
 import { playGroup, scheduleAutoAdvanceChain } from 'ooxml-ui/pptx';
+import type { PptxSlide } from 'pptx-viewer-core';
 
 import type { PresentationAnimationRuntime } from '../../types';
 import { computeEntranceAnimationDelay } from '../usePresentationSetup-helpers';

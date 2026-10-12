@@ -1,3 +1,8 @@
+import type { DeckViewPreferences } from 'ooxml-ui/pptx';
+import {
+	viewerPreferencesFromViewProperties,
+	viewPropertiesPatchFromPreferences,
+} from 'ooxml-ui/pptx';
 /**
  * editor-view-preferences.ts: deck view-preferences seeding + write-back for
  * the vanilla binding.
@@ -11,11 +16,6 @@
  * `ppt/viewProps.xml`.
  */
 import type { PptxViewProperties } from 'pptx-viewer-core';
-import type { DeckViewPreferences } from 'ooxml-ui/pptx';
-import {
-	viewerPreferencesFromViewProperties,
-	viewPropertiesPatchFromPreferences,
-} from 'ooxml-ui/pptx';
 
 import type { ViewerState } from '../state';
 

@@ -1,14 +1,14 @@
+import {
+	buildAnimationTimelineRows,
+	moveAnimationTimelineRowBy,
+	reorderAnimationTo,
+} from 'ooxml-ui/pptx';
 /* oxlint-disable eslint/one-var -- each `it` block below declares its own
    independent fixture locals; merging unrelated declarations across these
    test cases would hurt readability, not help it. */
 import type { PptxElement, PptxElementAnimation } from 'pptx-viewer-core';
 import { describe, expect, it } from 'vitest';
 
-import {
-	buildAnimationTimelineRows,
-	moveAnimationTimelineRowBy,
-	reorderAnimationTo,
-} from 'ooxml-ui/pptx';
 import { getAnimationElementLabel, getAnimationTriggerElements } from './animation-author-view';
 import { buildAnimationTimelineBars } from './animation-timeline.component';
 

@@ -227,12 +227,14 @@ describe('ribbon renderer', () => {
 		main.click();
 		expect(extra.fill.runs).toEqual([{ rgb: 'FFFF00' }]);
 		(main.nextElementSibling as HTMLButtonElement).click();
-		const grid = $(core.ctx.root, '.color-grid');
-		expect(grid.querySelectorAll('.swatch')).toHaveLength(70);
-		(grid.querySelector('[aria-label="Accent 1, Lighter 80%"]') as HTMLButtonElement).click();
+		// The shared colour grid, in Excel's popover.
+		const grid = () => $(core.ctx.root, '.color-grid office-ui-color-grid').shadowRoot!;
+		expect(grid().querySelectorAll('.swatch')).toHaveLength(70);
+		(grid().querySelector('[aria-label="Accent 1, Lighter 80%"]') as HTMLButtonElement).click();
 		expect(extra.fill.runs[1]).toEqual({ theme: 4, tint: 0.8 });
 		(main.nextElementSibling as HTMLButtonElement).click();
-		($(core.ctx.root, '.color-grid .color-grid-command') as HTMLButtonElement).click();
+		expect(grid().querySelector('[data-command="automatic"]')!.textContent).toContain('No Fill');
+		(grid().querySelector('[data-command="automatic"]') as HTMLButtonElement).click();
 		expect(extra.fill.runs[2]).toBeUndefined();
 		expect(extra.fill.runs).toHaveLength(3);
 		main.click();

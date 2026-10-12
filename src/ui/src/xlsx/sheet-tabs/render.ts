@@ -18,7 +18,9 @@ export function renderTabs(doc: Document, strip: HTMLElement, options: TabRender
 	const { workbook, active, focusable } = options;
 	// Existing tab nodes are reused (a double-click must land on the node its first click hit).
 	const previous = new Map<string, HTMLElement>();
-	for (const node of [...strip.children].filter((node): node is HTMLElement => node.classList.contains('xst-tab')))
+	for (const node of [...strip.children].filter((node): node is HTMLElement =>
+		node.classList.contains('xst-tab'),
+	))
 		if (node.dataset.sheet !== undefined) previous.set(node.dataset.sheet, node);
 	const tabs = visibleSheetIndices(workbook).map((index) => {
 		const sheet = workbook.sheets[index]!;
@@ -37,7 +39,9 @@ export function renderTabs(doc: Document, strip: HTMLElement, options: TabRender
 			tab.style.setProperty('--xst-color', color);
 		}
 		const label =
-			([...tab.children].find((node) => node.classList.contains('xst-label')) as HTMLElement | undefined) ?? h(doc, 'span', 'xst-label');
+			([...tab.children].find((node) => node.classList.contains('xst-label')) as
+				| HTMLElement
+				| undefined) ?? h(doc, 'span', 'xst-label');
 		if (label.textContent !== sheet.name) label.textContent = sheet.name;
 		tab.title = sheet.name;
 		if (label.parentNode !== tab) tab.prepend(label);

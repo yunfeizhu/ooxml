@@ -1,3 +1,5 @@
+import { buildChartViewModel } from 'ooxml-ui/pptx';
+import type { ChartViewModel, SvgText } from 'ooxml-ui/pptx';
 /**
  * The view model resolves the chart text font (`chartTextFontFamily`) and style
  * onto every chart text: axis, secondary-axis, category and data labels, and
@@ -6,8 +8,6 @@
  * the same chart in different fonts (caught by `e2e/pptx/chart-svg-parity.spec.ts`).
  */
 import type { ChartPptxElement, PptxChartData } from 'pptx-viewer-core';
-import { buildChartViewModel } from 'ooxml-ui/pptx';
-import type { ChartViewModel, SvgText } from 'ooxml-ui/pptx';
 import { describe, expect, it } from 'vitest';
 
 import { renderChartViewModelSvg } from './chart-svg';

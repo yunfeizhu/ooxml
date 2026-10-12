@@ -4,19 +4,20 @@ import { VisioPackage } from './package';
 import { decodePath, fail, type VisioPackageLimits } from './package-common';
 import { openEditablePackage, writeEditedPackage } from './edit-package';
 import { serializeEditedXml } from './edit-text';
-import { parseXml } from '../xml/index';
 import { updatePageAppProperties } from './edit-page-properties';
 import { recalculatePageFormulas } from './edit-page-formulas';
 import { renameVisioPage } from './edit-page-rename';
 import { deleteVisioPage } from './edit-page-delete';
 import { setVisioPageSize } from './edit-page-size';
+import { setVisioPageProperties, setVisioPageSetup } from './edit-page-setup';
+import { setVisioPageLayout } from './edit-page-layout';
+import { setVisioSnapGlue } from './edit-snap-glue';
+import { setVisioPageDecoration } from './edit-page-decoration';
+import { createVisioPagePart, type VisioPageParts } from './edit-page-create';
 import { relationshipsPartFor } from '../opc/relationships';
 import type { VisioPageEdit } from './edit-commands';
 import type { EditVsdxResult } from './edit';
 
-const officeRel = 'http://schemas.openxmlformats.org/officeDocument/2006/relationships';
-const pageType = 'http://schemas.microsoft.com/visio/2010/relationships/page';
-const contentType = 'application/vnd.ms-visio.page+xml';
 function copy(root: Element): Element {
 	return (root.ownerDocument!.cloneNode(true) as Document).documentElement;
 }
@@ -56,13 +57,50 @@ export async function editVsdxPages(
 	const relIds = new Set(
 		Array.from(rels.childNodes)
 			.filter((node) => node.nodeType === 1)
-			.map((node) => (node as Element).getAttribute('Id')),
+			.map((node) => (node as Element).getAttribute('Id') ?? ''),
 	);
-	let nextPart = 1,
-		nextRel = 1;
+	const parts_: VisioPageParts = {
+		pagesPart,
+		relsPart,
+		directory,
+		rels,
+		types,
+		paths,
+		relIds,
+		pagePaths,
+		dirty,
+		nextPart: 1,
+		nextRel: 1,
+	};
 	for (const command of commands) {
 		check();
 		const existing = children(pages, 'Page');
+		if (command.type === 'set-page-setup') {
+			await setVisioPageSetup(pkg, pagesPart, pages, pagePaths, dirty, command, check);
+			continue;
+		}
+		if (command.type === 'set-snap-glue') {
+			// Document settings live in the document part, saved with the same transaction.
+			const document =
+				dirty.get(documentPart) ?? copy(await visioXml(pkg, documentPart, 'VisioDocument'));
+			if (setVisioSnapGlue(document, command)) dirty.set(documentPart, document);
+			continue;
+		}
+		if (command.type === 'set-page-layout') {
+			await setVisioPageLayout(pkg, pagesPart, pages, pagePaths, dirty, command, check);
+			continue;
+		}
+		if (command.type === 'set-page-properties') {
+			setVisioPageProperties(pagesPart, pages, dirty, command);
+			continue;
+		}
+		if (command.type === 'set-page-decoration') {
+			await setVisioPageDecoration(
+				{ pkg, pages, parts: parts_, packageParts: parts, removed, check },
+				command,
+			);
+			continue;
+		}
 		if (command.type === 'set-page-size') {
 			await setVisioPageSize(pkg, pagesPart, pages, pagePaths, dirty, command, check);
 			continue;
@@ -119,60 +157,31 @@ export async function editVsdxPages(
 			fail('EDIT_DUPLICATE_PAGE_NAME', 'New page name already exists.');
 		const after = existing.find((page) => attribute(page, 'ID') === command.afterPageId);
 		if (!after) fail('EDIT_TARGET_NOT_FOUND', 'Insertion target page does not exist.');
-		let path: string;
-		do {
-			check();
-			path = `${directory}page${nextPart++}.xml`;
-		} while (paths.has(path.toLowerCase()));
-		paths.add(path.toLowerCase());
-		pagePaths.set(command.pageId, path);
-		let relId: string;
-		do {
-			check();
-			relId = `rIdPage${nextRel++}`;
-		} while (relIds.has(relId));
-		relIds.add(relId);
-		const doc = pages.ownerDocument!;
-		const page = doc.createElementNS(pages.namespaceURI, 'Page');
-		page.setAttribute('ID', command.pageId);
+		const { page } = createVisioPagePart(parts_, pages, command.pageId, check);
 		page.setAttribute('Name', command.name);
 		page.setAttribute('NameU', command.name);
 		page.setAttribute('IsCustomName', '1');
 		page.setAttribute('IsCustomNameU', '1');
 		const sheet = child(after, 'PageSheet');
-		if (sheet) page.appendChild(sheet.cloneNode(true));
+		if (sheet) page.insertBefore(sheet.cloneNode(true), page.firstChild);
 		const background = attribute(after, 'BackPage');
 		if (background !== undefined) page.setAttribute('BackPage', background);
-		const link = doc.createElementNS(pages.namespaceURI, 'Rel');
-		link.setAttributeNS(officeRel, 'r:id', relId);
-		page.appendChild(link);
 		pages.insertBefore(page, after.nextSibling);
-		const relationship = rels.ownerDocument!.createElementNS(rels.namespaceURI, 'Relationship');
-		relationship.setAttribute('Id', relId);
-		relationship.setAttribute('Type', pageType);
-		relationship.setAttribute('Target', path.slice(directory.length));
-		rels.appendChild(relationship);
-		const override = types.ownerDocument!.createElementNS(types.namespaceURI, 'Override');
-		override.setAttribute('PartName', `/${path}`);
-		override.setAttribute('ContentType', contentType);
-		types.appendChild(override);
-		const contentDoc = parseXml(`<PageContents xmlns="${pages.namespaceURI}"/>`);
-		contentDoc.documentElement.setAttributeNS(
-			'http://www.w3.org/XML/1998/namespace',
-			'xml:space',
-			'preserve',
-		);
-		dirty.set(path, contentDoc.documentElement);
-		dirty.set(pagesPart, pages);
-		dirty.set(relsPart, rels);
-		dirty.set('[Content_Types].xml', types);
 	}
 	if (!dirty.size) {
 		if (original.length > maxOutput)
 			fail('LIMIT_EDIT_OUTPUT', 'Saved package exceeds output limit.');
 		return { bytes: original, changedParts: [], diagnostics: [] };
 	}
-	if (commands.some((command) => command.type !== 'set-page-size')) {
+	if (
+		commands.some(
+			(command) =>
+				command.type !== 'set-page-size' &&
+				command.type !== 'set-page-setup' &&
+				command.type !== 'set-page-layout' &&
+				command.type !== 'set-snap-glue',
+		)
+	) {
 		await updatePageAppProperties(pkg, pages, priorCount, dirty, limits, check);
 		await recalculatePageFormulas(pkg, pagesPart, pages, pagePaths, dirty, check);
 	}

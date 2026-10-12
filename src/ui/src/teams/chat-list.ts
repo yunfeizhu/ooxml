@@ -171,13 +171,14 @@ export class OfficeUiChatList extends TeamsElement {
 		return html`
 			<div class="toolbar" role="toolbar" aria-label="Message actions">
 				${QUICK_REACTIONS.slice(0, 4).map(
-					(emoji) => html`<button
-						type="button"
-						aria-label=${`React ${emoji}`}
-						@click=${() => this.fire('office-chat-react', { messageId: m.id, emoji })}
-					>
-						${emoji}
-					</button>`,
+					(emoji) =>
+						html`<button
+							type="button"
+							aria-label=${`React ${emoji}`}
+							@click=${() => this.fire('office-chat-react', { messageId: m.id, emoji })}
+						>
+							${emoji}
+						</button>`,
 				)}
 				<button
 					type="button"

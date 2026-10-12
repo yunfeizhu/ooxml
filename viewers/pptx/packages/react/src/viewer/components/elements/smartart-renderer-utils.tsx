@@ -1,6 +1,6 @@
-import type { PptxSmartArtChrome } from 'pptx-viewer-core';
 import { buildChromeStyle, centeredSvgTextLines } from 'ooxml-ui/pptx';
 import type { CssStyleMap, RenderedGradient, SvgTextLine } from 'ooxml-ui/pptx';
+import type { PptxSmartArtChrome } from 'pptx-viewer-core';
 import React from 'react';
 
 /**

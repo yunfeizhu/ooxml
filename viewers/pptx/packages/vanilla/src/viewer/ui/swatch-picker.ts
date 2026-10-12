@@ -1,6 +1,6 @@
-import type { PptxThemeColorRef } from 'pptx-viewer-core';
 import type { ThemeColorPickerCommit } from 'ooxml-ui/pptx';
 import { OFFICE_COLOR_SWATCH_HEXES } from 'ooxml-ui/pptx';
+import type { PptxThemeColorRef } from 'pptx-viewer-core';
 
 import type { Translator } from '../i18n';
 import { createEl } from '../render';

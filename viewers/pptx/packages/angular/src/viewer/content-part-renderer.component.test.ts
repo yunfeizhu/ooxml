@@ -12,13 +12,12 @@
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
 
-import type { ContentPartPptxElement } from 'pptx-viewer-core';
-import { describe, expect, it } from 'vitest';
-
 import {
 	buildContentPartStrokes,
 	contentPartViewBox,
 } from 'ooxml-ui/pptx/render/content-part-strokes';
+import type { ContentPartPptxElement } from 'pptx-viewer-core';
+import { describe, expect, it } from 'vitest';
 
 const inked = (): ContentPartPptxElement =>
 	({

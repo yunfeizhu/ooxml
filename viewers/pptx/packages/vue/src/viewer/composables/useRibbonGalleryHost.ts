@@ -1,3 +1,4 @@
+import type { RibbonGalleryApplyResult, RibbonGalleryContext } from 'ooxml-ui/pptx';
 /**
  * useRibbonGalleryHost: the viewer-side half of the ribbon style galleries.
  *
@@ -14,7 +15,6 @@
  * inert host (no selection, no-op dispatch) when mounted standalone.
  */
 import type { PptxElement, PptxHandler, PptxTheme } from 'pptx-viewer-core';
-import type { RibbonGalleryApplyResult, RibbonGalleryContext } from 'ooxml-ui/pptx';
 import { computed, inject, provide } from 'vue';
 import type { ComputedRef, InjectionKey, Ref, ShallowRef } from 'vue';
 

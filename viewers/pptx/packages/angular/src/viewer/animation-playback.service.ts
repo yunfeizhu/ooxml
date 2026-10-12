@@ -28,8 +28,6 @@
  */
 
 import { DestroyRef, Injectable, inject, signal } from '@angular/core';
-import type { PptxSlide } from 'pptx-viewer-core';
-
 import {
 	advanceMainSequence,
 	clearPlaybackTimers,
@@ -41,6 +39,8 @@ import {
 	scheduleAutoAdvanceChain,
 } from 'ooxml-ui/pptx';
 import type { BuildRafHandle, ElementAnimationState, PlaybackContext } from 'ooxml-ui/pptx';
+import type { PptxSlide } from 'pptx-viewer-core';
+
 import { playAnimationSound, stopAnimationSound } from './animation-sound';
 
 @Injectable()

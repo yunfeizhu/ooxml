@@ -13,6 +13,12 @@
  * view concern; this module pairs each value with its Angular display label.
  */
 
+import {
+	ANIMATION_DIRECTION_LABEL_KEYS,
+	animationFor,
+	directionValuesFor,
+	effectiveDirection,
+} from 'ooxml-ui/pptx';
 import type {
 	PptxAnimationDirection,
 	PptxAnimationPreset,
@@ -21,13 +27,6 @@ import type {
 	PptxAnimationTimingCurve,
 	PptxElementAnimation,
 } from 'pptx-viewer-core';
-
-import {
-	ANIMATION_DIRECTION_LABEL_KEYS,
-	animationFor,
-	directionValuesFor,
-	effectiveDirection,
-} from 'ooxml-ui/pptx';
 
 // ── Pure authoring functions (consolidated in shared) ──
 export {

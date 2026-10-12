@@ -1,5 +1,5 @@
-import type { PptxTableCellStyle } from 'pptx-viewer-core';
 import { FILL_PATTERN_LABEL_KEYS, schemaLabel } from 'ooxml-ui/pptx';
+import type { PptxTableCellStyle } from 'pptx-viewer-core';
 
 import type { Translator } from '../../i18n';
 import { createInspectorSelect } from './controls-extra';

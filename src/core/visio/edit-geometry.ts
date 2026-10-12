@@ -8,11 +8,18 @@ import {
 	glueNewConnector,
 	glueParticipants,
 	planConnector,
+	proveConnector,
 	releaseDeletedGlue,
-	rerouteConnector,
 	topShape,
 	unglueConnector,
 } from './edit-connector';
+import {
+	applyConnectorEdit,
+	editRoutedConnector,
+	isRoutedConnector,
+	rerouteConnector,
+} from './edit-connector-reroute';
+import { isVisioConnectorEdit } from './edit-connector-commands';
 import { attribute } from './sheet';
 import { fail } from './package-common';
 import { visioFormulaCachedValue } from './formula';
@@ -54,6 +61,10 @@ export function applyGeometryEdit(
 	check();
 	const root = roots.get(edit.pageId);
 	if (!root) fail('EDIT_TARGET_NOT_FOUND', 'Page does not exist.');
+	if (isVisioConnectorEdit(edit)) return applyConnectorEdit(roots, root, edit, check);
+	const own = edit.type.startsWith('create-') ? undefined : topShape(root, edit.shapeId);
+	if (own && edit.type !== 'delete-shape' && isRoutedConnector(own))
+		return editRoutedConnector(roots, edit, check);
 	// Connectors glued to an edited 2D shape follow it; an edited connector is unglued first.
 	const glue = edit.type.startsWith('create-')
 		? { connectors: [] }
@@ -86,6 +97,10 @@ export function applyGeometryEdit(
 		const line = planConnector(root, edit);
 		const shape = createLine(root, document, line);
 		glueNewConnector(root, shape, line);
+		if (line.route && line.route !== 'straight')
+			return rerouteConnector(roots, edit.pageId, proveConnector(root, edit.shapeId), check, {
+				route: line.route,
+			});
 		if (line.connect) glueShapes.add(shape);
 		lineEditShapes.add(shape);
 		fixedLine = proveLocalLine(shape);

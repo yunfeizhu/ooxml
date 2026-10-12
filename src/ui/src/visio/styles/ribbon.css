@@ -10,16 +10,6 @@
 	min-width: 0;
 	border-bottom: 1px solid var(--_vv-border);
 }
-.qat {
-	display: flex;
-	align-items: center;
-	gap: 0;
-	padding: 0 6px;
-	border-right: 1px solid var(--_vv-border);
-}
-.qat office-ui-button {
-	--office-target-size: 30px;
-}
 .ribbon-head .ribbon-tabs {
 	flex: 0 1 auto;
 	min-width: 0;
@@ -39,6 +29,12 @@
 .ribbon-content {
 	min-height: 96px;
 	padding: 2px 2px 0;
+	/* Groups collapse into buttons when the window narrows (ribbon-overflow.ts), so the panel
+	   only scrolls when even those do not fit, and never shows a scrollbar. */
+	scrollbar-width: none;
+}
+.ribbon-content::-webkit-scrollbar {
+	display: none;
 }
 .ribbon-row {
 	display: flex;
@@ -179,17 +175,10 @@ office-ui-status-bar.status {
 	padding: 0 8px 0 12px;
 	font-size: 11px;
 	background: var(--_vv-surface);
-	color: var(--_vv-muted);
+	color: var(--_vv-ink);
 }
 office-ui-status-item[value=''] {
 	display: none;
-}
-office-ui-status-item[data-page-status] {
-	color: var(--_vv-ink);
-}
-.status-message {
-	flex: 1;
-	min-width: 0;
 }
 .viewport[data-tool='ellipse'],
 .viewport[data-tool='ellipse'] .paper [data-shape-id],
@@ -204,7 +193,9 @@ office-ui-status-item[data-page-status] {
 .viewport[data-tool='pencil'],
 .viewport[data-tool='pencil'] .paper [data-shape-id],
 .viewport[data-tool='connector'],
-.viewport[data-tool='connector'] .paper [data-shape-id] {
+.viewport[data-tool='connector'] .paper [data-shape-id],
+.viewport[data-tool='connection-point'],
+.viewport[data-tool='connection-point'] .paper [data-shape-id] {
 	cursor: crosshair;
 }
 .viewport[data-tool='ellipse'],
@@ -217,7 +208,7 @@ office-ui-status-item[data-page-status] {
 	touch-action: none;
 }
 /* Connector tool: the shape under the pointer is the glue target (Visio's green glue box). */
-.viewport[data-tool='connector'] .paper [data-connect-target='true'] > path[data-geometry] {
+.viewport .paper [data-connect-target='true'] > path[data-geometry] {
 	/* Drawing units (inches), like the canvas focus stroke; wins over a focused shape's dashes. */
 	stroke: var(--_vv-accent) !important;
 	stroke-width: 0.05 !important;
@@ -242,12 +233,15 @@ path.draw-preview {
 		linear-gradient(to top, var(--_vv-grid-major) 1px, transparent 1px),
 		linear-gradient(to right, var(--_vv-grid-minor) 1px, transparent 1px),
 		linear-gradient(to top, var(--_vv-grid-minor) 1px, transparent 1px);
+	/* The page's grid (Ruler & Grid): a line every step, a stronger one every fourth step. */
+	--_vv-grid-step-x: var(--_vv-grid-x, calc(var(--vv-inch, 96px) / 4));
+	--_vv-grid-step-y: var(--_vv-grid-y, calc(var(--vv-inch, 96px) / 4));
 	background-size:
-		var(--vv-inch, 96px) var(--vv-inch, 96px),
-		var(--vv-inch, 96px) var(--vv-inch, 96px),
-		calc(var(--vv-inch, 96px) / 4) calc(var(--vv-inch, 96px) / 4),
-		calc(var(--vv-inch, 96px) / 4) calc(var(--vv-inch, 96px) / 4);
-	background-position: left bottom;
+		calc(var(--_vv-grid-step-x) * 4) calc(var(--_vv-grid-step-y) * 4),
+		calc(var(--_vv-grid-step-x) * 4) calc(var(--_vv-grid-step-y) * 4),
+		var(--_vv-grid-step-x) var(--_vv-grid-step-y),
+		var(--_vv-grid-step-x) var(--_vv-grid-step-y);
+	background-position: left var(--_vv-grid-origin-x, 0px) bottom var(--_vv-grid-origin-y, 0px);
 }
 :host(:fullscreen) {
 	width: 100vw;
@@ -259,9 +253,6 @@ path.draw-preview {
 		flex: 1;
 		min-width: 0;
 	}
-	.qat office-ui-button {
-		--office-target-size: 44px;
-	}
 	.ribbon-tools .tools-content office-ui-ribbon-group {
 		width: 100%;
 	}
@@ -269,10 +260,7 @@ path.draw-preview {
 		gap: 4px;
 		min-height: 48px;
 	}
-	office-ui-status-bar .notes-strip,
-	office-ui-status-bar .status-message,
-	office-ui-status-item[data-shape-status],
-	office-ui-status-item[data-page-status] {
+	office-ui-status-item:not([data-page-status]) {
 		display: none;
 	}
 	.zoom-controls {
@@ -296,4 +284,20 @@ path.draw-preview {
 	.tell-me {
 		display: none;
 	}
+}
+
+/*
+ * Quick Styles, Themes and Variants: Visio's row of tiles with a More button. The viewer's width
+ * sets data-inline-tiles (ribbon-inline-galleries.ts); the tiles beyond it stay in the gallery.
+ */
+[data-inline-gallery][mode='inline'] {
+	align-self: center;
+}
+[data-inline-tiles='1'] .strip .tile:nth-child(n + 2),
+[data-inline-tiles='2'] .strip .tile:nth-child(n + 3),
+[data-inline-tiles='3'] .strip .tile:nth-child(n + 4),
+[data-inline-tiles='4'] .strip .tile:nth-child(n + 5),
+[data-inline-tiles='5'] .strip .tile:nth-child(n + 6),
+[data-inline-tiles='6'] .strip .tile:nth-child(n + 7) {
+	display: none;
 }

@@ -337,11 +337,7 @@ export {
 	resolveProfileInitial,
 	saveViewerProfile,
 } from 'ooxml-ui/pptx';
-export type {
-	AccountAuthConfig,
-	LocalStorageUsageSummary,
-	ViewerProfile,
-} from 'ooxml-ui/pptx';
+export type { AccountAuthConfig, LocalStorageUsageSummary, ViewerProfile } from 'ooxml-ui/pptx';
 export { KeepAnnotationsDialogComponent } from './keep-annotations-dialog.component';
 export { AutosaveRecoveryDialogComponent } from './autosave-recovery-dialog.component';
 export { SignatureStrippedDialogComponent } from './signature-stripped-dialog.component';

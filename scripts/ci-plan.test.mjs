@@ -9,7 +9,9 @@ import {
 	PPTX_E2E_SHARDS,
 	VIEWERS,
 	consumersOfArea,
+	onBasePlan,
 	plan,
+	plannedFiles,
 	shardsFor,
 	viewersOfArea,
 } from './ci-plan.mjs';
@@ -34,7 +36,10 @@ test('UI typechecks reuse core declarations from the build job', () => {
 	const job = workflow.match(/^  typecheck-ui:\r?\n([\s\S]*?)(?=^  \S)/m)?.[1];
 	assert.ok(job, 'the workflow has a UI typecheck job');
 	assert.match(job, /needs:\s*\[[^\]]*\bbuild\b[^\]]*\]/u);
-	assert.match(job, /download-artifact@\S+\s+with:\s+name:\s*core-dist\s+path:\s*src\/core\/dist/u);
+	assert.match(
+		job,
+		/download-artifact@\S+(?: +#[^\r\n]*)?\s+with:\s+name:\s*core-dist\s+path:\s*src\/core\/dist/u,
+	);
 	assert.ok(job.indexOf('download-artifact') < job.indexOf('src/ui typecheck'));
 });
 
@@ -326,4 +331,29 @@ test('PowerPoint product UI reaches its own bindings without unrelated viewers',
 	assert.deepEqual(viewers(result), []);
 	assert.ok(result.pptx.tests.includes('angular'));
 	assert.ok(result.pptx.tests.includes('vanilla'));
+});
+
+test('manual runs are full unless they ask for the changes since a base', () => {
+	const diff = (base) => (base === 'abc' ? ['src/core/xlsx/model.ts'] : undefined);
+	assert.equal(plannedFiles('schedule', 'abc', 'changed', diff), undefined);
+	assert.equal(plannedFiles('workflow_dispatch', 'abc', 'full', diff), undefined);
+	assert.equal(plannedFiles('workflow_dispatch', '', 'changed', diff), undefined);
+	assert.equal(plannedFiles('workflow_dispatch', undefined, undefined, diff), undefined);
+	assert.deepEqual(plannedFiles('workflow_dispatch', 'abc', 'changed', diff), [
+		'src/core/xlsx/model.ts',
+	]);
+	// A base git cannot diff (not in a fork's history) falls back to a full run.
+	assert.equal(plannedFiles('workflow_dispatch', 'missing', 'changed', diff), undefined);
+	assert.deepEqual(plannedFiles('push', 'abc', undefined, diff), ['src/core/xlsx/model.ts']);
+});
+
+test('a run on the base tests the core sources the branch changed, with vitest related', () => {
+	const changed = ['src/core/xlsx/model.ts', 'viewers/docx/docs/index.md'];
+	const result = onBasePlan(plan(changed), changed);
+	assert.equal(result.test.mode, 'related');
+	assert.deepEqual(result.test.related, ['xlsx/model.ts']);
+	const viewerOnly = ['viewers/docx/packages/react/src/index.ts'];
+	const none = onBasePlan(plan(viewerOnly), viewerOnly);
+	assert.equal(none.test.run, false);
+	assert.deepEqual(none.test.shards, []);
 });

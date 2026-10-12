@@ -2,6 +2,8 @@ import {
 	defineXlsxEditor,
 	type EditorLocaleInput,
 	type EditorThemeMode,
+	type RibbonAddInCommandDetail,
+	type RibbonAddInTab,
 	type SelectionChangeDetail,
 	type XlsxCollaborationOptions,
 	type XlsxCollaborationState,
@@ -37,6 +39,8 @@ export interface EditorProps {
 	showFormulaBar?: boolean | undefined;
 	/** Ribbon controls to hide, by stable id. */
 	hiddenActions?: readonly string[] | undefined;
+	/** Tabs the host adds after Excel's own, as an Office add-in does. */
+	ribbonAddIns?: readonly RibbonAddInTab[] | undefined;
 	/** Theme token overrides, applied as `--xve-*` custom properties. */
 	themeColors?: XlsxThemeColors | undefined;
 	/**
@@ -55,6 +59,8 @@ export interface EditorEventOptions {
 	onReadOnlyChange?: ((readOnly: boolean) => void) | undefined;
 	/** The user changed the shown ribbon commands (File > Options > Customize Ribbon). */
 	onRibbonCustomize?: ((hiddenActions: string[]) => void) | undefined;
+	/** A command of a host tab (`ribbonAddIns`) was chosen. */
+	onRibbonAddIn?: ((detail: RibbonAddInCommandDetail) => void) | undefined;
 	/** Sharing started or stopped, the connection changed, or someone joined or left. */
 	onCollaborationChange?: ((state: XlsxCollaborationState) => void) | undefined;
 	/** Called once, after the element is created and attached. */
@@ -75,6 +81,7 @@ export const EDITOR_PROP_KEYS = [
 	'showToolbar',
 	'showFormulaBar',
 	'hiddenActions',
+	'ribbonAddIns',
 	'themeColors',
 	'collaboration',
 ] as const satisfies readonly (keyof EditorProps)[];
@@ -92,6 +99,7 @@ export const EDITOR_EVENT_NAMES = [
 	'dirty-change',
 	'readonly-change',
 	'ribbon-customize',
+	'office-ribbon-add-in',
 	'collaboration-change',
 ] as const satisfies readonly XlsxEditorEventName[];
 export type EditorEventName = (typeof EDITOR_EVENT_NAMES)[number];
@@ -103,6 +111,7 @@ export interface EditorEventHandlers {
 	'dirty-change': EditorEventOptions['onDirtyChange'];
 	'readonly-change': EditorEventOptions['onReadOnlyChange'];
 	'ribbon-customize': EditorEventOptions['onRibbonCustomize'];
+	'office-ribbon-add-in': EditorEventOptions['onRibbonAddIn'];
 	'collaboration-change': EditorEventOptions['onCollaborationChange'];
 	ready?: EditorEventOptions['onReady'];
 }
@@ -125,6 +134,7 @@ export function eventOptions(handlers: EditorEventHandlers): EditorEventOptions 
 		onDirtyChange: handlers['dirty-change'],
 		onReadOnlyChange: handlers['readonly-change'],
 		onRibbonCustomize: handlers['ribbon-customize'],
+		onRibbonAddIn: handlers['office-ribbon-add-in'],
 		onCollaborationChange: handlers['collaboration-change'],
 		onReady: handlers.ready,
 	};
@@ -214,6 +224,7 @@ export function mountEditor(host: HTMLElement, initial: EditorOptions = {}): Edi
 		'dirty-change': (event) => options.onDirtyChange?.(event.detail.dirty),
 		'readonly-change': (event) => options.onReadOnlyChange?.(event.detail.readOnly),
 		'ribbon-customize': (event) => options.onRibbonCustomize?.([...event.detail.hiddenActions]),
+		'office-ribbon-add-in': (event) => options.onRibbonAddIn?.(event.detail),
 		'collaboration-change': (event) => options.onCollaborationChange?.(event.detail),
 	};
 	const listen = (add: boolean) => {
@@ -241,6 +252,9 @@ export function mountEditor(host: HTMLElement, initial: EditorOptions = {}): Edi
 				element.showFormulaBar = next.showFormulaBar ?? true;
 			if (changed('hiddenActions', next.hiddenActions, sameList))
 				element.hiddenActions = [...(next.hiddenActions ?? [])];
+			// The element keeps panels whose look is unchanged, so a fresh array per render is cheap.
+			if (changed('ribbonAddIns', next.ribbonAddIns))
+				element.ribbonAddIns = next.ribbonAddIns ?? [];
 			if (changed('themeColors', next.themeColors, sameThemeColors))
 				element.themeColors = { ...next.themeColors };
 			// The element renames itself on File > Open; only forward a name the parent changed.

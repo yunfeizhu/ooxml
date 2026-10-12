@@ -1,3 +1,4 @@
+import { takePendingCaretPoint } from 'ooxml-ui/pptx';
 // oxlint-disable react-hooks/rules-of-hooks -- Vue composables, not React hooks
 /**
  * Selecting inside a group, driven through the REAL composables (shared
@@ -9,7 +10,6 @@
  * pointer, and Escape steps back out to the group.
  */
 import type { PptxElement, PptxSlide } from 'pptx-viewer-core';
-import { takePendingCaretPoint } from 'ooxml-ui/pptx';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { computed, ref, shallowRef } from 'vue';
 

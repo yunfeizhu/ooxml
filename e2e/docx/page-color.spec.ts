@@ -15,7 +15,7 @@ test('Layout > Page Color paints the page, saves w:background and undoes', async
 	const caret = editor.locator('[aria-label="Page color"] + [data-split-caret]');
 	await reveal(editor, caret);
 	await caret.click();
-	await editor.getByRole('menuitem', { name: 'Light Green', exact: true }).click();
+	await editor.getByRole('menuitemradio', { name: 'Light Green', exact: true }).click();
 	await expect(paper).toHaveCSS('background-color', 'rgb(146, 208, 80)');
 
 	const pending = page.waitForEvent('download');

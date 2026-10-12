@@ -7,7 +7,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { after, before, describe, it } from 'node:test';
 import { createTeamsClient } from 'ooxml-core/teams';
-import WebSocket from 'ws';
+import { WebSocket } from 'ws';
 import { createTeamsServer } from './index.mjs';
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
@@ -33,7 +33,13 @@ describe('teams server', () => {
 		...extra,
 	});
 	const client = (name, workspaceId, extra = {}) => {
-		const c = createTeamsClient({ workspaceId, user: { id: name, name }, config: config(), WebSocket, ...extra });
+		const c = createTeamsClient({
+			workspaceId,
+			user: { id: name, name },
+			config: config(),
+			WebSocket,
+			...extra,
+		});
 		clients.push(c);
 		return c;
 	};
@@ -68,7 +74,10 @@ describe('teams server', () => {
 		const y = client('yan', 'room-y');
 		x.createChannel('Only X');
 		await sleep(300);
-		assert.equal(y.getState().channels.some((c) => c.name === 'Only X'), false);
+		assert.equal(
+			y.getState().channels.some((c) => c.name === 'Only X'),
+			false,
+		);
 	});
 
 	it('persists a room across a server restart', async () => {
@@ -108,7 +117,10 @@ describe('teams server', () => {
 
 	it('stores and serves files, sanitising names and rejecting oversize bodies', async () => {
 		const base = `http://127.0.0.1:${port}`;
-		const up = await fetch(`${base}/files/ws1/${encodeURIComponent('../Q3 Plan.docx')}`, { method: 'POST', body: 'PK-data' });
+		const up = await fetch(`${base}/files/ws1/${encodeURIComponent('../Q3 Plan.docx')}`, {
+			method: 'POST',
+			body: 'PK-data',
+		});
 		assert.equal(up.status, 201);
 		const { url } = await up.json();
 		assert.ok(!url.includes('..') || url.startsWith('/files/ws1/'));
@@ -116,7 +128,9 @@ describe('teams server', () => {
 		assert.equal(got.status === 200 || got.status === 404, true);
 		const small = createTeamsServer({ dataDir: dir, maxFileBytes: 10 });
 		const sp = (await small.listen(0, '127.0.0.1')).port;
-		await assert.rejects(fetch(`http://127.0.0.1:${sp}/files/ws1/big.bin`, { method: 'POST', body: 'x'.repeat(5000) }));
+		await assert.rejects(
+			fetch(`http://127.0.0.1:${sp}/files/ws1/big.bin`, { method: 'POST', body: 'x'.repeat(5000) }),
+		);
 		await small.close();
 		assert.equal((await fetch(`${base}/files/ws1/nope.docx`)).status, 404);
 		assert.equal((await fetch(`${base}/health`)).status, 200);
@@ -147,16 +161,27 @@ describe('teams server with a token and origin list', () => {
 
 	it('refuses sockets without the token or from another origin', async () => {
 		assert.equal((await connect('/sync/r1', { Origin: 'https://app.example' })).ok, false);
-		assert.equal((await connect('/sync/r1?token=wrong', { Origin: 'https://app.example' })).ok, false);
-		assert.equal((await connect('/sync/r1?token=s3cret', { Origin: 'https://evil.example' })).ok, false);
+		assert.equal(
+			(await connect('/sync/r1?token=wrong', { Origin: 'https://app.example' })).ok,
+			false,
+		);
+		assert.equal(
+			(await connect('/sync/r1?token=s3cret', { Origin: 'https://evil.example' })).ok,
+			false,
+		);
 		const good = await connect('/signal/r1?token=s3cret', { Origin: 'https://app.example' });
 		assert.equal(good.ok, true);
 		good.ws.close();
 	});
 
 	it('refuses invalid room names and unauthenticated file requests', async () => {
-		assert.equal((await connect('/sync/..%2F..%2Fetc?token=s3cret', { Origin: 'https://app.example' })).ok, false);
-		const noAuth = await fetch(`http://127.0.0.1:${port}/files/ws1/a.txt`, { headers: { Origin: 'https://app.example' } });
+		assert.equal(
+			(await connect('/sync/..%2F..%2Fetc?token=s3cret', { Origin: 'https://app.example' })).ok,
+			false,
+		);
+		const noAuth = await fetch(`http://127.0.0.1:${port}/files/ws1/a.txt`, {
+			headers: { Origin: 'https://app.example' },
+		});
 		assert.equal(noAuth.status, 401);
 		const ok = await fetch(`http://127.0.0.1:${port}/files/ws1/a.txt`, {
 			method: 'POST',
@@ -171,7 +196,10 @@ describe('teams server with a token and origin list', () => {
 		const headers = { Origin: 'https://app.example' };
 		const auth = { ...headers, Authorization: 'Bearer s3cret' };
 		assert.equal((await fetch(`${base}/files/ws1/a.txt?token=s3cret`, { headers })).status, 401);
-		assert.equal((await fetch(`${base}/files/link/ws1/a.txt`, { method: 'POST', headers })).status, 401);
+		assert.equal(
+			(await fetch(`${base}/files/link/ws1/a.txt`, { method: 'POST', headers })).status,
+			401,
+		);
 		const issued = await fetch(`${base}/files/link/ws1/a.txt`, { method: 'POST', headers: auth });
 		assert.equal(issued.status, 200);
 		const { url } = await issued.json();
@@ -182,7 +210,13 @@ describe('teams server with a token and origin list', () => {
 		assert.equal(await got.text(), 'hi');
 		// The signature is bound to its file, to reading, and to its expiry.
 		assert.equal((await fetch(`${base}${url.replace('a.txt', 'b.txt')}`, { headers })).status, 401);
-		assert.equal((await fetch(`${base}${url}`, { method: 'POST', body: 'x', headers })).status, 401);
-		assert.equal((await fetch(`${base}${url.replace(/exp=\d+/u, 'exp=1')}`, { headers })).status, 401);
+		assert.equal(
+			(await fetch(`${base}${url}`, { method: 'POST', body: 'x', headers })).status,
+			401,
+		);
+		assert.equal(
+			(await fetch(`${base}${url.replace(/exp=\d+/u, 'exp=1')}`, { headers })).status,
+			401,
+		);
 	});
 });

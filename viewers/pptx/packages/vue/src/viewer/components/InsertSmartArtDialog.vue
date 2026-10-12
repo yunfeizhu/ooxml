@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import type { PptxElement, SmartArtLayout, SmartArtPptxElement } from 'pptx-viewer-core';
 import { buildSmartArtPresetData } from 'ooxml-ui/pptx';
+import type { PptxElement, SmartArtLayout, SmartArtPptxElement } from 'pptx-viewer-core';
 import { computed, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 

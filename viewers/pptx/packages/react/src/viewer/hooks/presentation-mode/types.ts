@@ -1,4 +1,3 @@
-import type { PptxAction, PptxElement, PptxSlide, PptxSlideTransition } from 'pptx-viewer-core';
 import type {
 	MorphTransitionPlan,
 	PresentationPointerTool,
@@ -6,6 +5,7 @@ import type {
 	RunProgramNotice,
 	ZoomNavigationTarget,
 } from 'ooxml-ui/pptx';
+import type { PptxAction, PptxElement, PptxSlide, PptxSlideTransition } from 'pptx-viewer-core';
 
 import type { ViewerMode, PresentationAnimationRuntime } from '../../types';
 import type { ElementAnimationState } from '../../utils/animation-timeline';

@@ -1,0 +1,3 @@
+# One line ending for every checkout: oxfmt, oxlint and the generated files assume LF, and a
+# Windows checkout with core.autocrlf=true otherwise has every file reported as unformatted.
+* text=auto eol=lf

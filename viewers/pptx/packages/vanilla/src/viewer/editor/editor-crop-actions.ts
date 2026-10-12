@@ -1,4 +1,3 @@
-import type { PptxElement, PptxSlide } from 'pptx-viewer-core';
 import {
 	cancelCropUpdate,
 	canCropElement,
@@ -11,6 +10,7 @@ import {
 	startCropSession,
 } from 'ooxml-ui/pptx';
 import type { CropElementUpdate, CropRestoreUpdate, NaturalImageSize } from 'ooxml-ui/pptx';
+import type { PptxElement, PptxSlide } from 'pptx-viewer-core';
 
 import type { Store, ViewerState } from '../state';
 import { getActiveElements, replaceActiveElements } from './editor-active-elements';

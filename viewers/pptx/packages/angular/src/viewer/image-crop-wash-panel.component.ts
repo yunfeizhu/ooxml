@@ -8,10 +8,10 @@ import {
 	CUSTOM_ELEMENTS_SCHEMA,
 } from '@angular/core';
 import { TranslatePipe } from '@ngx-translate/core';
+import { cropResetPatch, cropResetState } from 'ooxml-ui/pptx';
 import type { PptxCropShape, PptxElement, PptxImageEffects } from 'pptx-viewer-core';
 import { isImageLikeElement } from 'pptx-viewer-core';
 
-import { cropResetPatch, cropResetState } from 'ooxml-ui/pptx';
 import { RecentColorsService } from './recent-colors.service';
 
 const SIDES = ['Left', 'Top', 'Right', 'Bottom'] as const;

@@ -1,5 +1,5 @@
-import type { PptxSlide } from 'pptx-viewer-core';
 import { PRESENTER_LAYOUT_METRICS, PRESENTER_NAVIGATOR_LABEL_KEYS } from 'ooxml-ui/pptx';
+import type { PptxSlide } from 'pptx-viewer-core';
 
 import type { Translator } from '../i18n';
 import { sizePreviewHost } from './presenter-preview-box';

@@ -120,6 +120,7 @@ describe('shared option keys', () => {
 			'dirty-change': undefined,
 			'readonly-change': undefined,
 			'ribbon-customize': undefined,
+			'office-ribbon-add-in': undefined,
 			'collaboration-change': undefined,
 		});
 		options.onWorkbookChange?.(workbook);

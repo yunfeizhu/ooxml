@@ -1,6 +1,6 @@
+import type { EditPointsElementPatch } from 'ooxml-ui/pptx';
 // @vitest-environment happy-dom
 import type { PptxElement, ShapePptxElement } from 'pptx-viewer-core';
-import type { EditPointsElementPatch } from 'ooxml-ui/pptx';
 import React, { act } from 'react';
 import { createRoot } from 'react-dom/client';
 import type { Root } from 'react-dom/client';

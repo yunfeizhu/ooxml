@@ -1,3 +1,8 @@
+import {
+	isDialogAvailable,
+	printPropertiesFrameSlides,
+	printPropertiesSlidesPerPage,
+} from 'ooxml-ui/pptx';
 /**
  * ViewerDialogGroup: Renders all modal / dialog overlays used by the
  * PowerPoint viewer.  Keeps the orchestrator component focused on layout.
@@ -9,11 +14,6 @@ import type {
 	PptxAppProperties,
 	PptxCustomProperty,
 } from 'pptx-viewer-core';
-import {
-	isDialogAvailable,
-	printPropertiesFrameSlides,
-	printPropertiesSlidesPerPage,
-} from 'ooxml-ui/pptx';
 
 import {
 	PasswordProtectionDialog,

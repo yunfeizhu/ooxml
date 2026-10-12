@@ -1,4 +1,3 @@
-import type { PptxSlide } from 'pptx-viewer-core';
 import type {
 	CollabLoadOrigin,
 	CollaborationConfig,
@@ -14,6 +13,7 @@ import {
 	observeExternalCollaborationReadiness,
 	readSlidesFromYDoc,
 } from 'ooxml-ui/pptx';
+import type { PptxSlide } from 'pptx-viewer-core';
 
 import type { CollaborationDeps } from './collaboration-deps';
 import {

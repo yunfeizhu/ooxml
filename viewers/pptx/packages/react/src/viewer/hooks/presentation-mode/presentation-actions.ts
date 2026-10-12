@@ -1,5 +1,5 @@
-import type { PptxAction } from 'pptx-viewer-core';
 import { runPresentationAction } from 'ooxml-ui/pptx';
+import type { PptxAction } from 'pptx-viewer-core';
 
 import type { ViewerMode } from '../../types';
 

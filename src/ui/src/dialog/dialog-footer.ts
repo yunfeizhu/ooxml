@@ -73,17 +73,18 @@ export class OfficeUiDialogFooter extends OfficeElement {
 				${repeat(
 					this.model.actions,
 					(action) => action.id,
-					(action) => html`<button
-						type="button"
-						class=${this.classes(action)}
-						data-action=${action.id}
-						data-testid=${ifDefined(action.testId)}
-						title=${ifDefined(action.title)}
-						aria-busy=${ifDefined(action.busy ? 'true' : undefined)}
-						?disabled=${action.disabled === true || action.busy === true}
-						@click=${() => this.fire(requestEvent, { id: action.id })}
-						>${action.icon ? glyph(action.icon, 'icon') : ''}${action.label}</button
-					>`,
+					(action) =>
+						html`<button
+							type="button"
+							class=${this.classes(action)}
+							data-action=${action.id}
+							data-testid=${ifDefined(action.testId)}
+							title=${ifDefined(action.title)}
+							aria-busy=${ifDefined(action.busy ? 'true' : undefined)}
+							?disabled=${action.disabled === true || action.busy === true}
+							@click=${() => this.fire(requestEvent, { id: action.id })}
+							>${action.icon ? glyph(action.icon, 'icon') : ''}${action.label}</button
+						>`,
 				)}
 			</div>
 		`;

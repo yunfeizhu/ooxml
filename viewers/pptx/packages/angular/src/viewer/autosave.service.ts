@@ -17,7 +17,6 @@
 
 import { DestroyRef, effect, inject, Injectable, Injector, signal } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-
 import {
 	autosaveSnapshotMark,
 	resolveAutosaveIntervalMs,

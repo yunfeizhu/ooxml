@@ -1,4 +1,12 @@
 import type {
+	AnimationGroup,
+	GradientState,
+	InlineTextSelection,
+	SlideSizeEmu,
+	SlideSizeRescaleMode,
+	TextAdvancedChanges,
+} from 'ooxml-ui/pptx';
+import type {
 	PptxAnimationPreset,
 	PptxImageEffects,
 	PptxChartData,
@@ -31,14 +39,6 @@ import type {
 	TextStyle,
 	ShapeStyle,
 } from 'pptx-viewer-core';
-import type {
-	AnimationGroup,
-	GradientState,
-	InlineTextSelection,
-	SlideSizeEmu,
-	SlideSizeRescaleMode,
-	TextAdvancedChanges,
-} from 'ooxml-ui/pptx';
 
 import type { AnimationTimingPatch } from '../../editor/editor-animation-actions';
 import type { GeometryPatch } from '../../editor/editor-edit-ops';

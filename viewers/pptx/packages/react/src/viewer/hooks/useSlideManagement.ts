@@ -1,9 +1,3 @@
-/**
- * useSlideManagement: Slide CRUD operations: add, move, delete,
- * duplicate, toggle-hide, insert-from-layout, and context menu.
- */
-import type { PptxElement, PptxHandler, PptxSlide, PptxTheme } from 'pptx-viewer-core';
-import { duplicateSlide } from 'pptx-viewer-core';
 import {
 	buildSlideTemplateSlide,
 	createBlankSlide,
@@ -11,6 +5,12 @@ import {
 	templateSchemeFromTheme,
 } from 'ooxml-ui/pptx';
 import type { SlideTemplateId } from 'ooxml-ui/pptx';
+/**
+ * useSlideManagement: Slide CRUD operations: add, move, delete,
+ * duplicate, toggle-hide, insert-from-layout, and context menu.
+ */
+import type { PptxElement, PptxHandler, PptxSlide, PptxTheme } from 'pptx-viewer-core';
+import { duplicateSlide } from 'pptx-viewer-core';
 import type React from 'react';
 
 import type { EditorHistoryResult } from './useEditorHistory';

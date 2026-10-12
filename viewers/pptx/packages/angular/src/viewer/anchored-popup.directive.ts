@@ -1,5 +1,4 @@
 import { AfterViewInit, Directive, ElementRef, inject, input, OnDestroy } from '@angular/core';
-
 import { computeAnchoredPopupPosition } from 'ooxml-ui/pptx';
 
 /**

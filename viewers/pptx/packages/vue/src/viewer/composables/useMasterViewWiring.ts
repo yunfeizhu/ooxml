@@ -1,3 +1,18 @@
+import {
+	buildInlineTextCommitPatch,
+	deleteMasterViewElements,
+	masterViewBackgroundColor,
+	masterViewElements,
+	masterViewPseudoSlide,
+	setMasterViewBackgroundColor,
+	updateMasterViewElement,
+} from 'ooxml-ui/pptx';
+import type {
+	InlineTextEditSnapshot,
+	MasterViewDocument,
+	MasterViewTarget,
+	MasterViewWrite,
+} from 'ooxml-ui/pptx';
 /**
  * useMasterViewWiring: View > Master Views (slide / notes / handout masters).
  *
@@ -14,21 +29,6 @@ import type {
 	PptxSlide,
 	PptxSlideMaster,
 } from 'pptx-viewer-core';
-import {
-	buildInlineTextCommitPatch,
-	deleteMasterViewElements,
-	masterViewBackgroundColor,
-	masterViewElements,
-	masterViewPseudoSlide,
-	setMasterViewBackgroundColor,
-	updateMasterViewElement,
-} from 'ooxml-ui/pptx';
-import type {
-	InlineTextEditSnapshot,
-	MasterViewDocument,
-	MasterViewTarget,
-	MasterViewWrite,
-} from 'ooxml-ui/pptx';
 import type { ComputedRef, ShallowRef } from 'vue';
 import { computed } from 'vue';
 

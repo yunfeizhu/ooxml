@@ -1,6 +1,6 @@
 {
 	"name": "xlsx-vue-viewer",
-	"version": "0.5.1",
+	"version": "0.6.0",
 	"description": "Vue 3 component for the Excel spreadsheet editor. Self-contained: includes the editor, the formula engine and the legacy .xls reader.",
 	"keywords": [
 		"editor",

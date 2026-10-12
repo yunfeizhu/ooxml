@@ -18,13 +18,13 @@
  * inputs is exactly what the outline is.
  */
 import { X } from 'lucide-vue-next';
-import type { PptxSlide } from 'pptx-viewer-core';
 import {
 	OUTLINE_LEVEL_ATTR,
 	OUTLINE_ROW_ATTR,
 	OUTLINE_SLIDE_ATTR,
 	OUTLINE_VIEW_ATTR,
 } from 'ooxml-ui/pptx';
+import type { PptxSlide } from 'pptx-viewer-core';
 import { useI18n } from 'vue-i18n';
 
 import { useOutlineView } from '../composables/useOutlineView';

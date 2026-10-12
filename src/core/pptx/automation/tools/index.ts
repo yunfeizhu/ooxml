@@ -96,12 +96,7 @@ export type {
 export { convertToMarkdown } from './conversion-tools';
 export type { ConvertToMarkdownParams, ConvertToMarkdownResult } from './conversion-tools';
 
-export {
-	getThemeInfo,
-	applyThemePreset,
-	updateThemeColors,
-	updateThemeFonts,
-} from './theme-tools';
+export { getThemeInfo, applyThemePreset, updateThemeColors, updateThemeFonts } from './theme-tools';
 export type {
 	ThemeInfo,
 	ApplyThemePresetParams,

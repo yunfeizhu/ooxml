@@ -60,11 +60,7 @@ export type { AutosaveStatus } from './viewer/state/autosave.svelte';
 // pre-crash snapshot back itself on load ("Recover unsaved changes?", see the
 // `autosave` prop docs); these stay exported for hosts that want to inspect,
 // list or drop snapshots on their own terms.
-export {
-	deleteAutosaveSnapshot,
-	getAutosaveSnapshot,
-	listAutosaveSnapshots,
-} from 'ooxml-ui/pptx';
+export { deleteAutosaveSnapshot, getAutosaveSnapshot, listAutosaveSnapshots } from 'ooxml-ui/pptx';
 export type { AutosaveRecord } from 'ooxml-ui/pptx';
 export { loadPresentationDeck, parsePresentationSessionId } from 'ooxml-ui/pptx';
 // Session restore (opt-in, host-driven): remember the deck the host has open,

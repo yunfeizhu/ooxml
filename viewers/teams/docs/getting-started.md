@@ -46,15 +46,15 @@ npm install openteams-vanilla-viewer
 
 :::
 
-| Package                    | For                              | Peer dependency |
-| -------------------------- | -------------------------------- | --------------- |
-| `openteams-react-viewer`   | React 18+                        | `react`         |
-| `openteams-vue-viewer`     | Vue 3.4+                         | `vue`           |
-| `openteams-angular-viewer` | Angular 17+ (standalone)         | `@angular/core` |
-| `openteams-svelte-viewer`  | Svelte 5                         | `svelte`        |
-| `openteams-solid-viewer`   | SolidJS 1.9                      | `solid-js`      |
-| `openteams-vanilla-viewer` | no framework (`<teams-app>`)     | none            |
-| `openteams-server`         | the reference server (Node 22+)  | none            |
+| Package                    | For                             | Peer dependency |
+| -------------------------- | ------------------------------- | --------------- |
+| `openteams-react-viewer`   | React 18+                       | `react`         |
+| `openteams-vue-viewer`     | Vue 3.4+                        | `vue`           |
+| `openteams-angular-viewer` | Angular 17+ (standalone)        | `@angular/core` |
+| `openteams-svelte-viewer`  | Svelte 5                        | `svelte`        |
+| `openteams-solid-viewer`   | SolidJS 1.9                     | `solid-js`      |
+| `openteams-vanilla-viewer` | no framework (`<teams-app>`)    | none            |
+| `openteams-server`         | the reference server (Node 22+) | none            |
 
 Use one binding per page: each registers the same custom elements. The names are `openteams-*`
 because the plain `openteams` name on npm belongs to an unrelated project.
@@ -117,10 +117,10 @@ in local mode.
 
 ## 3. Choose where state lives
 
-| Mode     | `config`                                              | What happens                                                                                                   |
-| -------- | ----------------------------------------------------- | -------------------------------------------------------------------------------------------------------------- |
-| `local`  | `{ mode: 'local', iceServers: [...] }`                | No server. Tabs of one browser share chat, presence and calls over `BroadcastChannel`. Files are shared by name only. |
-| `server` | `{ mode: 'server', syncUrl, signalingUrl, iceServers, token? }` | Your server syncs the shared document, relays call signaling and (optionally) stores files.          |
+| Mode     | `config`                                                        | What happens                                                                                                          |
+| -------- | --------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- |
+| `local`  | `{ mode: 'local', iceServers: [...] }`                          | No server. Tabs of one browser share chat, presence and calls over `BroadcastChannel`. Files are shared by name only. |
+| `server` | `{ mode: 'server', syncUrl, signalingUrl, iceServers, token? }` | Your server syncs the shared document, relays call signaling and (optionally) stores files.                           |
 
 Local mode is what the [live demos](/demos) use. For anything with more than one browser, run a
 server:
@@ -140,7 +140,11 @@ Each binding also exposes a raw hook over the core client: state in, plain actio
 ```tsx
 import { useTeams } from 'openteams-react-viewer';
 
-const { client, state } = useTeams({ workspaceId: 'acme', user: { id: 'u1', name: 'Ada' }, config });
+const { client, state } = useTeams({
+	workspaceId: 'acme',
+	user: { id: 'u1', name: 'Ada' },
+	config,
+});
 state?.channels.map((c) => <button onClick={() => client!.select(c.id)}>{c.name}</button>);
 ```
 

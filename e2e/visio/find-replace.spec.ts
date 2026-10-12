@@ -1,7 +1,8 @@
 import { expect, test, type Locator } from '@playwright/test';
 import type { VisioViewerElement } from 'ooxml-ui/visio';
 import { replaceFixture } from '../../src/ui/src/visio/__fixtures__/replace-viewer';
-import { downloadCopy } from './ribbon';
+import { downloadCopy, ribbonGroup } from './ribbon';
+import { openDemo } from './demo-page';
 
 const idle = (viewer: Locator) =>
 	expect
@@ -33,6 +34,7 @@ async function scope(viewer: Locator, name: string) {
 }
 async function selectAll(viewer: Locator) {
 	await viewer.getByRole('tab', { name: 'Home', exact: true }).click();
+	await ribbonGroup(viewer, 'Editing');
 	await viewer.getByRole('button', { name: 'Select', exact: true }).click();
 	await viewer.locator('[command="select-all"]').click();
 }
@@ -44,7 +46,10 @@ for (const framework of ['vanilla', 'react', 'vue', 'angular', 'svelte', 'solid'
 		const errors: string[] = [];
 		page.on('pageerror', (error) => errors.push(error.message));
 		await page.setViewportSize({ width: 1600, height: 1000 });
-		await page.goto(framework === 'vanilla' ? '/demo/?sample=1' : `/demo-${framework}/?sample=1`);
+		await openDemo(
+			page,
+			framework === 'vanilla' ? '/demo/?sample=1' : `/demo-${framework}/?sample=1`,
+		);
 		const viewer = page.locator('visio-viewer');
 		const load = async (bytes: Uint8Array) => {
 			await page.locator('#file').setInputFiles({
@@ -52,11 +57,13 @@ for (const framework of ['vanilla', 'react', 'vue', 'angular', 'svelte', 'solid'
 				mimeType: 'application/vnd.ms-visio.drawing',
 				buffer: Buffer.from(bytes),
 			});
+			await expect(page.locator('#file-name')).toHaveText('replace.vsdx');
 			await idle(viewer);
 		};
 		await load(await replaceFixture());
 		const original = await inventory(viewer);
 		await viewer.getByRole('tab', { name: 'Home', exact: true }).click();
+		await ribbonGroup(viewer, 'Editing');
 		await viewer.getByRole('button', { name: 'Find', exact: true }).click();
 		await viewer.locator('[command="replace"]').click();
 		const bar = viewer.locator('office-ui-find-bar'),
@@ -76,9 +83,9 @@ for (const framework of ['vanilla', 'react', 'vue', 'angular', 'svelte', 'solid'
 		const first = await inventory(viewer);
 		expect(first.texts).toEqual([['dog cat CAT', 'cat Ω cat'], ['cat tail']]);
 		expect(first.selected).toEqual([['1', '1']]);
-		await viewer.locator('[command="undo"] button').click();
+		await viewer.locator('.qat [data-command="undo"]').click();
 		expect((await inventory(viewer)).bytes).toEqual(original.bytes);
-		await viewer.locator('[command="redo"] button').click();
+		await viewer.locator('.qat [data-command="redo"]').click();
 		expect((await inventory(viewer)).bytes).toEqual(first.bytes);
 		await expect(query).toHaveValue('cat');
 		await expect(replacement).toHaveValue('dog');
@@ -91,9 +98,9 @@ for (const framework of ['vanilla', 'react', 'vue', 'angular', 'svelte', 'solid'
 		await expect(status).toHaveText('Replaced 3 occurrences.');
 		const selected = await inventory(viewer);
 		expect(selected.texts).toEqual([['dog dog CAT', 'dog Ω dog'], ['cat tail']]);
-		await viewer.locator('[command="undo"] button').click();
+		await viewer.locator('.qat [data-command="undo"]').click();
 		expect((await inventory(viewer)).bytes).toEqual(first.bytes);
-		await viewer.locator('[command="redo"] button').click();
+		await viewer.locator('.qat [data-command="redo"]').click();
 		expect((await inventory(viewer)).bytes).toEqual(selected.bytes);
 		await scope(viewer, 'All pages');
 		await expect(status).toHaveText('1 occurrence');
@@ -130,7 +137,7 @@ for (const framework of ['vanilla', 'react', 'vue', 'angular', 'svelte', 'solid'
 		await expect(status).toHaveText('5 occurrences');
 		await bar.getByRole('button', { name: 'Replace All', exact: true }).click();
 		await idle(viewer);
-		await expect(bar.locator('[role="alert"]')).toContainText('EDIT_PROTECTED_CELL');
+		await expect(bar.locator('[role="alert"]')).toContainText('protection is active');
 		expect((await inventory(viewer)).bytes).toEqual(protectedSource.bytes);
 		await load(await replaceFixture());
 		await query.fill('cat');

@@ -1,5 +1,6 @@
 import { expect, it } from 'vitest';
 import { buildChartGradientDef, resolveChartGradient } from './gradient-definition';
+import { chartGradientMarkup } from './gradient-markup';
 import type { DrawingFill } from '../drawingml/types';
 it('retains the native vertical vector and resolves off-box circle focus', () => {
 	expect(buildChartGradientDef('g', { type: 'linear', angle: 90, stops: [] })).toMatchObject({
@@ -50,4 +51,13 @@ it('keeps legacy radial descriptors and unknown shape outlines unchanged', () =>
 	expect(
 		buildChartGradientDef('g', { ...legacy, path: 'circle' }, { width: 0, height: 0 }),
 	).toEqual(buildChartGradientDef('g', legacy));
+});
+
+it('writes gradientUnits only for a user-space def', () => {
+	const stops = [{ offset: 0, color: '#c08fbf' }];
+	const base = { kind: 'linearGradient' as const, id: 'g', x1: 10, y1: 4, x2: 90, y2: 4, stops };
+	expect(chartGradientMarkup(base)).toContain('<linearGradient id="g" x1="10"');
+	expect(chartGradientMarkup({ ...base, gradientUnits: 'userSpaceOnUse' })).toContain(
+		'<linearGradient id="g" gradientUnits="userSpaceOnUse" x1="10"',
+	);
 });

@@ -1,15 +1,5 @@
 <script setup lang="ts">
 import { X } from 'lucide-vue-next';
-import type {
-	PptxAfterAnimationAction,
-	PptxAnimationDirection,
-	PptxAnimationRepeatMode,
-	PptxAnimationSequence,
-	PptxAnimationTimingCurve,
-	PptxAnimationTrigger,
-	PptxElement,
-	PptxElementAnimation,
-} from 'pptx-viewer-core';
 import {
 	directionValuesFor,
 	effectiveDirection,
@@ -26,6 +16,16 @@ import {
 	TRIGGER_OPTIONS,
 	triggerChangePatch,
 } from 'ooxml-ui/pptx';
+import type {
+	PptxAfterAnimationAction,
+	PptxAnimationDirection,
+	PptxAnimationRepeatMode,
+	PptxAnimationSequence,
+	PptxAnimationTimingCurve,
+	PptxAnimationTrigger,
+	PptxElement,
+	PptxElementAnimation,
+} from 'pptx-viewer-core';
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 

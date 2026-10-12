@@ -1,7 +1,7 @@
+import type { MasterViewTarget } from 'ooxml-ui/pptx';
 // @vitest-environment happy-dom
 import type { PptxHandler, PptxSlide, PptxSlideMaster } from 'pptx-viewer-core';
 import { PptxHandler as PptxHandlerCtor } from 'pptx-viewer-core';
-import type { MasterViewTarget } from 'ooxml-ui/pptx';
 import React, { act, useRef, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import type { Root } from 'react-dom/client';

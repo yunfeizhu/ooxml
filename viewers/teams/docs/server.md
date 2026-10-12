@@ -22,13 +22,13 @@ TEAMS_TOKEN=change-me TEAMS_ORIGINS=https://app.example.com TEAMS_DATA=/var/lib/
 
 It is configured through the environment only; the command takes no flags.
 
-| Variable        | Default       | Meaning                                                                            |
-| --------------- | ------------- | ---------------------------------------------------------------------------------- |
-| `PORT`          | `8787`        | Listen port.                                                                       |
-| `HOST`          | `127.0.0.1`   | Listen address. Bind `0.0.0.0` only behind TLS.                                    |
-| `TEAMS_TOKEN`   | none          | If set, sockets take it as `?token=` and file requests as `Authorization: Bearer`. |
-| `TEAMS_ORIGINS` | none (any)    | Comma-separated allowed `Origin`s for sockets and files.                           |
-| `TEAMS_DATA`    | `./data`      | Data directory: `rooms/<room>.bin` snapshots and `files/<workspace>/`.             |
+| Variable        | Default     | Meaning                                                                            |
+| --------------- | ----------- | ---------------------------------------------------------------------------------- |
+| `PORT`          | `8787`      | Listen port.                                                                       |
+| `HOST`          | `127.0.0.1` | Listen address. Bind `0.0.0.0` only behind TLS.                                    |
+| `TEAMS_TOKEN`   | none        | If set, sockets take it as `?token=` and file requests as `Authorization: Bearer`. |
+| `TEAMS_ORIGINS` | none (any)  | Comma-separated allowed `Origin`s for sockets and files.                           |
+| `TEAMS_DATA`    | `./data`    | Data directory: `rooms/<room>.bin` snapshots and `files/<workspace>/`.             |
 
 Or embed it:
 
@@ -62,14 +62,14 @@ const config = {
 
 ## Endpoints
 
-| Endpoint                               | What it does                                                                                                         |
-| -------------------------------------- | -------------------------------------------------------------------------------------------------------------------- |
-| `ws /sync/<room>`                      | y-websocket compatible sync: one `Y.Doc` and awareness per room, persisted to `rooms/<room>.bin`. Messages up to 32 MB. |
-| `ws /signal/<room>`                    | JSON relay for call signaling: forwards each text message to the room's other sockets. Messages up to 256 KB.        |
-| `POST /files/<workspace>/<name>`       | Stores an attachment (25 MB cap) and answers `201 { url, size }`.                                                    |
-| `GET /files/<workspace>/<name>`        | Downloads it as an attachment (`Content-Disposition: attachment`, `Referrer-Policy: no-referrer`, `nosniff`).        |
-| `POST /files/link/<workspace>/<name>`  | Returns `{ url }`: a link signed for that one file, valid for five minutes, so the token never appears in a URL.     |
-| `GET /health`                          | `{ ok, rooms, calls, auth }`.                                                                                        |
+| Endpoint                              | What it does                                                                                                            |
+| ------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
+| `ws /sync/<room>`                     | y-websocket compatible sync: one `Y.Doc` and awareness per room, persisted to `rooms/<room>.bin`. Messages up to 32 MB. |
+| `ws /signal/<room>`                   | JSON relay for call signaling: forwards each text message to the room's other sockets. Messages up to 256 KB.           |
+| `POST /files/<workspace>/<name>`      | Stores an attachment (25 MB cap) and answers `201 { url, size }`.                                                       |
+| `GET /files/<workspace>/<name>`       | Downloads it as an attachment (`Content-Disposition: attachment`, `Referrer-Policy: no-referrer`, `nosniff`).           |
+| `POST /files/link/<workspace>/<name>` | Returns `{ url }`: a link signed for that one file, valid for five minutes, so the token never appears in a URL.        |
+| `GET /health`                         | `{ ok, rooms, calls, auth }`.                                                                                           |
 
 Room names must match `^[\w-]{1,128}$` and workspace ids in file paths `^[\w-]{1,64}$`; file names
 are sanitised to letters, digits, `.`, `-`, `_`, spaces and parentheses, and capped at 120

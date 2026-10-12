@@ -69,9 +69,10 @@ export default i18nInstance;
 ```
 
 ```tsx
+import { I18nextProvider } from 'react-i18next';
+
 // app entry
 import i18nInstance from './i18n';
-import { I18nextProvider } from 'react-i18next';
 
 <I18nextProvider i18n={i18nInstance}>
 	<App />
@@ -103,6 +104,7 @@ export default i18n;
 ```ts
 // main.ts
 import { createApp } from 'vue';
+
 import App from './App.vue';
 import i18n from './i18n';
 
@@ -165,6 +167,7 @@ The Vanilla binding has no framework to plug an i18n library into, so it ships a
 
 ```ts
 import { createPptxViewer } from 'pptx-vanilla-viewer';
+
 import { translationsFr } from './translations/fr';
 
 const viewer = createPptxViewer(document.querySelector('#host')!, {
@@ -183,6 +186,7 @@ Svelte also has no blessed i18n runtime, so the binding exposes `registerTransla
 ```ts
 // i18n.ts
 import { registerTranslations } from 'pptx-svelte-viewer/i18n';
+
 import { translationsFr } from './translations/fr';
 
 registerTranslations('fr', translationsFr);

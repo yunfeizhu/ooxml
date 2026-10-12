@@ -11,6 +11,7 @@ import {
 	isXlsxEditorAttribute,
 	reflectAttribute,
 } from './editor-attributes';
+import type { RibbonAddInTab } from '../ribbon/add-in-tabs';
 import { buildShell, type Shell } from './editor-shell';
 import { XlsxEditorApi } from './element-api';
 import type { XlsxEditorEventMap } from './events';
@@ -70,12 +71,14 @@ export class XlsxEditorElement extends XlsxEditorApi {
 		return XLSX_EDITOR_ATTRIBUTES;
 	}
 	private shell: Shell | undefined;
+	private addIns: readonly RibbonAddInTab[] = [];
 
 	connectedCallback(): void {
 		if (this.shell) return;
 		this.shell = buildShell(this.core);
 		this.chrome = this.shell.chrome;
 		this.openShare = () => this.shell?.backstage.open('share');
+		if (this.addIns.length) this.shell.ribbon.setAddIns(this.addIns);
 		this.core.requestRender();
 	}
 
@@ -166,6 +169,18 @@ export class XlsxEditorElement extends XlsxEditorApi {
 	set hiddenActions(value: readonly string[]) {
 		this.core.hiddenActions = [...(value ?? [])];
 		this.core.requestRender();
+	}
+
+	/**
+	 * Tabs a host adds after Excel's own, as an Office add-in does. Each command runs its `run`
+	 * callback and dispatches `office-ribbon-add-in` (`{ tab, command }`) from the editor.
+	 */
+	get ribbonAddIns(): readonly RibbonAddInTab[] {
+		return this.addIns;
+	}
+	set ribbonAddIns(value: readonly RibbonAddInTab[]) {
+		this.addIns = value ?? [];
+		this.shell?.ribbon.setAddIns(this.addIns);
 	}
 
 	/** The open workbook model, or null. Assigning one shows it with a fresh undo history. */

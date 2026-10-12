@@ -1,6 +1,3 @@
-import type { PptxElement } from 'pptx-viewer-core';
-import { isInkElement } from 'pptx-viewer-core';
-
 import {
 	buildInkGroupStrokes,
 	extractPathPoints,
@@ -10,6 +7,9 @@ import {
 	pressuresToWidths,
 } from 'ooxml-ui/pptx';
 import type { InkGroupStrokeView, PathPoint, PressureCircle } from 'ooxml-ui/pptx';
+import type { PptxElement } from 'pptx-viewer-core';
+import { isInkElement } from 'pptx-viewer-core';
+
 import { DEFAULT_STROKE_COLOR } from './constants';
 import type { StyleMap } from './element-style';
 import { getContainerStyle } from './element-style';

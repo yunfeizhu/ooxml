@@ -1,0 +1,69 @@
+name: Workflow lint
+
+# Checks the workflows and composite actions themselves: actionlint for syntax, expressions and the
+# shell inside `run:` blocks (through shellcheck, preinstalled on the runner), and zizmor for
+# security mistakes such as template injection, over-broad tokens and unpinned third-party actions
+# (policy in .github/zizmor.yml). Both report as annotations on the PR's diff.
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/**'
+      - '.github/actions/**'
+      - '.github/zizmor.yml'
+      - '.github/dependabot.yml'
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/**'
+      - '.github/actions/**'
+      - '.github/zizmor.yml'
+      - '.github/dependabot.yml'
+  schedule:
+    - cron: '23 5 * * 1' # weekly: zizmor's online audits learn about newly vulnerable actions
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: workflow-lint-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+env:
+  ACTIONLINT_VERSION: 1.7.12.25
+  ZIZMOR_VERSION: 1.30.1
+
+jobs:
+  actionlint:
+    name: actionlint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+      # Info and style notes from shellcheck are left out; deliberate word splitting is marked
+      # with `# shellcheck disable=...` where it happens.
+      - name: Lint the workflows
+        env:
+          SHELLCHECK_OPTS: --severity=warning
+        run: |
+          # One `::error` annotation per finding; the template's line break separates them.
+          # shellcheck disable=SC2016
+          pipx run "actionlint-py==$ACTIONLINT_VERSION" -format \
+            '{{range $err := .}}::error file={{$err.Filepath}},line={{$err.Line}},col={{$err.Column}}::{{$err.Message}}
+          {{end}}'
+
+  zizmor:
+    name: zizmor
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+      # The token lets the online audits look up action tags, commits and advisories (read only).
+      - name: Audit the workflows
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          pipx run "zizmor==$ZIZMOR_VERSION" --format=github --min-severity=medium \
+            --config .github/zizmor.yml .github

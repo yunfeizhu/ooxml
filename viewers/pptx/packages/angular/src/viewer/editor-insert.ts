@@ -8,10 +8,9 @@
  * any future importers are unchanged.
  */
 
-import type { PptxChartType, PptxElement } from 'pptx-viewer-core';
-
 import { DEFAULT_INSERT_CHART_KIND, createDefaultChartElement } from 'ooxml-ui/pptx';
 import type { InsertChartKind, ShapePresetType } from 'ooxml-ui/pptx';
+import type { PptxChartType, PptxElement } from 'pptx-viewer-core';
 
 export {
 	newTextElement,

@@ -7,6 +7,83 @@ A release listed with no entries carried no Conventional Commit in this package'
 scope: scripts/release-plan.mjs releases whenever any published file changes, not only on
 conventional commits.
 
+## [4.33.1](https://github.com/ChristopherVR/ooxml/releases/tag/pptx-react-viewer@4.33.1) - 2026-10-11
+
+### Testing
+
+- **pptx:** Wait for the hyperlink deck to load as svelte does ([01d7206](https://github.com/ChristopherVR/ooxml/commit/01d72066f9ab3fce3433426a19e8c337624e087f))
+- **pptx:** Share workers across the binding package unit tests ([d51469c](https://github.com/ChristopherVR/ooxml/commit/d51469cc709e145007222ef0510a19bedbf08728))
+- **ui:** Keep each DOM environment and test state in its own worker ([6d52bec](https://github.com/ChristopherVR/ooxml/commit/6d52bec41343129aa621e11e173fe3c706e82b6e))
+
+### Styling
+
+- Fix the oxfmt and oxlint warnings in the viewers ([db0314f](https://github.com/ChristopherVR/ooxml/commit/db0314f319e3d0508960872260792215477d9ca5))
+- **pptx:** Format the pptx viewer with its own oxfmt configuration ([7ca9f51](https://github.com/ChristopherVR/ooxml/commit/7ca9f51be7d0926e28cc5913792cfc1c966c0d35))
+
+## [4.33.0](https://github.com/ChristopherVR/ooxml/releases/tag/pptx-react-viewer@4.33.0) - 2026-10-10
+
+### Features
+
+- **color:** Add the Office theme colour palette to the color area ([646b6b5](https://github.com/ChristopherVR/ooxml/commit/646b6b532a304013f0c8783801ab3401de8a1950))
+- **pptx:** Add host ribbon tabs to all five PowerPoint bindings ([2089f62](https://github.com/ChristopherVR/ooxml/commit/2089f620d736c867dbd383f2fe4dd39eff7e6cc3))
+- **text:** Add the fonts' design advance widths, regular and bold ([15f7eeb](https://github.com/ChristopherVR/ooxml/commit/15f7eebb692c4cf43d8febdd49070e583daef22a))
+- **visio:** Pick theme colours that follow the page theme ([d29c9c7](https://github.com/ChristopherVR/ooxml/commit/d29c9c7b8ae343821db3461ca55af2283d6a19ef))
+
+### Bug Fixes
+
+- **pptx:** Verify certificate chains with node:crypto, not node-forge ([51e6312](https://github.com/ChristopherVR/ooxml/commit/51e6312aa152a47ac11a6beced49b373adf0fb68))
+- **pptx:** Keep the browser's image drag out of picture moves ([817a36a](https://github.com/ChristopherVR/ooxml/commit/817a36a1eae21a48e149ee5459597577dd2cdf22))
+
+### Refactor
+
+- **geometry:** Move the orthogonal connector router out of pptx ([7628894](https://github.com/ChristopherVR/ooxml/commit/7628894c847d098846b7250e8cf7cfee0b8e1ecd))
+- **ui:** Move Excel and Word colour pickers onto the shared grid ([ab332b6](https://github.com/ChristopherVR/ooxml/commit/ab332b6ed7a4b80bc5016de05efb3fad694c85de))
+
+### Styling
+
+- Apply oxfmt to files drifted from the formatter ([daeabf2](https://github.com/ChristopherVR/ooxml/commit/daeabf26125af866f90359ac8a5716234d5b8b36))
+
+## [4.32.0](https://github.com/ChristopherVR/ooxml/releases/tag/pptx-react-viewer@4.32.0) - 2026-10-10
+
+### Features
+
+- **geometry:** Share arrow-key nudges and Shift angle snapping ([a839871](https://github.com/ChristopherVR/ooxml/commit/a8398713b97bcc9a193e6bd85aba51c55066eba8))
+
+### Testing
+
+- **core:** Fuzz the xml, formula, number format and hyperlink parsers ([c6911a0](https://github.com/ChristopherVR/ooxml/commit/c6911a00f79fb07eab294d885b760452b4bdaf72))
+
+### Dependencies
+
+- **deps:** Bump the production-minor-and-patch group with 5 updates ([#42](https://github.com/ChristopherVR/ooxml/issues/42)) ([fda493e](https://github.com/ChristopherVR/ooxml/commit/fda493e2697908c477ce845019d9c2fe8b591ab2))
+
+### Chores
+
+- **deps-dev:** Bump the development-minor-and-patch group across 1 directory with 6 updates ([#43](https://github.com/ChristopherVR/ooxml/issues/43)) ([e3a4861](https://github.com/ChristopherVR/ooxml/commit/e3a4861279b8d2bbf3b869617329eddb953b7838))
+
+## [4.31.1](https://github.com/ChristopherVR/ooxml/releases/tag/pptx-react-viewer@4.31.1) - 2026-10-09
+
+### Bug Fixes
+
+- **pptx:** Paint the outline gradient of chart line series ([#41](https://github.com/ChristopherVR/ooxml/issues/41)) ([158d44b](https://github.com/ChristopherVR/ooxml/commit/158d44bd79582591697e9d6ef8ccc5311dc6d1f4))
+
+## [4.31.0](https://github.com/ChristopherVR/ooxml/releases/tag/pptx-react-viewer@4.31.0) - 2026-10-09
+
+### Features
+
+- **visio:** Add change case and format painter commands ([85440e1](https://github.com/ChristopherVR/ooxml/commit/85440e1b6a88608c297de91157648a057dda0102))
+- **visio:** Add page themes and glow, soft edge and reflection effects ([709bd22](https://github.com/ChristopherVR/ooxml/commit/709bd2287e86a689eff8cb3b674f95f6da755d00))
+- **visio:** Add re-layout, auto align, layer assignment and guide edits ([c4c9cb2](https://github.com/ChristopherVR/ooxml/commit/c4c9cb2dec0579c595fc0d6be0787fd1da4e8cd6))
+
+### Bug Fixes
+
+- **pptx:** Save the size of empty table cell paragraphs ([5f73df1](https://github.com/ChristopherVR/ooxml/commit/5f73df19e7c77690d55cc1c33f1792d76d18851a))
+- **pptx:** Follow slide links outside slide shows ([#38](https://github.com/ChristopherVR/ooxml/issues/38)) ([f3e99cb](https://github.com/ChristopherVR/ooxml/commit/f3e99cb2d4faaefbfbb8e8c3a130744665f9be3c))
+
+### Testing
+
+- **react:** Expect line-height 0 on exactly spaced table cell runs ([094ff1a](https://github.com/ChristopherVR/ooxml/commit/094ff1a1b06a7887c6762b00b007f451a9ba848e))
+
 ## [4.30.3](https://github.com/ChristopherVR/ooxml/releases/tag/pptx-react-viewer@4.30.3) - 2026-10-08
 
 ### Bug Fixes

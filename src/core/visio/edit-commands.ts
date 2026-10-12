@@ -1,5 +1,24 @@
 import { fail } from './package-common';
-import { isVisioBasicShape, type VisioBasicShape } from './basic-shapes';
+import { isVisioOutlineShape, type VisioOutlineShape } from './stencil-shapes';
+import {
+	isVisioConnectorEdit,
+	snapshotConnectorEdit,
+	snapshotConnectorGlue,
+	snapshotConnectorRoute,
+	type VisioConnectorEdit,
+	type VisioConnectorGlue,
+	type VisioConnectorRoute,
+} from './edit-connector-commands';
+export { snapshotConnectorGlue } from './edit-connector-commands';
+export type {
+	VisioConnectorGlue,
+	VisioConnectorRoute,
+	VisioConnectorEdit,
+	VisioAddConnectionPointEdit,
+	VisioDeleteConnectionPointEdit,
+	VisioGlueConnectorEdit,
+	VisioConnectorRouteEdit,
+} from './edit-connector-commands';
 import { snapshotTextRanges, type VisioTextRangesEdit } from './edit-text-range-commands';
 export type { VisioTextRange, VisioTextRangesEdit } from './edit-text-range-commands';
 import { snapshotResizeAnchor, type VisioResizeAnchor } from './resize-anchor';
@@ -12,12 +31,76 @@ export type { VisioPathCreateEdit, VisioPathSegment } from './edit-path-commands
 import { snapshotChangeShape, type VisioChangeShapeEdit } from './edit-change-shape-commands';
 export type { VisioChangeShapeEdit, VisioChangeShapeTarget } from './edit-change-shape-commands';
 import { isVisioGroupEdit, snapshotGroupEdit, type VisioGroupEdit } from './edit-group-commands';
+import {
+	isVisioPageSetupEdit,
+	snapshotPageSetupEdit,
+	type VisioPageSetupEdits,
+} from './edit-page-setup-commands';
+export type {
+	VisioPageSetupEdit,
+	VisioPagePropertiesEdit,
+	VisioPageDecorationEdit,
+	VisioPageSetupEdits,
+	VisioScaleUnit,
+} from './edit-page-setup-commands';
+import { snapshotShapeDataEdit, type VisioShapeDataEdit } from './edit-shape-data-commands';
+export type {
+	VisioShapeDataEdit,
+	VisioShapeDataFields,
+	VisioShapeDataType,
+} from './edit-shape-data-commands';
+import { isVisioDataEdit, snapshotDataEdit, type VisioDataEdit } from './edit-data-commands';
+export type {
+	VisioDataEdit,
+	VisioDataImportEdit,
+	VisioDataRefreshEdit,
+	VisioDataDeleteEdit,
+	VisioDataLinkEdit,
+	VisioDataUnlinkEdit,
+} from './edit-data-commands';
 export type {
 	VisioGroupEdit,
 	VisioGroupShapesEdit,
 	VisioUngroupShapeEdit,
 } from './edit-group-commands';
 export type { VisioPasteShapesEdit } from './edit-paste-commands';
+import { snapshotPageTheme, type VisioPageThemeEdit } from './edit-page-theme-commands';
+export type { VisioPageThemeEdit } from './edit-page-theme-commands';
+import {
+	isVisioCommentEdit,
+	snapshotCommentEdit,
+	type VisioCommentEdit,
+} from './edit-comment-commands';
+export type {
+	VisioCommentEdit,
+	VisioCommentAddEdit,
+	VisioCommentUpdateEdit,
+	VisioCommentDeleteEdit,
+} from './edit-comment-commands';
+import { snapshotSubprocessEdit, type VisioSubprocessEdit } from './edit-subprocess-commands';
+export type { VisioSubprocessEdit, VisioSubprocessSelection } from './edit-subprocess-commands';
+import {
+	isVisioDiagramPartEdit,
+	snapshotDiagramPartEdit,
+	type VisioDiagramPartEdit,
+} from './edit-diagram-parts-commands';
+export type {
+	VisioDiagramPartEdit,
+	VisioInsertContainerEdit,
+	VisioInsertCalloutEdit,
+} from './edit-diagram-parts-commands';
+import { snapshotAssignLayers, type VisioAssignLayersEdit } from './edit-layer-commands';
+export type { VisioAssignLayersEdit } from './edit-layer-commands';
+import { snapshotLayerProperties, type VisioLayerPropertiesEdit } from './edit-layer-properties';
+export type { VisioLayerPropertiesEdit } from './edit-layer-properties';
+import { snapshotMasterInstance, type VisioMasterInstanceEdit } from './edit-master-instance';
+export type { VisioMasterInstanceEdit } from './edit-master-instance';
+import { snapshotStencilMasterDrop, type VisioStencilMasterDropEdit } from './edit-master-drop';
+export type { VisioStencilMasterDropEdit } from './edit-master-drop';
+import { isVisioGuideEdit, snapshotGuideEdit, type VisioGuideEdit } from './edit-guide-commands';
+export type { VisioGuideEdit } from './edit-guide-commands';
+import { snapshotTextFieldInsert, type VisioTextFieldInsertEdit } from './edit-text-field-commands';
+export type { VisioTextFieldInsertEdit } from './edit-text-field-commands';
 import {
 	isVisioFormatEdit,
 	snapshotFormatting,
@@ -56,11 +139,6 @@ export interface VisioTextEdit {
 	shapeId: string;
 	text: string;
 }
-/** Shape-to-shape glue targets of a connector. A missing end stays unglued. */
-export interface VisioConnectorGlue {
-	begin?: string;
-	end?: string;
-}
 interface Target {
 	pageId: string;
 	shapeId: string;
@@ -74,10 +152,12 @@ export type VisioGeometryEdit =
 			beginY: number;
 			endX: number;
 			endY: number;
-			/** Present for a connector: shape IDs whose PinX each end is glued to (dynamic glue). */
+			/** Present for a connector: the shapes (or connection points) each end is glued to. */
 			connect?: VisioConnectorGlue;
+			/** A connector's route; omitted means straight. */
+			route?: VisioConnectorRoute;
 	  })
-	| (BoxCreation & { type: 'create-rectangle'; shape?: VisioBasicShape })
+	| (BoxCreation & { type: 'create-rectangle'; shape?: VisioOutlineShape })
 	| (BoxCreation & { type: 'create-ellipse' })
 	| (BoxCreation & { type: 'create-text-box'; text: string })
 	| VisioPathCreateEdit
@@ -86,7 +166,8 @@ export type VisioGeometryEdit =
 	| (Target & { type: 'rotate-shape'; angle: number })
 	| (Target & { type: 'flip-shape'; axis: 'horizontal' | 'vertical' })
 	| (Target & { type: 'move-line-endpoint'; endpoint: 'begin' | 'end'; x: number; y: number })
-	| (Target & { type: 'delete-shape' });
+	| (Target & { type: 'delete-shape' })
+	| VisioConnectorEdit;
 /** Insert a blank foreground page after an existing page, copying its PageSheet settings. */
 export interface VisioPageInsert {
 	type: 'insert-page';
@@ -123,10 +204,12 @@ export type VisioPageEdit =
 	| VisioPageReorder
 	| VisioPageRename
 	| VisioPageDelete
-	| VisioPageSizeEdit;
+	| VisioPageSizeEdit
+	| VisioPageSetupEdits;
 export type VisioEdit =
 	| VisioTextEdit
 	| VisioTextRangesEdit
+	| VisioTextFieldInsertEdit
 	| VisioGeometryEdit
 	| VisioPageEdit
 	| VisioFormatEdit
@@ -136,17 +219,34 @@ export type VisioEdit =
 	| VisioChangeShapeEdit
 	| VisioMetadataEdit
 	| VisioPictureInsertEdit
-	| VisioGroupEdit;
+	| VisioGroupEdit
+	| VisioPageThemeEdit
+	| VisioCommentEdit
+	| VisioSubprocessEdit
+	| VisioDiagramPartEdit
+	| VisioShapeDataEdit
+	| VisioDataEdit
+	| VisioAssignLayersEdit
+	| VisioLayerPropertiesEdit
+	| VisioMasterInstanceEdit
+	| VisioStencilMasterDropEdit
+	| VisioGuideEdit;
 export const isVisioPageEdit = (edit: VisioEdit): edit is VisioPageEdit =>
 	edit.type === 'insert-page' ||
 	edit.type === 'reorder-page' ||
 	edit.type === 'rename-page' ||
 	edit.type === 'delete-page' ||
-	edit.type === 'set-page-size';
+	edit.type === 'set-page-size' ||
+	isVisioPageSetupEdit(edit);
 
 /** Potential direct changes used by both package and master dependency admission. */
 export function geometryChangedCells(edit: VisioGeometryEdit): string[] {
-	if (edit.type === 'create-line')
+	if (edit.type === 'add-connection-point' || edit.type === 'delete-connection-point') return [];
+	if (
+		edit.type === 'create-line' ||
+		edit.type === 'glue-connector' ||
+		edit.type === 'set-connector-route'
+	)
 		return [
 			'BeginX',
 			'BeginY',
@@ -211,14 +311,29 @@ export function snapshotVisioEdits(
 		return value;
 	};
 	return Array.from(edits, (edit) => {
+		// Snap & Glue belongs to the drawing, not to a page.
+		if (edit?.type === 'set-snap-glue') return snapshotPageSetupEdit(edit);
 		if (!edit || typeof edit.pageId !== 'string' || !edit.pageId || edit.pageId.length > 256)
 			fail('INVALID_EDIT', 'Invalid edit target.');
 		if (edit.type === 'duplicate-shapes') return snapshotDuplicateShapes(edit);
 		if (edit.type === 'paste-shapes') return snapshotPasteShapes(edit);
 		if (edit.type === 'change-shape') return snapshotChangeShape(edit);
 		if (edit.type === 'insert-picture') return snapshotPictureInsert(edit);
+		if (edit.type === 'set-page-theme') return snapshotPageTheme(edit);
+		if (edit.type === 'assign-layers') return snapshotAssignLayers(edit);
+		if (edit.type === 'set-layer-properties') return snapshotLayerProperties(edit);
+		if (edit.type === 'insert-master-instance') return snapshotMasterInstance(edit);
+		if (edit.type === 'drop-stencil-master') return snapshotStencilMasterDrop(edit);
+		if (isVisioGuideEdit(edit)) return snapshotGuideEdit(edit);
 		if (isVisioMetadataEdit(edit)) return snapshotMetadataEdit(edit);
 		if (isVisioGroupEdit(edit)) return snapshotGroupEdit(edit);
+		if (isVisioPageSetupEdit(edit)) return snapshotPageSetupEdit(edit);
+		if (isVisioCommentEdit(edit)) return snapshotCommentEdit(edit);
+		if (edit.type === 'create-subprocess') return snapshotSubprocessEdit(edit);
+		if (isVisioDiagramPartEdit(edit)) return snapshotDiagramPartEdit(edit);
+		if (edit.type === 'set-shape-data') return snapshotShapeDataEdit(edit);
+		if (isVisioDataEdit(edit)) return snapshotDataEdit(edit);
+		if (isVisioConnectorEdit(edit)) return snapshotConnectorEdit(edit);
 		if (edit.type === 'delete-page') return { type: edit.type, pageId: edit.pageId };
 		if (edit.type === 'set-page-size')
 			return {
@@ -259,6 +374,7 @@ export function snapshotVisioEdits(
 		if (edit.type === 'replace-plain-text')
 			return { ...target, type: edit.type, text: text(edit.text) };
 		if (edit.type === 'replace-text-ranges') return snapshotTextRanges(edit, text);
+		if (edit.type === 'insert-text-field') return snapshotTextFieldInsert(edit);
 		if (isVisioFormatEdit(edit)) return snapshotFormatting(edit);
 		if (edit.type === 'reorder-shape') {
 			if (!['front', 'back', 'forward', 'backward'].includes(edit.order))
@@ -287,6 +403,7 @@ export function snapshotVisioEdits(
 					endY = numeric(edit.endY);
 				numeric(Math.hypot(endX - beginX, endY - beginY), true);
 				const connect = snapshotConnectorGlue(edit.connect, edit.shapeId);
+				const route = edit.route === undefined ? undefined : snapshotConnectorRoute(edit.route);
 				return {
 					...target,
 					type: edit.type,
@@ -295,13 +412,14 @@ export function snapshotVisioEdits(
 					endX,
 					endY,
 					...(connect ? { connect } : {}),
+					...(route ? { route } : {}),
 				};
 			}
 			case 'create-rectangle':
 			case 'create-ellipse': {
 				const shape = edit.type === 'create-rectangle' ? edit.shape : undefined;
-				if (shape !== undefined && !isVisioBasicShape(shape))
-					fail('INVALID_EDIT', 'Unknown basic shape.');
+				if (shape !== undefined && !isVisioOutlineShape(shape))
+					fail('INVALID_EDIT', 'Unknown outline shape.');
 				return {
 					...target,
 					type: edit.type,
@@ -347,30 +465,4 @@ export function snapshotVisioEdits(
 				return fail('INVALID_EDIT', 'Unsupported edit command.');
 		}
 	});
-}
-
-/** Copy connector glue targets; each is a distinct canonical shape ID other than the connector. */
-export function snapshotConnectorGlue(
-	value: unknown,
-	connectorId: string,
-): VisioConnectorGlue | undefined {
-	if (value === undefined) return undefined;
-	if (!value || typeof value !== 'object') fail('INVALID_EDIT', 'Invalid connector glue.');
-	const source = value as Record<string, unknown>;
-	const result: VisioConnectorGlue = {};
-	for (const end of ['begin', 'end'] as const) {
-		const id = source[end];
-		if (id === undefined) continue;
-		if (
-			typeof id !== 'string' ||
-			!/^[1-9]\d{0,9}$/.test(id) ||
-			Number(id) > 4294967295 ||
-			id === connectorId
-		)
-			fail('INVALID_EDIT', 'Connector glue targets must be other canonical shape IDs.');
-		result[end] = id;
-	}
-	if (result.begin !== undefined && result.begin === result.end)
-		fail('INVALID_EDIT', 'A connector cannot glue both ends to the same shape.');
-	return result;
 }

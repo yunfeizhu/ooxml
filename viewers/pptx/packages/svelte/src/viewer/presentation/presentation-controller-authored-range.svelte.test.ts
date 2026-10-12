@@ -1,5 +1,5 @@
-import type { PptxSlide } from 'pptx-viewer-core';
 import type { AuthoredSlideRange } from 'ooxml-ui/pptx';
+import type { PptxSlide } from 'pptx-viewer-core';
 import { describe, expect, it, vi } from 'vitest';
 
 import { PresentationController } from './presentation-controller.svelte';

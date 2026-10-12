@@ -9,11 +9,7 @@
  * @module pdf-builder-slides
  */
 
-import {
-	buildSlidesPdfBytes,
-	buildTiledSlidesPdfBytes,
-	canvasToJpegData,
-} from 'ooxml-ui/pptx';
+import { buildSlidesPdfBytes, buildTiledSlidesPdfBytes, canvasToJpegData } from 'ooxml-ui/pptx';
 import type { PdfTiledPageImage } from 'ooxml-ui/pptx';
 
 import type { PdfImageData } from './pdf-builder-types';

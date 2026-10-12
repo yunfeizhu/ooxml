@@ -1,3 +1,4 @@
+import { scopeLayoutOptionsToSlide } from 'ooxml-ui/pptx';
 /**
  * Scope the list of available layout options to the active slide's master.
  *
@@ -8,7 +9,6 @@
  * the shared module exists to prevent.
  */
 import type { PptxLayoutOption, PptxSlide } from 'pptx-viewer-core';
-import { scopeLayoutOptionsToSlide } from 'ooxml-ui/pptx';
 
 export function scopeLayoutOptionsToActiveSlide(
 	options: PptxLayoutOption[],

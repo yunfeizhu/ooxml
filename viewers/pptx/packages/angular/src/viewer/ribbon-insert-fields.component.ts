@@ -17,9 +17,9 @@ import {
 	CUSTOM_ELEMENTS_SCHEMA,
 } from '@angular/core';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
+import { buildActionButtonElement, secureRandomUuid } from 'ooxml-ui/pptx';
 import type { PptxElement, TextStyle } from 'pptx-viewer-core';
 
-import { buildActionButtonElement, secureRandomUuid } from 'ooxml-ui/pptx';
 import type { DialogFooterActionSpec } from './dialog-footer.component';
 import { DialogFooterComponent } from './dialog-footer.component';
 import { EditorStateService } from './editor-state.service';

@@ -1,3 +1,4 @@
+import { HIDDEN_SLIDE_SLASH_GRADIENT } from 'ooxml-ui/pptx';
 /**
  * The hidden-slide cue in the thumbnail rail and the slide sorter.
  *
@@ -9,7 +10,6 @@
  * disturbing the "Go to slide {{n}}" accessible name the e2e suite pins.
  */
 import type { PptxSlide } from 'pptx-viewer-core';
-import { HIDDEN_SLIDE_SLASH_GRADIENT } from 'ooxml-ui/pptx';
 import { describe, expect, it, vi } from 'vitest';
 
 import { createTranslator } from '../i18n';

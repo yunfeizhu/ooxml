@@ -7,12 +7,12 @@
  * resulting `CommentTextSegment[]` onto spans.
  */
 
-import type { PptxComment } from 'pptx-viewer-core';
 import {
 	COMMENT_MENTION_ATTRIBUTE,
 	COMMENT_MENTION_CLASS,
 	commentTextSegments,
 } from 'ooxml-ui/pptx';
+import type { PptxComment } from 'pptx-viewer-core';
 import React from 'react';
 
 export interface CommentBodyProps {

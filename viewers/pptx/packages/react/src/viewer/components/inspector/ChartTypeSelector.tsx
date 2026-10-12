@@ -1,6 +1,6 @@
-import type { PptxChartData, PptxChartType } from 'pptx-viewer-core';
 import type { ChartTypeSelectValue } from 'ooxml-ui/pptx';
 import { resolveDisplayedChartType } from 'ooxml-ui/pptx';
+import type { PptxChartData, PptxChartType } from 'pptx-viewer-core';
 import { useTranslation } from 'react-i18next';
 
 import { WebSelect } from '../WebControls';

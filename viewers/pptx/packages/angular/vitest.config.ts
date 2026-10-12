@@ -2,6 +2,8 @@ import { resolve } from 'node:path';
 
 import { defineConfig } from 'vitest/config';
 
+import { isolationProjects } from '../../scripts/vitest-isolation.mjs';
+
 /**
  * Unit tests for the framework-agnostic helpers (element-style, utils), plus
  * `.component.ts` files imported for their co-located pure-logic exports (see
@@ -22,7 +24,7 @@ export default defineConfig({
 	test: {
 		environment: 'happy-dom',
 		maxWorkers: 4,
-		include: ['src/**/*.test.ts'],
+		projects: isolationProjects('angular', import.meta.dirname, 'happy-dom'),
 		globals: true,
 		setupFiles: ['./vitest-setup.ts'],
 	},

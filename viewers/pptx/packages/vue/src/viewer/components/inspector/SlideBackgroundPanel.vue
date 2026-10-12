@@ -1,4 +1,10 @@
 <script setup lang="ts">
+import {
+	normalizeHexColor,
+	resolveTemplateBackgroundRows,
+	slideBackgroundClearPatch,
+	slideBackgroundClearState,
+} from 'ooxml-ui/pptx';
 /**
  * SlideBackgroundPanel: per-slide background editing (Vue port of React's
  * `SlideBackgroundPanel`). Edits the active slide's solid colour and
@@ -11,12 +17,6 @@
  * PowerPointViewer) applies it to the active slide with history.
  */
 import type { PptxSlide, PptxSlideMaster } from 'pptx-viewer-core';
-import {
-	normalizeHexColor,
-	resolveTemplateBackgroundRows,
-	slideBackgroundClearPatch,
-	slideBackgroundClearState,
-} from 'ooxml-ui/pptx';
 import { computed, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 

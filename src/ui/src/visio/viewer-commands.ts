@@ -1,11 +1,13 @@
+import type { VisioGridSteps } from 'ooxml-core/visio/ui';
 import type { ViewerController, ViewerState } from './controller';
 import {
 	editErrorMessage,
 	isEditCancellation,
 	visioPageInsertCommand,
 	visioQuarterTurnCommand,
-	visioLocalRotationShape,
+	visioRotationShape,
 	visioSelectionIsOnPage,
+	visioWithCalloutLeaders,
 } from 'ooxml-core/visio/ui';
 import { RIBBON_ACTION_EVENT, type VisioRibbonAction, type CanvasTool } from './ribbon-action';
 import type { RibbonCommand } from './ribbon-parts';
@@ -13,12 +15,13 @@ import { routeRibbonAction, type RibbonTargets } from './ribbon-router';
 import { ShapeDrawTool } from './viewer-draw-tool';
 import { ViewerTextTool } from './viewer-text-tool';
 import { ViewerConnectorTool } from './viewer-connector-tool';
+import { ViewerConnectionPoints } from './viewer-connection-points';
+import { ViewerConnectorRoutes } from './viewer-connector-routes';
 import type { Rulers } from './viewer-ruler';
 import { ViewerPageOrder } from './viewer-page-order';
 import { ViewerPageRename } from './viewer-page-rename';
 import { ViewerPageDelete } from './viewer-page-delete';
 import { ViewerFormatting } from './viewer-formatting';
-import { ViewerPaintProperties } from './viewer-paint-properties';
 import { ViewerFormatPainter } from './viewer-format-painter';
 import { ViewerArrangement } from './viewer-arrangement';
 import { ViewerChangeShape } from './viewer-change-shape';
@@ -26,6 +29,15 @@ import { ViewerDuplication } from './viewer-duplication';
 import { ViewerGrouping } from './viewer-grouping';
 import { ViewerClipboard, type ClipboardOperation } from './viewer-clipboard';
 import { ViewerInsert } from './viewer-insert';
+import { ViewerPageSetup } from './viewer-page-setup';
+import { ViewerThemes } from './viewer-themes';
+import { ViewerColorMenus } from './viewer-color-menus';
+import { ViewerFormatPane } from './viewer-format-pane';
+import { ViewerReview } from './viewer-review';
+import { ViewerDiagramParts } from './viewer-diagram-parts';
+import { ViewerData } from './viewer-data';
+import { ViewerLayoutCommands } from './viewer-layout-commands';
+import { ViewerTextFeatures } from './viewer-text-features';
 
 export type { CanvasTool } from './ribbon-action';
 interface CommandHost {
@@ -35,7 +47,7 @@ interface CommandHost {
 	controller: ViewerController;
 	fit(mode: 'page' | 'width'): void;
 	togglePane(pane: 'shapes' | 'inspector'): void;
-	reveal(panel: 'edit' | 'notes' | 'selection' | 'layers', focusText: boolean): void;
+	reveal(panel: 'edit' | 'notes' | 'selection' | 'format', focusText: boolean): void;
 	focusSearch(): void;
 	focusReplace?(): void;
 	togglePanZoom(): void;
@@ -67,11 +79,12 @@ export class ViewerCommands {
 	#draw: ShapeDrawTool;
 	#text: ViewerTextTool;
 	#connector: ViewerConnectorTool;
+	#points: ViewerConnectionPoints;
+	#routes: ViewerConnectorRoutes;
 	#pageOrder: ViewerPageOrder;
 	#pageRename: ViewerPageRename;
 	#pageDelete: ViewerPageDelete;
 	#formatting: ViewerFormatting;
-	#paint: ViewerPaintProperties;
 	#painter: ViewerFormatPainter;
 	#arrangement: ViewerArrangement;
 	#changeShape: ViewerChangeShape;
@@ -79,6 +92,15 @@ export class ViewerCommands {
 	#grouping: ViewerGrouping;
 	#clipboard: ViewerClipboard;
 	#insert: ViewerInsert;
+	#pageSetup: ViewerPageSetup;
+	#themes: ViewerThemes;
+	#colors: ViewerColorMenus;
+	#formatPane: ViewerFormatPane;
+	#review: ViewerReview;
+	#parts: ViewerDiagramParts;
+	#data: ViewerData;
+	readonly layoutCommands: ViewerLayoutCommands;
+	#textFeatures: ViewerTextFeatures;
 	readonly #targets: RibbonTargets;
 	constructor(private readonly host: CommandHost) {
 		this.#clipboard = new ViewerClipboard(host.root, host.controller, host.announce, () =>
@@ -102,7 +124,64 @@ export class ViewerCommands {
 		this.#insert = new ViewerInsert(host.root, host.controller, host.announce, (run, message) => {
 			void this.#edit(run, message);
 		});
-		this.#paint = new ViewerPaintProperties(host.root, host.controller, host.announce);
+		this.#pageSetup = new ViewerPageSetup(
+			host.root,
+			host.controller,
+			(run, message) => {
+				void this.#edit(run, message);
+			},
+			host.announce,
+		);
+		this.#review = new ViewerReview(
+			host.root,
+			host.viewport,
+			host.controller,
+			host.announce,
+			(run, message) => void this.#edit(run, message),
+		);
+		this.#parts = new ViewerDiagramParts(
+			host.root,
+			host.controller,
+			(run, message) => void this.#edit(run, message),
+			() => host.reveal('edit', true),
+		);
+		this.#data = new ViewerData(host.root, host.controller, host.announce, (run, message) => {
+			void this.#edit(run, message);
+		});
+		this.layoutCommands = new ViewerLayoutCommands({
+			root: host.root,
+			viewport: host.viewport,
+			rulers: host.rulers.element,
+			controller: host.controller,
+			announce: host.announce,
+			edit: (run, message) => {
+				void this.#edit(run, message);
+			},
+			pasteShapes: () => this.#clipboard.run('paste'),
+			pointerTool: () => this.#tool === 'pointer',
+		});
+		this.#textFeatures = new ViewerTextFeatures(
+			host.root,
+			host.viewport,
+			host.controller,
+			host.announce,
+			(run, message) => void this.#edit(run, message),
+			(panel, focus) => host.reveal(panel, focus),
+		);
+		this.#themes = new ViewerThemes(host.root, host.controller, (run, message) => {
+			void this.#edit(run, message);
+		});
+		this.#colors = new ViewerColorMenus(host.root, host.controller, (action) =>
+			this.#formatting.run(action),
+		);
+		this.#formatPane = new ViewerFormatPane(
+			host.root,
+			host.controller,
+			this.#colors,
+			(action) => this.#formatting.run(action),
+			() => host.reveal('format', false),
+			host.announce,
+		);
 		this.#painter = new ViewerFormatPainter(host.root, host.controller, host.announce, (run, m) => {
 			void this.#edit(run, m);
 		});
@@ -111,13 +190,27 @@ export class ViewerCommands {
 		this.#pageDelete = new ViewerPageDelete(host.root, host.controller);
 		this.#draw = new ShapeDrawTool(host.viewport, host.controller, {
 			tool: () =>
-				this.#tool === 'pointer' || this.#tool === 'text' || this.#tool === 'connector'
+				this.#tool === 'pointer' ||
+				this.#tool === 'text' ||
+				this.#tool === 'connector' ||
+				this.#tool === 'connection-point'
 					? undefined
 					: this.#tool,
 			announce: host.announce,
 		});
+		this.#routes = new ViewerConnectorRoutes(host.root, host.controller, {
+			setTool: (tool) => this.setTool(tool),
+			edit: (run, message) => void this.#edit(run, message),
+			announce: host.announce,
+		});
 		this.#connector = new ViewerConnectorTool(host.viewport, host.controller, {
 			active: () => this.#tool === 'connector',
+			announce: host.announce,
+			route: () => this.#routes.route,
+		});
+		this.#points = new ViewerConnectionPoints(host.viewport, host.controller, {
+			active: () => this.#tool === 'connection-point',
+			showing: () => this.#tool === 'connector',
 			announce: host.announce,
 		});
 		this.#text = new ViewerTextTool(host.viewport, host.controller, {
@@ -139,9 +232,11 @@ export class ViewerCommands {
 			rotateSelection: (direction) => this.#transform({ type: 'rotate', direction }),
 			flipSelection: (axis) => this.#transform({ type: 'flip', axis }),
 			changeShape: (shape) => this.#changeShape.run(shape),
+			insertDiagramPart: (action) => this.#parts.run(action),
 			formatSelection: (action) => this.#formatting.run(action),
 			formatPainter: (mode) => this.#painter.run(mode),
 			arrangeSelection: (action) => this.#arrangement.run(action.operation),
+			layout: (action) => this.layoutCommands.run(action),
 			setTool: (tool) => this.setTool(tool),
 			cancelDrawing: () => {
 				this.#draw.cancel();
@@ -150,11 +245,19 @@ export class ViewerCommands {
 			},
 			insertPage: () => this.#insertPage(),
 			insert: (item) => this.#insert.open(item),
-			showPaintProperties: () => this.#paint.show(),
+			data: (command) => this.#data.handle(command),
+			textFeature: (feature) => this.#textFeatures.run(feature),
+			showFormatPane: (section) => this.#formatPane.show(section),
+			pageTheme: (action) => this.#themes.run(action),
 			toggleGrid: () => {
 				this.#grid = !this.#grid;
 				this.render(host.controller.state);
 			},
+			toggleConnectionPoints: () => {
+				this.#points.toggle();
+				this.render(host.controller.state);
+			},
+			connectorRoute: (action) => this.#routes.run(action),
 			toggleRuler: () => {
 				this.#ruler = !this.#ruler;
 				this.render(host.controller.state);
@@ -168,7 +271,13 @@ export class ViewerCommands {
 			toggleSizePosition: host.toggleSizePosition,
 			focusSearch: host.focusSearch,
 			focusReplace: () => host.focusReplace?.(),
+			pageSetup: (command) => this.#pageSetup.run(command),
+			review: (action) => this.#review.run(action),
 		};
+	}
+	/** The page's grid lines while View > Grid is on (Snap to Grid), else 0. */
+	get gridStep(): VisioGridSteps | 0 {
+		return this.#grid ? this.#pageSetup.rulerGrid.steps() : 0;
 	}
 	get tool(): CanvasTool {
 		return this.#tool;
@@ -207,11 +316,21 @@ export class ViewerCommands {
 					(event.target as Element)?.matches?.('.page-tabs')
 				)
 					this.#insertPage();
+				if ((event as CustomEvent<{ command?: unknown }>).detail?.command === 'layout-dialog')
+					this.run({ type: 'layout-options' });
 				if ((event as CustomEvent<{ command?: unknown }>).detail?.command === 'zoom-fit')
 					this.run({ type: 'zoom', mode: 'fit' });
+				const launcher = (event as CustomEvent<{ command?: unknown }>).detail?.command;
+				if (launcher === 'font-dialog' || launcher === 'paragraph-dialog')
+					this.run({
+						type: 'text-feature',
+						feature: launcher === 'font-dialog' ? 'text-dialog' : 'paragraph-dialog',
+					});
 			},
 			options,
 		);
+		// First, so its handles take the pointer before shape and marquee gestures.
+		const disposeTextFeatures = this.#textFeatures.wire();
 		root.addEventListener('keydown', (event) => this.#shortcut(event as KeyboardEvent), options);
 		viewport.addEventListener(
 			'wheel',
@@ -246,13 +365,20 @@ export class ViewerCommands {
 			options,
 		);
 		const disposeConnector = this.#connector.wire();
+		const disposePoints = this.#points.wire();
 		const disposeDraw = this.#draw.wire();
 		const disposeText = this.#text.wire();
 		const disposeClipboard = this.#clipboard.wire();
-		const disposePaint = this.#paint.wire();
 		const disposePainter = this.#painter.wire();
 		const disposeInsert = this.#insert.wire(viewport);
+		const disposePageSetup = this.#pageSetup.wire();
+		const disposeColors = this.#colors.wire();
+		const disposeFormatPane = this.#formatPane.wire();
+		const disposeReview = this.#review.wire();
+		const disposeData = this.#data.wire(viewport);
+		const disposeLayout = this.layoutCommands.wire();
 		return () => {
+			disposePageSetup();
 			this.#pageOrder.close();
 			this.#pageRename.close();
 			this.#pageDelete.close();
@@ -260,11 +386,18 @@ export class ViewerCommands {
 			events.abort();
 			disposeDraw();
 			disposeConnector();
+			disposePoints();
 			disposeText();
 			disposeClipboard();
-			disposePaint();
 			disposePainter();
 			disposeInsert();
+			disposeColors();
+			disposeFormatPane();
+			disposeReview();
+			disposeData();
+			disposeLayout();
+			this.layoutCommands.close();
+			disposeTextFeatures();
 		};
 	}
 	setTool(tool: CanvasTool): void {
@@ -289,8 +422,10 @@ export class ViewerCommands {
 	}
 	#delete(): void {
 		const state = this.host.controller.state;
+		if (this.#tool === 'connection-point' && this.#points.deleteSelected()) return;
 		const shapes = state.selectedShapes;
-		const pageId = state.document?.pages[state.pageIndex]?.id;
+		const page = state.document?.pages[state.pageIndex];
+		const pageId = page?.id;
 		if (
 			!shapes.length ||
 			pageId === undefined ||
@@ -301,7 +436,11 @@ export class ViewerCommands {
 		void this.#edit(
 			() =>
 				this.host.controller.applyEdits(
-					shapes.map((shape) => ({ type: 'delete-shape', pageId, shapeId: shape.id })),
+					// A callout takes its own leader connector with it.
+					visioWithCalloutLeaders(
+						page!,
+						shapes.map((shape) => shape.id),
+					).map((shapeId) => ({ type: 'delete-shape', pageId, shapeId })),
 				),
 			shapes.length === 1
 				? `Deleted ${shapes[0]!.name || `shape ${shapes[0]!.id}`}.`
@@ -352,7 +491,7 @@ export class ViewerCommands {
 		const command =
 			action.type === 'rotate'
 				? visioQuarterTurnCommand(page, state.selectedShape.id, action.direction)
-				: visioLocalRotationShape(page, state.selectedShape.id, false)
+				: visioRotationShape(page, state.selectedShape.id, false)
 					? {
 							type: 'flip-shape' as const,
 							pageId: page.id,
@@ -413,6 +552,7 @@ export class ViewerCommands {
 		if (control && (key === 'PageDown' || key === 'PageUp'))
 			return { type: 'page', step: key === 'PageDown' ? 1 : -1 };
 		if (key === 'F5' && !control) return { type: 'presentation' };
+		if (key === 'F1' && !control) return { type: 'help', topic: 'help' };
 		const drawing = this.#draw.drawing || this.#connector.drawing;
 		if (key === 'Escape' && (drawing || this.#text.drafting)) return { type: 'cancel-drawing' };
 		if (event.composedPath().some(editable)) return undefined;
@@ -434,6 +574,11 @@ export class ViewerCommands {
 		if (control && !event.shiftKey && key === 'z') return { type: 'history', key: 'undo' };
 		if (control && (key === 'y' || (event.shiftKey && key === 'z')))
 			return { type: 'history', key: 'redo' };
+		if (control && event.shiftKey && (event.code === 'Digit1' || key === '1' || key === '!'))
+			return { type: 'tool', tool: 'connection-point' };
+		if (control && event.shiftKey && event.code === 'Digit4')
+			return { type: 'text-feature', feature: 'text-block' };
+		if (!control && key === 'F7') return { type: 'text-feature', feature: 'spelling' };
 		if (control && key === '1') return { type: 'tool', tool: 'pointer' };
 		if (control && key === '2') return { type: 'tool', tool: 'text' };
 		if (control && key === '3') return { type: 'tool', tool: 'connector' };
@@ -443,7 +588,8 @@ export class ViewerCommands {
 		if (control && key === '5') return { type: 'tool', tool: 'freeform' };
 		if (control && key === '7') return { type: 'tool', tool: 'arc' };
 		if (control && key === '4') return { type: 'tool', tool: 'pencil' };
-		if (!control && key === 'Delete' && state.selectedShape) return { type: 'delete' };
+		if (!control && key === 'Delete' && (state.selectedShape || this.#points.selected))
+			return { type: 'delete' };
 		if (!control && key === 'F2' && state.document)
 			return { type: 'reveal', panel: 'edit', focusText: true };
 		if (key === 'Escape' && this.#tool !== 'pointer' && !drawing)
@@ -462,18 +608,27 @@ export class ViewerCommands {
 	render(state: ViewerState): void {
 		this.#draw.render(state);
 		this.#connector.render(state);
+		this.#points.render(state);
+		this.#routes.render(state);
 		this.#text.render(state);
 		this.#duplication.render(state);
 		this.#grouping.render(state);
 		this.#clipboard.render(state);
 		this.#formatting.render(state);
 		this.#changeShape.render(state);
-		this.#paint.render(state);
+		this.#parts.render(state);
 		this.#painter.render(state);
 		this.#insert.render(state);
+		this.#themes.render(state);
+		this.#colors.render(state);
+		this.#formatPane.render(state);
+		this.#review.render(state);
+		this.#data.render(state);
+		this.#textFeatures.render(state, this.#tool === 'pointer');
 		this.#pageOrder.render(state);
 		this.#pageRename.render(state);
 		this.#pageDelete.render(state);
+		this.#pageSetup.render(state);
 		const { root, viewport } = this.host;
 		const button = (name: string) => root.querySelector<RibbonCommand>(`[command="${name}"]`)!;
 		const box = (name: string) =>
@@ -487,25 +642,28 @@ export class ViewerCommands {
 			!!state.selectedShape &&
 			visioSelectionIsOnPage(state.selectedShape, page.id) &&
 			state.selectedShapes.length === 1 &&
-			!!visioLocalRotationShape(page, state.selectedShape.id);
+			!!visioRotationShape(page, state.selectedShape.id);
 		for (const name of ['rotate-left', 'rotate-right']) button(name).disabled = !rotating;
 		const flipping =
 			rotating &&
 			!!page &&
 			!!state.selectedShape &&
-			!!visioLocalRotationShape(page, state.selectedShape.id, false);
+			!!visioRotationShape(page, state.selectedShape.id, false);
 		for (const name of ['flip-horizontal', 'flip-vertical']) button(name).disabled = !flipping;
 		root.querySelector<RibbonCommand>('[data-menu="rotate"]')!.disabled = !rotating;
 		const distributing = this.#arrangement.render(state);
+		this.layoutCommands.render(state);
 		root.querySelector<RibbonCommand>('[data-menu="position"]')!.disabled =
-			!rotating && !distributing;
+			!rotating && !distributing && !this.layoutCommands.layout.available(state);
 		button('select-all').disabled = !page || state.loading;
 		button('clear-selection').disabled = !state.selectedShapes.length;
-		button('undo').disabled = !state.edit.canUndo || state.edit.busy || state.loading;
-		button('redo').disabled = !state.edit.canRedo || state.edit.busy || state.loading;
 		button('pointer').setAttribute('pressed', String(this.#tool === 'pointer'));
 		button('connector').setAttribute('pressed', String(this.#tool === 'connector'));
 		button('connector').disabled = !editing || !page;
+		button('connection-point').setAttribute('pressed', String(this.#tool === 'connection-point'));
+		button('connection-point').disabled = !editing || !page;
+		box('connection-points').checked = this.#points.visible;
+		box('connection-points').disabled = !page;
 		// The drawing-tools split button shows the active tool; its active drawing item is checked.
 		const rectangle = button('rectangle');
 		rectangle.toggleAttribute('data-active', this.#tool === 'rectangle');
@@ -533,7 +691,7 @@ export class ViewerCommands {
 				: 'Open a .vsdx file to add text boxes.';
 		rectangle.title = state.edit.sourceAvailable
 			? 'Rectangle (Ctrl+8)'
-			: 'Rectangle (Ctrl+8): open a .vsdx file to draw. Model-only documents are read only.';
+			: 'Rectangle (Ctrl+8): open a .vsdx file to draw.';
 		box('grid').checked = this.#grid;
 		box('grid').disabled = !page;
 		box('ruler').checked = this.#ruler;
@@ -549,6 +707,10 @@ export class ViewerCommands {
 		);
 		viewport.dataset.tool = this.#tool;
 		viewport.dataset.grid = String(this.#grid);
-		this.host.rulers.render(this.#ruler && !!page, state.zoom);
+		this.host.rulers.render(
+			this.#ruler && !!page,
+			state.zoom,
+			this.#pageSetup.rulerGrid.look(state),
+		);
 	}
 }

@@ -7,6 +7,7 @@
  */
 import type { PptxChartData, PptxChartSeries } from 'ooxml-core/pptx';
 
+import { resolveBlankDisplay, visibleRuns } from './chart-blank-display';
 import { pushMarker } from './chart-cartesian-plots';
 import type { LabelAnchor } from './chart-data-label-anchor';
 import { resolveBarLabelPlacement, resolveMarkerLabelPlacement } from './chart-data-label-anchor';
@@ -118,8 +119,15 @@ export function appendLineSeries(
 		return;
 	}
 	const fill = seriesColor(series, seriesIndex, chartData.colorPalette);
+	// Blank points follow c:dispBlanksAs as in buildLines: gap breaks the line,
+	// span interpolates, zero (or unset) keeps the placeholder 0.
+	const { values, visible } = resolveBlankDisplay(
+		sourceIndices.map((sourceIndex) => series.values[sourceIndex] ?? 0),
+		sourceIndices.map((sourceIndex) => series.blanks?.[sourceIndex] ?? false),
+		chartData.chartChrome?.dispBlanksAs,
+	);
 	const points = sourceIndices.map((sourceIndex, displayIndex) => {
-		const value = series.values[sourceIndex] ?? 0;
+		const value = values[displayIndex] ?? 0;
 		return {
 			x:
 				xPositions?.[displayIndex] ??
@@ -129,17 +137,26 @@ export function appendLineSeries(
 			value,
 		};
 	});
+	const shown = points.filter((_point, displayIndex) => visible[displayIndex]);
 	// Same stroke and markers as buildLines.
 	if (!series.lineNoFill) {
-		primitives.push({
-			kind: 'polyline',
-			points: points.map((point) => `${point.x.toFixed(2)},${point.y.toFixed(2)}`).join(' '),
-			stroke: fill,
-			fill: 'none',
-			...seriesLineStroke(chartData, series),
-		} satisfies SvgPolyline);
+		const allVisible = visible.every(Boolean);
+		for (const run of allVisible
+			? [points]
+			: visibleRuns(visible).map((indices) => indices.map((index) => points[index]!))) {
+			if (!allVisible && run.length < 2) {
+				continue;
+			}
+			primitives.push({
+				kind: 'polyline',
+				points: run.map((point) => `${point.x.toFixed(2)},${point.y.toFixed(2)}`).join(' '),
+				stroke: fill,
+				fill: 'none',
+				...seriesLineStroke(chartData, series),
+			} satisfies SvgPolyline);
+		}
 	}
-	for (const point of points) {
+	for (const point of shown) {
 		pushMarker(primitives, series, point.sourceIndex, point.x, point.y, fill, 2.5, {
 			role: 'dataPoint',
 			seriesIndex,
@@ -149,7 +166,7 @@ export function appendLineSeries(
 	if (!chartData.style?.hasDataLabels) {
 		return;
 	}
-	points.forEach((point) => {
+	shown.forEach((point) => {
 		// c:dLblPos (t/b/l/r/ctr) decides where round the marker the label sits;
 		// a per-point c:dLbl/c:layout drag shifts it further.
 		const anchor = resolveMarkerLabelPlacement(

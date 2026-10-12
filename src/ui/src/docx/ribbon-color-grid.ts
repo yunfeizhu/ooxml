@@ -1,3 +1,4 @@
+import { defineColorGrid, type OfficeColorPick, type OfficeUiColorGrid } from '../controls';
 import { localeOf, translate } from './localization';
 import { closeRibbonPopover, mountPopover } from './ribbon-popover';
 
@@ -27,38 +28,15 @@ const STANDARD: Array<[string, string]> = [
 	['#7030a0', 'Purple'],
 ];
 
-/** Mixes `hex` toward `target` (0 to 255 per channel) by `amount` (0 to 1). */
-function mix(hex: string, target: number, amount: number): string {
-	const channel = (at: number) => {
-		const value = parseInt(hex.slice(at, at + 2), 16);
-		return Math.round(value + (target - value) * amount)
-			.toString(16)
-			.padStart(2, '0');
-	};
-	return `#${channel(1)}${channel(3)}${channel(5)}`;
-}
-
-/** The five variants under a theme colour, as Word's grid shows them (lighter, then darker). */
-export function themeShades(hex: string): string[] {
-	if (hex === '#ffffff') return [0.05, 0.15, 0.25, 0.35, 0.5].map((n) => mix(hex, 0, n));
-	if (hex === '#000000') return [0.5, 0.35, 0.25, 0.15, 0.05].map((n) => mix(hex, 255, n));
-	return [
-		mix(hex, 255, 0.8),
-		mix(hex, 255, 0.6),
-		mix(hex, 255, 0.4),
-		mix(hex, 0, 0.25),
-		mix(hex, 0, 0.5),
-	];
-}
-
 export interface ColorGridOptions {
 	/** Label of the first row's "clear" command, or omitted when the property cannot be cleared. */
 	noneLabel?: string;
 }
 
 /**
- * Word's colour picker: a no-colour row, a Theme Colors grid (ten columns, each a colour over five
- * variants), Standard Colors and More Colors (the browser's colour dialog).
+ * Word's colour picker on the shared `office-ui-color-grid`: a no-colour row, Theme Colors (ten
+ * columns, each a colour over the five variants Office derives from it), Standard Colors and More
+ * Colors (the browser's colour dialog). A choice is reported as `#rrggbb`, or `'none'`.
  */
 export function openColorGridPopover(
 	anchor: HTMLElement,
@@ -67,72 +45,34 @@ export function openColorGridPopover(
 ): void {
 	const locale = localeOf(anchor);
 	const say = (text: string) => translate(locale, text as never);
+	defineColorGrid();
 	const pop = document.createElement('div');
 	pop.className = 'ribbon-popover color-grid';
-	pop.setAttribute('role', 'menu');
 	const pick = (value: string) => {
 		closeRibbonPopover();
 		choose(value);
 	};
-	const swatch = (value: string, name: string) => {
-		const item = document.createElement('button');
-		item.type = 'button';
-		item.setAttribute('role', 'menuitem');
-		item.className = 'swatch';
-		item.style.setProperty('--swatch', value);
-		item.setAttribute('aria-label', say(name));
-		item.title = say(name);
-		item.dataset.color = value;
-		item.addEventListener('mousedown', (event) => event.preventDefault());
-		item.addEventListener('click', () => pick(value));
-		return item;
-	};
-	const title = (text: string) => {
-		const el = document.createElement('div');
-		el.className = 'color-grid-title';
-		el.textContent = say(text);
-		return el;
-	};
-	const grid = (...items: HTMLElement[]) => {
-		const el = document.createElement('div');
-		el.className = 'color-grid-cells';
-		el.append(...items);
-		return el;
-	};
-	if (options.noneLabel) {
-		const none = document.createElement('button');
-		none.type = 'button';
-		none.setAttribute('role', 'menuitem');
-		none.className = 'color-grid-command';
-		none.textContent = say(options.noneLabel);
-		none.addEventListener('mousedown', (event) => event.preventDefault());
-		none.addEventListener('click', () => pick('none'));
-		pop.append(none);
-	}
-	const shades = THEME.map(([hex]) => themeShades(hex));
-	pop.append(
-		title('Theme Colors'),
-		grid(
-			...THEME.map(([hex, name]) => swatch(hex, name)),
-			...[0, 1, 2, 3, 4].flatMap((row) =>
-				THEME.map(([, name], column) => swatch(shades[column]![row]!, name)),
-			),
-		),
-		title('Standard Colors'),
-		grid(...STANDARD.map(([hex, name]) => swatch(hex, name))),
-	);
-	const more = document.createElement('button');
-	more.type = 'button';
-	more.setAttribute('role', 'menuitem');
-	more.className = 'color-grid-command';
-	more.textContent = say('More Colors…');
+	const grid = document.createElement('office-ui-color-grid') as OfficeUiColorGrid;
+	grid.themeColors = THEME.map(([hex]) => hex);
+	grid.themeNames = THEME.map(([, name]) => say(name));
+	// A variant keeps its column's name, as this picker always named it.
+	grid.variantLabel = (column) => column;
+	grid.standardColors = STANDARD.map(([hex, name]) => ({ hex, label: say(name) }));
+	grid.themeHeading = say('Theme Colors');
+	grid.standardHeading = say('Standard Colors');
+	grid.moreLabel = say('More Colors…');
+	if (options.noneLabel) grid.noneLabel = say(options.noneLabel);
 	const input = Object.assign(document.createElement('input'), { type: 'color' });
 	input.className = 'color-grid-input';
 	input.tabIndex = -1;
 	input.addEventListener('change', () => pick(input.value));
-	more.addEventListener('mousedown', (event) => event.preventDefault());
-	more.addEventListener('click', () => input.click());
-	pop.append(more, input);
+	grid.addEventListener('office-color-pick', (event) =>
+		pick((event as CustomEvent<OfficeColorPick>).detail.color),
+	);
+	grid.addEventListener('office-color-more', () => input.click());
+	// A press on a swatch must not take the selection from the document.
+	pop.addEventListener('mousedown', (event) => event.preventDefault());
+	pop.append(grid, input);
 	if (!mountPopover(anchor, pop, anchor)) return;
 	const box = anchor.getBoundingClientRect();
 	pop.style.left = `${Math.max(4, box.left - 120)}px`;

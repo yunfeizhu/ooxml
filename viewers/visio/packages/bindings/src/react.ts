@@ -70,4 +70,7 @@ export type {
 	CreateVsdxOptions,
 	ViewerEditState,
 	VsdxExportResult,
+	RibbonAddInCommand,
+	RibbonAddInGroup,
+	RibbonAddInTab,
 } from './common';

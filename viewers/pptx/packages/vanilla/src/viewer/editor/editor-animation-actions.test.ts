@@ -1,10 +1,10 @@
+import { bookmarkOptionValue, motionPathPresetById } from 'ooxml-ui/pptx';
 import type {
 	PptxAnimationTimelineAnchor,
 	PptxElement,
 	PptxElementAnimation,
 	PptxSlide,
 } from 'pptx-viewer-core';
-import { bookmarkOptionValue, motionPathPresetById } from 'ooxml-ui/pptx';
 import { describe, expect, it, vi } from 'vitest';
 
 import { createInitialViewerState, createStore } from '../state';

@@ -1,3 +1,4 @@
+import type { PrintSettings } from 'ooxml-ui/pptx';
 /**
  * Shared types, interfaces, and constants for the PrintDialog family.
  *
@@ -7,7 +8,6 @@
  * `radioClass` Tailwind helper stay local.
  */
 import type { PptxSlide } from 'pptx-viewer-core';
-import type { PrintSettings } from 'ooxml-ui/pptx';
 
 export type {
 	HandoutSlidesPerPage,

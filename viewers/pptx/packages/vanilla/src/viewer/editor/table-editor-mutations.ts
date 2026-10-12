@@ -1,7 +1,3 @@
-/* oxlint-disable eslint/one-var -- pervasive pre-existing pattern in this file
-   (independent short-lived `const`s per operation); merging them isn't a
-   style choice here. */
-import type { PptxTableCellStyle, PptxTableData, TablePptxElement } from 'pptx-viewer-core';
 import {
 	canMergeCells,
 	computeSplitCell,
@@ -13,6 +9,10 @@ import {
 	redistributeColumnWidth,
 	withCellStyle,
 } from 'ooxml-ui/pptx';
+/* oxlint-disable eslint/one-var -- pervasive pre-existing pattern in this file
+   (independent short-lived `const`s per operation); merging them isn't a
+   style choice here. */
+import type { PptxTableCellStyle, PptxTableData, TablePptxElement } from 'pptx-viewer-core';
 
 export interface TableCellPosition {
 	row: number;

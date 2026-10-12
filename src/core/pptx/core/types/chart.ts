@@ -697,6 +697,13 @@ export interface PptxChartSeries {
 	 */
 	gradientFill?: PptxChartGradientFill;
 	/**
+	 * Outline gradient of a line-drawn series (`c:ser/c:spPr/a:ln/a:gradFill`),
+	 * the stroke PowerPoint paints along the series line. Read for rendering
+	 * only (the viewer paints linear ones); the authored `a:ln` is left as
+	 * loaded on save.
+	 */
+	lineGradientFill?: PptxChartGradientFill;
+	/**
 	 * Per-series x values from `c:ser/c:xVal` (scatter and bubble series only).
 	 *
 	 * Every `CT_ScatterSer` / `CT_BubbleSer` carries its OWN `c:xVal`, so two

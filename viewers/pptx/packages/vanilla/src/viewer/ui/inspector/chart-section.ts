@@ -1,7 +1,3 @@
-/* oxlint-disable eslint/one-var -- pervasive pre-existing pattern in this file
-   (an imperative DOM-builder with many independent `const`s), not one
-   statement */
-import type { PptxChartData } from 'pptx-viewer-core';
 import type { ChartTypeSelectValue } from 'ooxml-ui/pptx';
 import {
 	chartDataLabelsTogglePatch,
@@ -12,6 +8,10 @@ import {
 	patchChartData as sharedPatchChartData,
 	resolveDisplayedChartType,
 } from 'ooxml-ui/pptx';
+/* oxlint-disable eslint/one-var -- pervasive pre-existing pattern in this file
+   (an imperative DOM-builder with many independent `const`s), not one
+   statement */
+import type { PptxChartData } from 'pptx-viewer-core';
 
 import type { Translator } from '../../i18n';
 import { createChartAdvancedSection } from './chart-advanced-section';

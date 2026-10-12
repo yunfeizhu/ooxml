@@ -772,6 +772,243 @@
 		},
 		{
 			"kind": "javascript-module",
+			"path": "form/color-custom.ts",
+			"declarations": [
+				{
+					"kind": "class",
+					"name": "OfficeUiColorCustom",
+					"tagName": "office-ui-color-custom",
+					"customElement": true,
+					"description": "`<office-ui-color-custom>`: the Custom tab of Office's Colors dialog. A hue (across) and saturation (up) square, a luminance slider, Hex, Red/Green/Blue and Hue/Sat/Lum fields (0-255, as Office shows them) that follow each other, and New over Current swatches. `value` is the colour (`#rrggbb`); `current` the colour being replaced. Every change emits `office-color-change` `{ color }`. The square and the slider take the arrow keys (Shift moves in larger steps), Home and End. The element is only the body: a product puts it in its dialog.",
+					"attributes": [
+						{
+							"name": "current"
+						},
+						{
+							"name": "disabled"
+						},
+						{
+							"name": "label"
+						},
+						{
+							"name": "value"
+						}
+					],
+					"members": [
+						{
+							"kind": "field",
+							"name": "bad"
+						},
+						{
+							"kind": "field",
+							"name": "current",
+							"type": {
+								"text": "string"
+							}
+						},
+						{
+							"kind": "field",
+							"name": "disabled",
+							"type": {
+								"text": "boolean"
+							}
+						},
+						{
+							"kind": "field",
+							"name": "hsl"
+						},
+						{
+							"kind": "field",
+							"name": "label",
+							"type": {
+								"text": "string"
+							}
+						},
+						{
+							"kind": "field",
+							"name": "typed"
+						},
+						{
+							"kind": "field",
+							"name": "value",
+							"type": {
+								"text": "string"
+							}
+						}
+					],
+					"events": [
+						{
+							"name": "office-color-change"
+						}
+					]
+				}
+			],
+			"exports": [
+				{
+					"kind": "custom-element-definition",
+					"name": "office-ui-color-custom",
+					"declaration": {
+						"name": "OfficeUiColorCustom"
+					}
+				}
+			]
+		},
+		{
+			"kind": "javascript-module",
+			"path": "form/color-grid.ts",
+			"declarations": [
+				{
+					"kind": "class",
+					"name": "OfficeUiColorGrid",
+					"tagName": "office-ui-color-grid",
+					"customElement": true,
+					"description": "`<office-ui-color-grid>`: Office's colour picker body. From the top: an optional `automatic-label` command (Automatic) and `none-label` command (No Fill, No Line), \"Theme Colors\" (ten columns, a base colour over its five lighter and darker variants, built from `themeColors`), \"Standard Colors\" (preceded by the `extraColors` row when a product has one, such as Visio's variant colours), \"Recent Colors\" when `recentColors` has any, and an optional `more-label` command (More Colors...). `value` (`#rrggbb`, `'none'` or `'automatic'`) marks the current choice. `themeNames` renames the ten columns and `variantLabel` names their variants (for a translated product). Choosing emits `office-color-pick` `{ color, source, label, theme?, index? }` (a theme swatch reports its column and variant, so a product can save a theme reference instead of the colour); the More Colors command emits `office-color-more`. Arrow keys move through the swatches and commands, Home and End jump to the ends; ArrowUp on the first row and ArrowDown on the last are left for a host menu. The element is only the grid: a product puts it in its own menu, popup or pane.",
+					"attributes": [
+						{
+							"name": "automatic-label"
+						},
+						{
+							"name": "disabled"
+						},
+						{
+							"name": "label"
+						},
+						{
+							"name": "more-label"
+						},
+						{
+							"name": "none-label"
+						},
+						{
+							"name": "recent-heading"
+						},
+						{
+							"name": "standard-heading"
+						},
+						{
+							"name": "theme-heading"
+						},
+						{
+							"name": "value"
+						}
+					],
+					"members": [
+						{
+							"kind": "field",
+							"name": "automaticLabel",
+							"type": {
+								"text": "string"
+							},
+							"attribute": "automatic-label"
+						},
+						{
+							"kind": "field",
+							"name": "disabled",
+							"type": {
+								"text": "boolean"
+							}
+						},
+						{
+							"kind": "field",
+							"name": "extraColors"
+						},
+						{
+							"kind": "field",
+							"name": "label",
+							"type": {
+								"text": "string"
+							}
+						},
+						{
+							"kind": "field",
+							"name": "moreLabel",
+							"type": {
+								"text": "string"
+							},
+							"attribute": "more-label"
+						},
+						{
+							"kind": "field",
+							"name": "noneLabel",
+							"type": {
+								"text": "string"
+							},
+							"attribute": "none-label"
+						},
+						{
+							"kind": "field",
+							"name": "recentColors"
+						},
+						{
+							"kind": "field",
+							"name": "recentHeading",
+							"type": {
+								"text": "string"
+							},
+							"attribute": "recent-heading"
+						},
+						{
+							"kind": "field",
+							"name": "standardColors"
+						},
+						{
+							"kind": "field",
+							"name": "standardHeading",
+							"type": {
+								"text": "string"
+							},
+							"attribute": "standard-heading"
+						},
+						{
+							"kind": "field",
+							"name": "themeColors"
+						},
+						{
+							"kind": "field",
+							"name": "themeHeading",
+							"type": {
+								"text": "string"
+							},
+							"attribute": "theme-heading"
+						},
+						{
+							"kind": "field",
+							"name": "themeNames"
+						},
+						{
+							"kind": "field",
+							"name": "value",
+							"type": {
+								"text": "string"
+							}
+						},
+						{
+							"kind": "field",
+							"name": "variantLabel"
+						}
+					],
+					"events": [
+						{
+							"name": "office-color-more"
+						},
+						{
+							"name": "office-color-pick"
+						}
+					]
+				}
+			],
+			"exports": [
+				{
+					"kind": "custom-element-definition",
+					"name": "office-ui-color-grid",
+					"declaration": {
+						"name": "OfficeUiColorGrid"
+					}
+				}
+			]
+		},
+		{
+			"kind": "javascript-module",
 			"path": "menu/command-search.ts",
 			"declarations": [
 				{
@@ -1501,7 +1738,7 @@
 					"name": "OfficeUiMenuButton",
 					"tagName": "office-ui-menu-button",
 					"customElement": true,
-					"description": "Dropdown command with a menu of `office-ui-menu-item` children (Office's Find, Layers, Align). With a `command` attribute it is a split button: the main part emits that command and the caret opens the menu. Attributes: `label`, `icon`, `command`, `variant=\"stacked\"`, `icon-only`, `disabled`, `main-disabled` (split command only), `title`, `keyshortcuts`. The menu uses the top layer (`popover`) so ribbon overflow never clips it. Keyboard: Enter, Space or ArrowDown open; arrows, Home and End move; Escape and Tab close; focus returns to the trigger. Choosing an item closes the menu; its `office-command` bubbles to the host.",
+					"description": "Dropdown command with a menu of `office-ui-menu-item` children (Office's Find, Layers, Align). With a `command` attribute it is a split button: the main part emits that command and the caret opens the menu. Attributes: `label`, `icon`, `command`, `variant=\"stacked\"`, `icon-only`, `disabled`, `main-disabled` (split command only), `title`, `keyshortcuts`. The menu uses the top layer (`popover`) so ribbon overflow never clips it. Keyboard: Enter, Space or ArrowDown open; arrows, Home and End move; Escape and Tab close; focus returns to the trigger. Choosing an item closes the menu; its `office-command` bubbles to the host. A child marked `data-menu-item` (a colour grid, say) takes part in that focus order through its own `focus()`.",
 					"attributes": [
 						{
 							"name": "command"
@@ -2618,8 +2855,11 @@
 					"name": "OfficeUiRuler",
 					"tagName": "office-ui-ruler",
 					"customElement": true,
-					"description": "`<office-ui-ruler>`: an Office ruler (inches by default). The product positions it and says where zero is: `origin` is the CSS-pixel offset of zero from the ruler's start edge, `scale` the CSS pixels per unit (96 at 100% for inches). `orientation=\"vertical\"` draws a side ruler; `direction=\"reverse\"` makes values grow toward the start edge, as Visio's vertical ruler grows upward from the page bottom. Page rulers add: `extent` (the ruler's own length in px, as long as the page), `marginStart` / `marginEnd` (shaded margin bands), `zoom` (the ruler is shown at that CSS zoom) and `labelsWithinMargins` (whole-unit labels only between the margins, counted up from `origin`). `markers` are draggable: the element fires `ruler-marker-move` while one is dragged (the host answers by updating `markers` to preview), then `ruler-marker-commit` on release or `ruler-marker-cancel`; all carry a `RulerMarkerEventDetail`. Without a `label` the ruler is hidden from assistive technology; with one it is an image with that name.",
+					"description": "`<office-ui-ruler>`: an Office ruler (inches by default). The product positions it and says where zero is: `origin` is the CSS-pixel offset of zero from the ruler's start edge, `scale` the CSS pixels per unit (96 at 100% for inches). `orientation=\"vertical\"` draws a side ruler; `direction=\"reverse\"` makes values grow toward the start edge, as Visio's vertical ruler grows upward from the page bottom. `density` (1 by default) is the share of the subdivisions shown: 0.5 draws every second tick and 0.25 every fourth (Visio's Normal and Coarse ruler subdivisions). Page rulers add: `extent` (the ruler's own length in px, as long as the page), `marginStart` / `marginEnd` (shaded margin bands), `zoom` (the ruler is shown at that CSS zoom) and `labelsWithinMargins` (whole-unit labels only between the margins, counted up from `origin`). `markers` are draggable: the element fires `ruler-marker-move` while one is dragged (the host answers by updating `markers` to preview), then `ruler-marker-commit` on release or `ruler-marker-cancel`; all carry a `RulerMarkerEventDetail`. Without a `label` the ruler is hidden from assistive technology; with one it is an image with that name.",
 					"attributes": [
+						{
+							"name": "density"
+						},
 						{
 							"name": "direction"
 						},
@@ -2652,6 +2892,13 @@
 						}
 					],
 					"members": [
+						{
+							"kind": "field",
+							"name": "density",
+							"type": {
+								"text": "number"
+							}
+						},
 						{
 							"kind": "field",
 							"name": "direction",
@@ -3122,6 +3369,65 @@
 		},
 		{
 			"kind": "javascript-module",
+			"path": "form/symbol-picker.ts",
+			"declarations": [
+				{
+					"kind": "class",
+					"name": "OfficeUiSymbolPicker",
+					"tagName": "office-ui-symbol-picker",
+					"customElement": true,
+					"description": "`<office-ui-symbol-picker>`: a grid of common symbols plus a character-code field, as in Office's Insert > Symbol. `symbols` replaces the grid (default `OFFICE_SYMBOLS`), `label` names the group, `disabled` disables everything. Choosing a symbol or inserting a valid code emits `office-symbol-pick` with `{ symbol, code }` (`code` is `U+XXXX`). Document text is never touched.",
+					"attributes": [
+						{
+							"name": "disabled"
+						},
+						{
+							"name": "label"
+						}
+					],
+					"members": [
+						{
+							"kind": "field",
+							"name": "code"
+						},
+						{
+							"kind": "field",
+							"name": "disabled",
+							"type": {
+								"text": "boolean"
+							}
+						},
+						{
+							"kind": "field",
+							"name": "label",
+							"type": {
+								"text": "string"
+							}
+						},
+						{
+							"kind": "field",
+							"name": "symbols"
+						}
+					],
+					"events": [
+						{
+							"name": "office-symbol-pick"
+						}
+					]
+				}
+			],
+			"exports": [
+				{
+					"kind": "custom-element-definition",
+					"name": "office-ui-symbol-picker",
+					"declaration": {
+						"name": "OfficeUiSymbolPicker"
+					}
+				}
+			]
+		},
+		{
+			"kind": "javascript-module",
 			"path": "chrome/tab-strip.ts",
 			"declarations": [
 				{
@@ -3129,7 +3435,7 @@
 					"name": "OfficeUiTabStrip",
 					"tagName": "office-ui-tab-strip",
 					"customElement": true,
-					"description": "Bottom document tabs (Visio pages, Excel sheets). Set `tabs` (`OfficeTab[]`) and `selected` (a tab id). Labels are inserted as text. The previous/next buttons and arrow, Home and End keys move the selection; the tab list uses a roving tabindex. User selection emits `office-tab-select` `{ id }` (cancelable); setting properties never emits. Attributes: `label` (tab list name, default \"Tabs\"), `previous-label` and `next-label` (step button names, default \"Previous\" and \"Next\"), `disabled`, and `add-label` to show an add button after the tabs (Insert Page, New Sheet) that emits `office-command` `{ command: 'tab-add' }`; `add-disabled` and `add-title` disable and explain it.",
+					"description": "Bottom document tabs (Visio pages, Excel sheets). Set `tabs` (`OfficeTab[]`) and `selected` (a tab id). Labels are inserted as text. The previous/next buttons and arrow, Home and End keys move the selection; the tab list uses a roving tabindex. User selection emits `office-tab-select` `{ id }` (cancelable); setting properties never emits. Attributes: `label` (tab list name, default \"Tabs\"), `previous-label` and `next-label` (step button names, default \"Previous\" and \"Next\"), `disabled`, and `add-label` to show an add button after the tabs (Insert Page, New Sheet) that emits `office-command` `{ command: 'tab-add' }`; `add-disabled` and `add-title` disable and explain it. The `after-tabs` slot sits between the tabs and the add button (Visio's All pages list), and the `plain` attribute draws the selected tab as bold accent text without a box, as Visio does.",
 					"attributes": [
 						{
 							"name": "add-disabled"
@@ -3245,6 +3551,58 @@
 		},
 		{
 			"kind": "javascript-module",
+			"path": "chrome/task-pane.ts",
+			"declarations": [
+				{
+					"kind": "class",
+					"name": "OfficeUiTaskPane",
+					"tagName": "office-ui-task-pane",
+					"customElement": true,
+					"description": "`<office-ui-task-pane>`: a docked task pane, as Office shows Format Shape or Shape Data. A header with the `label` as its title and a close button (named by `close-label`, default \"Close <label>\"), then the slotted body. The close button emits `office-pane-close`; the host decides whether to hide the pane. The host is a `complementary` landmark named by the label. Parts: `header` and `body`, for a product that lays the pane out differently (a wide pane docked under the document, whose body does not scroll as a whole).",
+					"attributes": [
+						{
+							"name": "close-label"
+						},
+						{
+							"name": "label"
+						}
+					],
+					"members": [
+						{
+							"kind": "field",
+							"name": "closeLabel",
+							"type": {
+								"text": "string"
+							},
+							"attribute": "close-label"
+						},
+						{
+							"kind": "field",
+							"name": "label",
+							"type": {
+								"text": "string"
+							}
+						}
+					],
+					"events": [
+						{
+							"name": "office-pane-close"
+						}
+					]
+				}
+			],
+			"exports": [
+				{
+					"kind": "custom-element-definition",
+					"name": "office-ui-task-pane",
+					"declaration": {
+						"name": "OfficeUiTaskPane"
+					}
+				}
+			]
+		},
+		{
+			"kind": "javascript-module",
 			"path": "chrome/title-bar.ts",
 			"declarations": [
 				{
@@ -3252,7 +3610,7 @@
 					"name": "OfficeUiTitleBar",
 					"tagName": "office-ui-title-bar",
 					"customElement": true,
-					"description": "`<office-ui-title-bar>`: Office's title bar above the ribbon (app mark, AutoSave, Quick Access Toolbar, file name and status, centred command search, `actions`, `collaboration` and `account` slots). Controlled: set `state` (`OfficeTitleBarState`, every string translated); the bar owns no effects. `placement=\"belowRibbon\"` renders only the Quick Access row and hides itself (`data-empty`) while that row is empty. Events (bubbling, composed; static names let a product subclass keep its published ones): `office-autosave-toggle`, `office-command` `{ command }` from a Quick Access button and `office-command-search` `{ query, command? }`. Override `activate(id)` to route Quick Access buttons differently and `rendered()` to mirror state onto the host. Tokens: `--office-title-bar-*`. The search query stays local to the bar, so hosts never round-trip keystrokes; they receive one request per commit.",
+					"description": "`<office-ui-title-bar>`: Office's title bar above the ribbon (app mark, AutoSave, Quick Access Toolbar, file name and status, centred command search, `actions`, `collaboration` and `account` slots). Controlled: set `state` (`OfficeTitleBarState`, every string translated); the bar owns no effects. The `centered` attribute puts the file name in the middle of the bar. `placement=\"belowRibbon\"` renders only the Quick Access row and hides itself (`data-empty`) while that row is empty. Events (bubbling, composed; static names let a product subclass keep its published ones): `office-autosave-toggle`, `office-command` `{ command }` from a Quick Access button and `office-command-search` `{ query, command? }`. Override `activate(id)` to route Quick Access buttons differently and `rendered()` to mirror state onto the host. Tokens: `--office-title-bar-*`. The search query stays local to the bar, so hosts never round-trip keystrokes; they receive one request per commit.",
 					"attributes": [
 						{
 							"name": "placement"

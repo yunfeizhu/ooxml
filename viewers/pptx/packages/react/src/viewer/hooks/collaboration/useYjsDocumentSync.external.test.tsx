@@ -1,5 +1,3 @@
-// @vitest-environment happy-dom
-import type { PptxSlide } from 'pptx-viewer-core';
 import type {
 	CollaborationConfig,
 	CollaborationLivePatcher,
@@ -13,6 +11,8 @@ import {
 	readSlidesFromYDoc,
 	reconcileSlidesInYDoc,
 } from 'ooxml-ui/pptx';
+// @vitest-environment happy-dom
+import type { PptxSlide } from 'pptx-viewer-core';
 import React, { act, useEffect, useState, useMemo, useRef } from 'react';
 import { createRoot } from 'react-dom/client';
 import type { Root } from 'react-dom/client';
@@ -312,7 +312,9 @@ describe('host-owned document synchronization', () => {
 		const patcher = createCollaborationLivePatcher();
 		const enabledWithoutChannel: boolean[] = [];
 		const onReadOnlyChange = vi.fn((readOnly: boolean) => {
-			if (!readOnly) enabledWithoutChannel.push(!patcher.isActive());
+			if (!readOnly) {
+				enabledWithoutChannel.push(!patcher.isActive());
+			}
 		});
 		const collaboration = {
 			config: { roomId: 'native-readiness', serverUrl: '', userName: 'Participant' },
@@ -334,7 +336,7 @@ describe('host-owned document synchronization', () => {
 			),
 		);
 		expect(onReadOnlyChange).toHaveBeenLastCalledWith(true);
-		expect(patcher.isActive()).toBe(false);
+		expect(patcher.isActive()).toBeFalsy();
 		await act(async () =>
 			root.render(
 				<PermissionProbe
@@ -344,9 +346,9 @@ describe('host-owned document synchronization', () => {
 				/>,
 			),
 		);
-		expect(patcher.isActive()).toBe(true);
+		expect(patcher.isActive()).toBeTruthy();
 		expect(onReadOnlyChange).toHaveBeenLastCalledWith(false);
-		expect(enabledWithoutChannel).toEqual([false]);
+		expect(enabledWithoutChannel).toStrictEqual([false]);
 		await act(async () =>
 			root.render(
 				<PermissionProbe
@@ -357,7 +359,7 @@ describe('host-owned document synchronization', () => {
 			),
 		);
 		// Keep the existing local/offline policy once this document was initialized.
-		expect(patcher.isActive()).toBe(false);
+		expect(patcher.isActive()).toBeFalsy();
 		expect(onReadOnlyChange).toHaveBeenLastCalledWith(false);
 	});
 

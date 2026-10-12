@@ -6,8 +6,23 @@ export const VISIO_WALK_GLUE = '_WALKGLUE(BegTrigger,EndTrigger,WalkPreference)'
 const walkGlue =
 	/^\s*_WALKGLUE\((?:BegTrigger,EndTrigger|EndTrigger,BegTrigger),WalkPreference\)\s*$/i;
 const trigger = /^\s*_XFTRIGGER\(Sheet\.([1-9]\d{0,9})!EventXFMod\)\s*$/i;
+const pointGlue =
+	/^\s*PAR\(PNT\(Sheet\.([1-9]\d{0,9})!Connections\.X([1-9]\d{0,4}),\s*Sheet\.\1!Connections\.Y\2\)\)\s*$/i;
 
 export const visioGlueTrigger = (shapeId: string) => `_XFTRIGGER(Sheet.${shapeId}!EventXFMod)`;
+/**
+ * The formula Visio writes on both coordinates of an end glued to a connection point (point-to-point
+ * glue). `index` is the zero-based Connection row; ShapeSheet names count rows from 1.
+ */
+export const visioPointGlue = (shapeId: string, index: number) =>
+	`PAR(PNT(Sheet.${shapeId}!Connections.X${index + 1},Sheet.${shapeId}!Connections.Y${index + 1}))`;
+/** The shape and zero-based Connection row a point-glue formula names, if it is one. */
+export function visioPointGlueTarget(
+	formula: string | undefined,
+): { shapeId: string; index: number } | undefined {
+	const match = formula ? pointGlue.exec(formula) : undefined;
+	return match ? { shapeId: match[1]!, index: Number(match[2]) - 1 } : undefined;
+}
 
 /** The glued shape a native trigger formula names, if it is one. */
 export function visioGlueTriggerTarget(formula: string | undefined): string | undefined {
@@ -17,7 +32,8 @@ export function visioGlueTriggerTarget(formula: string | undefined): string | un
 /** Native dynamic-glue cells of a connector: Visio re-evaluates them; the editor keeps their caches. */
 export function isNativeGlueCell(name: string, formula: string): boolean {
 	return (
-		(/^(BeginX|BeginY|EndX|EndY)$/.test(name) && walkGlue.test(formula)) ||
+		(/^(BeginX|BeginY|EndX|EndY)$/.test(name) &&
+			(walkGlue.test(formula) || pointGlue.test(formula))) ||
 		(/^(BegTrigger|EndTrigger)$/.test(name) && trigger.test(formula))
 	);
 }

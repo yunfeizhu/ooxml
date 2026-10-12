@@ -2,6 +2,7 @@ import { test, expect } from '@playwright/test';
 import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { parseVsdx } from 'ooxml-core/visio';
+import { openDemo } from './demo-page';
 for (const variable of [
 	'VISIO_NATIVE_ROTATE_DIR',
 	'VISIO_NATIVE_ROTATE_DOUBLE_DIR',
@@ -34,7 +35,8 @@ for (const variable of [
 				const reference = evidence.rotated[kind]!;
 				const native = await parseVsdx(await readFile(join(directory!, 'rotated.vsdx')));
 				const expected = native.pages[0]!.shapes.find((shape) => shape.id === reference.shapeId)!;
-				await page.goto(
+				await openDemo(
+					page,
 					framework === 'vanilla' ? '/demo/?sample=1' : `/demo-${framework}/?sample=1`,
 				);
 				await page.locator('#file').setInputFiles({

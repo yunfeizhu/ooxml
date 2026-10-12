@@ -1,0 +1,32 @@
+/* Visio's title bar: the shared office-ui-title-bar, with the signed-in name at its right end. */
+.title-bar {
+	flex: none;
+}
+.title-bar[hidden] {
+	display: none;
+}
+.title-account {
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+	font-size: 12px;
+	color: var(--_vv-ink);
+}
+.title-account[hidden] {
+	display: none;
+}
+.title-account-avatar {
+	display: inline-grid;
+	place-items: center;
+	width: 24px;
+	height: 24px;
+	border-radius: 50%;
+	color: #fff;
+	font-size: 10px;
+	font-weight: 600;
+}
+@media (max-width: 760px) {
+	.title-account-name {
+		display: none;
+	}
+}

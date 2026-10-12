@@ -13,10 +13,10 @@ import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import type { PptxSlide } from 'pptx-viewer-core';
-import { PptxHandler } from 'pptx-viewer-core';
 import { partitionTemplateElements } from 'ooxml-ui/pptx';
 import { translationsEn } from 'ooxml-ui/pptx/i18n';
+import type { PptxSlide } from 'pptx-viewer-core';
+import { PptxHandler } from 'pptx-viewer-core';
 import React from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { beforeAll, afterAll, describe, expect, it, vi } from 'vitest';

@@ -33,6 +33,7 @@ const PANELS: Readonly<Record<string, Readonly<Record<string, string>>>> = {
 		'align-middle': 'AM',
 		'align-bottom': 'AB',
 		bullets: 'U',
+		'rotate-text': 'AX',
 		'align-left': 'AL',
 		'align-center': 'AC',
 		'align-right': 'AR',
@@ -108,8 +109,6 @@ export function applyKeyTips(toolbar: HTMLElement): void {
 	// File and the tabs live in the shared ribbon, which copies these onto its own buttons.
 	toolbar.setAttribute('file-keytip', 'F');
 	toolbar.querySelector<HTMLElement>('.tell-me')!.dataset.keytip = 'Q';
-	toolbar.querySelector<HTMLElement>('.qat [command="undo"]')!.dataset.keytip = '1';
-	toolbar.querySelector<HTMLElement>('.qat [command="redo"]')!.dataset.keytip = '2';
 	for (const panel of toolbar.querySelectorAll<HTMLElement>('[data-ribbon-tab]')) {
 		const tab = panel.dataset.ribbonTab!;
 		panel.dataset.tabKeytip = TABS[tab] ?? tab.slice(0, 1).toUpperCase();

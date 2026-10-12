@@ -1,11 +1,4 @@
 import {
-	cloneElement,
-	cloneSlide,
-	duplicateElement,
-	updateSmartArtNodeText,
-} from 'pptx-viewer-core';
-import type { PptxElement, PptxSlide } from 'pptx-viewer-core';
-import {
 	bringForward as sharedBringForward,
 	bringToFront as sharedBringToFront,
 	isGroupMember,
@@ -14,6 +7,13 @@ import {
 	sendToBack as sharedSendToBack,
 	updateElementInTree,
 } from 'ooxml-ui/pptx';
+import {
+	cloneElement,
+	cloneSlide,
+	duplicateElement,
+	updateSmartArtNodeText,
+} from 'pptx-viewer-core';
+import type { PptxElement, PptxSlide } from 'pptx-viewer-core';
 import { computed, ref } from 'vue';
 import type { ComputedRef, Ref } from 'vue';
 

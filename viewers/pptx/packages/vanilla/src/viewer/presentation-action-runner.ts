@@ -1,4 +1,3 @@
-import type { PptxSlide } from 'pptx-viewer-core';
 import {
 	buildRunProgramNotice,
 	downloadDataUrl,
@@ -8,6 +7,7 @@ import {
 	toggleStageElementMedia,
 } from 'ooxml-ui/pptx';
 import type { PresentationActionRunner, RunProgramNotice } from 'ooxml-ui/pptx';
+import type { PptxSlide } from 'pptx-viewer-core';
 
 import type { CustomShowRunner } from './presenter/presentation-custom-show-runner';
 

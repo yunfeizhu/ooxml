@@ -22,9 +22,9 @@ import {
 	signal,
 } from '@angular/core';
 import { TranslatePipe } from '@ngx-translate/core';
-
 import type { ActiveSessionUserDescriptor, CollaborationConfig } from 'ooxml-ui/pptx';
 import { buildCreateCollaborationConfig, buildJoinCollaborationConfig } from 'ooxml-ui/pptx';
+
 import { canUseClipboard } from './broadcast-helpers';
 import type { DialogFooterActionSpec } from './dialog-footer.component';
 import { DialogFooterComponent } from './dialog-footer.component';

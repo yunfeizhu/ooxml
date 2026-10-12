@@ -1,3 +1,9 @@
+import {
+	createCollaborationLivePatcher,
+	readSlidesFromYDoc,
+	reconcileSlidesInYDoc,
+} from 'ooxml-ui/pptx';
+import type { YDocLike, YjsFactories } from 'ooxml-ui/pptx';
 // @vitest-environment happy-dom
 /**
  * Regression test for the collaboration live-preview channel: React's drag and
@@ -7,12 +13,6 @@
  * `processPointerUp` runs.
  */
 import type { PptxElement, PptxSlide } from 'pptx-viewer-core';
-import {
-	createCollaborationLivePatcher,
-	readSlidesFromYDoc,
-	reconcileSlidesInYDoc,
-} from 'ooxml-ui/pptx';
-import type { YDocLike, YjsFactories } from 'ooxml-ui/pptx';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import * as Y from 'yjs';
 

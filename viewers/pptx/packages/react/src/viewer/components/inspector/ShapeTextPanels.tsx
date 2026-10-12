@@ -1,10 +1,10 @@
-import type { PptxElement, ShapeStyle, TextStyle } from 'pptx-viewer-core';
-import { hasShapeProperties, hasTextProperties } from 'pptx-viewer-core';
 import {
 	shouldShowAccessibilitySection,
 	textFontSizePtToPx,
 	textFontSizePxToPt,
 } from 'ooxml-ui/pptx';
+import type { PptxElement, ShapeStyle, TextStyle } from 'pptx-viewer-core';
+import { hasShapeProperties, hasTextProperties } from 'pptx-viewer-core';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 

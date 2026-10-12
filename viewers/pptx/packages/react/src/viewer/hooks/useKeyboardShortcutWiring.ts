@@ -1,9 +1,3 @@
-/**
- * useKeyboardShortcutWiring: Wires the composed editor results into the
- * generic `useKeyboardShortcuts` hook.  Keeps the orchestrator lean.
- */
-import { hasTextProperties } from 'pptx-viewer-core';
-import type { PptxSlide } from 'pptx-viewer-core';
 import type { ResolvedCustomization } from 'ooxml-ui/pptx';
 import {
 	cycleSelectableElement,
@@ -12,6 +6,12 @@ import {
 	textFontSizePtToPx,
 	textFontSizePxToPt,
 } from 'ooxml-ui/pptx';
+/**
+ * useKeyboardShortcutWiring: Wires the composed editor results into the
+ * generic `useKeyboardShortcuts` hook.  Keeps the orchestrator lean.
+ */
+import { hasTextProperties } from 'pptx-viewer-core';
+import type { PptxSlide } from 'pptx-viewer-core';
 
 import type { ViewerMode } from '../types-core';
 import type { EditorHistoryResult } from './useEditorHistory';

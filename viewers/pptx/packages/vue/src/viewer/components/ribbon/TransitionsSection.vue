@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import type { PptxSlide, PptxSlideTransition } from 'pptx-viewer-core';
 import type { RibbonTransitionsRequestEvent } from 'ooxml-ui/pptx';
 import {
 	playSlideTransitionPreview,
@@ -9,6 +8,7 @@ import {
 	ribbonTransitionStockSoundUrl,
 	ribbonTransitionUpdates,
 } from 'ooxml-ui/pptx';
+import type { PptxSlide, PptxSlideTransition } from 'pptx-viewer-core';
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 

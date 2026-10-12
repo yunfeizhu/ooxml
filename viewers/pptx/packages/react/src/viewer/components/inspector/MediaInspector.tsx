@@ -1,4 +1,3 @@
-import type { MediaPptxElement, PptxElement } from 'pptx-viewer-core';
 import {
 	mediaTrimEndAbsoluteMs,
 	mediaTrimEndMsFromAbsoluteMs,
@@ -8,6 +7,7 @@ import {
 	validateMediaTrimRange,
 } from 'ooxml-ui/pptx';
 import type { MediaTrimRangeError } from 'ooxml-ui/pptx';
+import type { MediaPptxElement, PptxElement } from 'pptx-viewer-core';
 import React, { useState, useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { LuClock, LuScissors } from 'react-icons/lu';

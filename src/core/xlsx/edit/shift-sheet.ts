@@ -3,6 +3,7 @@ import { putCell } from '../cells';
 import { clearFilteredRows } from '../filter-rows';
 import type { Cell, DrawingAnchor, Table, TableColumn, Worksheet } from '../model';
 import { normalizeColumns } from './columns';
+import { assertInsertFits } from './insert-guard';
 import { shiftPreservedXml } from './shift-preserved';
 import {
 	type AxisShift,
@@ -26,6 +27,7 @@ export interface Band {
  * and x14 extensions kept as XML. Formulas are rewritten separately (they live on every sheet).
  */
 export function shiftSheetContent(sheet: Worksheet, shift: AxisShift, band?: Band): void {
+	assertInsertFits(sheet, shift, band);
 	const moveRange = (range: CellRange): CellRange | undefined =>
 		band ? shiftRangeInBand(range, shift, band.lo, band.hi) : shiftRange(range, shift);
 	shiftCells(sheet, shift, band, moveRange);

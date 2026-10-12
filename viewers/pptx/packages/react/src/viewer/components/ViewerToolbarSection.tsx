@@ -1,3 +1,12 @@
+import {
+	applyMotionPathPreset,
+	createBackstagePresentation,
+	DEFAULT_INSERT_CHART_KIND,
+	isPanelVisible,
+	resetSlideLayoutPath,
+	templateSchemeFromTheme,
+} from 'ooxml-ui/pptx';
+import type { AnimationApplyGroup, FreeformToolKind, ToolbarActionId } from 'ooxml-ui/pptx';
 import type {
 	PptxElement,
 	PptxEmbeddedFont,
@@ -10,15 +19,6 @@ import type {
 	PptxAnimationPreset,
 	PptxTheme,
 } from 'pptx-viewer-core';
-import {
-	applyMotionPathPreset,
-	createBackstagePresentation,
-	DEFAULT_INSERT_CHART_KIND,
-	isPanelVisible,
-	resetSlideLayoutPath,
-	templateSchemeFromTheme,
-} from 'ooxml-ui/pptx';
-import type { AnimationApplyGroup, FreeformToolKind, ToolbarActionId } from 'ooxml-ui/pptx';
 /**
  * ViewerToolbarSection: Renders the top toolbar, signature badge,
  * and hidden file-input elements.

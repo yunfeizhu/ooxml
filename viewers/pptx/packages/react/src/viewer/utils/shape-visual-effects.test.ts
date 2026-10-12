@@ -1,5 +1,5 @@
-import type { PptxElement } from 'pptx-viewer-core';
 import { buildImageBiLevelTable, getImageAlphaFilter } from 'ooxml-ui/pptx';
+import type { PptxElement } from 'pptx-viewer-core';
 import { describe, it, expect } from 'vitest';
 
 import { getImageEffectsFilter, getImageEffectsOpacity } from './shape-visual-effects';

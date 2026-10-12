@@ -1,4 +1,3 @@
-import type { PptxElement, PptxSlide } from 'pptx-viewer-core';
 /**
  * `SlideLayer` - a simplified, non-interactive slide render (like
  * `SlideThumbnail`), used by both the single-layer and multi-fragment
@@ -6,6 +5,7 @@ import type { PptxElement, PptxSlide } from 'pptx-viewer-core';
  * `FragmentedTransitionLayer.tsx` can reuse it without a circular import.
  */
 import { visibleTemplateElements } from 'ooxml-ui/pptx';
+import type { PptxElement, PptxSlide } from 'pptx-viewer-core';
 import React from 'react';
 
 import type { CanvasSize } from '../types';

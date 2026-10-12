@@ -20,7 +20,8 @@ describe('pickers follow the display language', () => {
 	it('names the colour picker sections and swatches in French', () => {
 		const { anchor } = frenchHost();
 		openColorGridPopover(anchor, () => {}, { noneLabel: 'No Color' });
-		const pop = document.querySelector('.color-grid')!;
+		// The shared colour grid renders into its shadow root.
+		const pop = document.querySelector('.color-grid office-ui-color-grid')!.shadowRoot!;
 		const text = pop.textContent!;
 		expect(text).toContain('Couleurs du thème');
 		expect(text).toContain('Couleurs standard');

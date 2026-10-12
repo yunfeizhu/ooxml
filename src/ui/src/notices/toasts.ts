@@ -72,23 +72,24 @@ export class OfficeUiToasts extends OfficeElement {
 					>
 				</div>
 				${visible.map(
-					(toast) => html`<div
-						class="toast"
-						role="status"
-						data-testid=${p}
-						data-code=${ifDefined(toast.code)}
-						data-severity=${toast.severity}
-					>
-						${glyph(toast.severity === 'warning' ? 'warning' : 'info', 'icon')}
-						<p class="message">${toast.message}</p>
-						<button
-							type="button"
-							data-testid="${p}-dismiss"
-							aria-label=${labels.dismiss ?? 'Dismiss'}
-							@click=${() => this.fire(requestEvent, { id: 'dismiss', toastId: toast.id })}
-							>${glyph('close', 'icon')}</button
+					(toast) =>
+						html`<div
+							class="toast"
+							role="status"
+							data-testid=${p}
+							data-code=${ifDefined(toast.code)}
+							data-severity=${toast.severity}
 						>
-					</div>`,
+							${glyph(toast.severity === 'warning' ? 'warning' : 'info', 'icon')}
+							<p class="message">${toast.message}</p>
+							<button
+								type="button"
+								data-testid="${p}-dismiss"
+								aria-label=${labels.dismiss ?? 'Dismiss'}
+								@click=${() => this.fire(requestEvent, { id: 'dismiss', toastId: toast.id })}
+								>${glyph('close', 'icon')}</button
+							>
+						</div>`,
 				)}
 				${hiddenCount > 0 ? html`<p class="overflow">+${hiddenCount}</p>` : ''}
 			</div>

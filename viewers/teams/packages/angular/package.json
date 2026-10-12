@@ -1,6 +1,6 @@
 {
 	"name": "openteams-angular-viewer",
-	"version": "0.2.3",
+	"version": "0.2.4",
 	"description": "Angular standalone component and service for OpenTeams, the open-source bring-your-own-server team workspace. Self-contained: includes the <teams-app> UI.",
 	"keywords": [
 		"angular",

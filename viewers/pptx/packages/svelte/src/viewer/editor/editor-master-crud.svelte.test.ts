@@ -1,5 +1,5 @@
-import type { PptxHandler, PptxSlideMaster } from 'pptx-viewer-core';
 import type { MasterViewCrudAction, MasterViewCrudActionId } from 'ooxml-ui/pptx';
+import type { PptxHandler, PptxSlideMaster } from 'pptx-viewer-core';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import type { MasterViewCrudPrompts } from './editor-master-crud';

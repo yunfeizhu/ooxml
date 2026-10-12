@@ -6,12 +6,16 @@ import { BASIC_SHAPES, createShapesWindow } from './shapes-window';
 import { wireStencil } from './viewer-stencil';
 import type { CancellableEditor } from './worker-editor';
 
-afterEach(() => document.body.replaceChildren());
+afterEach(() => {
+	document.body.replaceChildren();
+	localStorage.clear();
+});
 
-async function setup(source = true) {
+async function setup(source = true, delay = 0) {
 	const edits: VisioEdit[][] = [];
 	const editor: CancellableEditor = async (_bytes, commands) => {
 		edits.push([...commands]);
+		if (delay) await new Promise((resolve) => setTimeout(resolve, delay));
 		return {
 			bytes: new Uint8Array([2]),
 			document: structuredClone(demoDocument),
@@ -47,34 +51,60 @@ describe("Visio's Shapes window", () => {
 			expect(master.hasAttribute('aria-disabled')).toBe(false);
 			expect(master.title).not.toMatch(/not available/);
 		}
-		// More Shapes and Quick Shapes need stencil files, which are not supported yet.
+		// More Shapes and Quick Shapes work over the built-in stencils.
 		expect(
-			[...pane.querySelectorAll<HTMLButtonElement>('.shapes-row')].every((row) => row.disabled),
-		).toBe(true);
+			[...pane.querySelectorAll<HTMLButtonElement>('.shapes-row')].map((row) => row.disabled),
+		).toEqual([false, false]);
 	});
 
 	it('adds masters at the page centre through core', async () => {
 		const { controller, edits, master, messages, settle } = await setup();
 		const page = demoDocument.pages[0]!;
-		const box = {
+		// An instance of the stencil master, pinned at the page centre (the size is the master's).
+		const drop = (id: string) => ({
+			type: 'drop-stencil-master',
 			pageId: page.id,
 			shapeId: expect.any(String),
+			master: id,
 			x: page.width / 2,
 			y: page.height / 2,
-		};
+		});
 		master('rectangle').click();
 		await settle();
 		master('circle').click();
 		await settle();
 		master('star').click();
 		await settle();
-		expect(edits).toEqual([
-			[{ ...box, type: 'create-rectangle', width: 1, height: 0.75, shape: 'rectangle' }],
-			[{ ...box, type: 'create-ellipse', width: 1, height: 1 }],
-			[{ ...box, type: 'create-rectangle', width: 1, height: 1, shape: 'star' }],
+		// Each master is created with Visio's default theme look in the same history step.
+		const style = (shapeId: string) => ({
+			type: 'format-shape',
+			pageId: page.id,
+			shapeId,
+			quickStyle: { color: 100, matrix: 4 },
+		});
+		expect(edits.map(([created]) => created)).toEqual([
+			drop('rectangle'),
+			drop('circle'),
+			drop('star'),
 		]);
+		for (const [created, styled, ...rest] of edits) {
+			expect(styled).toEqual(style((created as { shapeId: string }).shapeId));
+			expect(rest).toEqual([]);
+		}
 		expect(messages.at(-1)).toMatch(/^5-point star .+ added from Basic Shapes\.$/);
 		expect(controller.state.edit.canUndo).toBe(true);
+	});
+
+	it('adds a master dropped while the previous one is still saving', async () => {
+		const { master, edits, messages } = await setup(true, 30);
+		master('square').click();
+		master('triangle').click();
+		await new Promise((resolve) => setTimeout(resolve, 200));
+		expect(edits.map(([created]) => (created as { master?: string }).master)).toEqual([
+			'square',
+			'triangle',
+		]);
+		expect(messages.at(-1)).toMatch(/^Triangle .+ added from Basic Shapes\.$/);
 	});
 
 	it('explains read-only documents instead of editing them', async () => {
@@ -82,25 +112,35 @@ describe("Visio's Shapes window", () => {
 		master('rectangle').click();
 		await settle();
 		expect(edits).toEqual([]);
-		expect(messages).toEqual([
-			'Open a .vsdx file to add shapes. Model-only documents are read only.',
-		]);
+		expect(messages).toEqual(['Open a .vsdx file to add shapes.']);
 	});
 
-	it('switches to Search and filters the stencil by name', async () => {
+	it('searches from the box under the title and filters every stencil by name', async () => {
 		const { pane } = await setup();
-		pane.querySelector<HTMLButtonElement>('[data-shapes-view="search"]')!.click();
-		expect(pane.querySelector<HTMLElement>('#shapes-stencils')!.hidden).toBe(true);
+		const stencils = pane.querySelector<HTMLElement>('#shapes-stencils')!;
+		const results = pane.querySelector<HTMLElement>('#shapes-search')!;
 		const field = pane.querySelector<HTMLInputElement>('.shapes-search-field')!;
-		expect(document.activeElement).toBe(field);
+		expect(field.placeholder).toBe('Search shapes');
+		expect(pane.querySelector('[data-shapes-view]')).toBeNull();
+		expect([stencils.hidden, results.hidden]).toEqual([false, true]);
 		field.value = 'star';
 		field.dispatchEvent(new Event('input'));
-		const visible = [...pane.querySelectorAll<HTMLElement>('#shapes-search li')].filter(
-			(item) => !item.hidden,
-		);
-		expect(visible.map((item) => item.dataset.name)).toEqual(['5-point star']);
+		// Typing swaps the stencils for the results; clearing brings them back.
+		expect([stencils.hidden, results.hidden]).toEqual([true, false]);
+		const visible = () =>
+			[...pane.querySelectorAll<HTMLElement>('#shapes-search li')]
+				.filter((item) => !item.hidden)
+				.map((item) => item.dataset.name);
+		// Search covers the built-in stencils too, open or not.
+		expect(visible()).toEqual(['5-point star', 'Start/End']);
+		field.value = 'arrow';
+		field.dispatchEvent(new Event('input'));
+		expect(visible()).toContain('Curved arrow');
 		field.value = 'zzz';
 		field.dispatchEvent(new Event('input'));
 		expect(pane.querySelector<HTMLElement>('.shapes-empty')!.hidden).toBe(false);
+		field.value = '';
+		field.dispatchEvent(new Event('input'));
+		expect([stencils.hidden, results.hidden]).toEqual([false, true]);
 	});
 });

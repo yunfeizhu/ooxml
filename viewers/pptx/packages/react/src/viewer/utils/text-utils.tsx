@@ -1,5 +1,5 @@
-import { PptxElement, TextSegment, TextStyle, hasTextProperties } from 'pptx-viewer-core';
 import { buildTextBlockStyle } from 'ooxml-ui/pptx';
+import { PptxElement, TextSegment, TextStyle, hasTextProperties } from 'pptx-viewer-core';
 import React from 'react';
 
 import { cloneTextStyle } from './clone';

@@ -10,6 +10,8 @@ export const grid: Record<string, string> = {
 		'Un nom de feuille ne peut pas contenir \\ / ? * [ ] ou :',
 	'A sheet name cannot start or end with an apostrophe.':
 		'Un nom de feuille ne peut pas commencer ou se terminer par une apostrophe.',
+	'Cannot insert cells: non-empty cells would be pushed off the sheet.':
+		'Impossible d’insérer des cellules : des cellules non vides seraient déplacées hors de la feuille.',
 	Cancel: 'Annuler',
 	'Cell editor': 'Éditeur de cellule',
 	Chart: 'Graphique',
@@ -76,6 +78,8 @@ export const grid: Record<string, string> = {
 	'That name is already taken.': 'Ce nom est déjà utilisé.',
 	"The browser didn't allow access to the clipboard. Use Ctrl+V to paste.":
 		"Le navigateur n'a pas autorisé l'accès au Presse-papiers. Utilisez Ctrl+V pour coller.",
+	'The insert area extends beyond the sheet.':
+		'La zone d’insertion dépasse les limites de la feuille.',
 	'The paste area extends beyond the sheet.':
 		'La zone de collage dépasse les limites de la feuille.',
 	"This action won't work on multiple selections.":

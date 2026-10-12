@@ -185,6 +185,7 @@ export function renderTextBlock(
 			});
 			image.src = picture.src;
 			image.alt = picture.accessibleLabel;
+			image.setAttribute('draggable', 'false');
 			p.appendChild(image);
 		} else if (para.bulletMarker !== undefined) {
 			const bullet = createEl(doc, 'span', 'pptxv-bullet');

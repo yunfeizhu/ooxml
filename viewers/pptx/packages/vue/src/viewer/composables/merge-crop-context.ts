@@ -1,3 +1,4 @@
+import type { CropElementUpdate, NaturalImageSize } from 'ooxml-ui/pptx';
 /**
  * The Merge Shapes + picture Crop controller, handed to the ribbon's Arrange
  * group and to the canvas overlays through provide/inject.
@@ -9,7 +10,6 @@
  * tests of a ribbon section) simply renders both controls disabled.
  */
 import type { MergeShapeOperation, PptxElement } from 'pptx-viewer-core';
-import type { CropElementUpdate, NaturalImageSize } from 'ooxml-ui/pptx';
 import type { ComputedRef, InjectionKey } from 'vue';
 
 /** Merge Shapes: the ribbon dropdown and the context-menu entries. */

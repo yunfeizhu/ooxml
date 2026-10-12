@@ -1,4 +1,3 @@
-import type { PptxElement } from 'pptx-viewer-core';
 import {
 	attachInlineListController,
 	attachCollaborationInlineEditor,
@@ -12,6 +11,7 @@ import {
 	restoreInlineListBodySelection,
 } from 'ooxml-ui/pptx';
 import type { InlineTextEditSnapshot } from 'ooxml-ui/pptx';
+import type { PptxElement } from 'pptx-viewer-core';
 import { useContext, useLayoutEffect, useRef } from 'react';
 import type { RefObject } from 'react';
 

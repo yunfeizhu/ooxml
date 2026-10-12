@@ -1,5 +1,6 @@
 // Compatibility exports: all document operations are owned by OOXML core.
 import { apiToolsChartFormattingTools as operations } from 'ooxml-core/pptx/automation';
+
 export type FormatChartDataPointParams = operations.FormatChartDataPointParams;
 export const formatChartDataPoint = operations.formatChartDataPoint;
 export type FormatChartDataLabelParams = operations.FormatChartDataLabelParams;

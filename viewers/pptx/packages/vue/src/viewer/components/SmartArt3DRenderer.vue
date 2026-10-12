@@ -1,4 +1,14 @@
 <script setup lang="ts">
+import {
+	commitSmartArtNodeFill,
+	elementInLocalFrame,
+	measureSvgViewportRect,
+	resolvePalette,
+	resolveSmartArtThreeViewSpec,
+	shouldCommitSmartArtNodeText,
+	smartArtNodeAtPoint,
+} from 'ooxml-ui/pptx';
+import type { TextStyleAnimationDescriptor } from 'ooxml-ui/pptx';
 /**
  * SmartArt3DRenderer - Vue 3D SmartArt view on the shared `<pptx-three-view>`.
  *
@@ -18,16 +28,6 @@
  * through the same injection context the 2D renderer uses (undo/redo + save).
  */
 import type { PptxElement } from 'pptx-viewer-core';
-import {
-	commitSmartArtNodeFill,
-	elementInLocalFrame,
-	measureSvgViewportRect,
-	resolvePalette,
-	resolveSmartArtThreeViewSpec,
-	shouldCommitSmartArtNodeText,
-	smartArtNodeAtPoint,
-} from 'ooxml-ui/pptx';
-import type { TextStyleAnimationDescriptor } from 'ooxml-ui/pptx';
 import { computed, nextTick, ref } from 'vue';
 import type { CSSProperties } from 'vue';
 import { useI18n } from 'vue-i18n';

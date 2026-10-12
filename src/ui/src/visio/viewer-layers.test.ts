@@ -250,31 +250,67 @@ describe('shared viewer display layer state', () => {
 	});
 });
 
+/** Home > Layers > Layer Properties, and the dialog's OK. */
+function layerProperties(root: ShadowRoot) {
+	const open = () =>
+		root.querySelector('[command="layer-properties"]')!.dispatchEvent(
+			new CustomEvent('office-command', {
+				detail: { command: 'layer-properties' },
+				bubbles: true,
+				composed: true,
+			}),
+		);
+	const dialog = () =>
+		root.querySelector<HTMLElement & { open: boolean }>('.layer-properties-dialog')!;
+	const ok = () =>
+		dialog()
+			.querySelector('[command="layer-properties-dialog-ok"]')!
+			.shadowRoot!.querySelector('button')!
+			.click();
+	const box = (pageId: string, layerId: string, flag: string) =>
+		dialog().querySelector<HTMLInputElement>(
+			`tr[data-page-id="${pageId}"][data-layer-id="${layerId}"] input[data-flag="${flag}"]`,
+		)!;
+	return { open, dialog, ok, box };
+}
+
 describe('shared layer controls and rendering', () => {
-	it('shows source-scoped accessible checkboxes, saved states and resets with keyboard focus preserved', () => {
+	it('lists the page layers in Layer Properties and shows or hides one for this view', async () => {
 		const host = document.createElement('div');
 		document.body.append(host);
 		const viewer = mountViewer(host, { document: model() }),
 			root = viewer.element.shadowRoot!;
-		const panel = root.querySelector<HTMLDetailsElement>('.layer-controls')!;
-		expect(panel.hidden).toBe(false);
-		expect(panel.querySelector('summary')!.textContent).toBe('Layers');
-		panel.open = true;
-		let input = root.querySelector<HTMLInputElement>('input[data-page-id="1"]')!;
-		expect(input.checked).toBe(true);
-		expect(input.getAttribute('aria-label')).toContain('Layer 0');
-		expect(panel.textContent).toContain('saved hidden');
+		const properties = layerProperties(root);
+		properties.open();
+		expect(properties.dialog().open).toBe(true);
+		expect(properties.dialog().getAttribute('heading')).toBe('Layer Properties');
+		const titles = [...properties.dialog().querySelectorAll('thead th')].map(
+			(cell) => cell.textContent,
+		);
+		expect(titles).toEqual(['Name', '#', 'Visible', 'Print', 'Lock', 'Color']);
+		const visible = properties.box('1', '0', 'visible');
+		expect(visible.checked).toBe(true);
+		expect(visible.getAttribute('aria-label')).toBe('Layer 0: Visible');
+		expect(visible.closest('tr')!.querySelector('th')!.textContent).toBe('Layer 0');
+		// The saved flags show; this model has no package, so only Visible can change, for this view.
+		expect(properties.box('1', '0', 'lock').checked).toBe(true);
+		expect(properties.box('1', '0', 'lock').disabled).toBe(true);
+		expect(properties.box('1', '0', 'print').disabled).toBe(true);
+		expect(properties.dialog().querySelector('.layer-note')!.textContent).toMatch(/read-only/);
 		expect(root.querySelectorAll('svg [data-shape-id]')).toHaveLength(1);
-		input.focus();
-		input.checked = false;
-		input.dispatchEvent(new Event('change', { bubbles: true }));
-		input = root.querySelector<HTMLInputElement>('input[data-page-id="1"]')!;
-		expect(root.activeElement).toBe(input);
-		expect(panel.open).toBe(true);
+		visible.checked = false;
+		properties.ok();
+		await vi.waitFor(() => expect(properties.dialog().open).toBe(false));
 		expect(root.querySelectorAll('svg [data-shape-id]')).toHaveLength(0);
-		expect(panel.textContent).toContain('override hidden');
-		root.querySelector<HTMLButtonElement>('[data-layer-reset="one"]')!.click();
+		expect(viewer.controller.state.layerVisibilityOverrides).toHaveLength(1);
+		// Putting the box back to the saved value removes the override.
+		properties.open();
+		expect(properties.box('1', '0', 'visible').checked).toBe(false);
+		properties.box('1', '0', 'visible').checked = true;
+		properties.ok();
+		await vi.waitFor(() => expect(properties.dialog().open).toBe(false));
 		expect(root.querySelectorAll('svg [data-shape-id]')).toHaveLength(1);
+		expect(viewer.controller.state.layerVisibilityOverrides).toHaveLength(0);
 		viewer.destroy();
 	});
 	it('renders background same-ID overrides independently, without source mutation or saved snapshot changes', () => {
@@ -293,7 +329,7 @@ describe('shared layer controls and rendering', () => {
 		expect(drawingIds(viewer.element.shadowRoot!.querySelector('svg.paper')!)).toEqual(['1:same']);
 		viewer.destroy();
 	});
-	it('reconnects listeners once, preserves overrides and guards both handle surfaces after destruction', () => {
+	it('reconnects listeners once, preserves overrides and guards both handle surfaces after destruction', async () => {
 		const host = document.createElement('div');
 		document.body.append(host);
 		const viewer = mountViewer(host, { document: model() }),
@@ -303,12 +339,17 @@ describe('shared layer controls and rendering', () => {
 		host.append(viewer.element);
 		viewer.element.remove();
 		host.append(viewer.element);
-		const input =
-			viewer.element.shadowRoot!.querySelector<HTMLInputElement>('input[data-page-id="1"]')!;
+		// The override survives reconnecting, and the dialog still drives one set of listeners.
+		const properties = layerProperties(viewer.element.shadowRoot!);
+		properties.open();
+		const input = properties.box('1', '0', 'visible');
 		expect(input.checked).toBe(false);
 		input.checked = true;
-		input.dispatchEvent(new Event('change', { bubbles: true }));
-		expect(set).toHaveBeenCalledTimes(2);
+		const calls = set.mock.calls.length;
+		properties.ok();
+		await vi.waitFor(() => expect(properties.dialog().open).toBe(false));
+		expect(set.mock.calls.length).toBeGreaterThan(calls);
+		expect(viewer.controller.state.layerVisibilityOverrides).toHaveLength(0);
 		viewer.destroy();
 		for (const command of [
 			() => viewer.setLayerVisibility('1', '0', false),
@@ -318,7 +359,7 @@ describe('shared layer controls and rendering', () => {
 		])
 			expect(command).toThrow('destroyed');
 	});
-	it('bounds controls, treats hostile labels as text and offers a document reset away from overridden pages', () => {
+	it('bounds the table, treats hostile labels as text and resets overrides away from their page', () => {
 		const source = model();
 		source.pages[0]!.layers = Array.from({ length: VIEWER_LAYER_LIMITS.controls + 1 }, (_, i) => ({
 			...layer(String(i)),
@@ -326,18 +367,20 @@ describe('shared layer controls and rendering', () => {
 		}));
 		const viewer = mountViewer(document.createElement('div'), { document: source }),
 			root = viewer.element.shadowRoot!;
-		expect(root.querySelectorAll('input[data-layer-id]')).toHaveLength(
+		const properties = layerProperties(root);
+		properties.open();
+		expect(properties.dialog().querySelectorAll('tr[data-layer-id]')).toHaveLength(
 			VIEWER_LAYER_LIMITS.controls,
 		);
-		expect(root.querySelector('[data-layer-status]')!.textContent).toContain(
-			'Showing 200 of 202 layers',
-		);
-		expect(root.querySelector('.layer-controls img')).toBeNull();
+		expect(
+			[...properties.dialog().querySelectorAll('tbody th[scope="row"]')].map(
+				(cell) => cell.textContent,
+			),
+		).toContain('<img src=x onerror=alert(1)>');
+		expect(properties.dialog().querySelector('img')).toBeNull();
 		viewer.setLayerVisibility('1', '200', false);
 		viewer.update({ pageIndex: 1 });
-		const reset = root.querySelector<HTMLButtonElement>('[data-layer-reset="all"]')!;
-		expect(reset.disabled).toBe(false);
-		reset.click();
+		viewer.resetLayerVisibility();
 		expect(viewer.controller.state.layerVisibilityOverrides).toHaveLength(0);
 		viewer.destroy();
 	});

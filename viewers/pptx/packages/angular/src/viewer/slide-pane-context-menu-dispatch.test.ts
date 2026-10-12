@@ -1,3 +1,5 @@
+import type { SlidePaneContextMenuCommandId } from 'ooxml-ui/pptx';
+import { buildSlidePaneContextMenuEntries } from 'ooxml-ui/pptx';
 /**
  * Every command the shared thumbnail menu can render must actually do
  * something here. Sibling of `slide-canvas-context-menu-dispatch.test.ts`.
@@ -6,8 +8,6 @@
  */
 import { describe, expect, it } from 'vitest';
 
-import type { SlidePaneContextMenuCommandId } from 'ooxml-ui/pptx';
-import { buildSlidePaneContextMenuEntries } from 'ooxml-ui/pptx';
 import type { SlidePaneContextMenuActions } from './slide-pane-context-menu-dispatch';
 import { runSlidePaneContextMenuCommand } from './slide-pane-context-menu-dispatch';
 

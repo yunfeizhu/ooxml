@@ -18,10 +18,7 @@
  * `preset-shape-definitions-table.ts`.
  */
 
-import type {
-	PresetPath,
-	PresetShapeGeometryDefinition,
-} from './preset-shape-definitions-table';
+import type { PresetPath, PresetShapeGeometryDefinition } from './preset-shape-definitions-table';
 
 /**
  * The `stroke="false"` backing square every chart marker shares: it carries

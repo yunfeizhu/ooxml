@@ -1,4 +1,3 @@
-import type { PptxChartData, PptxElement } from 'pptx-viewer-core';
 import {
 	CHART_AXIS_TYPE_LABEL_KEYS,
 	CHART_DATA_LABEL_POSITION_LABEL_KEYS,
@@ -7,6 +6,7 @@ import {
 	CHART_TYPE_LABEL_KEYS,
 } from 'ooxml-ui/pptx';
 import { translationsEn } from 'ooxml-ui/pptx/i18n';
+import type { PptxChartData, PptxElement } from 'pptx-viewer-core';
 import { flushSync, mount, unmount } from 'svelte';
 import { afterEach, describe, expect, it } from 'vitest';
 

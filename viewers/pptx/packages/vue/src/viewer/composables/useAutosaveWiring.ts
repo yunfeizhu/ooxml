@@ -1,3 +1,9 @@
+import {
+	resolveAutosaveActivation,
+	resolveAutosaveIntervalMs,
+	saveAutosaveSnapshot,
+} from 'ooxml-ui/pptx';
+import type { AutosaveDisabledReason } from 'ooxml-ui/pptx';
 /**
  * useAutosaveWiring: the title-bar AutoSave toggle plus the debounced save
  * engine behind it.
@@ -9,12 +15,6 @@
  * rather than being recomputed at two call sites.
  */
 import type { PptxSlide } from 'pptx-viewer-core';
-import {
-	resolveAutosaveActivation,
-	resolveAutosaveIntervalMs,
-	saveAutosaveSnapshot,
-} from 'ooxml-ui/pptx';
-import type { AutosaveDisabledReason } from 'ooxml-ui/pptx';
 import type { ComputedRef, Ref, ShallowRef } from 'vue';
 import { computed, ref, watch } from 'vue';
 

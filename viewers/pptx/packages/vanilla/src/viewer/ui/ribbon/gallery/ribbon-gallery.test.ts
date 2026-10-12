@@ -1,5 +1,5 @@
-import type { PptxElement, PptxSlide, PptxThemeColorScheme } from 'pptx-viewer-core';
 import type { RibbonGalleryApplyResult, RibbonGalleryContext } from 'ooxml-ui/pptx';
+import type { PptxElement, PptxSlide, PptxThemeColorScheme } from 'pptx-viewer-core';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { createGalleryActions } from '../../../editor/editor-gallery-actions';

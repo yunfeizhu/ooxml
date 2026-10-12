@@ -32,9 +32,6 @@ import {
 	CUSTOM_ELEMENTS_SCHEMA,
 } from '@angular/core';
 import { TranslatePipe } from '@ngx-translate/core';
-import type { MaterialPresetType, PptxElement, Text3DStyle } from 'pptx-viewer-core';
-import { hasTextProperties } from 'pptx-viewer-core';
-
 import {
 	MATERIAL_PRESETS,
 	TEXT_3D_MAX_EXTRUSION_PT,
@@ -47,6 +44,9 @@ import {
 	text3dStylePatch,
 	toggleText3dExtrusion,
 } from 'ooxml-ui/pptx';
+import type { MaterialPresetType, PptxElement, Text3DStyle } from 'pptx-viewer-core';
+import { hasTextProperties } from 'pptx-viewer-core';
+
 import { RecentColorsService } from './recent-colors.service';
 import {
 	TEXT_3D_BOTTOM_BEVEL_KEYS,

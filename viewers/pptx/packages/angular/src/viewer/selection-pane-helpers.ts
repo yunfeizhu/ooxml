@@ -4,9 +4,8 @@
  * presentation and this logic is testable without a TestBed.
  */
 
-import type { PptxElement } from 'pptx-viewer-core';
-
 import { resolveSelectionPaneRename } from 'ooxml-ui/pptx';
+import type { PptxElement } from 'pptx-viewer-core';
 
 /** Unicode icon by element type (no Lucide dependency in Angular). */
 const ELEMENT_TYPE_ICONS: Record<string, string> = {

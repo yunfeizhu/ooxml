@@ -1,8 +1,5 @@
 import { NgStyle } from '@angular/common';
 import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
-import type { PptxElement } from 'pptx-viewer-core';
-import { hasShapeProperties, hasTextProperties } from 'pptx-viewer-core';
-
 import {
 	build3DExtrusionData,
 	buildHollowHitOutline,
@@ -18,6 +15,9 @@ import type {
 	Extrusion3DData,
 	FieldSubstitutionContext,
 } from 'ooxml-ui/pptx';
+import type { PptxElement } from 'pptx-viewer-core';
+import { hasShapeProperties, hasTextProperties } from 'pptx-viewer-core';
+
 import { DynamicStyleComponent } from './dynamic-style.component';
 import {
 	getEffectFillOverlay,

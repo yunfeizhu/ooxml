@@ -1,5 +1,5 @@
-import type { PptxSlide } from 'pptx-viewer-core';
 import { SORTER_MAX_ZOOM, SORTER_MIN_ZOOM, SORTER_ZOOM_STEP } from 'ooxml-ui/pptx';
+import type { PptxSlide } from 'pptx-viewer-core';
 
 import type { CanvasSize, SlideSectionGroup } from '../../types';
 

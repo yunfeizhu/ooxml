@@ -1,3 +1,9 @@
+import {
+	applyMasterViewCrudAction,
+	masterViewCrudActions,
+	masterViewCrudFailureKey,
+} from 'ooxml-ui/pptx';
+import type { MasterViewCrudAction, MasterViewCrudActionId } from 'ooxml-ui/pptx';
 /**
  * Slide Master view sidebar CRUD (Insert / Duplicate / Delete / Rename Layout
  * and Slide Master), the Svelte wiring for the shared decision layer in
@@ -11,12 +17,6 @@
  * handler back to the loader through `EditorState.adoptHandler`.
  */
 import type { PptxData } from 'pptx-viewer-core';
-import {
-	applyMasterViewCrudAction,
-	masterViewCrudActions,
-	masterViewCrudFailureKey,
-} from 'ooxml-ui/pptx';
-import type { MasterViewCrudAction, MasterViewCrudActionId } from 'ooxml-ui/pptx';
 
 import type { EditorState } from './editor-state.svelte';
 

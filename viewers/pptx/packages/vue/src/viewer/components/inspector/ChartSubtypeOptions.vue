@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import type { PptxChartData } from 'pptx-viewer-core';
 import {
 	BAR3D_SHAPE_OPTIONS,
 	bar3DShapePatch,
@@ -8,6 +7,7 @@ import {
 	SURFACE_WIREFRAME_OPTIONS,
 	surfaceWireframePatch,
 } from 'ooxml-ui/pptx';
+import type { PptxChartData } from 'pptx-viewer-core';
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 

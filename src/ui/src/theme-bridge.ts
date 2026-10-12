@@ -1,4 +1,4 @@
-import type { OfficeToken } from './tokens';
+import { OFFICE_TOKENS, type OfficeToken } from './tokens';
 
 /**
  * Feeds the `--office-*` tokens from a product's own theme, so the shared elements follow it.
@@ -30,11 +30,41 @@ const SHADCN_NAMES: ReadonlyArray<readonly [OfficeToken, string, string?]> = [
 	['--office-danger-foreground', 'destructive-foreground'],
 ];
 
-/** `selector { --office-x: value; ... }` for a mapping; entries without a value are skipped. */
+/** The `--office-*` tokens a token's default reads, such as `--office-background` for selects. */
+const reads = (value: string) => [...value.matchAll(/var\((--office-[\w-]+)/g)].map((m) => m[1]!);
+
+/**
+ * The tokens whose defaults read (directly or through another default) one of `bridged`. The
+ * theme declares those defaults on `:root`, and a `var()` resolves where it is declared, so a
+ * bridge that only re-points `--office-background` would leave `--office-select-background`
+ * holding the page's colour (black selects on a light viewer when the system is dark).
+ */
+function derivedTokens(bridged: ReadonlySet<string>): [string, string][] {
+	const derived = new Map<string, string>();
+	let grew = true;
+	while (grew) {
+		grew = false;
+		for (const [name, value] of Object.entries(OFFICE_TOKENS)) {
+			if (bridged.has(name) || derived.has(name)) continue;
+			if (reads(value).some((token) => bridged.has(token) || derived.has(token))) {
+				derived.set(name, value);
+				grew = true;
+			}
+		}
+	}
+	return [...derived];
+}
+
+/**
+ * `selector { --office-x: value; ... }` for a mapping; entries without a value are skipped. The
+ * tokens derived from a mapped one are declared again on the selector with their defaults, so they
+ * follow the product's colours instead of the page's.
+ */
 export function themeBridge(selector: string, map: ThemeBridgeMap): string {
-	const lines = Object.entries(map)
-		.filter(([, value]) => value)
-		.map(([name, value]) => `\t${name}: ${value};`);
+	const mapped = Object.entries(map).filter((entry): entry is [string, string] => !!entry[1]);
+	const lines = [...mapped, ...derivedTokens(new Set(mapped.map(([name]) => name)))].map(
+		([name, value]) => `\t${name}: ${value};`,
+	);
 	return `${selector} {\n${lines.join('\n')}\n}\n`;
 }
 

@@ -1,3 +1,4 @@
+import { keyToLabel, translationsEn } from 'ooxml-ui/pptx/i18n';
 /**
  * schema-token-labels.test.ts: the wire-token spelling layer.
  *
@@ -9,7 +10,6 @@
  */
 import { describe, expect, it } from 'vitest';
 
-import { keyToLabel, translationsEn } from 'ooxml-ui/pptx/i18n';
 import {
 	arrowheadLabelKey,
 	arrowSizeLabelKey,

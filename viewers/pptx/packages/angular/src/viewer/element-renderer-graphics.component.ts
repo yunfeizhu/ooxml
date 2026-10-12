@@ -1,8 +1,8 @@
 import { NgStyle } from '@angular/common';
 import { ChangeDetectionStrategy, Component, computed, input, output } from '@angular/core';
+import type { ElementAnimationState } from 'ooxml-ui/pptx';
 import type { PptxElement, PptxTableData } from 'pptx-viewer-core';
 
-import type { ElementAnimationState } from 'ooxml-ui/pptx';
 import { ChartElementViewComponent } from './chart-element-view.component';
 import { ContentPartRendererComponent } from './content-part-renderer.component';
 import { DynamicStyleComponent } from './dynamic-style.component';

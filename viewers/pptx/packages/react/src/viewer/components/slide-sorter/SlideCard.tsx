@@ -1,9 +1,5 @@
+import { HIDDEN_SLIDE_LABEL_KEY, HIDDEN_SLIDE_SLASH_GRADIENT, hiddenSlideCue } from 'ooxml-ui/pptx';
 import type { PptxSlide } from 'pptx-viewer-core';
-import {
-	HIDDEN_SLIDE_LABEL_KEY,
-	HIDDEN_SLIDE_SLASH_GRADIENT,
-	hiddenSlideCue,
-} from 'ooxml-ui/pptx';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { LuEyeOff } from 'react-icons/lu';

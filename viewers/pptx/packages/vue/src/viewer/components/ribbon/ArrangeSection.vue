@@ -13,7 +13,6 @@
 	name, by a user or by a test.
 -->
 <script setup lang="ts">
-import type { MergeShapeOperation, PptxElement, ShapeStyle } from 'pptx-viewer-core';
 import type { RibbonHomeRequestEvent, ToolbarActionId } from 'ooxml-ui/pptx';
 import {
 	arrangeAlignAction,
@@ -27,6 +26,7 @@ import {
 	parseCropValue,
 	strokeWidthOf,
 } from 'ooxml-ui/pptx';
+import type { MergeShapeOperation, PptxElement, ShapeStyle } from 'pptx-viewer-core';
 import { computed, inject } from 'vue';
 import { useI18n } from 'vue-i18n';
 

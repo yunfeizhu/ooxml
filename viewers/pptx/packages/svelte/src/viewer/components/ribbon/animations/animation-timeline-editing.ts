@@ -1,9 +1,9 @@
-import type { PptxAnimationTimelineAnchor, PptxElementAnimation } from 'pptx-viewer-core';
 import {
 	applyAnimationTimelineOrder,
 	buildAnimationTimelineRows,
 	reorderAnimationTimelineRows,
 } from 'ooxml-ui/pptx';
+import type { PptxAnimationTimelineAnchor, PptxElementAnimation } from 'pptx-viewer-core';
 
 /**
  * Reorders `entries` by moving the editor-authored animation for `sourceId`

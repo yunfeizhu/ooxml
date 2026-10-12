@@ -5,11 +5,7 @@ import { decryptOoxmlPackage, isEncryptedOoxmlPackage } from '../../crypto/index
 import { getCell, putCell } from '../cells';
 import { createWorkbook } from '../workbook';
 import { detectWorkbookFormat, loadWorkbook, saveWorkbook } from './detect';
-import {
-	IncorrectPasswordError,
-	PasswordRequiredError,
-	UnsupportedWorkbookError,
-} from './errors';
+import { IncorrectPasswordError, PasswordRequiredError, UnsupportedWorkbookError } from './errors';
 import { LegacyXlsError } from './legacy-xls';
 
 const fixture = async (path: string): Promise<Uint8Array> =>

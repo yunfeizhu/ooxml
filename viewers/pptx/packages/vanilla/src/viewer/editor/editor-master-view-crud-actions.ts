@@ -1,3 +1,11 @@
+import {
+	applyImagePathPatches,
+	applyMasterViewCrudAction,
+	collectImagePaths,
+	masterViewCrudActions,
+	masterViewCrudFailureKey,
+} from 'ooxml-ui/pptx';
+import type { MasterViewCrudActionId, MasterViewTarget } from 'ooxml-ui/pptx';
 /**
  * B4: Slide Master view sidebar CRUD (Insert/Duplicate/Delete/Rename Layout
  * and Slide Master), the vanilla wiring for the shared decision layer in
@@ -14,14 +22,6 @@
  * @module viewer/editor/editor-master-view-crud-actions
  */
 import type { PptxData, PptxHandler, PptxSlide, PptxSlideMaster } from 'pptx-viewer-core';
-import {
-	applyImagePathPatches,
-	applyMasterViewCrudAction,
-	collectImagePaths,
-	masterViewCrudActions,
-	masterViewCrudFailureKey,
-} from 'ooxml-ui/pptx';
-import type { MasterViewCrudActionId, MasterViewTarget } from 'ooxml-ui/pptx';
 
 import type { Translator } from '../i18n';
 import type { Store, ViewerState } from '../state';

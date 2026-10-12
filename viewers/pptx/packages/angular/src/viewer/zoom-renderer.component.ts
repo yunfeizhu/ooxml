@@ -1,8 +1,6 @@
 import { NgStyle } from '@angular/common';
 import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
-import type { PptxElement } from 'pptx-viewer-core';
-
 import {
 	buildSummaryZoomView,
 	elementHitTargetStyle,
@@ -10,6 +8,8 @@ import {
 	shouldRenderHitTarget,
 } from 'ooxml-ui/pptx';
 import type { SummaryZoomTileView } from 'ooxml-ui/pptx';
+import type { PptxElement } from 'pptx-viewer-core';
+
 import type { StyleMap } from './element-style';
 import { ZoomNavigationService } from './zoom-navigation.service';
 import {
@@ -102,6 +102,7 @@ import { ZoomTargetService } from './zoom-target.service';
 									<img
 										[src]="tile.imageSrc"
 										[alt]="tile.ariaLabel"
+										draggable="false"
 										style="width:100%;height:100%;object-fit:contain"
 									/>
 								} @else {

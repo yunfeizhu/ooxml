@@ -1,3 +1,10 @@
+import {
+	stepFontSizePt,
+	textFontSizePatch,
+	textFontSizePtToPx,
+	textFontSizePxToPt,
+} from 'ooxml-ui/pptx';
+import type { InlineTextEditSnapshot } from 'ooxml-ui/pptx';
 /**
  * viewer-keyboard-text-commands.ts: the text-formatting half of the keyboard
  * shortcut handler (paragraph alignment, the font-size ladder, and
@@ -15,13 +22,6 @@
  */
 import type { PptxElement, TextStyle } from 'pptx-viewer-core';
 
-import {
-	stepFontSizePt,
-	textFontSizePatch,
-	textFontSizePtToPx,
-	textFontSizePxToPt,
-} from 'ooxml-ui/pptx';
-import type { InlineTextEditSnapshot } from 'ooxml-ui/pptx';
 import type { EditorStateService } from './editor-state.service';
 import { isTextElement, patchTextStyle, textStyleOf } from './ribbon-text-helpers';
 

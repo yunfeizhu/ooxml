@@ -1,15 +1,10 @@
+import { describeToolActivity, humanizeDiffLine, summarizeToolArgs } from 'ooxml-ui/pptx/ai';
 /**
  * Data-level guarantees behind the round-3 friendly cards (the components
  * themselves are template-only and need TestBed rendering, which this package's
  * vitest env does not run). These assert the shared helpers the cards bind to.
  */
 import { describe, expect, it } from 'vitest';
-
-import {
-	describeToolActivity,
-	humanizeDiffLine,
-	summarizeToolArgs,
-} from 'ooxml-ui/pptx/ai';
 
 describe('tool-call card activity (friendly labels, ids hidden)', () => {
 	it('describes a tool as a plain-language phrase without leaking element ids', () => {

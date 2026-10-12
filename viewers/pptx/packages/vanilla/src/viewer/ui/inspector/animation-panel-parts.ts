@@ -1,6 +1,6 @@
+import { animationEffectLabel, buildAnimationTimelineBars } from 'ooxml-ui/pptx';
 import type { PptxElement, PptxElementAnimation } from 'pptx-viewer-core';
 import { hasTextProperties } from 'pptx-viewer-core';
-import { animationEffectLabel, buildAnimationTimelineBars } from 'ooxml-ui/pptx';
 
 import type { Translator } from '../../i18n';
 import { createEl } from '../../render';

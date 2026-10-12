@@ -1,5 +1,3 @@
-import type { PptxElement, PptxSlide } from 'pptx-viewer-core';
-import { PptxHandler } from 'pptx-viewer-core';
 import type {
 	AwarenessLike,
 	CollaborationConfig,
@@ -9,6 +7,8 @@ import type {
 	YjsFactories,
 } from 'ooxml-ui/pptx';
 import { readSlidesFromYDoc, reconcileSlidesInYDoc } from 'ooxml-ui/pptx';
+import type { PptxElement, PptxSlide } from 'pptx-viewer-core';
+import { PptxHandler } from 'pptx-viewer-core';
 import { flushSync } from 'svelte';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import * as Y from 'yjs';

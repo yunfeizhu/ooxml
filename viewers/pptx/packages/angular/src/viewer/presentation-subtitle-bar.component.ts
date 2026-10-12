@@ -30,8 +30,8 @@ import {
 	signal,
 } from '@angular/core';
 import { translate } from '@ngx-translate/core';
-
 import { subtitleRecognitionLanguage, subtitleSettingsFromOptions } from 'ooxml-ui/pptx';
+
 import {
 	captionDisplayText,
 	getSpeechRecognitionCtor,

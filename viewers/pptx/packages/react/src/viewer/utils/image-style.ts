@@ -1,5 +1,3 @@
-import type { PptxElement } from 'pptx-viewer-core';
-import { isImageLikeElement, hasShapeProperties } from 'pptx-viewer-core';
 import type { NativeImageSize } from 'ooxml-ui/pptx';
 import {
 	getComputedFillStyle,
@@ -9,6 +7,8 @@ import {
 	getImageTilingStyle as sharedGetImageTilingStyle,
 	resolveShapeGeometry,
 } from 'ooxml-ui/pptx';
+import type { PptxElement } from 'pptx-viewer-core';
+import { isImageLikeElement, hasShapeProperties } from 'pptx-viewer-core';
 /**
  * Image mask, render style, crop shape, and tiling helpers
  * for the PowerPoint editor.

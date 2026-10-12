@@ -19,6 +19,9 @@ import { createVisioCellEvaluator } from './edit-recalculate-values';
 import { recalculateVisioCells, type VisioCellKey } from './edit-recalculate';
 import { createVisioDependencyQuery } from './edit-recalculate';
 import { assertGeometryPackageScope } from './edit-scope';
+import { finishInstanceCopy, planInstanceCopy } from './edit-instance-duplicate';
+import { pageShapes, shapeIsStructural, stencilInstance } from './edit-instance-shape';
+import { masterTemplate } from './edit-text-scope';
 
 /** Native duplication drops UniqueID and gives each copy a fresh sheet name. */
 function copyIdentity(shape: Element, newId: string, names: Map<string, Set<string>>): void {
@@ -61,9 +64,16 @@ export async function duplicateVisioShapes(
 	const newIds = new Set(edit.copies.map((copy) => copy.newShapeId));
 	if ([...newIds].some((id) => ids.has(id)))
 		fail('INVALID_SHAPE_ID', 'Duplicate shape ID already exists.');
-	await assertDuplicateScope(pkg, pagePaths, root, newIds, check);
 	const sourceRoot = detached?.root ?? root;
 	const sourcePageId = detached?.pageId ?? edit.pageId;
+	const template = masterTemplate(pkg);
+	// Copying a container or a list is the one case where container lookups elsewhere matter.
+	let structural = false;
+	for (const copy of edit.copies) {
+		const source = pageShapes(sourceRoot).find((shape) => attribute(shape, 'ID') === copy.shapeId);
+		structural ||= !source || (await shapeIsStructural(source, template));
+	}
+	await assertDuplicateScope(pkg, pagePaths, root, newIds, check, structural);
 	const indexed = indexCells(detached ? new Map([[sourcePageId, sourceRoot]]) : roots, { check });
 	const evaluate = createVisioCellEvaluator(indexed, { check }, true);
 	const containers = children(root, 'Shapes');
@@ -78,11 +88,42 @@ export async function duplicateVisioShapes(
 				const value = attribute(node, name);
 				if (value !== undefined) occupied.add(value.toLowerCase());
 			}
-	const plans: { source: Element; id: string; x: number; y: number }[] = [];
+	const plans: { source: Element; id: string; x: number; y: number; template?: Element }[] = [];
 	let cloneNodes = 0,
 		cloneCharacters = buildXml(root).length;
+	const size = (source: Element) => {
+		cloneNodes += source.getElementsByTagName('*').length + 1;
+		cloneCharacters += buildXml(source).length;
+		if (cloneNodes > 100_000 || cloneCharacters > 16 * 1024 * 1024)
+			fail('LIMIT_DUPLICATE', 'Duplicated XML exceeds bounded expansion limits.');
+	};
 	for (const copy of edit.copies) {
 		check();
+		// A stencil shape is copied as an instance of the same master, as Visio does.
+		const stencil = await stencilInstance(
+			sourceRoot,
+			copy.shapeId,
+			template,
+			'UNSUPPORTED_DUPLICATE',
+		);
+		if (stencil) {
+			const pin = await planInstanceCopy(
+				pkg,
+				edit.pageId,
+				sourceRoot,
+				stencil,
+				edit.offsetX,
+				edit.offsetY,
+			);
+			size(stencil.instance);
+			plans.push({
+				source: stencil.instance,
+				id: copy.newShapeId,
+				...pin,
+				template: stencil.template,
+			});
+			continue;
+		}
 		const source = admitted(sourceRoot, copy.shapeId);
 		assertCloneLeaf(source);
 		assertUnlayeredShape(source, document);
@@ -102,10 +143,7 @@ export async function duplicateVisioShapes(
 		}
 		if (Math.abs(x + edit.offsetX) > 1e6 || Math.abs(y + edit.offsetY) > 1e6)
 			fail('UNSUPPORTED_DUPLICATE', 'Duplicated pins exceed coordinate limits.');
-		cloneNodes += source.getElementsByTagName('*').length + 1;
-		cloneCharacters += buildXml(source).length;
-		if (cloneNodes > 100_000 || cloneCharacters > 16 * 1024 * 1024)
-			fail('LIMIT_DUPLICATE', 'Duplicated XML exceeds bounded expansion limits.');
+		size(source);
 		plans.push({ source, id: copy.newShapeId, x: x + edit.offsetX, y: y + edit.offsetY });
 	}
 	const order = new Map(
@@ -121,8 +159,14 @@ export async function duplicateVisioShapes(
 		for (const node of [shape, ...Array.from(shape.getElementsByTagName('*'))]) {
 			const source = executableCellFormula(attribute(node, 'F'));
 			if (!source) continue;
-			const analysis = analyzeVisioFormula(source);
-			if (analysis.references.some((ref) => ref.shapeId !== undefined && mapping.has(ref.shapeId)))
+			// A stencil shape's formulas may use functions the analyser does not know; a sheet
+			// reference is still recognisable by its syntax.
+			const named = plan.template
+				? /\bSheet\.\d+!/i.test(source)
+				: analyzeVisioFormula(source).references.some(
+						(ref) => ref.shapeId !== undefined && mapping.has(ref.shapeId),
+					);
+			if (named)
 				node.setAttribute(
 					'F',
 					mapVisioFormulaSyntax(source, (segment) =>
@@ -131,6 +175,13 @@ export async function duplicateVisioShapes(
 						),
 					),
 				);
+		}
+		if (plan.template) {
+			// Sub-shapes of a group instance take IDs beyond the page's and every copy's own.
+			for (const id of newIds) ids.add(id);
+			finishInstanceCopy(shape, plan.template, plan.x, plan.y, ids, check);
+			container.appendChild(shape);
+			continue;
 		}
 		for (const [name, value, offset] of [
 			['PinX', plan.x, edit.offsetX],
@@ -142,12 +193,13 @@ export async function duplicateVisioShapes(
 			}
 		container.appendChild(shape);
 	}
+	const local = plans.filter((plan) => !plan.template);
 	if (changed.length) {
 		// Reuse inherited-style and package admission in the copies' actual sheet context.
 		await assertGeometryPackageScope(
 			pkg,
 			pagePaths,
-			plans.map((plan) => ({
+			local.map((plan) => ({
 				type: 'move-shape',
 				pageId: edit.pageId,
 				shapeId: plan.id,
@@ -158,7 +210,7 @@ export async function duplicateVisioShapes(
 			roots,
 		);
 		const depends = createVisioDependencyQuery(roots, { check });
-		for (const plan of plans) {
+		for (const plan of local) {
 			const clone = children(container, 'Shape').find((node) => attribute(node, 'ID') === plan.id)!;
 			for (const section of children(clone, 'Section'))
 				if (attribute(section, 'N') === 'Field')

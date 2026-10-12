@@ -1,8 +1,4 @@
-import {
-	DEFAULT_INSERT_CHART_KIND,
-	FREEFORM_TOOL_IDS,
-	isDrawingToolVisible,
-} from 'ooxml-ui/pptx';
+import { DEFAULT_INSERT_CHART_KIND, FREEFORM_TOOL_IDS, isDrawingToolVisible } from 'ooxml-ui/pptx';
 import type {
 	FreeformToolKind,
 	InsertChartKind,

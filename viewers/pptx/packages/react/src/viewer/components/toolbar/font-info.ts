@@ -1,6 +1,6 @@
+import { resolveDefaultFontFamily, textFontSizePxToPt } from 'ooxml-ui/pptx';
 import { hasTextProperties } from 'pptx-viewer-core';
 import type { PptxElement } from 'pptx-viewer-core';
-import { resolveDefaultFontFamily, textFontSizePxToPt } from 'ooxml-ui/pptx';
 
 /**
  * What the font name / size boxes should display for the current selection.

@@ -1,6 +1,6 @@
-import type { PptxElement, ShapeStyle } from 'pptx-viewer-core';
 import { CONNECTOR_ARROW_CONTROLS } from 'ooxml-ui/pptx';
 import { translationsEn } from 'ooxml-ui/pptx/i18n';
+import type { PptxElement, ShapeStyle } from 'pptx-viewer-core';
 import { flushSync, mount, unmount } from 'svelte';
 import { afterEach, describe, expect, it } from 'vitest';
 

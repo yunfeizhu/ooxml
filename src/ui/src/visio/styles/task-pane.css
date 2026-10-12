@@ -1,0 +1,182 @@
+/* The right task pane (Shape Data, Layers): the shared office-ui-task-pane, one view at a time. */
+.inspector-pane {
+	flex: 0 0 288px;
+	width: 288px;
+	overflow: hidden;
+	border-left: 1px solid var(--_vv-border);
+	background: var(--_vv-surface);
+	--office-background: var(--_vv-surface);
+	--office-surface: var(--_vv-secondary);
+	--office-foreground: var(--_vv-ink);
+}
+.inspector-pane [data-pane-view]:not([data-active]) {
+	display: none;
+}
+.selection-hint {
+	margin: 24px 0;
+	text-align: center;
+	color: var(--_vv-muted);
+	font-size: 12px;
+}
+/* Shape Data reads as Visio's two-column window: a label column and a value column in rows. */
+.shape-inspector {
+	font-size: 12px;
+	line-height: 18px;
+}
+.shape-inspector div {
+	max-height: none;
+	overflow: visible;
+}
+.shape-inspector dl {
+	gap: 0;
+	margin: 6px 0;
+	border-top: 1px solid var(--_vv-border);
+}
+.shape-inspector dt,
+.shape-inspector dd {
+	padding: 4px 6px;
+	border-bottom: 1px solid var(--_vv-border);
+}
+.shape-inspector dt {
+	font-weight: 400;
+	color: var(--_vv-muted);
+	border-right: 1px solid var(--_vv-border);
+}
+.shape-inspector h3 {
+	font-size: 12px;
+}
+
+/* Status bar: Visio's Page, Width, Height, Angle and language; messages are for screen readers. */
+office-ui-status-bar.status {
+	gap: 18px;
+	/* A host may recolour the bar: see the status aliases in theme.ts. */
+	background: var(--_vv-status-bg);
+	color: var(--_vv-status-ink);
+}
+/*
+ * Office Theme "Colorful" (File > Options, or the status-bar attribute): the bar takes the product
+ * colour, as desktop Visio's does, and its controls draw in the bar's own ink.
+ */
+:host([status-bar='colorful']) office-ui-status-bar.status {
+	border-top-color: transparent;
+	accent-color: var(--_vv-status-ink);
+	--office-foreground: currentColor;
+	--office-muted-foreground: currentColor;
+	--office-accent: currentColor;
+	--office-ring: currentColor;
+	--office-border: color-mix(in srgb, currentColor 45%, transparent);
+	--office-surface: color-mix(in srgb, currentColor 18%, transparent);
+	--office-background: color-mix(in srgb, currentColor 18%, transparent);
+}
+:host([status-bar='colorful']) .status-message[data-error] {
+	color: inherit;
+	font-weight: 600;
+}
+/* Presentation Mode sits beside the zoom, at the trailing edge. */
+office-ui-status-bar.status .zoom-controls {
+	margin-inline-start: 0;
+}
+.status-message:not([data-error]) {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	margin: -1px;
+	overflow: hidden;
+	clip-path: inset(50%);
+	white-space: nowrap;
+}
+.status-message[data-error] {
+	flex: 1;
+	min-width: 0;
+	color: var(--_vv-danger);
+}
+
+/* In-place text editing: the editor sits on the shape and replaces its drawn text. */
+.inline-text {
+	position: absolute;
+	z-index: 3;
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0 4px;
+	overflow: hidden;
+	resize: none;
+	border: 0;
+	border-radius: 0;
+	outline: 1px dashed var(--_vv-accent);
+	outline-offset: 2px;
+	background: transparent;
+	line-height: 1.2;
+	min-height: 0;
+}
+.paper [data-editing-text] text {
+	visibility: hidden;
+}
+
+/* File > Info lists what the drawing shows approximately. */
+.backstage-notes-list {
+	max-height: 240px;
+	margin: 6px 0 0;
+	padding-left: 18px;
+	overflow: auto;
+	color: var(--_vv-muted);
+}
+.backstage-notes-list li {
+	margin: 5px 0;
+	overflow-wrap: anywhere;
+}
+@media (max-width: 760px) {
+	.inspector-pane {
+		position: absolute;
+		inset: 0 0 0 auto;
+		z-index: 4;
+		width: min(320px, 100%);
+		box-shadow: -8px 0 24px #0002;
+	}
+}
+
+/* Layer Properties: Visio's table of layers with their flags. */
+.layer-table {
+	width: 100%;
+	border-collapse: collapse;
+	font-size: 12px;
+}
+.layer-table th,
+.layer-table td {
+	padding: 4px 8px;
+	border: 1px solid var(--_vv-border);
+	text-align: center;
+}
+.layer-table thead th {
+	background: var(--_vv-secondary);
+	font-weight: 600;
+}
+.layer-table tbody th {
+	text-align: left;
+	font-weight: 400;
+	overflow-wrap: anywhere;
+}
+.layer-table .layer-page th {
+	background: var(--_vv-secondary);
+	color: var(--_vv-muted);
+	font-size: 11px;
+}
+.layer-table input {
+	width: 16px;
+	height: 16px;
+	min-height: 16px;
+	padding: 0;
+	accent-color: var(--_vv-accent);
+}
+.layer-colour {
+	display: inline-block;
+	width: 28px;
+	height: 12px;
+	border: 1px solid var(--_vv-border);
+}
+.layer-note:empty {
+	display: none;
+}
+.layer-note {
+	color: var(--_vv-muted);
+	font-size: 12px;
+}

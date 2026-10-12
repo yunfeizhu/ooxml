@@ -1,4 +1,3 @@
-import type { ChartPptxElement, PptxElement } from 'pptx-viewer-core';
 import {
 	applyChartPartHighlight,
 	canDrillDown,
@@ -10,6 +9,7 @@ import {
 	withChartTitle,
 } from 'ooxml-ui/pptx';
 import type { ElementAnimationState } from 'ooxml-ui/pptx';
+import type { ChartPptxElement, PptxElement } from 'pptx-viewer-core';
 import React, {
 	useContext,
 	useEffect,

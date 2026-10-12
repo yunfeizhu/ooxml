@@ -10,8 +10,6 @@ import {
 	signal,
 } from '@angular/core';
 import { TranslatePipe } from '@ngx-translate/core';
-import type { PptxElement, PptxSlide } from 'pptx-viewer-core';
-
 import type { AuthoredSlideRange, CanvasSize, ShowOrderCustomShow } from 'ooxml-ui/pptx';
 import {
 	formatMobileElapsed,
@@ -22,6 +20,8 @@ import {
 	presenterPrevDisabled,
 	visibleTemplateElements as filterVisibleTemplateElements,
 } from 'ooxml-ui/pptx';
+import type { PptxElement, PptxSlide } from 'pptx-viewer-core';
+
 import { currentSlideAt, nextSlideAfter, resolvePresenterNotes } from './presenter-view-helpers';
 import { SlideCanvasComponent } from './slide-canvas.component';
 

@@ -1,4 +1,3 @@
-import type { PptxSlide } from 'pptx-viewer-core';
 import { annotationOverlayZIndex, strokeToInkElement } from 'ooxml-ui/pptx';
 import type {
 	CanvasSize,
@@ -7,6 +6,7 @@ import type {
 	PresentationInkStroke,
 	PresentationPointerState,
 } from 'ooxml-ui/pptx';
+import type { PptxSlide } from 'pptx-viewer-core';
 
 import type { Translator } from '../i18n';
 import { mountAnnotationOverlay } from './annotation-overlay';

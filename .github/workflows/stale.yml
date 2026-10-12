@@ -1,0 +1,44 @@
+name: Stale
+
+# Marks issues and pull requests with no activity as stale, then closes them if nothing happens.
+# Anything a maintainer still owes an answer on (needs-triage), plans to do (a milestone, an
+# assignee) or wants kept (pinned, security, good first issue, help wanted) is never touched, and
+# any comment or push removes the label.
+on:
+  schedule:
+    - cron: '13 2 * * *' # daily
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  stale:
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      pull-requests: write
+    steps:
+      - uses: actions/stale@4391f3da665fdf50b6810c1a66712fb9ba21aa93 # v11
+        with:
+          days-before-issue-stale: 90
+          days-before-pr-stale: 45
+          days-before-close: 14
+          stale-issue-label: stale
+          stale-pr-label: stale
+          exempt-issue-labels: 'pinned,security,needs-triage,good first issue,help wanted'
+          exempt-pr-labels: 'pinned,security,dependencies'
+          exempt-all-milestones: true
+          exempt-all-assignees: true
+          stale-issue-message: >
+            This issue has had no activity for 90 days, so it is marked stale and will close in 14
+            days. Comment if it still affects you (ideally with a file that reproduces it) and the
+            label comes off.
+          stale-pr-message: >
+            This pull request has had no activity for 45 days, so it is marked stale and will close
+            in 14 days. Push a commit or comment to keep it open.
+          close-issue-message: >
+            Closed after 14 days as stale. Comment or open a new issue if it is still a problem.
+          close-pr-message: >
+            Closed after 14 days as stale. Reopen it or open a new pull request to pick it up again.
+          operations-per-run: 60

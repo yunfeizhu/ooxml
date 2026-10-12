@@ -1,10 +1,6 @@
-import type { PptxElement, PptxHandlerSaveOptions, PptxSlide } from 'pptx-viewer-core';
-import type {
-	CollabLoadOrigin,
-	CollaborationConfig,
-	CollaborationTransport,
-} from 'ooxml-ui/pptx';
+import type { CollabLoadOrigin, CollaborationConfig, CollaborationTransport } from 'ooxml-ui/pptx';
 import { buildBroadcastViewerUrl, shouldAutoFollowBroadcaster } from 'ooxml-ui/pptx';
+import type { PptxElement, PptxHandlerSaveOptions, PptxSlide } from 'pptx-viewer-core';
 import { computed, ref, watch } from 'vue';
 import type { ComputedRef, Ref } from 'vue';
 

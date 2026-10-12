@@ -1,4 +1,3 @@
-import type { PptxElement } from 'pptx-viewer-core';
 import type { AlignEdge } from 'ooxml-ui/pptx';
 import {
 	bringForward,
@@ -8,6 +7,7 @@ import {
 	sendBackward,
 	sendToBack,
 } from 'ooxml-ui/pptx';
+import type { PptxElement } from 'pptx-viewer-core';
 
 import type { Store, ViewerState } from '../state';
 import {

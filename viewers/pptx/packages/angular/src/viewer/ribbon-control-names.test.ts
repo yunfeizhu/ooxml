@@ -1,3 +1,11 @@
+import { keyToLabel, translationsEn } from 'ooxml-ui/pptx/i18n';
+import {
+	EMPHASIS_PRESET_VALUES,
+	ENTRANCE_PRESET_VALUES,
+	EXIT_PRESET_VALUES,
+} from 'ooxml-ui/pptx/render/animation-authoring';
+import { animationPresetLabelKey } from 'ooxml-ui/pptx/render/animation-preset-labels';
+import { ANIMATION_RIBBON_CATEGORIES as ANIMATION_PRESET_CATEGORIES } from 'ooxml-ui/pptx/render/ribbon-animations-state';
 /**
  * The ribbon's accessible names are a cross-binding contract, so pin them.
  *
@@ -16,15 +24,6 @@
  * not the markup around them.
  */
 import { describe, expect, it } from 'vitest';
-
-import { keyToLabel, translationsEn } from 'ooxml-ui/pptx/i18n';
-import {
-	EMPHASIS_PRESET_VALUES,
-	ENTRANCE_PRESET_VALUES,
-	EXIT_PRESET_VALUES,
-} from 'ooxml-ui/pptx/render/animation-authoring';
-import { animationPresetLabelKey } from 'ooxml-ui/pptx/render/animation-preset-labels';
-import { ANIMATION_RIBBON_CATEGORIES as ANIMATION_PRESET_CATEGORIES } from 'ooxml-ui/pptx/render/ribbon-animations-state';
 
 /** The label a ribbon control renders, resolved the way the Angular host does. */
 function label(key: string): string {

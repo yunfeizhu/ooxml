@@ -12,8 +12,9 @@ Diese Seite fuhrt durch vier haufige Ablaufe von Anfang bis Ende. Jeder ist eige
 Verwenden Sie `PptxHandler.create()`, um ein neues Deck zu starten, bauen Sie Folien mit der flussigen Builder-API, dann `save()` fur die Bytes.
 
 ```ts
-import { PptxHandler } from 'pptx-viewer-core';
 import { writeFile } from 'node:fs/promises';
+
+import { PptxHandler } from 'pptx-viewer-core';
 
 const { handler, data, createSlide } = await PptxHandler.create({
 	title: 'Meine Prasentation',
@@ -39,8 +40,9 @@ await writeFile('prasentation.pptx', output);
 ## 2. Eine vorhandene Prasentation analysieren und bearbeiten
 
 ```ts
-import { PptxHandler } from 'pptx-viewer-core';
 import { readFile, writeFile } from 'node:fs/promises';
+
+import { PptxHandler } from 'pptx-viewer-core';
 
 const handler = new PptxHandler();
 const buffer = await readFile('prasentation.pptx');
@@ -88,8 +90,8 @@ console.log(markdown);
 ## 4. Mit dem React Viewer rendern
 
 ```tsx
-import { useState } from 'react';
 import { PowerPointViewer } from 'pptx-react-viewer/viewer';
+import { useState } from 'react';
 
 function App() {
 	const [content, setContent] = useState<Uint8Array>();

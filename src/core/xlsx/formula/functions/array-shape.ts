@@ -68,7 +68,7 @@ function stack(ctx: CallContext, args: Value[], vertical: boolean): Matrix {
 function flatten(ctx: CallContext, args: Value[]): Scalar[] {
 	const m = ctx.toMatrix(args[0] ?? null);
 	const ignore = intAt(ctx, args, 1) ?? 0;
-	const byCol = intAt(ctx, args, 2) ? true : false;
+	const byCol = Boolean(intAt(ctx, args, 2));
 	const values: Scalar[] = [];
 	const rows = byCol ? m.cols : m.rows;
 	const cols = byCol ? m.rows : m.cols;

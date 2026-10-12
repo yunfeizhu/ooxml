@@ -1,3 +1,10 @@
+import type { DeckSaveIntent, TableStyleSaveOptions, TemplateElementMap } from 'ooxml-ui/pptx';
+import {
+	buildDeckSaveOptions,
+	cloneSlides,
+	cloneTemplateElementsBySlideId,
+	saveDeckWithPassword,
+} from 'ooxml-ui/pptx';
 import type {
 	PptxAppProperties,
 	PptxCoreProperties,
@@ -16,13 +23,6 @@ import type {
 	PptxCustomShow,
 	PptxTagCollection,
 } from 'pptx-viewer-core';
-import type { DeckSaveIntent, TableStyleSaveOptions, TemplateElementMap } from 'ooxml-ui/pptx';
-import {
-	buildDeckSaveOptions,
-	cloneSlides,
-	cloneTemplateElementsBySlideId,
-	saveDeckWithPassword,
-} from 'ooxml-ui/pptx';
 
 export interface EditorSnapshot {
 	slides: PptxSlide[];

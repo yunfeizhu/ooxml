@@ -1,5 +1,4 @@
 import { mount } from '@vue/test-utils';
-import type { PptxElement } from 'pptx-viewer-core';
 import {
 	createCollaborationLivePatcher,
 	createSnapshotTextPositions,
@@ -8,6 +7,7 @@ import {
 	setElementBullets,
 } from 'ooxml-ui/pptx';
 import type { YjsFactories } from 'ooxml-ui/pptx';
+import type { PptxElement } from 'pptx-viewer-core';
 import { describe, expect, it } from 'vitest';
 import * as Y from 'yjs';
 

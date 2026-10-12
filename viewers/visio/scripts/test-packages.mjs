@@ -130,8 +130,8 @@ for (const name of ${JSON.stringify(names)}) {
   await controller.load(legacy);
   assert.equal(controller.state.document.format, 'vsd');
   assert.equal(controller.state.edit.sourceAvailable, false);
-  assert.throws(() => controller.exportVsdx(), /Load a VSDX/);
-  await assert.rejects(controller.replacePlainText('0', '7', 'changed'), /Load a VSDX/);
+  assert.throws(() => controller.exportVsdx(), /Open a .vsdx file before downloading/);
+  await assert.rejects(controller.replacePlainText('0', '7', 'changed'), /Open a .vsdx file before editing/);
   controller.destroy();
  }
 }

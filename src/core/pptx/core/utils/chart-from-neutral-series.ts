@@ -83,6 +83,7 @@ export function seriesFromNeutral(
 		...(numberFormat ? { numberFormat } : {}),
 		color: tree.color,
 		...(tree.gradientFill ? { gradientFill: tree.gradientFill } : {}),
+		...(tree.lineGradientFill ? { lineGradientFill: tree.lineGradientFill } : {}),
 		...(tree.trendlines ? { trendlines: tree.trendlines } : {}),
 		...(tree.errBars ? { errBars: tree.errBars } : {}),
 		...(dataPoints ? { dataPoints } : {}),

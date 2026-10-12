@@ -9,7 +9,7 @@
 import { SWITCHABLE_LAYOUT_TYPES } from 'ooxml-core/pptx';
 
 import { SMARTART_LAYOUT_LABEL_KEYS } from '../schema-label-keys';
-import { smartArtBuiltinLayouts } from '../smartart-builtin-layouts';
+import { preloadSmartArtBuiltinLayouts, smartArtBuiltinLayouts } from '../smartart-builtin-layouts';
 import type { RibbonGalleryModule } from './gallery-module';
 import { galleryColorScheme } from './gallery-theme';
 import type { RibbonGallerySection } from './gallery-types';
@@ -84,6 +84,9 @@ export const SMARTART_LAYOUTS_GALLERY: RibbonGalleryModule = {
 		const data = element?.type === 'smartArt' ? element.smartArtData : undefined;
 		const current = data?.resolvedLayoutType ?? 'list';
 		const accent1 = galleryColorScheme(ctx).accent1;
+		// The named layouts come from a lazy chunk. When it has not landed, hand the element a
+		// promise for the descriptor built after it has, since the bindings memoize this one.
+		const pending = smartArtBuiltinLayouts() === undefined;
 		return {
 			id: 'smartArtLayouts',
 			labelKey: 'pptx.gallery.smartArtLayouts.title',
@@ -105,6 +108,11 @@ export const SMARTART_LAYOUTS_GALLERY: RibbonGalleryModule = {
 				},
 				...namedLayoutSections(accent1, data?.layoutDefinition?.uniqueId),
 			],
+			...(pending && {
+				ready: preloadSmartArtBuiltinLayouts().then((library) =>
+					library ? SMARTART_LAYOUTS_GALLERY.build(ctx) : undefined,
+				),
+			}),
 		};
 	},
 	apply(itemId, ctx) {

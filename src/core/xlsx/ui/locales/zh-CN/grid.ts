@@ -7,6 +7,8 @@ export const grid: Record<string, string> = {
 	'A sheet name cannot be blank.': '工作表名称不能为空。',
 	'A sheet name cannot contain \\ / ? * [ ] or :': '工作表名称不能包含 \\ / ? * [ ] 或 :',
 	'A sheet name cannot start or end with an apostrophe.': '工作表名称不能以撇号开头或结尾。',
+	'Cannot insert cells: non-empty cells would be pushed off the sheet.':
+		'无法插入单元格：非空单元格会被移出工作表。',
 	Cancel: '取消',
 	'Cell editor': '单元格编辑器',
 	Chart: '图表',
@@ -73,6 +75,7 @@ export const grid: Record<string, string> = {
 	'That name is already taken.': '该名称已被使用。',
 	"The browser didn't allow access to the clipboard. Use Ctrl+V to paste.":
 		'浏览器不允许访问剪贴板。请使用 Ctrl+V 粘贴。',
+	'The insert area extends beyond the sheet.': '插入区域超出了工作表范围。',
 	'The paste area extends beyond the sheet.': '粘贴区域超出了工作表范围。',
 	"This action won't work on multiple selections.": '此操作不适用于多重选择。',
 	'This chart could not be displayed.': '无法显示此图表。',

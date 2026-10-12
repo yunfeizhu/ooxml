@@ -11,14 +11,14 @@
  * wiring, and the rules above stay in one place.
  */
 import { signal } from '@angular/core';
-import type { PptxSlide, PptxSlideTransition } from 'pptx-viewer-core';
-
 import {
 	beginZoomExcursion,
 	buildZoomTransitionOverride,
 	resolveForwardSlideWithZoomReturn,
 } from 'ooxml-ui/pptx';
 import type { ZoomExcursion, ZoomNavigationTarget } from 'ooxml-ui/pptx';
+import type { PptxSlide, PptxSlideTransition } from 'pptx-viewer-core';
+
 import type { AnimationPlaybackService } from './animation-playback.service';
 import type { PresentationAnnotationsService } from './presentation-annotations.service';
 import {

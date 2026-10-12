@@ -228,6 +228,8 @@ describe('bounded open orthogonal rounding', () => {
 		);
 		const { geometry: _g, ...rounded } = model.pages[0]!.shapes[0]!;
 		const { geometry: _h, ...unrounded } = original.pages[0]!.shapes[0]!;
-		expect(rounded).toEqual(unrounded);
+		// Besides the geometry, only the saved radius (shown in Format Shape) tells them apart.
+		expect(rounded.style.rounding).toBeGreaterThan(0);
+		expect({ ...rounded, style: { ...rounded.style, rounding: undefined } }).toEqual(unrounded);
 	});
 });

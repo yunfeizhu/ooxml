@@ -26,10 +26,10 @@ import {
 	CUSTOM_ELEMENTS_SCHEMA,
 } from '@angular/core';
 import { TranslatePipe } from '@ngx-translate/core';
-import type { PptxChartUserShape } from 'pptx-viewer-core';
-
 import type { ChartUserShapeRow, ChartUserShapeRowPatch } from 'ooxml-ui/pptx';
 import { getChartUserShapeRowChartBox } from 'ooxml-ui/pptx';
+import type { PptxChartUserShape } from 'pptx-viewer-core';
+
 import { CHART_EDITOR_STYLES } from './chart-editor-styles';
 
 export interface ChartUserShapePositionPatch {

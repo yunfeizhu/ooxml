@@ -1,4 +1,3 @@
-import type { PptxSmartArtDrawingShape, PptxSmartArtNode, SmartArtStyle } from 'pptx-viewer-core';
 import {
 	computeDrawingViewBox,
 	projectDrawingShapes,
@@ -6,6 +5,7 @@ import {
 	styleShadowFilter,
 } from 'ooxml-ui/pptx';
 import type { RenderedShape } from 'ooxml-ui/pptx';
+import type { PptxSmartArtDrawingShape, PptxSmartArtNode, SmartArtStyle } from 'pptx-viewer-core';
 import React from 'react';
 
 import {

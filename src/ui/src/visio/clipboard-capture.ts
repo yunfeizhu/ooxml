@@ -52,7 +52,7 @@ export class ViewerClipboardCapture {
 	token(): ViewerClipboardToken {
 		const context = this.context();
 		if (this.#destroyed || !context)
-			throw new Error('Load an idle source-backed VSDX before using the clipboard.');
+			throw new Error('Open a .vsdx file before using the clipboard.');
 		const token = Object.freeze({ [tokenBrand]: true as const });
 		this.#tokens.set(token, context);
 		return token;

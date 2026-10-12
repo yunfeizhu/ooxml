@@ -85,6 +85,7 @@
 					class="pptx-svelte-bullet-image"
 					src={para.bulletPicture.src}
 					alt={para.bulletPicture.accessibleLabel}
+					draggable="false"
 					style="width: {para.bulletPicture.sizePx}px; height: {para.bulletPicture
 						.sizePx}px; display: inline-block; vertical-align: middle; margin-inline-end: 4px; object-fit: contain;"
 				/>{:else if para.bulletMarker !== undefined}<span

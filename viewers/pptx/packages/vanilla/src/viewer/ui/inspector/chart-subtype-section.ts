@@ -1,3 +1,11 @@
+import {
+	BAR3D_SHAPE_OPTIONS,
+	bar3DShapePatch,
+	RADAR_STYLE_OPTIONS,
+	radarStylePatch,
+	SURFACE_WIREFRAME_OPTIONS,
+	surfaceWireframePatch,
+} from 'ooxml-ui/pptx';
 /**
  * chart-subtype-section.ts: the three chart-family-specific subtype pickers
  * (bar3D column/bar shape, radar style, surface wireframe) that sit beside
@@ -10,14 +18,6 @@
  * only maps the descriptor onto a `<select>`).
  */
 import type { PptxBar3DShape, PptxChartData } from 'pptx-viewer-core';
-import {
-	BAR3D_SHAPE_OPTIONS,
-	bar3DShapePatch,
-	RADAR_STYLE_OPTIONS,
-	radarStylePatch,
-	SURFACE_WIREFRAME_OPTIONS,
-	surfaceWireframePatch,
-} from 'ooxml-ui/pptx';
 
 import type { Translator } from '../../i18n';
 import { optionSelect } from './chart-exhaustive-controls';

@@ -11,11 +11,7 @@
  * (a cursor pointing along the wrong diagonal looks fine in a screenshot and
  * wrong under the hand).
  */
-import {
-	attachRotateHandlePlacement,
-	RESIZE_HANDLE_GEOMETRY,
-	RESIZE_HANDLES,
-} from 'ooxml-ui/pptx';
+import { attachRotateHandlePlacement, RESIZE_HANDLE_GEOMETRY, RESIZE_HANDLES } from 'ooxml-ui/pptx';
 import React, { act } from 'react';
 import { createRoot } from 'react-dom/client';
 import { renderToStaticMarkup } from 'react-dom/server';

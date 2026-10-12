@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import type { PptxElement, TablePptxElement } from 'pptx-viewer-core';
 import {
 	appendTableElementColumn,
 	appendTableElementRow,
@@ -12,6 +11,7 @@ import {
 	removeTableElementRow,
 	setTableElementCellText,
 } from 'ooxml-ui/pptx';
+import type { PptxElement, TablePptxElement } from 'pptx-viewer-core';
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 

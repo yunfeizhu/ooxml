@@ -1,3 +1,4 @@
+// @vitest-environment jsdom
 import { defineTeamsApp, type TeamsApp } from './teams-app';
 import type { TeamsChannelTab } from './channel-tab';
 import type { TeamsContentPreview } from './content-preview';

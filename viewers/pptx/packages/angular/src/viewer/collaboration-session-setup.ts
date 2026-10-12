@@ -8,8 +8,6 @@
  * the service holds as a single atomic handle; `teardownSession` disposes it.
  */
 
-import type { PptxHandlerSaveOptions, PptxSlide } from 'pptx-viewer-core';
-
 import type {
 	CollaborationConfig,
 	CollaborationLivePatcher,
@@ -19,6 +17,8 @@ import type {
 	YDocLike,
 } from 'ooxml-ui/pptx';
 import { clearLocalAwareness, observeYDocSlides } from 'ooxml-ui/pptx';
+import type { PptxHandlerSaveOptions, PptxSlide } from 'pptx-viewer-core';
+
 import { wireConnectionStatus } from './collaboration-connection';
 import { DEFAULT_CURSOR_COLOR } from './collaboration-helpers';
 import { LocalPresencePublisher } from './collaboration-local-presence';

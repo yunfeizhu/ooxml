@@ -5,14 +5,7 @@ import { defaultCellStyle } from '../workbook';
 import { builtinFormatIdOf } from '../read/builtin-formats';
 import { parseStyles } from '../read/styles';
 import { att, numAttr, outerXml, xChildren, xFirst } from '../read/xml-util';
-import {
-	alignmentXml,
-	borderXml,
-	fillXml,
-	fontXml,
-	numFmtXml,
-	protectionXml,
-} from './style-xml';
+import { alignmentXml, borderXml, fillXml, fontXml, numFmtXml, protectionXml } from './style-xml';
 import { XML_HEADER, el, inlineFragment } from './xml-out';
 
 /** What a save keeps from the source `styles.xml` so carried parts keep valid references. */

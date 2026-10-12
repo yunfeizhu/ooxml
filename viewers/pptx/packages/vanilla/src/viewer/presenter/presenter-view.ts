@@ -1,4 +1,3 @@
-import type { PptxSlide } from 'pptx-viewer-core';
 import {
 	formatElapsed,
 	PRESENTER_LAYOUT_METRICS,
@@ -8,6 +7,7 @@ import {
 	presenterTimerProgress,
 } from 'ooxml-ui/pptx';
 import type { AuthoredSlideRange, ShowOrderCustomShow } from 'ooxml-ui/pptx';
+import type { PptxSlide } from 'pptx-viewer-core';
 
 import type { Translator } from '../i18n';
 import { buildPresenterNavigator } from './presenter-navigator';

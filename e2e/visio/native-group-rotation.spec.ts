@@ -4,6 +4,7 @@ import { join } from 'node:path';
 import { parseVsdx, type VisioEdit } from 'ooxml-core/visio';
 import { composeAffine, IDENTITY_AFFINE, type AffineMatrix } from 'ooxml-core/geometry';
 import { rotateGroup } from './group-rotation-interaction';
+import { openDemo } from './demo-page';
 interface Tree {
 	id: string;
 	transform: number[];
@@ -90,7 +91,10 @@ for (const { variable, mode } of cases)
 				quarterTurn?: 'Left' | 'Right';
 			};
 			const ratio = evidence.pageScale / evidence.drawingScale;
-			await page.goto(framework === 'vanilla' ? '/demo/?sample=1' : `/demo-${framework}/?sample=1`);
+			await openDemo(
+				page,
+				framework === 'vanilla' ? '/demo/?sample=1' : `/demo-${framework}/?sample=1`,
+			);
 			await page.locator('#file').setInputFiles({
 				name: 'group.vsdx',
 				mimeType: 'application/vnd.ms-visio.drawing',

@@ -7,7 +7,6 @@ import {
 	buildProcessPanel,
 	buildReviewPanel,
 } from './ribbon-other-tabs';
-import { command } from './ribbon-parts';
 import { buildViewPanel } from './ribbon-view';
 import { createTellMe } from './viewer-tell-me';
 
@@ -26,36 +25,9 @@ export const RIBBON_TABS = [
 ] as const;
 export type RibbonTab = (typeof RIBBON_TABS)[number][0];
 
-/** Visio's Quick Access Toolbar: Undo and Redo beside the tabs, as in the desktop app. */
-function quickAccess(doc: Document): HTMLElement {
-	const qat = doc.createElement('div');
-	qat.className = 'qat';
-	qat.setAttribute('role', 'toolbar');
-	qat.setAttribute('aria-label', 'Quick Access Toolbar');
-	qat.append(
-		command(doc, {
-			id: 'undo',
-			label: 'Undo',
-			icon: 'undo',
-			size: 'icon',
-			action: { type: 'history', key: 'undo' },
-			keys: ['Control+Z', 'Ctrl+Z'],
-		}),
-		command(doc, {
-			id: 'redo',
-			label: 'Redo',
-			icon: 'redo',
-			size: 'icon',
-			action: { type: 'history', key: 'redo' },
-			keys: ['Control+Y', 'Ctrl+Y'],
-		}),
-	);
-	return qat;
-}
-
 /**
- * The Visio ribbon on the shared `office-ui-ribbon`: Quick Access Toolbar, File, one panel per
- * tab and Tell me. The shared element owns the tab row, selection and arrow-key movement;
+ * The Visio ribbon on the shared `office-ui-ribbon`: File, one panel per tab and Tell me (the
+ * Quick Access Toolbar is in the title bar, `title-bar.ts`). The shared element owns the tab row, selection and arrow-key movement;
  * commands emit `ribbon-action` events for the router.
  */
 export function createRibbon(doc: Document): HTMLElement {
@@ -65,11 +37,9 @@ export function createRibbon(doc: Document): HTMLElement {
 	ribbon.setAttribute('aria-label', 'Diagram controls');
 	ribbon.setAttribute('label', 'Ribbon');
 	ribbon.setAttribute('selected', 'home');
-	const qat = quickAccess(doc);
-	qat.slot = 'quick-access';
 	const tellMe = createTellMe(doc);
 	tellMe.slot = 'search';
-	ribbon.append(qat, tellMe);
+	ribbon.append(tellMe);
 	for (const [key, name, build] of RIBBON_TABS) {
 		const panel = doc.createElement('div');
 		panel.className = 'ribbon-content';

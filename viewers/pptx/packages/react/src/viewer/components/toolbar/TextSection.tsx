@@ -1,6 +1,6 @@
+import { textFontSizePtToPx } from 'ooxml-ui/pptx';
 import { hasTextProperties } from 'pptx-viewer-core';
 import type { PptxElement, PptxThemeColorRef, TextStyle } from 'pptx-viewer-core';
-import { textFontSizePtToPx } from 'ooxml-ui/pptx';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 

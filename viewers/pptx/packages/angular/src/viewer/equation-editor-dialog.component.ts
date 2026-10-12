@@ -35,8 +35,8 @@ import {
 import { DomSanitizer } from '@angular/platform-browser';
 import type { SafeHtml } from '@angular/platform-browser';
 import { TranslatePipe } from '@ngx-translate/core';
-
 import { convertLatexToOmml, convertOmmlToLatex } from 'ooxml-ui/pptx';
+
 import type { DialogFooterActionSpec } from './dialog-footer.component';
 import { DialogFooterComponent } from './dialog-footer.component';
 import { latexToMathml } from './equation-editor-helpers';

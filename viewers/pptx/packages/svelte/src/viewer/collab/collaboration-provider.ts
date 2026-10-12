@@ -12,11 +12,7 @@
  *    no document server. Same-browser tabs meet over BroadcastChannel
  *    immediately, so the handle reports `connectedNow: true`.
  */
-import type {
-	AwarenessLike,
-	CollaborationConfig,
-	CollaborationTransport,
-} from 'ooxml-ui/pptx';
+import type { AwarenessLike, CollaborationConfig, CollaborationTransport } from 'ooxml-ui/pptx';
 import { clearLocalAwareness, createDepartureChannel } from 'ooxml-ui/pptx';
 
 /** A transport-agnostic view of a live Yjs provider. */

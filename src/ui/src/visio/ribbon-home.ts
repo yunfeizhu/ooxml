@@ -1,14 +1,26 @@
 import { textGroups } from './ribbon-home-format';
 import { paintOptions } from './ribbon-style-options';
+import { colorGrid, type ColorTarget } from './ribbon-color-menu';
 import { effectsOptions, quickStyleGallery } from './ribbon-shape-styles';
 import { command, commandRow, group, menu, stack, type CommandSpec } from './ribbon-parts';
 import { changeShapeGallery } from './ribbon-change-shape';
 
 const ARRANGE = 'Needs core alignment, position, z-order and grouping edits.';
-const CONNECTION_POINT = 'Needs core connection-point rows and point-to-point glue.';
-const SELECT = 'Needs multi-shape selection.';
 const small = (spec: CommandSpec): CommandSpec => ({ size: 'small', ...spec });
 const icon = (spec: CommandSpec): CommandSpec => ({ size: 'icon', ...spec });
+
+/** Home > Fill or Line: Office's colour picker over the menu's own commands. */
+function paintMenu(doc: Document, target: Exclude<ColorTarget, 'font'>, label: string) {
+	const el = menu(doc, {
+		id: target,
+		label,
+		icon: target,
+		size: 'small',
+		items: paintOptions(target),
+	});
+	el.prepend(colorGrid(doc, target));
+	return el;
+}
 
 /**
  * Microsoft Visio's Home tab, group for group: Clipboard, Font, Paragraph, Tools, Shape
@@ -113,7 +125,8 @@ export function buildHomePanel(doc: Document, panel: HTMLElement): void {
 					id: 'connection-point',
 					label: 'Connection Point',
 					icon: 'visioConnectionPoint',
-					unsupported: CONNECTION_POINT,
+					action: { type: 'tool', tool: 'connection-point' },
+					keys: ['Control+Shift+1', 'Ctrl+Shift+1'],
 				}),
 			),
 			command(
@@ -122,7 +135,9 @@ export function buildHomePanel(doc: Document, panel: HTMLElement): void {
 					id: 'text-block',
 					label: 'Text Block',
 					icon: 'visioTextBlock',
-					unsupported: 'Needs core text-block movement and resizing.',
+					action: { type: 'text-feature', feature: 'text-block' },
+					keys: ['Control+Shift+4', 'Ctrl+Shift+4'],
+					pressed: false,
 				}),
 			),
 		]),
@@ -133,20 +148,8 @@ export function buildHomePanel(doc: Document, panel: HTMLElement): void {
 		[
 			quickStyleGallery(doc),
 			stack(doc, [
-				menu(doc, {
-					id: 'fill',
-					label: 'Fill',
-					icon: 'fill',
-					size: 'small',
-					items: paintOptions('fill'),
-				}),
-				menu(doc, {
-					id: 'line',
-					label: 'Line',
-					icon: 'line',
-					size: 'small',
-					items: paintOptions('line'),
-				}),
+				paintMenu(doc, 'fill', 'Fill'),
+				paintMenu(doc, 'line', 'Line'),
 				menu(doc, {
 					id: 'effects',
 					label: 'Effects',
@@ -156,7 +159,7 @@ export function buildHomePanel(doc: Document, panel: HTMLElement): void {
 				}),
 			]),
 		],
-		{ launcher: 'Needs the Format Shape pane.' },
+		{ dialog: 'Format Shape' },
 	);
 	const arrange = group(doc, 'Arrange', [
 		menu(doc, {
@@ -175,7 +178,7 @@ export function buildHomePanel(doc: Document, panel: HTMLElement): void {
 			icon: 'position',
 			unsupported: ARRANGE,
 			items: [
-				{ id: 'auto-align', label: 'Auto Align & Space', unsupported: ARRANGE },
+				{ id: 'auto-align', label: 'Auto Align & Space', action: { type: 'auto-align' } },
 				{
 					id: 'distribute-horizontal',
 					label: 'Distribute Horizontally',
@@ -301,12 +304,12 @@ export function buildHomePanel(doc: Document, panel: HTMLElement): void {
 					{
 						id: 'layer-properties',
 						label: 'Layer Properties...',
-						action: { type: 'reveal', panel: 'layers' },
+						action: { type: 'layer-properties' },
 					},
 					{
 						id: 'assign-layer',
 						label: 'Assign to Layer...',
-						unsupported: 'Needs core layer assignment edits.',
+						action: { type: 'assign-layers' },
 					},
 				],
 			}),
@@ -327,7 +330,7 @@ export function buildHomePanel(doc: Document, panel: HTMLElement): void {
 						label: 'Deselect All',
 						action: { type: 'selection', mode: 'clear' },
 					},
-					{ id: 'select-by-type', label: 'Select by Type...', unsupported: SELECT },
+					{ id: 'select-by-type', label: 'Select by Type...', action: { type: 'select-by-type' } },
 				],
 			}),
 		]),

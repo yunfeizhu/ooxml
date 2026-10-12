@@ -1,13 +1,13 @@
 import { computed } from '@angular/core';
 import type { Signal } from '@angular/core';
-import type { PptxElement, PptxSlide, PptxSlideTransition } from 'pptx-viewer-core';
-
 import type { CanvasSize, FragmentedTransitionDescriptor } from 'ooxml-ui/pptx';
 import {
 	buildMorphTransitionPlan,
 	getFragmentedTransitionDescriptor,
 	morphOptionToMode,
 } from 'ooxml-ui/pptx';
+import type { PptxElement, PptxSlide, PptxSlideTransition } from 'pptx-viewer-core';
+
 import type { StyleMap } from './element-style';
 import type { MorphCrossfadeGroupSlides } from './presentation-transition-overlay-morph';
 import {

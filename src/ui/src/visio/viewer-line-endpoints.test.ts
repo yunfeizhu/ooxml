@@ -1,3 +1,4 @@
+// @vitest-environment jsdom
 import { afterEach, expect, it, vi } from 'vitest';
 import { demoDocument } from 'ooxml-core/visio/ui';
 import { ViewerLineEndpoints } from './viewer-line-endpoints';

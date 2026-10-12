@@ -1,4 +1,3 @@
-import type { PptxChartData } from 'pptx-viewer-core';
 import {
 	createDefaultChartUserShape,
 	createDefaultChartUserShapeGroupChild,
@@ -14,6 +13,7 @@ import {
 	withChartUserShapeRowUpdated,
 } from 'ooxml-ui/pptx';
 import type { ChartUserShapeRowPatch } from 'ooxml-ui/pptx';
+import type { PptxChartData } from 'pptx-viewer-core';
 import { useTranslation } from 'react-i18next';
 
 import { BTN, CARD, HEADING, INPUT } from './chart-panel-constants';

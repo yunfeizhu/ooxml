@@ -1,3 +1,8 @@
+import type { CollaborationConfig, YDocLike } from 'ooxml-ui/pptx';
+import {
+	createWriteBackScheduler as createSharedWriteBackScheduler,
+	readSlidesFromYDoc,
+} from 'ooxml-ui/pptx';
 /**
  * collaboration-writeback.ts: elected-writer (role 'owner') PPTX write-back
  * for the vanilla viewer.
@@ -8,11 +13,6 @@
  * re-serializes directly through it instead of reloading from scratch.
  */
 import type { PptxHandler, PptxHandlerSaveOptions } from 'pptx-viewer-core';
-import type { CollaborationConfig, YDocLike } from 'ooxml-ui/pptx';
-import {
-	createWriteBackScheduler as createSharedWriteBackScheduler,
-	readSlidesFromYDoc,
-} from 'ooxml-ui/pptx';
 
 export interface WriteBackDeps {
 	getYDoc: () => YDocLike | null;

@@ -20,7 +20,9 @@ export default defineConfig((options) => ({
 	sourcemap: false,
 	clean: !options.watch,
 	// `ooxml-ui` depends on `ooxml-core`, so inlining the core here as well would ship it twice.
-	external: [/^ooxml-ui(?:\/|$)/, /^ooxml-core(?:\/|$)/,
+	external: [
+		/^ooxml-ui(?:\/|$)/,
+		/^ooxml-core(?:\/|$)/,
 		'react',
 		'react-dom',
 		'framer-motion',

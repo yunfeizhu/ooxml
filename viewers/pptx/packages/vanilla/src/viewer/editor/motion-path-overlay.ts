@@ -1,4 +1,3 @@
-import type { PptxElement } from 'pptx-viewer-core';
 import type { MotionPathFrame } from 'ooxml-ui/pptx';
 import {
 	isEditableMotionPath,
@@ -6,6 +5,7 @@ import {
 	motionPathToSvgD,
 	setMotionPathEnd,
 } from 'ooxml-ui/pptx';
+import type { PptxElement } from 'pptx-viewer-core';
 
 import type { Translator } from '../i18n';
 import { createSvgEl, setSvgAttrs } from '../render';

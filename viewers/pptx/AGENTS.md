@@ -216,6 +216,40 @@ packed-binding check), `pptx-test` (one job per package, plus React 18), the
 browser suite split by framework and shard (`pptx-e2e`), and the packaged-build
 smoke.
 
+### Running the tests quickly
+
+**Unit tests share workers.** Each binding package's `vitest.config.ts` builds its `projects` from
+`scripts/vitest-isolation.mjs` and runs with `isolate: false`, which is most of the speed (react
+489s to about 150s, vue 294s to 40s, angular 281s to 50s, svelte 281s to 45s, vanilla 221s to 50s).
+Files that need more are found by content, so a new test needs no registration:
+
+- `vi.mock` / `vi.doMock`, or the comment `@vitest-fresh-modules` (use it when a test depends on
+  module state such as an uninitialized i18n or the lazily loaded layout library): the module
+  registry is reset before the file loads.
+- `*ssr.test.*` or `TestBed.initTestEnvironment(`: a worker of its own.
+
+`scripts/vitest-dom-hygiene.setup.ts` removes the `document`/`window` listeners a file leaves and
+clears the body, because the DOM is shared too. Tests must still clean up what they change (module
+state, globals, timers): the next file in the worker sees it. `packages/react`'s React 18 leg
+(`vitest.react18.config.ts`) is unchanged and still isolates per file.
+
+**Browser tests run React only by default** when not in CI. React is the parity reference: its
+parity specs drive all five demos and diff them against it, so one project still checks every
+binding, at about a fifth of the cost. Run another binding with `--project=<name>` (or
+`bun run e2e -- --project=vue`), or all of them with `bun run e2e:all` /
+`PPTX_E2E_ALL_BINDINGS=1`. CI always runs every binding.
+
+- `bun run e2e:servers start|stop|restart|status` keeps the five demo dev servers and the
+  collaboration relay up between runs (Playwright reuses a server that is listening). Restart them
+  after rebuilding `ooxml-ui`, core or the angular package, since a running server serves the old
+  build. The list lives in `e2e-servers.ts`, which `playwright.config.ts` also uses.
+- `bun run e2e:changed` runs only the spec files changed against `origin/main`, plus specs that
+  import a changed support file. It does not follow a change to product source: for that run the
+  affected specs by name (`bun run e2e -- <spec>`), or the project (`bun run verify --browser`).
+- Machine-specific settings go in the git-ignored `viewers/pptx/.env.local`, which the config
+  loads: `PPTX_E2E_WORKERS=12` sets the Playwright worker count (the default is half the cores),
+  `PPTX_E2E_PORT_OFFSET` shifts the ports.
+
 ### `@local-only` e2e tests and the pre-push hook
 
 A few e2e specs do real-time video capture and reliably crash the hosted CI
@@ -375,7 +409,7 @@ primitives come from the `geometry`, `color` and `units` areas of the core.
   `if (element.type === "image")`.
 - **EMU units**: PowerPoint uses English Metric Units internally. Conversion
   constants are in `src/core/pptx/core/constants.ts` (`EMU_PER_INCH =
-914400`, `EMU_PER_POINT = 12700`, `EMU_PER_PIXEL = 9525`).
+  914400`, `EMU_PER_POINT = 12700`, `EMU_PER_PIXEL = 9525`).
 - **Service interfaces**: services define `I*` interfaces for DI/testability.
 - **File naming**: kebab-case for utilities, PascalCase for classes. Tests
   colocated with source (`.test.ts` suffix).

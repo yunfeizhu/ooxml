@@ -1,11 +1,6 @@
 // Column / row resizing by dragging a header border (with a guide line), and double-click
 // AutoFit through the core's `autoFitColumnWidth` and `setRowHeight(..., 'auto')`.
-import {
-	autoFitColumnWidth,
-	MAX_COL,
-	MAX_ROW,
-	pixelsToColumnWidth,
-} from 'ooxml-core/xlsx';
+import { autoFitColumnWidth, MAX_COL, MAX_ROW, pixelsToColumnWidth } from 'ooxml-core/xlsx';
 import { h, place } from './dom';
 import type { GridView } from './grid-view';
 

@@ -1,8 +1,8 @@
-import { createRotationDrag, resolveRotateHandlePlacement } from 'ooxml-core/geometry';
+import { createRotationDrag, resolveRotateHandlePlacement, snapAngle } from 'ooxml-core/geometry';
 import {
 	editErrorMessage,
 	isEditCancellation,
-	visioLocalRotationShape,
+	visioRotationShape,
 	visioSelectionIsOnPage,
 } from 'ooxml-core/visio/ui';
 import type { ViewerController, ViewerState } from './controller';
@@ -16,6 +16,9 @@ import { createRotationPreview } from './viewer-rotation-preview';
 import { hideGestureOverlays } from './viewer-gesture-overlays';
 const SVG = 'http://www.w3.org/2000/svg';
 const pointOptions = { snap: false, bounded: false } as const;
+/** Visio's counter-clockwise radians from the drag's clockwise degrees; Shift snaps to 15°. */
+const radians = (degrees: number, snap: boolean) =>
+	(-(snap ? snapAngle(degrees) : degrees) * Math.PI) / 180;
 /** A source-backed rotation gesture; previews never mutate the model or history. */
 export class ViewerRotationHandle {
 	#drag:
@@ -56,7 +59,7 @@ export class ViewerRotationHandle {
 			!this.options.active()
 		)
 			return;
-		const shape = visioLocalRotationShape(page, selection.id);
+		const shape = visioRotationShape(page, selection.id);
 		if (!shape?.rotation) return;
 		const group = Array.from(this.viewport.querySelectorAll<SVGGElement>('[data-shape-id]')).find(
 			(group) =>
@@ -103,10 +106,15 @@ export class ViewerRotationHandle {
 		handle.dataset.rotationHandle = shape.id;
 		handle.setAttribute('cx', String(point.x));
 		handle.setAttribute('cy', String(point.y));
-		handle.setAttribute('r', '6');
+		handle.setAttribute('r', '8');
 		handle.setAttribute('vector-effect', 'non-scaling-stroke');
 		handle.setAttribute('aria-label', 'Drag rotation handle');
-		overlay.append(stem, handle);
+		// Visio's rotation handle is a circular arrow; the circle under it is the hit target.
+		const glyph = this.viewport.ownerDocument.createElementNS(SVG, 'path');
+		glyph.classList.add('rotation-glyph');
+		glyph.setAttribute('transform', `translate(${point.x} ${point.y})`);
+		glyph.setAttribute('d', 'M4.6 -2.9A5.4 5.4 0 1 0 5.4 .6M5.6 -5.9V-2.4H2.1');
+		overlay.append(stem, handle, glyph);
 		this.viewport.append(overlay);
 		this.#overlay = overlay;
 	}
@@ -212,7 +220,7 @@ export class ViewerRotationHandle {
 		}
 		const point = pagePoint(drag.svg, drag.page, event, pointOptions);
 		if (point) {
-			const angle = (-drag.rotate(point) * Math.PI) / 180;
+			const angle = radians(drag.rotate(point), event.shiftKey);
 			try {
 				drag.shapePreview.update(angle);
 			} catch (error) {
@@ -226,13 +234,22 @@ export class ViewerRotationHandle {
 		event.stopImmediatePropagation();
 	}
 	#cancel(): void {
+		this.#release()();
+	}
+	/**
+	 * Ends the gesture and returns the removal of its previews, which a finished drag keeps until its
+	 * source edit settles (removing them first showed the old geometry for as long as the edit took).
+	 */
+	#release(): () => void {
 		const drag = this.#drag;
 		this.#drag = undefined;
-		drag?.preview.remove();
-		drag?.shapePreview.dispose();
-		drag?.showOverlays();
 		if (drag && this.viewport.hasPointerCapture?.(drag.pointer))
 			this.viewport.releasePointerCapture(drag.pointer);
+		return () => {
+			drag?.preview.remove();
+			drag?.shapePreview.dispose();
+			drag?.showOverlays();
+		};
 	}
 	async #finish(event: PointerEvent): Promise<void> {
 		const drag = this.#drag;
@@ -244,14 +261,16 @@ export class ViewerRotationHandle {
 		event.preventDefault();
 		event.stopImmediatePropagation();
 		const point = pagePoint(drag.svg, drag.page, event, pointOptions);
-		const angle = point ? (-drag.rotate(point) * Math.PI) / 180 : undefined;
-		this.#cancel();
+		const angle = point ? radians(drag.rotate(point), event.shiftKey) : undefined;
+		const settle = this.#release();
 		if (
 			angle === undefined ||
 			Math.hypot(event.clientX - drag.startX, event.clientY - drag.startY) < 0.5 ||
 			this.controller.state.document !== drag.document
-		)
+		) {
+			settle();
 			return;
+		}
 		const request = ++this.#request;
 		try {
 			await this.controller.applyEdits([
@@ -261,6 +280,8 @@ export class ViewerRotationHandle {
 		} catch (error) {
 			if (request === this.#request && !isEditCancellation(error))
 				this.options.announce(editErrorMessage(error));
+		} finally {
+			settle();
 		}
 	}
 }

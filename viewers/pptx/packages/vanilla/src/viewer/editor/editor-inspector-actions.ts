@@ -1,3 +1,26 @@
+import {
+	addGradientStopPatch,
+	applyStyleToSelectedSegments,
+	applyUniformCellPaddingPatch,
+	autoFitModePatch,
+	buildOleObjectNamePatch,
+	elementLockTogglePatch,
+	gradientStatePatch,
+	imageAdjustmentsPatch,
+	imageCropPatch,
+	isElementLocked,
+	reflowSmartArtData,
+	remapTextToSegments,
+	removeGradientStopPatch,
+	tableInspectorPatch,
+	textAdvancedPatch,
+	textWrapPatch,
+	updateGradientStopPatch,
+	vAlignPatch,
+	switchSmartArtLayoutData,
+	withCellStyle,
+} from 'ooxml-ui/pptx';
+import type { GradientState, InlineTextSelection, TextAdvancedChanges } from 'ooxml-ui/pptx';
 import type {
 	PptxImageEffects,
 	PptxTableCellStyle,
@@ -25,29 +48,6 @@ import {
 	setSmartArtNodeStyle,
 	updateSmartArtNodeText,
 } from 'pptx-viewer-core';
-import {
-	addGradientStopPatch,
-	applyStyleToSelectedSegments,
-	applyUniformCellPaddingPatch,
-	autoFitModePatch,
-	buildOleObjectNamePatch,
-	elementLockTogglePatch,
-	gradientStatePatch,
-	imageAdjustmentsPatch,
-	imageCropPatch,
-	isElementLocked,
-	reflowSmartArtData,
-	remapTextToSegments,
-	removeGradientStopPatch,
-	tableInspectorPatch,
-	textAdvancedPatch,
-	textWrapPatch,
-	updateGradientStopPatch,
-	vAlignPatch,
-	switchSmartArtLayoutData,
-	withCellStyle,
-} from 'ooxml-ui/pptx';
-import type { GradientState, InlineTextSelection, TextAdvancedChanges } from 'ooxml-ui/pptx';
 
 import type { ApplyToSelected } from './editor-apply-to-selected';
 import { patchShapeStyle } from './editor-format-mutations';

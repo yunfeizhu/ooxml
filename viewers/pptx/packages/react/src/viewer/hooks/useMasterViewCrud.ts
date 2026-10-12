@@ -1,4 +1,3 @@
-import type { PptxData, PptxHandler, PptxSlide, PptxSlideMaster } from 'pptx-viewer-core';
 import type {
 	CompatibilityWarningToast,
 	MasterViewCrudAction,
@@ -10,6 +9,7 @@ import {
 	masterViewCrudActions,
 	masterViewCrudFailureKey,
 } from 'ooxml-ui/pptx';
+import type { PptxData, PptxHandler, PptxSlide, PptxSlideMaster } from 'pptx-viewer-core';
 import { useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 

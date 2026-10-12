@@ -7,8 +7,8 @@
  * falls back to the default SVG {@link SmartArtRenderer} otherwise.
  */
 
-import type { PptxElement } from 'pptx-viewer-core';
 import type { ElementAnimationState } from 'ooxml-ui/pptx';
+import type { PptxElement } from 'pptx-viewer-core';
 import React, { useContext } from 'react';
 
 import { Rendering3DFlagsContext } from './rendering-3d-flags-context';

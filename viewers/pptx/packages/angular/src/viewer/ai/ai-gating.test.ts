@@ -1,6 +1,6 @@
+import type { PptxAiConfig } from 'ooxml-ui/pptx/ai';
 import { describe, expect, it } from 'vitest';
 
-import type { PptxAiConfig } from 'ooxml-ui/pptx/ai';
 import { aiToggleVisible } from './ai-gating';
 
 describe('aiToggleVisible', () => {

@@ -1,3 +1,4 @@
+import { motionPathFor, setMotionPath } from 'ooxml-ui/pptx';
 /**
  * useInspectorWiring: what the right-hand property inspector sees, and where
  * its patches are written back to.
@@ -12,7 +13,6 @@
  * lives here too rather than duplicating the lookup.
  */
 import type { PptxElement, PptxSlide } from 'pptx-viewer-core';
-import { motionPathFor, setMotionPath } from 'ooxml-ui/pptx';
 import type { ComputedRef, ShallowRef, Ref } from 'vue';
 import { computed } from 'vue';
 

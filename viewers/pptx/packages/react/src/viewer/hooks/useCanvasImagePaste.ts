@@ -1,5 +1,5 @@
-import type { ImagePptxElement } from 'pptx-viewer-core';
 import type { EditorImagePasteOptions } from 'ooxml-ui/pptx';
+import type { ImagePptxElement } from 'pptx-viewer-core';
 import { useMemo, useRef } from 'react';
 
 import type { UseEditorOperationsInput } from './useEditorOperations';

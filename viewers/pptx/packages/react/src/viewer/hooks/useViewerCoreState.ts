@@ -1,3 +1,16 @@
+/**
+ * useViewerCoreState: Core state declarations for PowerPointViewer.
+ *
+ * Owns document state and pointer refs; live text state is delegated.
+ *
+ * Derived values (activeSlide, elementLookup, selectedElement, master view
+ * elements) are computed by {@link useDerivedElementState} and spread into
+ * the return value. Type definitions live in `viewer-core-state-types.ts`.
+ * UI panel state lives in {@link useViewerUIState}.
+ *
+ */
+import { createCollaborationLivePatcher, publishLiveInlineText } from 'ooxml-ui/pptx';
+import type { SlideSizeEmu } from 'ooxml-ui/pptx';
 import type {
 	PptxAppProperties,
 	PptxCoreProperties,
@@ -19,19 +32,6 @@ import type {
 	PptxViewProperties,
 	ParsedTableStyleMap,
 } from 'pptx-viewer-core';
-/**
- * useViewerCoreState: Core state declarations for PowerPointViewer.
- *
- * Owns document state and pointer refs; live text state is delegated.
- *
- * Derived values (activeSlide, elementLookup, selectedElement, master view
- * elements) are computed by {@link useDerivedElementState} and spread into
- * the return value. Type definitions live in `viewer-core-state-types.ts`.
- * UI panel state lives in {@link useViewerUIState}.
- *
- */
-import { createCollaborationLivePatcher, publishLiveInlineText } from 'ooxml-ui/pptx';
-import type { SlideSizeEmu } from 'ooxml-ui/pptx';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { DEFAULT_CANVAS_HEIGHT, DEFAULT_CANVAS_WIDTH } from '../constants';

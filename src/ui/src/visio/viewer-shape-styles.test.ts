@@ -65,14 +65,14 @@ it('applies and clears outer shadows, checks the current preset and draws the sh
 	ui.controller.destroy();
 });
 
-it('keeps unsupported effects disabled with their reasons and disables styles for masters', async () => {
+it('keeps unsupported effects disabled with their reasons and disables styles for drawn shapes on a layer', async () => {
 	const ui = await setup();
 	ui.selection();
-	for (const id of ['glow', 'reflection', 'soft-edges', 'bevel', 'rotation-3d']) {
+	for (const id of ['bevel', 'rotation-3d']) {
 		expect(ui.button(id).disabled).toBe(true);
 		expect(ui.button(id).title).toMatch(/not available yet/);
 	}
-	ui.shape().masterId = '42';
+	ui.shape().layerIds = ['42'];
 	ui.commands.render(ui.controller.state);
 	expect(gallery(ui.root).hasAttribute('disabled')).toBe(true);
 	expect(ui.button('shadow-bottom').disabled).toBe(true);

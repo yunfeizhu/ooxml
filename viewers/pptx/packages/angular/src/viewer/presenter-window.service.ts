@@ -17,7 +17,6 @@
  */
 
 import { Injectable, signal } from '@angular/core';
-
 import {
 	buildPresentationAudienceUrl,
 	createInitialPresentationSnapshot,
@@ -32,6 +31,7 @@ import {
 	swapPresentationWindows,
 } from 'ooxml-ui/pptx';
 import type { PresentationSnapshot } from 'ooxml-ui/pptx';
+
 import {
 	AUDIENCE_HASH,
 	clearAudienceContent,

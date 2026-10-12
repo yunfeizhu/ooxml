@@ -16,6 +16,12 @@ import {
 	signal,
 } from '@angular/core';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
+import type { TableStyleEditorFieldEdit, TableStyleEditorPartId } from 'ooxml-ui/pptx';
+import {
+	applyTableStyleFieldEdit,
+	describeTableStyleEditor,
+	TABLE_STYLE_EDITOR_PARTS,
+} from 'ooxml-ui/pptx';
 import type { ParsedTableStyleMap } from 'pptx-viewer-core';
 import {
 	addTableStyleToMap,
@@ -24,12 +30,6 @@ import {
 	normalizeTableStyleGuid,
 } from 'pptx-viewer-core';
 
-import type { TableStyleEditorFieldEdit, TableStyleEditorPartId } from 'ooxml-ui/pptx';
-import {
-	applyTableStyleFieldEdit,
-	describeTableStyleEditor,
-	TABLE_STYLE_EDITOR_PARTS,
-} from 'ooxml-ui/pptx';
 import { LoadContentService } from './load-content.service';
 import { TableStyleEditorFieldsComponent } from './table-style-editor-fields.component';
 

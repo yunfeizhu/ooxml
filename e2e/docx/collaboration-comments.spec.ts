@@ -114,9 +114,17 @@ for (const framework of ['vanilla', 'react', 'vue', 'angular', 'svelte', 'solid'
 		const b = page.locator('#peer-b docx-editor');
 		await expect(a.locator('.ProseMirror')).toContainText('Shared document');
 		await expect(b.locator('.ProseMirror')).toContainText('Shared document');
-		await a.locator('.ProseMirror').click();
-		await page.keyboard.press('Control+Home');
-		await page.keyboard.press('Control+Shift+ArrowRight');
+		// The peers can still be settling their first sync when the text appears, and
+		// a document update that lands around these keystrokes drops the selection,
+		// which leaves Add comment disabled. Select until the selection is there.
+		// This narrows the race, it does not close it: an update can still land
+		// after the check.
+		await expect(async () => {
+			await a.locator('.ProseMirror').click();
+			await page.keyboard.press('Control+Home');
+			await page.keyboard.press('Control+Shift+ArrowRight');
+			expect(await page.evaluate(() => getSelection()?.toString())).not.toBe('');
+		}).toPass();
 		await a.locator('office-ui-ribbon-actions [part="comments"]').click();
 		const paneA = a.locator('.dve-comments-panel');
 		await paneA.getByRole('textbox', { name: 'New comment', exact: true }).fill('Shared review');

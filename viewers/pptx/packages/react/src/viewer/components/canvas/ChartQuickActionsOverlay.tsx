@@ -1,4 +1,3 @@
-import type { ChartPptxElement, PptxElement } from 'pptx-viewer-core';
 import {
 	applyChartElementToggle,
 	applyChartStylePreset,
@@ -7,6 +6,7 @@ import {
 	hideChartSeries,
 	restoreFilteredSeries,
 } from 'ooxml-ui/pptx';
+import type { ChartPptxElement, PptxElement } from 'pptx-viewer-core';
 import React, { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { LuFilter, LuPaintbrush, LuPlus } from 'react-icons/lu';

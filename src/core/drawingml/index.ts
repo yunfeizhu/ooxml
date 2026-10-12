@@ -20,6 +20,7 @@ export * from './drawing-geometry';
 export * from './drawing-shadow';
 export * from './write-color';
 export * from './write-fill';
+export * from './write-theme';
 export * from './gradient-presets';
 export * from './gradient-geometry';
 export * from './rect-path-gradient';

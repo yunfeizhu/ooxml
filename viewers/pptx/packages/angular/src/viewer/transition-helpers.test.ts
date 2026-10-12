@@ -1,7 +1,7 @@
+import { DEFAULT_TRANSITION_DURATION_MS as SHARED_DEFAULT_TRANSITION_DURATION_MS } from 'ooxml-ui/pptx';
 import type { PptxSlideTransition, PptxTransitionType } from 'pptx-viewer-core';
 import { describe, expect, it } from 'vitest';
 
-import { DEFAULT_TRANSITION_DURATION_MS as SHARED_DEFAULT_TRANSITION_DURATION_MS } from 'ooxml-ui/pptx';
 import {
 	DEFAULT_MORPH_DURATION_MS,
 	DEFAULT_TRANSITION_DURATION_MS,

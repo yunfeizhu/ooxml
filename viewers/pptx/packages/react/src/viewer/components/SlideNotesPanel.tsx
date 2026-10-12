@@ -1,5 +1,5 @@
-import type { PptxSlide, PptxTextStyleLevels, TextSegment } from 'pptx-viewer-core';
 import { observeElementHeight } from 'ooxml-ui/pptx';
+import type { PptxSlide, PptxTextStyleLevels, TextSegment } from 'pptx-viewer-core';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 

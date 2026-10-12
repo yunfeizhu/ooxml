@@ -9,14 +9,7 @@
  * and binds this engine to the live doc for the duration of a session.
  */
 
-import type { PptxSlide } from 'pptx-viewer-core';
-
-import type {
-	CollabLoadOrigin,
-	YDocLike,
-	YjsFactories,
-	YTransactionLike,
-} from 'ooxml-ui/pptx';
+import type { CollabLoadOrigin, YDocLike, YjsFactories, YTransactionLike } from 'ooxml-ui/pptx';
 import {
 	createSyncGate,
 	LOCAL_SYNC_ORIGIN,
@@ -25,6 +18,8 @@ import {
 	shouldRoomSlidesReplaceLoad,
 	YDOC_SLIDES_KEY,
 } from 'ooxml-ui/pptx';
+import type { PptxSlide } from 'pptx-viewer-core';
+
 import type { ProviderLike } from './collaboration-providers';
 
 /** Live-session references the engine writes into, set on connect. */

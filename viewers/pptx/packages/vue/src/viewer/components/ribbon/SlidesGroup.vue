@@ -1,4 +1,12 @@
 <script setup lang="ts">
+import type {
+	HomeLayoutArtwork,
+	RibbonHomeLayoutModel,
+	RibbonHomePopupEvent,
+	RibbonHomeRequestEvent,
+	SlideTemplateId,
+} from 'ooxml-ui/pptx';
+import { homeSnapshotTranslator, slidesHomeControls } from 'ooxml-ui/pptx';
 /**
  * SlidesGroup: New Slide split button, Slide Templates, Layout (apply to
  * current), Reset and Section. All of it, including the layout thumbnail
@@ -8,14 +16,6 @@
  * runs the edits. The Slide Templates dialog stays native.
  */
 import type { PptxLayoutPreview, PptxSlide } from 'pptx-viewer-core';
-import type {
-	HomeLayoutArtwork,
-	RibbonHomeLayoutModel,
-	RibbonHomePopupEvent,
-	RibbonHomeRequestEvent,
-	SlideTemplateId,
-} from 'ooxml-ui/pptx';
-import { homeSnapshotTranslator, slidesHomeControls } from 'ooxml-ui/pptx';
 import { computed, ref, shallowRef } from 'vue';
 import { useI18n } from 'vue-i18n';
 

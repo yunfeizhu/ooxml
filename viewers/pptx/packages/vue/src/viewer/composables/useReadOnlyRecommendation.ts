@@ -1,6 +1,6 @@
-import type { PptxCustomProperty, PptxModifyVerifier } from 'pptx-viewer-core';
 import type { ModifyPasswordCheckResult, ReadOnlyRecommendation } from 'ooxml-ui/pptx';
 import { checkModifyPassword, readOnlyRecommendation } from 'ooxml-ui/pptx';
+import type { PptxCustomProperty, PptxModifyVerifier } from 'pptx-viewer-core';
 import { computed, ref } from 'vue';
 import type { ComputedRef, Ref } from 'vue';
 

@@ -22,11 +22,15 @@ const chart = (): ChartObject =>
 
 const hostileKeys = ['__proto__', 'constructor', 'prototype', '0', -1, 2, 0.5, Number.NaN];
 const pollutedNames = ['fill', 'color', 'drawingColor', 'pointColors', 'pointFills'];
+// `fill` is a real Array method: only a name that was not there to begin with counts as pollution,
+// and removing the native one would break every test that shares the worker.
+const nativeArrayNames = new Set(Object.getOwnPropertyNames(Array.prototype));
 
 afterEach(() => {
 	for (const name of pollutedNames) delete (Object.prototype as Record<string, unknown>)[name];
 	for (const name of pollutedNames)
-		delete (Array.prototype as unknown as Record<string, unknown>)[name];
+		if (!nativeArrayNames.has(name))
+			delete (Array.prototype as unknown as Record<string, unknown>)[name];
 });
 
 describe('chart series edit targets', () => {
@@ -52,7 +56,7 @@ describe('chart series edit targets', () => {
 			for (const key of hostileKeys) expect(() => edit(key as number)).toThrow(RangeError);
 		for (const name of pollutedNames) {
 			expect(Object.prototype).not.toHaveProperty(name);
-			expect(Object.hasOwn(Array.prototype, name)).toBe(false);
+			expect(Object.hasOwn(Array.prototype, name)).toBe(nativeArrayNames.has(name));
 			expect(({} as Record<string, unknown>)[name]).toBeUndefined();
 		}
 		expect(chartSeriesTransparencyPatch(chart(), 0, 50)?.series?.[0]?.drawingColor).toBeDefined();

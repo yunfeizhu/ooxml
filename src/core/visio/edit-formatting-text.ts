@@ -1,3 +1,4 @@
+import { visioThemeColorFormula } from './theme-color-ref';
 import { attribute } from './sheet';
 import { fail } from './package-common';
 import { visioFormulaCachedValue } from './formula';
@@ -10,6 +11,13 @@ import {
 } from './edit-style-admission';
 import type { VisioTextFormatEdit } from './edit-formatting-commands';
 import type { FormattingWrite } from './edit-formatting';
+import {
+	characterExtraWrites,
+	hasCharacterExtras,
+	hasParagraphExtras,
+	paragraphExtraWrites,
+	textBlockWrites,
+} from './edit-formatting-text-extra';
 
 export function textFormattingWrites(
 	shape: Element,
@@ -21,26 +29,35 @@ export function textFormattingWrites(
 	if (
 		['fontSize', 'fontFamily', 'fontColor', 'bold', 'italic', 'underline', 'strikethrough'].some(
 			(key) => edit[key as keyof VisioTextFormatEdit] !== undefined,
-		)
+		) ||
+		hasCharacterExtras(edit)
 	)
 		rows.set('Character', formattingRowContext(shape, document, 'Character'));
 	if (
 		edit.bullets !== undefined ||
 		edit.indentLeft !== undefined ||
-		edit.horizontalAlign !== undefined
+		edit.horizontalAlign !== undefined ||
+		hasParagraphExtras(edit)
 	)
 		rows.set('Paragraph', formattingRowContext(shape, document, 'Paragraph'));
 	const characters = rows.get('Character')?.source;
 	const paragraphs = rows.get('Paragraph')?.source;
 	if (rows.size) assertFormattingText(shape, characters, paragraphs);
 	const writes: FormattingWrite[] = [];
-	const add = (name: string, value: string | number, unit?: string, formula?: string) =>
+	const add = (
+		name: string,
+		value: string | number,
+		unit?: string,
+		formula?: string,
+		dropUnit?: boolean,
+	) =>
 		writes.push({
 			name,
 			value: String(value),
 			category: 'TextStyle',
 			...(unit ? { unit } : {}),
 			...(formula ? { formula } : {}),
+			...(dropUnit ? { dropUnit } : {}),
 		});
 	const scalar = (name: string, max: number, description: string): number => {
 		const cell = effectiveShapeCell(
@@ -50,9 +67,11 @@ export function textFormattingWrites(
 			'TextStyle',
 			rows.get(name.split('.')[0]!),
 		);
-		const cached = cell
-			? visioFormulaCachedValue(attribute(cell, 'V') ?? '', attribute(cell, 'U'))
-			: { value: 0, unit: 'scalar' };
+		// A themed style or bullet has no cached number; readers take it as none, and so does this.
+		const cached =
+			cell && attribute(cell, 'V') !== 'Themed'
+				? visioFormulaCachedValue(attribute(cell, 'V') ?? '', attribute(cell, 'U'))
+				: { value: 0, unit: 'scalar' };
 		if (
 			cached.unit !== 'scalar' ||
 			!Number.isSafeInteger(cached.value) ||
@@ -74,7 +93,9 @@ export function textFormattingWrites(
 				name('Color'),
 				edit.fontColor,
 				undefined,
-				`RGB(${[1, 3, 5].map((i) => parseInt(edit.fontColor!.slice(i, i + 2), 16)).join(',')})`,
+				edit.fontColorTheme
+					? visioThemeColorFormula(edit.fontColorTheme)
+					: `RGB(${[1, 3, 5].map((i) => parseInt(edit.fontColor!.slice(i, i + 2), 16)).join(',')})`,
 			);
 			add(name('ColorTrans'), 0);
 		}
@@ -89,6 +110,7 @@ export function textFormattingWrites(
 				if (value !== undefined) bits = value ? bits | bit : bits & ~bit;
 			add(name('Style'), bits);
 		}
+		characterExtraWrites(edit, name, add);
 	}
 	for (const index of paragraphs ? new Set(['0', ...paragraphs.keys()]) : []) {
 		check();
@@ -100,8 +122,10 @@ export function textFormattingWrites(
 		}
 		if (edit.horizontalAlign !== undefined)
 			add(name('HorzAlign'), ['left', 'center', 'right', 'justify'].indexOf(edit.horizontalAlign));
+		paragraphExtraWrites(edit, name, add);
 	}
 	if (edit.verticalAlign !== undefined)
 		add('VerticalAlign', ['top', 'middle', 'bottom'].indexOf(edit.verticalAlign));
+	textBlockWrites(shape, edit, add);
 	return { writes, rows };
 }

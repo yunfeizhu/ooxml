@@ -1,5 +1,3 @@
-// @vitest-environment happy-dom
-import type { PptxElement } from 'pptx-viewer-core';
 import {
 	createCollaborationLivePatcher,
 	createSnapshotTextPositions,
@@ -7,6 +5,9 @@ import {
 	reconcileSlidesInYDoc,
 } from 'ooxml-ui/pptx';
 import type { CollaborationLivePatcher, InlineTextEditSnapshot } from 'ooxml-ui/pptx';
+// @vitest-environment happy-dom
+/* oxlint-disable react/jsx-no-constructed-context-values -- test renders, not a component re-render. */
+import type { PptxElement } from 'pptx-viewer-core';
 import React, { act, useRef, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import type { Root } from 'react-dom/client';

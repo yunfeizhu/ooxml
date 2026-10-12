@@ -7,9 +7,9 @@
  * async load -> edit -> commit path a user's click actually runs.
  */
 import JSZip from 'jszip';
+import { translationsEn } from 'ooxml-ui/pptx/i18n';
 import type { OlePptxElement } from 'pptx-viewer-core';
 import { oleBytesToDataUrl, PptxHandler } from 'pptx-viewer-core';
-import { translationsEn } from 'ooxml-ui/pptx/i18n';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { createTranslator } from '../../i18n';

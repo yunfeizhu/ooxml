@@ -1,4 +1,3 @@
-import type { PptxSlide } from 'pptx-viewer-core';
 import type {
 	CollabLoadOrigin,
 	CollaborationConfig,
@@ -9,6 +8,7 @@ import type {
 	YjsFactories,
 } from 'ooxml-ui/pptx';
 import { observeExternalCollaborationReadiness } from 'ooxml-ui/pptx';
+import type { PptxSlide } from 'pptx-viewer-core';
 
 interface ExternalSyncDeps {
 	factories: YjsFactories;

@@ -1,3 +1,4 @@
+import type { AlignEdge, DistributeAxis, InsertChartKind, SlideTemplateId } from 'ooxml-ui/pptx';
 import type {
 	PptxComment,
 	PptxCustomShow,
@@ -9,12 +10,6 @@ import type {
 	PptxSlide,
 	PptxTheme,
 } from 'pptx-viewer-core';
-import type {
-	AlignEdge,
-	DistributeAxis,
-	InsertChartKind,
-	SlideTemplateId,
-} from 'ooxml-ui/pptx';
 import type { ComputedRef, Ref, ShallowRef } from 'vue';
 
 import type { ShapePreset } from '../components/EditorToolbar.vue';

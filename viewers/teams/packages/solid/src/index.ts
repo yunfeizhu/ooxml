@@ -1,4 +1,4 @@
-import { createEffect, createSignal, onCleanup, onMount, type Accessor } from 'solid-js';
+import { createEffect, createSignal, onCleanup, type Accessor } from 'solid-js';
 import {
 	bindTeams,
 	createTeams,

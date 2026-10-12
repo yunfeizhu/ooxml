@@ -1,11 +1,11 @@
+import type { DialogFooterAction, PptxUiDialogFooterElement } from 'ooxml-ui/pptx';
+import { computeDocumentStatistics } from 'ooxml-ui/pptx';
 import type {
 	PptxAppProperties,
 	PptxCoreProperties,
 	PptxCustomProperty,
 	PptxSlide,
 } from 'pptx-viewer-core';
-import type { DialogFooterAction, PptxUiDialogFooterElement } from 'ooxml-ui/pptx';
-import { computeDocumentStatistics } from 'ooxml-ui/pptx';
 
 import type { Translator } from '../i18n';
 import { createEl } from '../render';

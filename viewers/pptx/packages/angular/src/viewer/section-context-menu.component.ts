@@ -21,9 +21,9 @@ import {
 	output,
 } from '@angular/core';
 import { TranslatePipe } from '@ngx-translate/core';
-
 import { buildSectionContextMenuEntries } from 'ooxml-ui/pptx';
 import type { SectionContextMenuCommandId, SectionContextMenuEntry } from 'ooxml-ui/pptx';
+
 import { EDITOR_CONTEXT_MENU_STYLES } from './editor-context-menu.styles';
 
 @Component({

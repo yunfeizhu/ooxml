@@ -1,10 +1,4 @@
 <script setup lang="ts">
-/**
- * The Home font family and size fields (the shared `font-picker` element). They sit on the
- * first row of the Font group (see TextSection), beside Grow, Shrink and Clear.
- */
-import { hasTextProperties } from 'pptx-viewer-core';
-import type { PptxElement, TextStyle } from 'pptx-viewer-core';
 import {
 	fontPickerHomeControls,
 	homeSnapshotTranslator,
@@ -13,6 +7,12 @@ import {
 	textFontSizePxToPt,
 } from 'ooxml-ui/pptx';
 import type { RibbonHomeRequestEvent } from 'ooxml-ui/pptx';
+/**
+ * The Home font family and size fields (the shared `font-picker` element). They sit on the
+ * first row of the Font group (see TextSection), beside Grow, Shrink and Clear.
+ */
+import { hasTextProperties } from 'pptx-viewer-core';
+import type { PptxElement, TextStyle } from 'pptx-viewer-core';
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 

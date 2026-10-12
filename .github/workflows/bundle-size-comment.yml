@@ -1,0 +1,143 @@
+name: Bundle size comment
+
+# Comments the bundle-size table on a pull request once its CI run finishes.
+#
+# The measurement runs in ci.yml under `pull_request`, where a fork's PR gets a read-only token and
+# cannot comment. This workflow runs on `workflow_run` with the base repository's code and a
+# token that can, so it must never check out, build or execute anything from the PR: it reads the
+# `bundle-size` artifact as data only (scripts/bundle-size.mjs sanitizes it), compares it with the
+# newest one from main and finds the PR by the run's head commit, not by anything in the artifact.
+on:
+  workflow_run: # zizmor: ignore[dangerous-triggers] reads the artifact as data only (see above)
+    workflows: [CI]
+    types: [completed]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: bundle-size-comment-${{ github.event.workflow_run.head_repository.full_name }}-${{ github.event.workflow_run.head_branch }}
+  cancel-in-progress: true
+
+jobs:
+  comment:
+    name: Comment the bundle size
+    if: github.event.workflow_run.event == 'pull_request' && github.event.workflow_run.conclusion != 'cancelled'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      actions: read
+      pull-requests: write
+    steps:
+      # The default branch: trusted code only.
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+          sparse-checkout: scripts/bundle-size.mjs
+          sparse-checkout-cone-mode: false
+
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7
+        with:
+          node-version: 24
+
+      - name: Download the measurements
+        id: download
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9
+        env:
+          RUN_ID: ${{ github.event.workflow_run.id }}
+        with:
+          script: |
+            const { execFileSync } = require('node:child_process');
+            const fs = require('node:fs');
+
+            // The newest unexpired `bundle-size` artifact of a run, or of any run on main.
+            async function latest(filter) {
+              const artifacts = await github.paginate(github.rest.actions.listArtifactsForRepo, {
+                ...context.repo,
+                name: 'bundle-size',
+                per_page: 100,
+              });
+              return artifacts
+                .filter((artifact) => !artifact.expired && filter(artifact))
+                .sort((a, b) => Date.parse(b.created_at) - Date.parse(a.created_at))[0];
+            }
+            async function save(artifact, directory) {
+              const { data } = await github.rest.actions.downloadArtifact({
+                ...context.repo,
+                artifact_id: artifact.id,
+                archive_format: 'zip',
+              });
+              fs.mkdirSync(directory, { recursive: true });
+              fs.writeFileSync(`${directory}.zip`, Buffer.from(data));
+              execFileSync('unzip', ['-o', '-q', `${directory}.zip`, 'bundle-size.json', '-d', directory]);
+            }
+
+            const runId = Number(process.env.RUN_ID);
+            const head = await latest((artifact) => artifact.workflow_run?.id === runId);
+            if (!head) {
+              core.info('This run measured nothing (the build was skipped); no comment.');
+              return;
+            }
+            await save(head, 'head');
+            // A fork's branch can be called main too: the baseline must come from this repository.
+            const base = await latest(
+              (artifact) =>
+                artifact.workflow_run?.head_branch === 'main' &&
+                artifact.workflow_run?.head_repository_id === context.payload.repository.id &&
+                artifact.workflow_run?.id !== runId,
+            );
+            if (base) {
+              await save(base, 'base');
+              core.setOutput('label', `main (${base.workflow_run.head_sha.slice(0, 7)})`);
+            } else {
+              core.setOutput('label', 'main (no measurement yet)');
+            }
+            core.setOutput('measured', 'true');
+
+      - name: Compare
+        if: steps.download.outputs.measured == 'true'
+        env:
+          LABEL: ${{ steps.download.outputs.label }}
+        run: node scripts/bundle-size.mjs compare base/bundle-size.json head/bundle-size.json "$LABEL" > comment.md
+
+      - name: Comment on the pull request
+        if: steps.download.outputs.measured == 'true'
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9
+        env:
+          HEAD_SHA: ${{ github.event.workflow_run.head_sha }}
+          HEAD_OWNER: ${{ github.event.workflow_run.head_repository.owner.login }}
+          HEAD_BRANCH: ${{ github.event.workflow_run.head_branch }}
+        with:
+          script: |
+            const fs = require('node:fs');
+            const marker = '<!-- ooxml-bundle-size -->';
+            const body = fs.readFileSync('comment.md', 'utf8');
+
+            // The open PR whose head is the measured commit (a fork's PR is not listed on the run).
+            const pulls = await github.paginate(github.rest.pulls.list, {
+              ...context.repo,
+              state: 'open',
+              head: `${process.env.HEAD_OWNER}:${process.env.HEAD_BRANCH}`,
+              per_page: 100,
+            });
+            const pull = pulls.find((p) => p.head.sha === process.env.HEAD_SHA);
+            if (!pull) {
+              core.info('No open pull request has this commit as its head any more; no comment.');
+              return;
+            }
+
+            const comments = await github.paginate(github.rest.issues.listComments, {
+              ...context.repo,
+              issue_number: pull.number,
+              per_page: 100,
+            });
+            const existing = comments.find(
+              (c) => c.user?.type === 'Bot' && c.body?.startsWith(marker),
+            );
+            const unchanged = body.includes('No entry point changed size');
+            if (existing) {
+              await github.rest.issues.updateComment({ ...context.repo, comment_id: existing.id, body });
+            } else if (!unchanged) {
+              // Stay quiet on PRs that never changed a bundle.
+              await github.rest.issues.createComment({ ...context.repo, issue_number: pull.number, body });
+            }

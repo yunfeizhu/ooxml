@@ -1,3 +1,4 @@
+// @vitest-environment jsdom
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { mountViewer } from './binding';
 import { demoDocument } from 'ooxml-core/visio/ui';
@@ -61,7 +62,6 @@ describe('shared Office-style viewer chrome', () => {
 		expect(items[1]!.getAttribute('checked')).toBe('true');
 		expect(strip().querySelector('[aria-selected="true"]')!.textContent).toBe('Architecture');
 		expect(root.querySelector('[data-page-status]')!.getAttribute('value')).toBe('Page 2 of 2');
-		expect(root.querySelector('[data-page-name]')!.textContent).toBe('Architecture');
 		strip().querySelectorAll<HTMLButtonElement>('[role="tab"]')[0]!.click();
 		expect(viewer.element.pageIndex).toBe(0);
 		strip().querySelector<HTMLButtonElement>('[aria-label="Next page"]')!.click();
@@ -92,9 +92,7 @@ describe('shared Office-style viewer chrome', () => {
 		const info = root.querySelector<HTMLElement>('[data-backstage-page="info"]')!;
 		expect(info.hidden).toBe(false);
 		expect(info.querySelector('[data-info="pages"]')!.textContent).toBe('2');
-		expect(info.querySelector('[data-info="state"]')!.textContent).toBe(
-			'Model-only preview (read only)',
-		);
+		expect(info.querySelector('[data-info="state"]')!.textContent).toBe('Preview (read-only)');
 		// The sample is model-only, so Save has nothing to save.
 		expect(item('save').disabled).toBe(true);
 		item('new').click();
@@ -120,7 +118,7 @@ describe('shared Office-style viewer chrome', () => {
 		viewer.destroy();
 	});
 	it('provides real keyboard tabs and working pane toggles without changing zoom', () => {
-		const { viewer, root, button, command, press, ribbonRoot, tab } = setup();
+		const { viewer, root, command, press, ribbonRoot, tab } = setup();
 		viewer.element.zoom = 1.7;
 		tab('home').dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowRight', bubbles: true }));
 		expect(tab('insert').getAttribute('aria-selected')).toBe('true');
@@ -141,15 +139,19 @@ describe('shared Office-style viewer chrome', () => {
 		expect(command('shapes').getAttribute('checked')).toBe('false');
 		press('shapes');
 		expect(shapes.hidden).toBe(false);
-		press('inspector');
-		expect(root.querySelector<HTMLElement>('.inspector-pane')!.hidden).toBe(true);
+		// Task panes open on request, as in Visio: Shape Data is one titled pane with a close button.
+		const pane = root.querySelector<HTMLElement>('.inspector-pane')!;
+		expect(pane.hidden).toBe(true);
+		press('shape-data');
+		expect(pane.hidden).toBe(false);
+		expect(pane.getAttribute('label')).toBe('Shape Data');
+		expect(command('shape-data').getAttribute('checked')).toBe('true');
+		expect(pane.querySelector('.selection-hint')!.textContent).toBe('No Shape Data');
 		expect(viewer.element.zoom).toBe(1.7);
-		button('.notes-strip button').click();
-		expect(root.querySelector<HTMLElement>('.inspector-pane')!.hidden).toBe(false);
-		expect(command('inspector').getAttribute('checked')).toBe('true');
-		expect(root.querySelector<HTMLDetailsElement>('.notes')!.open).toBe(true);
-		expect(button('.notes-strip button').getAttribute('aria-expanded')).toBe('true');
-		expect(root.activeElement).toBe(root.querySelector('.notes summary'));
+		pane.shadowRoot!.querySelector<HTMLButtonElement>('.close')!.click();
+		expect(pane.hidden).toBe(true);
+		expect(command('shape-data').getAttribute('checked')).toBe('false');
+		expect(root.activeElement).toBe(root.querySelector('.viewport'));
 		viewer.destroy();
 	});
 	it('drives zoom from the status slider and View commands and hides it with the toolbar', () => {
@@ -174,25 +176,40 @@ describe('shared Office-style viewer chrome', () => {
 		expect(slider().hidden).toBe(false);
 		viewer.destroy();
 	});
-	it('uses disabled states honestly and routes editing to the existing disclosure', () => {
+	it('uses disabled states honestly and keeps a model-only drawing out of text editing', () => {
 		const { viewer, root, command, slider, tab } = setup();
-		expect(command('shape-data').disabled).toBe(true);
-		expect(command('layer-properties').disabled).toBe(true);
+		expect(command('layer-properties').hasAttribute('disabled')).toBe(true);
 		// The sample is a model-only document: no source bytes means no drawing or deletion.
 		expect(command('rectangle').disabled).toBe(true);
-		expect(command('undo').disabled).toBe(true);
+		// The Quick Access Toolbar is in the title bar: Save, Undo and Redo, all unavailable here.
+		const quick = [
+			...root
+				.querySelector('office-ui-title-bar')!
+				.shadowRoot!.querySelectorAll<HTMLButtonElement>('.qat button'),
+		];
+		expect(quick.map((item) => item.getAttribute('aria-label'))).toEqual(['Save', 'Undo', 'Redo']);
+		expect(quick.every((item) => item.disabled)).toBe(true);
 		// Formatting requires source bytes and explains how to enable it.
 		expect(command('bold').disabled).toBe(true);
 		expect(command('bold').getAttribute('title')).toMatch(/Open a .vsdx file/);
 		root
 			.querySelector<HTMLElement>('.viewport')!
 			.dispatchEvent(new KeyboardEvent('keydown', { key: 'F2', bubbles: true, composed: true }));
-		expect(root.querySelector<HTMLDetailsElement>('.edit-controls')!.open).toBe(true);
-		expect(root.querySelector<HTMLTextAreaElement>('#edit-text')!.disabled).toBe(true);
+		// F2 edits text in place; without a selection or source bytes no editor opens.
+		expect(root.querySelector('#edit-text')).toBeNull();
 		viewer.controller.selectShape({ id: 's1', name: 'Start', pageId: '1' });
-		expect(command('shape-data').disabled).toBe(false);
-		expect(root.querySelector<HTMLDetailsElement>('.shape-inspector')!.open).toBe(true);
-		expect(root.querySelector('[data-shape-status]')!.getAttribute('value')).toMatch(/^Width: /);
+		root
+			.querySelector<HTMLElement>('.viewport')!
+			.dispatchEvent(new KeyboardEvent('keydown', { key: 'F2', bubbles: true, composed: true }));
+		expect(root.querySelector('#edit-text')).toBeNull();
+		expect(root.querySelector('[data-status]')!.textContent).toBe('This drawing cannot be edited.');
+		// Visio's status bar: the selection's Width, Height and Angle, then the language.
+		const status = (name: string) =>
+			root.querySelector(`[data-${name}-status]`)!.getAttribute('value');
+		expect(status('width')).toBe('Width: 2.8 in.');
+		expect(status('height')).toBe('Height: 0.7 in.');
+		expect(status('angle')).toBe('Angle: 0°');
+		expect(status('language')).toMatch(/^[A-Z]/);
 		viewer.update({ document: null });
 		expect(root.querySelectorAll('.page-link')).toHaveLength(0);
 		expect(command('zoom-fit').disabled).toBe(true);
@@ -223,7 +240,7 @@ describe('shared Office-style viewer chrome', () => {
 		expect(viewer.element.pageIndex).toBe(1);
 		const zoomIn = zoomButton('Zoom in');
 		const inspector = root
-			.querySelector('[command="inspector"]')!
+			.querySelector('[command="shapes"]')!
 			.shadowRoot!.querySelector('button')!;
 		viewer.destroy();
 		zoomIn.click();

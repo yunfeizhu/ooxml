@@ -1,5 +1,5 @@
-import type { PptxElement } from 'pptx-viewer-core';
 import { _resetNativeImageSizeCacheForTests } from 'ooxml-ui/pptx';
+import type { PptxElement } from 'pptx-viewer-core';
 import { flushSync, mount, unmount } from 'svelte';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
@@ -165,5 +165,23 @@ describe('imageBox tiled-picture native size', () => {
 		const tile = target.querySelector<HTMLElement>('.pptx-svelte-image-tile');
 		// 800 * 0.1 = 80, 400 * 0.25 = 100.
 		expect(tile?.style.backgroundSize).toBe('80px 100px');
+	});
+});
+
+describe('imageBox native drag (issue #44)', () => {
+	it('marks the picture img as not draggable', () => {
+		// Regression: a press on a picture started the browser's own image drag,
+		// which cancels the pointer stream, so the move gesture died a few pixels
+		// in and a drag ghost followed the cursor instead.
+		const target = render({
+			type: 'picture',
+			id: 'pic-drag',
+			x: 0,
+			y: 0,
+			width: 100,
+			height: 80,
+			imageData: 'data:image/png;base64,AAAA',
+		} as unknown as PptxElement);
+		expect(target.querySelector('img')?.getAttribute('draggable')).toBe('false');
 	});
 });

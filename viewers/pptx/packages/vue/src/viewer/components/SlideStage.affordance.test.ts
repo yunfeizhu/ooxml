@@ -8,12 +8,8 @@
  * React drew it on all of them; these tests pin the stage pass instead.
  */
 import { mount } from '@vue/test-utils';
+import { ACTION_INDICATOR_CLASS, LINK_TOOLTIP_CLASS, LINK_TOOLTIP_HOST_CLASS } from 'ooxml-ui/pptx';
 import type { PptxElement, PptxSlide } from 'pptx-viewer-core';
-import {
-	ACTION_INDICATOR_CLASS,
-	LINK_TOOLTIP_CLASS,
-	LINK_TOOLTIP_HOST_CLASS,
-} from 'ooxml-ui/pptx';
 import { describe, expect, it } from 'vitest';
 import { nextTick } from 'vue';
 

@@ -1,8 +1,6 @@
 import { combo, command, group, menu, stack, type CommandSpec } from './ribbon-parts';
-import { fontColorOptions } from './ribbon-style-options';
+import { colorGrid } from './ribbon-color-menu';
 
-const TEXT = 'Needs core text formatting edits.';
-const CLIPBOARD = 'Paste Special and native Visio clipboard formats are unsupported.';
 const caseItems: CommandSpec[] = (
 	[
 		['sentence', 'Sentence case.'],
@@ -14,6 +12,21 @@ const caseItems: CommandSpec[] = (
 ).map(([mode, label]) => ({ id: `case-${mode}`, label, action: { type: 'change-case', mode } }));
 const small = (spec: CommandSpec): CommandSpec => ({ size: 'small', ...spec });
 const icon = (spec: CommandSpec): CommandSpec => ({ size: 'icon', ...spec });
+
+/** Home > Font Color: the button applies the last colour, the caret opens Office's picker. */
+function fontColorMenu(doc: Document) {
+	const el = menu(doc, {
+		id: 'font-color',
+		label: 'Font Color',
+		icon: 'fontColor',
+		size: 'icon',
+		split: true,
+		action: { type: 'font-color' },
+		items: [],
+	});
+	el.append(colorGrid(doc, 'font'));
+	return el;
+}
 
 /** Visio's Home > Clipboard, Font and Paragraph groups, in Visio's layout. */
 export function textGroups(doc: Document): [HTMLElement, HTMLElement, HTMLElement] {
@@ -27,7 +40,7 @@ export function textGroups(doc: Document): [HTMLElement, HTMLElement, HTMLElemen
 			keys: ['Control+V', 'Ctrl+V'],
 			items: [
 				{ id: 'paste-item', label: 'Paste', action: { type: 'clipboard', operation: 'paste' } },
-				{ id: 'paste-special', label: 'Paste Special...', unsupported: CLIPBOARD },
+				{ id: 'paste-special', label: 'Paste Special...', action: { type: 'paste-special' } },
 				{
 					id: 'duplicate',
 					label: 'Duplicate',
@@ -163,21 +176,13 @@ export function textGroups(doc: Document): [HTMLElement, HTMLElement, HTMLElemen
 							size: 'icon',
 							items: caseItems,
 						}),
-						menu(doc, {
-							id: 'font-color',
-							label: 'Font Color',
-							icon: 'fontColor',
-							size: 'icon',
-							split: true,
-							action: { type: 'font-color' },
-							items: fontColorOptions(),
-						}),
+						fontColorMenu(doc),
 					],
 					true,
 				),
 			]),
 		],
-		{ launcher: TEXT },
+		{ dialog: 'Font options (Text dialog)' },
 	);
 	const paragraph = group(
 		doc,
@@ -225,6 +230,15 @@ export function textGroups(doc: Document): [HTMLElement, HTMLElement, HTMLElemen
 								icon: 'bullets',
 								pressed: false,
 								action: { type: 'text-bullets' },
+							}),
+						),
+						command(
+							doc,
+							icon({
+								id: 'rotate-text',
+								label: 'Rotate Text',
+								icon: 'visioRotateText',
+								action: { type: 'text-rotate' },
 							}),
 						),
 					],
@@ -296,7 +310,7 @@ export function textGroups(doc: Document): [HTMLElement, HTMLElement, HTMLElemen
 				),
 			]),
 		],
-		{ launcher: TEXT },
+		{ dialog: 'Paragraph options (Text dialog)' },
 	);
 	return [clipboard, font, paragraph];
 }

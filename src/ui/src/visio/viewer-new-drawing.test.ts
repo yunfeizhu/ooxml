@@ -1,3 +1,4 @@
+// @vitest-environment jsdom
 import { afterEach, expect, it, vi } from 'vitest';
 import { parseVsdx } from 'ooxml-core/visio';
 import { demoDocument } from 'ooxml-core/visio/ui';

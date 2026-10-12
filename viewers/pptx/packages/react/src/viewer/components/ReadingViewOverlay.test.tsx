@@ -1,3 +1,9 @@
+import {
+	READING_VIEW_ATTR,
+	READING_VIEW_COUNTER_ATTR,
+	registerPptxWebControls,
+} from 'ooxml-ui/pptx';
+import { translationsEn } from 'ooxml-ui/pptx/i18n';
 // @vitest-environment happy-dom
 /**
  * Reading View, React binding.
@@ -10,12 +16,6 @@
  * and that it is a windowed view rather than a second slide show.
  */
 import type { PptxSlide } from 'pptx-viewer-core';
-import {
-	READING_VIEW_ATTR,
-	READING_VIEW_COUNTER_ATTR,
-	registerPptxWebControls,
-} from 'ooxml-ui/pptx';
-import { translationsEn } from 'ooxml-ui/pptx/i18n';
 import React, { act } from 'react';
 import { createRoot } from 'react-dom/client';
 import { renderToStaticMarkup } from 'react-dom/server';

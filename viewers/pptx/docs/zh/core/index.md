@@ -82,8 +82,9 @@ bun add pptx-viewer-core
 ::: code-group
 
 ```ts [Load, edit, save]
-import { PptxHandler } from 'pptx-viewer-core';
 import { readFile, writeFile } from 'node:fs/promises';
+
+import { PptxHandler } from 'pptx-viewer-core';
 
 const file = await readFile('deck.pptx');
 const buffer = file.buffer.slice(file.byteOffset, file.byteOffset + file.byteLength);

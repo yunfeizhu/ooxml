@@ -18,8 +18,6 @@
  * @module angular-viewer/table-data-helpers
  */
 
-import type { PptxTableData, TablePptxElement } from 'pptx-viewer-core';
-
 import type { CellCoord } from 'ooxml-ui/pptx';
 import {
 	computeMergeCellDown,
@@ -28,6 +26,7 @@ import {
 	mergeCells,
 	splitCell,
 } from 'ooxml-ui/pptx';
+import type { PptxTableData, TablePptxElement } from 'pptx-viewer-core';
 
 // `setCellText` is the framework-agnostic single-cell text edit. It lives in
 // `pptx-viewer-shared` (`render/table-cell-edit`); re-exported here so existing

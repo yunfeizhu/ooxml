@@ -1,6 +1,6 @@
 import { flushPromises, mount } from '@vue/test-utils';
-import type { PptxSlide } from 'pptx-viewer-core';
 import type { PptxAiBridge, PptxAiConfig } from 'ooxml-ui/pptx/ai';
+import type { PptxSlide } from 'pptx-viewer-core';
 import { afterEach, describe, expect, it } from 'vitest';
 
 import AiChatPanel from './AiChatPanel.vue';

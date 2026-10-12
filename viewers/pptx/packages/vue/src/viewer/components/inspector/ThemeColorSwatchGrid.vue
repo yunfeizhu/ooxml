@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import type { PptxThemeColorRef } from 'pptx-viewer-core';
 import type { ThemeColorPickerCommit } from 'ooxml-ui/pptx';
 import {
 	buildThemeColorSwatchGrid,
@@ -7,6 +6,7 @@ import {
 	themeColorSwatchRows,
 	themeSwatchCommit,
 } from 'ooxml-ui/pptx';
+import type { PptxThemeColorRef } from 'pptx-viewer-core';
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 

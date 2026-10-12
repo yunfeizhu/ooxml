@@ -1,5 +1,3 @@
-import type { PptxElement, TextStyle } from 'pptx-viewer-core';
-import { hasTextProperties } from 'pptx-viewer-core';
 import {
 	getInlineEditorSelectionResult,
 	readEditableText,
@@ -7,6 +5,8 @@ import {
 	toggleSelectionBullets,
 } from 'ooxml-ui/pptx';
 import type { InlineTextEditSnapshot } from 'ooxml-ui/pptx';
+import type { PptxElement, TextStyle } from 'pptx-viewer-core';
+import { hasTextProperties } from 'pptx-viewer-core';
 
 /**
  * Paragraph-level patch builders for the Home tab's Paragraph group:

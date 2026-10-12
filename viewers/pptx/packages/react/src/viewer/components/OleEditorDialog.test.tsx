@@ -8,9 +8,9 @@
  * commit path a user's click actually runs.
  */
 import JSZip from 'jszip';
+import { translationsEn } from 'ooxml-ui/pptx/i18n';
 import type { OlePptxElement } from 'pptx-viewer-core';
 import { oleBytesToDataUrl, PptxHandler } from 'pptx-viewer-core';
-import { translationsEn } from 'ooxml-ui/pptx/i18n';
 import React, { act } from 'react';
 import { createRoot } from 'react-dom/client';
 import type { Root } from 'react-dom/client';

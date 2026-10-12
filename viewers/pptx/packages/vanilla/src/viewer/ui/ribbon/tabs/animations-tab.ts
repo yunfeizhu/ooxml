@@ -1,3 +1,11 @@
+import type { RibbonAnimationsRequestEvent, RibbonAnimationsViewState } from 'ooxml-ui/pptx';
+import {
+	buildAnimationTimelineRows,
+	directionValuesFor,
+	effectiveDirection,
+	effectiveTimingCurve,
+	registerPptxWebControls,
+} from 'ooxml-ui/pptx';
 import type {
 	PptxAnimationDirection,
 	PptxAnimationPreset,
@@ -8,14 +16,6 @@ import type {
 	PptxAnimationTrigger,
 	PptxElementAnimation,
 } from 'pptx-viewer-core';
-import type { RibbonAnimationsRequestEvent, RibbonAnimationsViewState } from 'ooxml-ui/pptx';
-import {
-	buildAnimationTimelineRows,
-	directionValuesFor,
-	effectiveDirection,
-	effectiveTimingCurve,
-	registerPptxWebControls,
-} from 'ooxml-ui/pptx';
 
 import { playAnimationPreview } from '../../../animation';
 import type { AnimationActions } from '../../../editor/editor-animation-actions';

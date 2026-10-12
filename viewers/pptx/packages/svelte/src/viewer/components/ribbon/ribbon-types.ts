@@ -1,10 +1,10 @@
-import type { PptxSlide, PptxTheme } from 'pptx-viewer-core';
 import type {
 	AccountAuthConfig,
 	CanvasSize,
 	ToolbarActionId,
 	ViewerPreferences,
 } from 'ooxml-ui/pptx';
+import type { PptxSlide, PptxTheme } from 'pptx-viewer-core';
 
 import type { FindReplaceState } from '../../editor/editor-find-replace.svelte';
 import type { EditorState } from '../../editor/editor-state.svelte';

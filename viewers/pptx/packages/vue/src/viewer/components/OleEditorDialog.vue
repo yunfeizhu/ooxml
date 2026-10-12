@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { buildOleContentUpdatePatch, buildOleEditDialogDescriptor } from 'ooxml-ui/pptx';
 /**
  * "Edit content" dialog for an embedded OLE object: a spreadsheet grid,
  * document paragraph list, or nested-deck slide title list depending on
@@ -25,7 +26,6 @@ import {
 	getOleSheetGrid,
 	replaceOleFile,
 } from 'pptx-viewer-core';
-import { buildOleContentUpdatePatch, buildOleEditDialogDescriptor } from 'ooxml-ui/pptx';
 import { computed, onUnmounted, ref, useTemplateRef, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 

@@ -21,8 +21,6 @@ import {
 import { toSignal } from '@angular/core/rxjs-interop';
 import { LucideChevronDown, LucideChevronUp } from '@lucide/angular';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
-import { map, merge, startWith } from 'rxjs';
-
 import {
 	buildTabRowActionsState,
 	contextualTabLabelKey,
@@ -30,7 +28,9 @@ import {
 	TAB_ROW_ACTION_CLASSES,
 	TOOLBAR_TABS,
 } from 'ooxml-ui/pptx';
-import type { RibbonContextualTabId, ToolbarActionId } from 'ooxml-ui/pptx';
+import type { RibbonAddInTab, RibbonContextualTabId, ToolbarActionId } from 'ooxml-ui/pptx';
+import { map, merge, startWith } from 'rxjs';
+
 import type { RibbonTab } from './ribbon-types';
 import { toolbarVisibility } from './toolbar-visibility';
 import { ViewerOptionsService } from './viewer-options.service';
@@ -58,12 +58,12 @@ import { ViewerOptionsService } from './viewer-options.service';
 					<button
 						type="button"
 						role="tab"
-						[attr.aria-selected]="activeTab() === t.id"
+						[attr.aria-selected]="!activeAddIn() && activeTab() === t.id"
 						[title]="tabTip(t.labelKey)"
 						(click)="selectTab.emit(t.id)"
 						class="relative whitespace-nowrap px-3.5 py-2 text-[12px] font-medium transition-colors"
 						[ngClass]="
-							activeTab() === t.id
+							!activeAddIn() && activeTab() === t.id
 								? t.id === 'file'
 									? 'text-white bg-primary/80 rounded-sm'
 									: 'text-foreground after:absolute after:-bottom-px after:left-0 after:right-0 after:h-[2.5px] after:bg-primary'
@@ -75,18 +75,37 @@ import { ViewerOptionsService } from './viewer-options.service';
 						{{ t.labelKey | translate }}
 					</button>
 				}
+				<!-- The host's add-in tabs (ribbonAddIns), after the fixed tabs. -->
+				@for (tab of addInTabs(); track tab.id) {
+					<button
+						type="button"
+						role="tab"
+						[attr.data-ribbon-add-in-tab]="tab.id"
+						[attr.aria-selected]="activeAddIn() === tab.id"
+						[title]="addInTip(tab.label)"
+						(click)="selectAddIn.emit(tab.id)"
+						class="relative whitespace-nowrap px-3.5 py-2 text-[12px] font-medium transition-colors"
+						[ngClass]="
+							activeAddIn() === tab.id
+								? 'text-foreground after:absolute after:-bottom-px after:left-0 after:right-0 after:h-[2.5px] after:bg-primary'
+								: 'text-muted-foreground hover:bg-accent/30 hover:text-foreground'
+						"
+					>
+						{{ tab.label }}
+					</button>
+				}
 				<!-- Contextual tabs (Shape Format, ...): shown for the selection, never auto-selected. -->
 				@for (id of contextualTabs(); track id) {
 					<button
 						type="button"
 						role="tab"
 						[attr.data-ribbon-contextual-tab]="id"
-						[attr.aria-selected]="activeTab() === id"
+						[attr.aria-selected]="!activeAddIn() && activeTab() === id"
 						[title]="tabTip(contextualLabelKey(id))"
 						(click)="selectTab.emit(id)"
 						class="relative whitespace-nowrap px-3.5 py-2 text-[12px] font-medium text-primary transition-colors"
 						[ngClass]="
-							activeTab() === id
+							!activeAddIn() && activeTab() === id
 								? 'after:absolute after:-bottom-px after:left-0 after:right-0 after:h-[2.5px] after:bg-primary'
 								: 'hover:bg-primary/10'
 						"
@@ -162,8 +181,13 @@ export class RibbonTabListComponent {
 	readonly hiddenActions = input<ToolbarActionId[]>([]);
 	/** Contextual tabs the selection brings up, appended after the fixed tabs. */
 	readonly contextualTabs = input<readonly RibbonContextualTabId[]>([]);
+	/** The host's tabs (`ribbonAddIns`), shown after the fixed tabs. */
+	readonly addInTabs = input<readonly RibbonAddInTab[]>([]);
+	/** The host tab being shown; no fixed or contextual tab is selected while one is. */
+	readonly activeAddIn = input<string | null>(null);
 
 	readonly selectTab = output<RibbonTab>();
+	readonly selectAddIn = output<string>();
 	readonly record = output<void>();
 	readonly share = output<void>();
 	readonly toggleComments = output<void>();
@@ -200,6 +224,11 @@ export class RibbonTabListComponent {
 	});
 	/** Optional so the tab strip renders outside a full viewer host too. */
 	private readonly viewerOpts = inject(ViewerOptionsService, { optional: true });
+
+	/** ScreenTip-styled tooltip of a host tab: its label is the host's own text, not a key. */
+	protected addInTip(label: string): string | null {
+		return this.viewerOpts ? (this.viewerOpts.screenTip(label) ?? null) : label;
+	}
 
 	/** ScreenTip-styled tab tooltip (null suppresses the title attribute). */
 	protected tabTip(labelKey: string): string | null {

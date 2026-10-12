@@ -40,11 +40,7 @@ export { SlideTemplateGalleryDialog } from './viewer/components/SlideTemplateGal
 export type { SlideTemplateGalleryDialogProps } from './viewer/components/SlideTemplateGalleryDialog';
 export { SlideTemplatePreview } from './viewer/components/SlideTemplatePreview';
 export type { SlideTemplatePreviewProps } from './viewer/components/SlideTemplatePreview';
-export {
-	SLIDE_TEMPLATES,
-	buildSlideTemplateContent,
-	buildSlideTemplateSlide,
-} from 'ooxml-ui/pptx';
+export { SLIDE_TEMPLATES, buildSlideTemplateContent, buildSlideTemplateSlide } from 'ooxml-ui/pptx';
 export type { SlideTemplateId, SlideTemplateSpec } from 'ooxml-ui/pptx';
 
 // ── AI assistant (optional; requires the `ai` + `@ai-sdk/react` peers) ──

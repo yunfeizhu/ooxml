@@ -1,9 +1,9 @@
-import type { SmartArtColorScheme, SmartArtStyle } from 'pptx-viewer-core';
 import {
 	schemaLabel,
 	SMARTART_COLOR_SCHEME_LABEL_KEYS,
 	SMARTART_STYLE_LABEL_KEYS,
 } from 'ooxml-ui/pptx';
+import type { SmartArtColorScheme, SmartArtStyle } from 'pptx-viewer-core';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 

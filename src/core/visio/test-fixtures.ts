@@ -37,7 +37,8 @@ export async function fixture(
 	options: {
 		pages?: FixturePage[];
 		document?: string;
-		masters?: { id: string; shapes: string }[];
+		/** `attributes` go on the Master element (Name, NameU, Hidden); `sheet` is its PageSheet cells. */
+		masters?: { id: string; shapes: string; attributes?: string; sheet?: string }[];
 		edit?: (zip: JSZip) => void;
 	} = {},
 ): Promise<Uint8Array> {
@@ -81,7 +82,10 @@ export async function fixture(
 			xml(
 				'Masters',
 				options.masters
-					.map((master, i) => `<Master ID="${master.id}"><Rel r:id="rId${i + 1}"/></Master>`)
+					.map(
+						(master, i) =>
+							`<Master ID="${master.id}" ${master.attributes ?? ''}>${master.sheet === undefined ? '' : `<PageSheet>${master.sheet}</PageSheet>`}<Rel r:id="rId${i + 1}"/></Master>`,
+					)
 					.join(''),
 			),
 		);

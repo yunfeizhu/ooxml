@@ -1,4 +1,3 @@
-import type { PptxSlide } from 'pptx-viewer-core';
 import type {
 	CollaborationConfig,
 	ConnectionStatus,
@@ -16,6 +15,7 @@ import {
 	readSlidesFromYDoc,
 	reconcileSlidesInYDoc,
 } from 'ooxml-ui/pptx';
+import type { PptxSlide } from 'pptx-viewer-core';
 import { ref, watch } from 'vue';
 
 import { watchLoadAdoption } from './collaboration-load-adoption';

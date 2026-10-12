@@ -1,11 +1,7 @@
 <script setup lang="ts">
-import type { PptxElement, PptxSlide } from 'pptx-viewer-core';
-import {
-	calculateViewportFit,
-	EDITOR_VIEWPORT_FIT,
-	getSlideBackgroundStyle,
-} from 'ooxml-ui/pptx';
+import { calculateViewportFit, EDITOR_VIEWPORT_FIT, getSlideBackgroundStyle } from 'ooxml-ui/pptx';
 import type { ViewportFitPadding } from 'ooxml-ui/pptx';
+import type { PptxElement, PptxSlide } from 'pptx-viewer-core';
 import type { CSSProperties } from 'vue';
 import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';

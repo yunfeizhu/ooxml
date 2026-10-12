@@ -1,5 +1,3 @@
-import { createEditorId, createShapeElement, createTextElement } from 'pptx-viewer-core';
-import type { PptxElement, PptxHandler, PptxLayoutPreview, PptxSlide } from 'pptx-viewer-core';
 import {
 	classifyMediaType,
 	createDefaultChartElement,
@@ -8,6 +6,8 @@ import {
 	resolveInsertedFieldText,
 } from 'ooxml-ui/pptx';
 import type { InsertChartKind } from 'ooxml-ui/pptx';
+import { createEditorId, createShapeElement, createTextElement } from 'pptx-viewer-core';
+import type { PptxElement, PptxHandler, PptxLayoutPreview, PptxSlide } from 'pptx-viewer-core';
 import { ref } from 'vue';
 import type { Ref, ShallowRef } from 'vue';
 

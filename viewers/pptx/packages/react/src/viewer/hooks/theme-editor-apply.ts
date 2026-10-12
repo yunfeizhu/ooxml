@@ -1,3 +1,4 @@
+import type { ThemeEditorEdit } from 'ooxml-ui/pptx';
 import {
 	applyThemeToData,
 	buildThemeColorMap,
@@ -5,7 +6,6 @@ import {
 	reResolveElementFonts,
 } from 'pptx-viewer-core';
 import type { PptxData } from 'pptx-viewer-core';
-import type { ThemeEditorEdit } from 'ooxml-ui/pptx';
 
 import type { UseThemeHandlersInput } from './useThemeHandlers';
 

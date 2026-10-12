@@ -15,7 +15,6 @@
  */
 
 import { DestroyRef, inject, Injectable, signal } from '@angular/core';
-
 import {
 	computeKeyboardInset,
 	computeScrollDelta,

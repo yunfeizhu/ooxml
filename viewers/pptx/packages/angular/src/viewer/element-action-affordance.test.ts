@@ -1,3 +1,11 @@
+import {
+	ACTION_INDICATOR_CLASS,
+	LINK_TOOLTIP_CLASS,
+	LINK_TOOLTIP_HOST_CLASS,
+	actionAffordanceLabels,
+	applyElementActionAffordances,
+	isTemplateElement,
+} from 'ooxml-ui/pptx';
 // @vitest-environment jsdom
 /**
  * On-canvas action affordances, Angular side.
@@ -14,14 +22,6 @@
 import type { PptxElement } from 'pptx-viewer-core';
 import { describe, expect, it } from 'vitest';
 
-import {
-	ACTION_INDICATOR_CLASS,
-	LINK_TOOLTIP_CLASS,
-	LINK_TOOLTIP_HOST_CLASS,
-	actionAffordanceLabels,
-	applyElementActionAffordances,
-	isTemplateElement,
-} from 'ooxml-ui/pptx';
 import { affordanceElements } from './slide-canvas-helpers';
 
 const labels = actionAffordanceLabels((key) => key);

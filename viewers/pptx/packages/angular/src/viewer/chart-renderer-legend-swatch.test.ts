@@ -1,3 +1,4 @@
+import { computeChartLegendLayout } from 'ooxml-ui/pptx';
 /**
  * Regression test: a line chart's legend must get a line + marker swatch, not
  * the default filled rect, through Angular's VENDORED copy of
@@ -11,7 +12,6 @@
 import type { ChartPptxElement, PptxChartData } from 'pptx-viewer-core';
 import { describe, expect, it } from 'vitest';
 
-import { computeChartLegendLayout } from 'ooxml-ui/pptx';
 import { buildChartViewModel } from './chart-renderer-helpers';
 
 function lineChartElement(): ChartPptxElement {

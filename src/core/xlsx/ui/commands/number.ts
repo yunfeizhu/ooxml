@@ -1,11 +1,6 @@
 // Home > Number: the number format list (core FORMAT_PRESETS), accounting formats, percent,
 // comma style and increase / decrease decimal.
-import {
-	BUILTIN_NUMBER_FORMATS,
-	FORMAT_PRESETS,
-	getCell,
-	stepDecimals,
-} from '../../index';
+import { BUILTIN_NUMBER_FORMATS, FORMAT_PRESETS, getCell, stepDecimals } from '../../index';
 import type { Command } from '../commands';
 import type { EditorContext } from '../context';
 import { style } from './font';

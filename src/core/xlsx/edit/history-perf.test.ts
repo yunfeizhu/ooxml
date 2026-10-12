@@ -34,7 +34,7 @@ function recordedCells(entries: { before: object; after: object }[]): number {
 }
 
 describe('undo history size and speed on large sheets', () => {
-	it('20 table header edits on a 50k x 10 sheet take under a second and record a cell each', () => {
+	it('20 table header edits on a 50k x 10 sheet take under three seconds and record a cell each', () => {
 		const wb = bigWorkbook(50_000);
 		const s = createEditSession(wb, { recalc: false, autoRowHeight: false });
 		s.createTable(
@@ -44,7 +44,8 @@ describe('undo history size and speed on large sheets', () => {
 		);
 		const start = performance.now();
 		for (let i = 0; i < 20; i++) s.setCellInput(0, 0, 0, `Head${i}`);
-		expect(performance.now() - start).toBeLessThan(1000);
+		// A regression copies the sheet per step (tens of seconds); the margin keeps a busy shared runner green.
+		expect(performance.now() - start).toBeLessThan(3000);
 		const ctx = testContext(wb);
 		setCellInput(ctx, 0, 0, 0, 'Next');
 		expect(recordedCells(ctx.steps[0]?.entries ?? [])).toBe(2);

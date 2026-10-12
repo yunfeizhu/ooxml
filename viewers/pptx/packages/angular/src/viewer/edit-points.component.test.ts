@@ -14,10 +14,10 @@ import type { InputSignal, OutputEmitterRef, Provider, StaticProvider } from '@a
 import { TestBed } from '@angular/core/testing';
 import { BrowserTestingModule, platformBrowserTesting } from '@angular/platform-browser/testing';
 import { TranslateService } from '@ngx-translate/core';
+import type { CanvasSize, EditPointsView, FreeformToolKind } from 'ooxml-ui/pptx';
 import type { PptxElement, ShapePptxElement } from 'pptx-viewer-core';
 import { afterEach, beforeAll, describe, expect, it, vi } from 'vitest';
 
-import type { CanvasSize, EditPointsView, FreeformToolKind } from 'ooxml-ui/pptx';
 import type { EditPointsCommit } from './edit-points-overlay.component';
 import { EditPointsOverlayComponent } from './edit-points-overlay.component';
 import { EditorContextMenuComponent } from './editor-context-menu.component';

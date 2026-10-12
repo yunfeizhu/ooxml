@@ -10,8 +10,8 @@
  */
 import { mount } from '@vue/test-utils';
 import type { VueWrapper } from '@vue/test-utils';
-import type { PptxElement, PptxSlide } from 'pptx-viewer-core';
 import { OUTLINE_LEVEL_ATTR, OUTLINE_ROW_ATTR, OUTLINE_VIEW_ATTR } from 'ooxml-ui/pptx';
+import type { PptxElement, PptxSlide } from 'pptx-viewer-core';
 import { describe, expect, it } from 'vitest';
 import { defineComponent, nextTick, reactive } from 'vue';
 

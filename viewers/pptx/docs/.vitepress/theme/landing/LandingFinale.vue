@@ -21,7 +21,10 @@ function resolve(href: string, external?: boolean): string {
 				<a class="pv-btn pv-btn--accent" :href="withBase(copy.finale.quick.href)">
 					<span>{{ copy.finale.quick.text }}</span>
 				</a>
-				<a class="pv-btn pv-btn--outline" href="https://github.com/ChristopherVR/ooxml/tree/main/viewers/pptx">
+				<a
+					class="pv-btn pv-btn--outline"
+					href="https://github.com/ChristopherVR/ooxml/tree/main/viewers/pptx"
+				>
 					<span>{{ copy.finale.github }}</span>
 				</a>
 			</div>

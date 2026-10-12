@@ -1,6 +1,7 @@
 import type { VisioDocument, VisioPage } from 'ooxml-core/visio';
 import {
 	visioMoveCommands,
+	visioMoveTargets,
 	visioMovementShape,
 	visioPageDragDelta,
 	visioMarqueeBox,
@@ -45,7 +46,13 @@ export class ViewerPointerGestures {
 	constructor(
 		private readonly viewport: HTMLElement,
 		private readonly controller: ViewerController,
-		private readonly options: { active(): boolean; announce(message: string): void },
+		private readonly options: {
+			active(): boolean;
+			announce(message: string): void;
+			/** Guides and Dynamic Grid: adjust a drag delta and show alignment hints. */
+			snap?(page: VisioPage, ids: readonly string[], delta: VisioPagePoint): VisioPagePoint;
+			clearSnap?(): void;
+		},
 	) {}
 	render(state: ViewerState): void {
 		if (this.#drag && !this.#current(this.#drag, state)) this.#cancel();
@@ -94,7 +101,7 @@ export class ViewerPointerGestures {
 		const node = event.target as Element;
 		if (
 			node.closest?.(
-				'[data-line-endpoint], [data-rotation-handle], [data-resize-handle], .rotation-overlay',
+				'[data-line-endpoint], [data-rotation-handle], [data-resize-handle], .rotation-overlay, [data-guide-id]',
 			)
 		)
 			return;
@@ -179,10 +186,14 @@ export class ViewerPointerGestures {
 				);
 				return false;
 			}
+			// Container members move with their container, so they preview with it too.
 			drag.preview = createMovementPreview(
 				drag.svg,
 				drag.page,
-				drag.selection.map((shape) => shape.id),
+				visioMoveTargets(
+					drag.page,
+					drag.selection.map((shape) => shape.id),
+				),
 			);
 			drag.showOverlays = hideGestureOverlays(
 				this.viewport,
@@ -235,7 +246,7 @@ export class ViewerPointerGestures {
 		}
 		const point = pagePoint(drag.svg, drag.page, event, pointOptions);
 		if (point && this.#current(drag)) {
-			if (drag.preview) drag.preview.update(visioPageDragDelta(drag.start, point));
+			if (drag.preview) drag.preview.update(this.#delta(drag, point));
 			const box = drag.marquee && visioMarqueeBox(drag.start, point);
 			if (box)
 				for (const [name, value] of Object.entries(box))
@@ -244,15 +255,31 @@ export class ViewerPointerGestures {
 		event.preventDefault();
 		event.stopImmediatePropagation();
 	}
+	#delta(drag: Gesture, point: VisioPagePoint): VisioPagePoint {
+		const delta = visioPageDragDelta(drag.start, point);
+		const ids = drag.selection.map((shape) => shape.id);
+		return this.options.snap?.(drag.page, ids, delta) ?? delta;
+	}
 	#cancel(): void {
+		this.#release()();
+	}
+	/**
+	 * Ends the gesture and returns the removal of its previews. A finished move keeps showing the
+	 * preview until its source edit settles; removing it first showed the shape back at its old
+	 * position for as long as the edit took.
+	 */
+	#release(): () => void {
 		const drag = this.#drag;
 		this.#drag = undefined;
 		if (drag?.started) this.#cancelClick = true;
-		drag?.preview?.dispose();
-		drag?.showOverlays?.();
-		drag?.marquee?.remove();
 		if (drag && this.viewport.hasPointerCapture?.(drag.pointer))
 			this.viewport.releasePointerCapture(drag.pointer);
+		return () => {
+			drag?.preview?.dispose();
+			drag?.showOverlays?.();
+			drag?.marquee?.remove();
+			if (drag?.preview) this.options.clearSnap?.();
+		};
 	}
 	async #finish(event: PointerEvent): Promise<void> {
 		const drag = this.#drag;
@@ -264,7 +291,8 @@ export class ViewerPointerGestures {
 		const point = pagePoint(drag.svg, drag.page, event, pointOptions);
 		event.preventDefault();
 		event.stopImmediatePropagation();
-		this.#cancel();
+		const settle = this.#release();
+		if (!point || !this.#current(drag) || !drag.target) settle();
 		if (!point || !this.#current(drag)) return;
 		if (!drag.target) {
 			const box = visioMarqueeBox(drag.start, point);
@@ -282,9 +310,13 @@ export class ViewerPointerGestures {
 		const edits = visioMoveCommands(
 			drag.page,
 			drag.selection.map((shape) => shape.id),
-			visioPageDragDelta(drag.start, point),
+			this.#delta(drag, point),
 		);
-		if (!edits?.length || !this.#current(drag)) return;
+		this.options.clearSnap?.();
+		if (!edits?.length || !this.#current(drag)) {
+			settle();
+			return;
+		}
 		const request = ++this.#request;
 		try {
 			await this.controller.applySelectionEdits(edits);
@@ -292,6 +324,8 @@ export class ViewerPointerGestures {
 		} catch (error) {
 			if (request === this.#request && !isEditCancellation(error))
 				this.options.announce(editErrorMessage(error));
+		} finally {
+			settle();
 		}
 	}
 }

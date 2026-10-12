@@ -15,6 +15,7 @@ import type {
 	ViewerFontSource,
 	ViewerTheme,
 	ViewportFitOptions,
+	RibbonAddInTab,
 } from 'ooxml-ui/pptx';
 import type { PptxAiConfig } from 'ooxml-ui/pptx/ai';
 import type { LocaleCatalogEntry } from 'ooxml-ui/pptx/i18n';
@@ -185,6 +186,13 @@ export interface PptxViewerOptions extends PptxViewerCallbacks, ViewportFitOptio
 	 * change it live. {@link hiddenActions} still applies and is unioned with it.
 	 */
 	customization?: ViewerCustomization;
+	/**
+	 * Ribbon tabs the host adds after Help, as an Office add-in does. Each command runs its `run`
+	 * callback and dispatches a bubbling `office-ribbon-add-in` event (`{ tab, command }`) from the
+	 * viewer. `setRibbonAddIns` on the instance changes them live. A tab cannot take the id of a
+	 * built-in tab, and a drop-down (`items`) is drawn as its items.
+	 */
+	ribbonAddIns?: readonly RibbonAddInTab[];
 	/**
 	 * Custom element-renderer registry. Defaults to `createDefaultRegistry()`;
 	 * pass your own (or mutate the default via `getRegistry()`) to add or
@@ -458,6 +466,11 @@ export interface PptxViewerInstance extends PowerPointViewerAPI, ViewerCustomiza
 	setAutosaveEnabled(enabled: boolean): void;
 	/** Whether recovery autosave is currently enabled. */
 	isAutosaveEnabled(): boolean;
+	/**
+	 * Replace the host's ribbon tabs (the `ribbonAddIns` option); an empty list removes them.
+	 * Removing the tab that is showing returns the ribbon to its default tab.
+	 */
+	setRibbonAddIns(tabs: readonly RibbonAddInTab[]): void;
 	/** Tear down DOM, listeners, Blob URLs, and the core handler. */
 	destroy(): void;
 }

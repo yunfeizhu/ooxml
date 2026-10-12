@@ -1,3 +1,10 @@
+import type { DeckSaveIntent } from 'ooxml-ui/pptx';
+import {
+	nextAutosaveDelayMs,
+	recoverySnapshotIntent,
+	saveAutosaveSnapshot,
+	saveDeckWithPassword,
+} from 'ooxml-ui/pptx';
 import type {
 	PptxHandoutMaster,
 	PptxHandler,
@@ -6,13 +13,6 @@ import type {
 	PptxSlide,
 	PptxSlideMaster,
 } from 'pptx-viewer-core';
-import type { DeckSaveIntent } from 'ooxml-ui/pptx';
-import {
-	nextAutosaveDelayMs,
-	recoverySnapshotIntent,
-	saveAutosaveSnapshot,
-	saveDeckWithPassword,
-} from 'ooxml-ui/pptx';
 
 /**
  * autosave.svelte.ts: debounced crash-recovery autosave for the Svelte viewer.

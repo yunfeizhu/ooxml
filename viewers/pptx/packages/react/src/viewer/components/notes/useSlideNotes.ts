@@ -1,5 +1,5 @@
-import type { PptxSlide, PptxTextStyleLevels, TextSegment } from 'pptx-viewer-core';
 import { defaultRichEnabled } from 'ooxml-ui/pptx';
+import type { PptxSlide, PptxTextStyleLevels, TextSegment } from 'pptx-viewer-core';
 import type React from 'react';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 

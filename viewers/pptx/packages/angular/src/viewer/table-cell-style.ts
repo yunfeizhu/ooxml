@@ -1,3 +1,13 @@
+// The OOXML-dash → CSS-border-style map is framework-agnostic and lives in
+// `pptx-viewer-shared`; re-exported here so this module's public surface
+// (and colocated tests) keep importing `ooxmlDashToCssBorderStyle` unchanged.
+import type { CellParagraphBlock, CellTextRun as SharedCellTextRun } from 'ooxml-ui/pptx';
+import {
+	cellParagraphBlocks,
+	cellRunStyle as cellRunCss,
+	cellStyleToCss,
+	ooxmlDashToCssBorderStyle,
+} from 'ooxml-ui/pptx';
 /**
  * table-cell-style.ts: pure cell/run style projection for table rendering.
  *
@@ -14,16 +24,6 @@
  */
 import type { PptxTableCell, PptxTableCellStyle, PptxTableRow } from 'pptx-viewer-core';
 
-// The OOXML-dash → CSS-border-style map is framework-agnostic and lives in
-// `pptx-viewer-shared`; re-exported here so this module's public surface
-// (and colocated tests) keep importing `ooxmlDashToCssBorderStyle` unchanged.
-import type { CellParagraphBlock, CellTextRun as SharedCellTextRun } from 'ooxml-ui/pptx';
-import {
-	cellParagraphBlocks,
-	cellRunStyle as cellRunCss,
-	cellStyleToCss,
-	ooxmlDashToCssBorderStyle,
-} from 'ooxml-ui/pptx';
 import type { StyleMap } from './element-style';
 
 export { ooxmlDashToCssBorderStyle };

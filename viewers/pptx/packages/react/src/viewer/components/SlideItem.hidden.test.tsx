@@ -10,9 +10,9 @@
  * folding the state into the label would break the whole suite.
  */
 import { createInstance } from 'i18next';
-import type { PptxSlide } from 'pptx-viewer-core';
 import { EDITOR_THUMBNAIL_WIDTH, HIDDEN_SLIDE_SLASH_GRADIENT } from 'ooxml-ui/pptx';
 import { translationsEn } from 'ooxml-ui/pptx/i18n';
+import type { PptxSlide } from 'pptx-viewer-core';
 import React, { act } from 'react';
 import { createRoot } from 'react-dom/client';
 import type { Root } from 'react-dom/client';

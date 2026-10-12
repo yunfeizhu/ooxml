@@ -7,8 +7,8 @@ import {
 	output,
 } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-
 import type { RibbonDrawRequestEvent, RibbonDrawTool } from 'ooxml-ui/pptx';
+
 import { RecentColorsService } from './recent-colors.service';
 
 export type DrawTool = RibbonDrawTool;

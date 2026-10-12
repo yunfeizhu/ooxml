@@ -253,7 +253,7 @@ export class PptxHandlerRuntime extends PptxHandlerRuntimeBase {
 		if (
 			!isRichCellTxBody(xmlCell['a:txBody'] as XmlObject | undefined, this.ensureArray.bind(this))
 		) {
-			writeCellTextFormatting(xmlCell, style, this.ensureArray.bind(this));
+			writeCellTextFormatting(xmlCell, style, this.ensureArray.bind(this), paragraphs);
 		}
 
 		// Reorder tcPr children per CT_TableCellProperties §21.1.4.2 — borders

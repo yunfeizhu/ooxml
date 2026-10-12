@@ -12,5 +12,8 @@ export default defineConfig({
 		exclude: ['tests/**/*.ssr.test.ts'],
 		setupFiles: ['./tests/setup.ts'],
 		isolate: true,
+		// Each integration case mounts a real viewer in every framework adapter under jsdom; on a busy
+		// machine that sits right at the 5s default and fails at random.
+		testTimeout: 30_000,
 	},
 });

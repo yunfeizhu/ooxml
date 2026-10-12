@@ -1,6 +1,6 @@
-import type { ZoomPptxElement, PptxSlide } from 'pptx-viewer-core';
 import { buildSummaryZoomView, resolveZoomNavigationTarget } from 'ooxml-ui/pptx';
 import type { ZoomNavigationTarget } from 'ooxml-ui/pptx';
+import type { ZoomPptxElement, PptxSlide } from 'pptx-viewer-core';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -114,6 +114,7 @@ export function ZoomElementRenderer({
 							<img
 								src={tile.imageSrc}
 								alt={tile.ariaLabel}
+								draggable={false}
 								style={{ width: '100%', height: '100%', objectFit: 'contain' }}
 							/>
 						) : (

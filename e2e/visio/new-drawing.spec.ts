@@ -4,19 +4,24 @@ import type { VisioViewerElement } from 'ooxml-ui/visio';
 import { createVsdxFixture } from './fixture.mjs';
 import { downloadCopy } from './ribbon';
 import { readFile } from 'node:fs/promises';
+import { openDemo } from './demo-page';
 
 for (const framework of ['vanilla', 'react', 'vue', 'angular', 'svelte', 'solid']) {
 	test(`${framework}: File New and Ctrl+N create an editable clean source`, async ({ page }) => {
 		const errors: string[] = [];
 		page.on('pageerror', (error) => errors.push(error.message));
 		await page.setViewportSize({ width: 1600, height: 1000 });
-		await page.goto(framework === 'vanilla' ? '/demo/?sample=1' : `/demo-${framework}/?sample=1`);
+		await openDemo(
+			page,
+			framework === 'vanilla' ? '/demo/?sample=1' : `/demo-${framework}/?sample=1`,
+		);
 		const viewer = page.locator('visio-viewer');
 		await page.locator('#file').setInputFiles({
 			name: 'Previous.vsdx',
 			mimeType: 'application/vnd.ms-visio.drawing',
 			buffer: await createVsdxFixture('Previous drawing'),
 		});
+		await expect(page.locator('#file-name')).toHaveText('Previous.vsdx');
 		await expect(viewer.locator('svg.paper')).toContainText('Previous drawing');
 		await viewer.locator('office-ui-ribbon .file').click();
 		await viewer.locator('[data-backstage-item="new"]').click();

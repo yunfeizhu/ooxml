@@ -187,7 +187,7 @@ it('applies AllPages atomically with page-qualified IDs and preserves source on 
 		expect(refused.bar.status).toBe('5 occurrences');
 		refused.press('replace-all');
 		await refused.done();
-		const reason = locked ? 'EDIT_PROTECTED_CELL' : 'UNSUPPORTED_TEXT_EDIT';
+		const reason = locked ? 'protection is active' : 'cannot be edited';
 		await vi.waitFor(() => expect(refused.bar.error).toContain(reason));
 		expect(refused.controller.exportVsdx().bytes).toEqual(refused.bytes);
 		expect(refused.controller.state.edit.canUndo).toBe(false);

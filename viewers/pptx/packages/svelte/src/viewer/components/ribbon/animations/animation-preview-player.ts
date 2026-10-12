@@ -1,3 +1,4 @@
+import { buildAnimationRibbonPreview, playAnimationRibbonPreview } from 'ooxml-ui/pptx';
 /**
  * Thin wrapper around `pptx-viewer-shared`'s `animation-ribbon-preview`
  * module (itself lifted from this file and vanilla's identical copy): the
@@ -7,7 +8,6 @@
  * `motion-path-preview.test.ts` already depend on.
  */
 import type { PptxElementAnimation } from 'pptx-viewer-core';
-import { buildAnimationRibbonPreview, playAnimationRibbonPreview } from 'ooxml-ui/pptx';
 
 export function previewElementAnimation(animation: PptxElementAnimation): boolean {
 	const target = document.querySelector<HTMLElement>(

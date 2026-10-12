@@ -12,6 +12,8 @@ import { ViewerCommands } from '../viewer-commands';
 import { createRibbon } from '../ribbon';
 import { createRulers } from '../viewer-ruler';
 import { registerViewerControls } from '../office-ui';
+import type { OfficeUiColorGrid } from '../../controls';
+import type { ColorTarget } from '../ribbon-color-menu';
 import { createVsdxFixture } from './fixture.mjs';
 
 export async function setupFormattingViewer(source = true, mixedText = false) {
@@ -74,14 +76,30 @@ export async function setupFormattingViewer(source = true, mixedText = false) {
 	controller.subscribe((state) => commands.render(state));
 	const button = (id: string) =>
 		root.querySelector<HTMLElement & { disabled: boolean }>(`[command="${id}"]`)!;
+	// Undo and Redo are on the title bar's Quick Access Toolbar, which this ribbon-only harness
+	// does not mount: run the same history action they emit.
 	const press = (id: string) =>
-		button(id).shadowRoot!.querySelector<HTMLButtonElement>('button')!.click();
+		id === 'undo' || id === 'redo'
+			? commands.run({ type: 'history', key: id })
+			: button(id).shadowRoot!.querySelector<HTMLButtonElement>('button')!.click();
 	const combo = (id: string) =>
 		root.querySelector<HTMLElement & { value: string; disabled: boolean }>(`[data-combo="${id}"]`)!;
 	const select = (id: string, value: string) => {
 		combo(id).value = value;
 		combo(id).dispatchEvent(new Event('change', { bubbles: true }));
 	};
+	/** The colour picker inside Home > Fill, Line or Font Color. */
+	const grid = (target: ColorTarget) =>
+		root.querySelector<OfficeUiColorGrid>(
+			`office-ui-menu-button office-ui-color-grid[data-color-grid="${target}"]`,
+		)!;
+	/** Click a swatch (`#rrggbb`), No Fill / No Line (`none`) or More Colors (`more`). */
+	const pickColor = (target: ColorTarget, color: string) =>
+		grid(target)
+			.shadowRoot!.querySelector<HTMLButtonElement>(
+				color.startsWith('#') ? `[data-color="${color}"]` : `[data-command="${color}"]`,
+			)!
+			.click();
 	const done = () => vi.waitFor(() => expect(controller.state.edit.busy).toBe(false));
 	const shape = () => controller.state.document!.pages[0]!.shapes[0]!;
 	const selection = () => controller.selectShape({ id: '1', name: 'Import test', pageId: '1' });
@@ -95,6 +113,8 @@ export async function setupFormattingViewer(source = true, mixedText = false) {
 		feedback,
 		button,
 		press,
+		grid,
+		pickColor,
 		combo,
 		select,
 		done,

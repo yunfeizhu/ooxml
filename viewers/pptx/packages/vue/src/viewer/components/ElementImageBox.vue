@@ -5,8 +5,7 @@
  * with the computed CSS filter + any SVG `<filter>` defs for duotone/artistic
  * effects.
  */
-import type { PptxElement, PptxImageEffects } from 'pptx-viewer-core';
-import { isImageLikeElement } from 'pptx-viewer-core';
+
 import {
 	getComputedImageStyle,
 	getCropShapeClipPath,
@@ -17,6 +16,8 @@ import {
 	getImageTilingStyle,
 	resolveShapeGeometry,
 } from 'ooxml-ui/pptx';
+import type { PptxElement, PptxImageEffects } from 'pptx-viewer-core';
+import { isImageLikeElement } from 'pptx-viewer-core';
 import type { CSSProperties } from 'vue';
 import { computed } from 'vue';
 
@@ -176,10 +177,13 @@ const hitTargetStyle = useElementHitTargetStyle(
 			class="pptx-vue-image-tile"
 			:style="{ ...tilingStyle, filter: imageFx.filter, opacity: imageFx.opacity }"
 		/>
+		<!-- Not draggable: the browser's own image drag would cancel the pointer
+		     stream of the editor's move gesture. -->
 		<img
 			v-else-if="imageSrc"
 			:src="displaySrc ?? imageSrc"
 			alt=""
+			draggable="false"
 			:style="{
 				...imageFitStyle,
 				display: 'block',

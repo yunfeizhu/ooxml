@@ -12,10 +12,10 @@
  * `load-content-docprops.test.ts`; no TestBed.
  */
 import { DestroyRef, Injector, runInInjectionContext } from '@angular/core';
+import { recoverySnapshotIntent } from 'ooxml-ui/pptx';
 import { PptxHandler } from 'pptx-viewer-core';
 import { describe, expect, it, vi } from 'vitest';
 
-import { recoverySnapshotIntent } from 'ooxml-ui/pptx';
 import { LoadContentService } from './load-content.service';
 
 /**

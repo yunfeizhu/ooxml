@@ -1,5 +1,6 @@
 // Compatibility exports: all document operations are owned by OOXML core.
 import { apiToolsThemeTools as operations } from 'ooxml-core/pptx/automation';
+
 export type ThemeInfo = operations.ThemeInfo;
 export const getThemeInfo = operations.getThemeInfo;
 export type ApplyThemePresetParams = operations.ApplyThemePresetParams;

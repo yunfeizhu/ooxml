@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { SlideSizeEmu } from 'ooxml-ui/pptx';
 /**
  * SlideInspector: the right inspector shown when no element is selected,
  * mirroring React's `InspectorPane.tsx` no-selection state: an
@@ -29,7 +30,6 @@ import type {
 	PptxTheme,
 	PptxThemeOption,
 } from 'pptx-viewer-core';
-import type { SlideSizeEmu } from 'ooxml-ui/pptx';
 import { ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 

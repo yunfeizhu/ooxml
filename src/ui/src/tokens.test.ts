@@ -1,3 +1,4 @@
+// @vitest-environment jsdom
 import { beforeAll, describe, expect, it } from 'vitest';
 import { OFFICE_UI_TAGS, registerOfficeUi } from './index';
 import { THEME_CSS } from './theme';

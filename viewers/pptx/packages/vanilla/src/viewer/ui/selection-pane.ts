@@ -1,6 +1,6 @@
+import { resolveSelectionPaneRename, restoreEditorKeyboardFocus } from 'ooxml-ui/pptx';
 import { hasTextProperties } from 'pptx-viewer-core';
 import type { PptxElement } from 'pptx-viewer-core';
-import { resolveSelectionPaneRename, restoreEditorKeyboardFocus } from 'ooxml-ui/pptx';
 
 import type { Translator } from '../i18n';
 import { createEl } from '../render';

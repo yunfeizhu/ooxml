@@ -341,6 +341,19 @@ describe('chartViewModelSvg: gradient defs (COM: charts-com.pptx slide 23)', () 
 						],
 					},
 					{
+						kind: 'linearGradient',
+						id: 'g-line',
+						gradientUnits: 'userSpaceOnUse',
+						x1: 10,
+						y1: 40,
+						x2: 90,
+						y2: 40,
+						stops: [
+							{ offset: 0, color: '#c08fbf' },
+							{ offset: 1, color: '#800f85' },
+						],
+					},
+					{
 						kind: 'radialGradient',
 						id: 'g-rad',
 						cx: 0.5,
@@ -360,6 +373,10 @@ describe('chartViewModelSvg: gradient defs (COM: charts-com.pptx slide 23)', () 
 		expect(wrapper.find('pattern#g-rect image').attributes('width')).toBe('1');
 		expect(wrapper.find('pattern#g-rect image').attributes('preserveAspectRatio')).toBe('none');
 		expect(wrapper.find('linearGradient#g-lin').attributes('y2')).toBe('1');
+		expect(wrapper.find('linearGradient#g-lin').attributes('gradientUnits')).toBeUndefined();
+		expect(wrapper.find('linearGradient#g-line').attributes('gradientUnits')).toBe(
+			'userSpaceOnUse',
+		);
 		expect(wrapper.findAll('radialGradient#g-rad stop')).toHaveLength(2);
 		expect(wrapper.find('rect').attributes('fill')).toBe('url(#g-rad)');
 	});

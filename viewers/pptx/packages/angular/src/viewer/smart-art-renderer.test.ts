@@ -16,11 +16,11 @@ import { readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
+import { computeSmartArtElementLayout, computeSmartArtLayout } from 'ooxml-ui/pptx';
+import type { RenderedNode, SmartArtLayoutResult } from 'ooxml-ui/pptx';
 import type { PptxSmartArtNode, SmartArtLayoutType } from 'pptx-viewer-core';
 import { describe, expect, it, vi } from 'vitest';
 
-import { computeSmartArtElementLayout, computeSmartArtLayout } from 'ooxml-ui/pptx';
-import type { RenderedNode, SmartArtLayoutResult } from 'ooxml-ui/pptx';
 import { DEFAULT_PALETTE } from './smart-art-drawing';
 import { layoutConnectorPaints, layoutNodeLabels } from './smart-art-renderer-helpers';
 import { SmartArtRendererComponent } from './smart-art-renderer.component';

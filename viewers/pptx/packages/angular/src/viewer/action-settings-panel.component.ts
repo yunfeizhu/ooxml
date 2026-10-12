@@ -9,6 +9,12 @@ import {
 	CUSTOM_ELEMENTS_SCHEMA,
 } from '@angular/core';
 import { TranslatePipe } from '@ngx-translate/core';
+import {
+	canCommitActionType,
+	ELEMENT_ACTION_TYPE_OPTIONS,
+	resolveActionType,
+	toSlideIndex,
+} from 'ooxml-ui/pptx';
 import type {
 	ElementAction,
 	ElementActionType,
@@ -17,12 +23,6 @@ import type {
 } from 'pptx-viewer-core';
 import { elementActionToPptxAction, pptxActionToElementAction } from 'pptx-viewer-core';
 
-import {
-	canCommitActionType,
-	ELEMENT_ACTION_TYPE_OPTIONS,
-	resolveActionType,
-	toSlideIndex,
-} from 'ooxml-ui/pptx';
 import { ActionTargetFieldsComponent } from './action-target-fields.component';
 import { LoadContentService } from './load-content.service';
 

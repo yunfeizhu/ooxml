@@ -1,5 +1,5 @@
-import type { BevelPresetType, MaterialPresetType, Text3DStyle } from 'pptx-viewer-core';
 import { BEVEL_PRESETS, MATERIAL_PRESETS } from 'ooxml-ui/pptx';
+import type { BevelPresetType, MaterialPresetType, Text3DStyle } from 'pptx-viewer-core';
 
 import type { Translator } from '../../i18n';
 import { createEl } from '../../render';

@@ -1,5 +1,5 @@
-import type { PptxHandler, PptxSlide, PptxSlideMaster } from 'pptx-viewer-core';
 import type { SlideSizeEmu } from 'ooxml-ui/pptx';
+import type { PptxHandler, PptxSlide, PptxSlideMaster } from 'pptx-viewer-core';
 import { describe, expect, it, vi } from 'vitest';
 import { ref, shallowRef } from 'vue';
 

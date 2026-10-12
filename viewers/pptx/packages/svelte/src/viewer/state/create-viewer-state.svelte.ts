@@ -1,4 +1,3 @@
-import type { PptxSaveFormat } from 'pptx-viewer-core';
 import {
 	EMPTY_RESOLVED_CUSTOMIZATION,
 	buildFieldSubstitutionContext,
@@ -12,6 +11,7 @@ import {
 	tableStyleSaveOptions,
 } from 'ooxml-ui/pptx';
 import type { FieldSubstitutionContext } from 'ooxml-ui/pptx';
+import type { PptxSaveFormat } from 'pptx-viewer-core';
 
 import { provideTranslator } from '../../i18n/context';
 import { createDeckApi } from '../editor/deck-api';

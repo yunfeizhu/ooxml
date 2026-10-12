@@ -1,4 +1,11 @@
 <script setup lang="ts">
+import {
+	buildParagraphs,
+	getContainerStyle,
+	getGroupChildParentFill,
+	getImageFitStyle,
+	getImageSrc as sharedGetImageSrc,
+} from 'ooxml-ui/pptx';
 /**
  * ReflectionMirrorContent: the mirrored CONTENT painted inside a
  * `pptx-vue-reflection` wrapper (see `ShapeEffectOverlay.vue`), rendering the
@@ -22,13 +29,6 @@
  */
 import type { GroupPptxElement, PptxElement, ShapeStyle } from 'pptx-viewer-core';
 import { isImageLikeElement } from 'pptx-viewer-core';
-import {
-	buildParagraphs,
-	getContainerStyle,
-	getGroupChildParentFill,
-	getImageFitStyle,
-	getImageSrc as sharedGetImageSrc,
-} from 'ooxml-ui/pptx';
 import type { CSSProperties } from 'vue';
 import { computed } from 'vue';
 

@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { parentSelection, slideSpaceElement } from 'ooxml-ui/pptx';
+import type { PptxAiConfig } from 'ooxml-ui/pptx/ai';
 /**
  * ViewerCanvasOverlays: everything painted OVER the slide inside the scaled
  * stage (grid, comment markers, guides, snap lines, marquee, ink capture, AI
@@ -20,8 +22,6 @@ import type {
 	PptxSlide,
 	TextStyle,
 } from 'pptx-viewer-core';
-import { parentSelection, slideSpaceElement } from 'ooxml-ui/pptx';
-import type { PptxAiConfig } from 'ooxml-ui/pptx/ai';
 import { computed, inject, useTemplateRef } from 'vue';
 
 import type { AiPanelController } from '../composables/ai/useAiPanelController';

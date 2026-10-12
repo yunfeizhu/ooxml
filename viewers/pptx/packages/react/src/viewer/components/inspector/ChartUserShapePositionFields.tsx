@@ -1,6 +1,6 @@
-import type { PptxChartUserShape } from 'pptx-viewer-core';
 import type { ChartUserShapeRow, ChartUserShapeRowPatch } from 'ooxml-ui/pptx';
 import { getChartUserShapeRowChartBox } from 'ooxml-ui/pptx';
+import type { PptxChartUserShape } from 'pptx-viewer-core';
 import { useTranslation } from 'react-i18next';
 
 import { WebCheckbox } from '../WebControls';

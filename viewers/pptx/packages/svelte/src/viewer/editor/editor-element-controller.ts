@@ -1,5 +1,3 @@
-import type { PptxElement, TextSegment, TextStyle } from 'pptx-viewer-core';
-import { hasTextProperties } from 'pptx-viewer-core';
 import type { ElementBoxPatch } from 'ooxml-ui/pptx';
 import {
 	cloneElementForPaste,
@@ -8,6 +6,8 @@ import {
 	updateElementInTree,
 	updateTextSegmentStyle,
 } from 'ooxml-ui/pptx';
+import type { PptxElement, TextSegment, TextStyle } from 'pptx-viewer-core';
+import { hasTextProperties } from 'pptx-viewer-core';
 
 import { appendElement, newElementId } from './editor-insert';
 import type { EditorState } from './editor-state.svelte';

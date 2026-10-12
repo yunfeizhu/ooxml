@@ -128,9 +128,10 @@ const fsAdapter: FileSystemAdapter = {
 ## 可运行示例 {#runnable-example}
 
 ```ts
-import { PptxHandler, PptxMarkdownConverter } from 'pptx-viewer-core';
 import { readFile, writeFile, mkdir } from 'node:fs/promises';
 import { dirname } from 'node:path';
+
+import { PptxHandler, PptxMarkdownConverter } from 'pptx-viewer-core';
 
 const node = await readFile('deck.pptx');
 const buffer = node.buffer.slice(node.byteOffset, node.byteOffset + node.byteLength);

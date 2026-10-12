@@ -94,7 +94,7 @@ function assertOutlineUnreferenced(
 export function changeVisioShape(
 	roots: ReadonlyMap<string, Element>,
 	document: Element,
-	edit: VisioChangeShapeEdit,
+	edit: Extract<VisioChangeShapeEdit, { shape: unknown }>,
 	check: () => void,
 ): boolean {
 	check();

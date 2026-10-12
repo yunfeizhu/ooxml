@@ -10,6 +10,8 @@ export const grid: Record<string, string> = {
 		'Ein Blattname darf \\ / ? * [ ] oder : nicht enthalten',
 	'A sheet name cannot start or end with an apostrophe.':
 		'Ein Blattname darf nicht mit einem Apostroph beginnen oder enden.',
+	'Cannot insert cells: non-empty cells would be pushed off the sheet.':
+		'Zellen können nicht eingefügt werden: Nicht leere Zellen würden über den Blattrand hinaus verschoben.',
 	Cancel: 'Abbrechen',
 	'Cell editor': 'Zelleneditor',
 	Chart: 'Diagramm',
@@ -76,6 +78,8 @@ export const grid: Record<string, string> = {
 	'That name is already taken.': 'Dieser Name ist bereits vergeben.',
 	"The browser didn't allow access to the clipboard. Use Ctrl+V to paste.":
 		'Der Browser hat den Zugriff auf die Zwischenablage nicht erlaubt. Verwenden Sie Strg+V zum Einfügen.',
+	'The insert area extends beyond the sheet.':
+		'Der einzufügende Bereich reicht über das Blatt hinaus.',
 	'The paste area extends beyond the sheet.': 'Der Einfügebereich reicht über das Blatt hinaus.',
 	"This action won't work on multiple selections.":
 		'Diese Aktion funktioniert nicht bei Mehrfachauswahlen.',

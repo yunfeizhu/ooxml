@@ -19,8 +19,6 @@ import {
 } from '@angular/core';
 import { LucideChevronLeft, LucideChevronRight, LucideX } from '@lucide/angular';
 import { TranslatePipe } from '@ngx-translate/core';
-import type { PptxSlide } from 'pptx-viewer-core';
-
 import type {
 	AuthoredSlideRange,
 	CanvasSize,
@@ -34,6 +32,8 @@ import {
 	HIGHLIGHT_CLEAR_STYLE,
 	mayLeaveSlideShow,
 } from 'ooxml-ui/pptx';
+import type { PptxSlide } from 'pptx-viewer-core';
+
 import { AnimationPlaybackService } from './animation-playback.service';
 import { LoadContentService } from './load-content.service';
 import { PresentationAnnotationOverlayComponent } from './presentation-annotation-overlay.component';

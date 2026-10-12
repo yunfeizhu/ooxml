@@ -1,6 +1,6 @@
-import type { PptxSlide } from 'pptx-viewer-core';
 import { resolveCustomization } from 'ooxml-ui/pptx';
 import type { ViewerCustomization } from 'ooxml-ui/pptx';
+import type { PptxSlide } from 'pptx-viewer-core';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import type { EditActions } from '../editor';

@@ -10,13 +10,13 @@
  * environment's `Image`/`<canvas>` decode.
  */
 import { mount } from '@vue/test-utils';
-import type { ChartPptxElement, PptxChartData, PptxElement } from 'pptx-viewer-core';
 import {
 	ensureBarFacePicturePixelSampled,
 	getCachedBarFacePicturePixelColor,
 	resetBarFacePicturePixelCacheForTests,
 	resolveUntargetedBarFaceFill,
 } from 'ooxml-ui/pptx';
+import type { ChartPptxElement, PptxChartData, PptxElement } from 'pptx-viewer-core';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import ChartRenderer from './ChartRenderer.vue';

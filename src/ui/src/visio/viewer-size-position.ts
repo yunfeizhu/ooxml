@@ -9,6 +9,7 @@ import {
 import type { ViewerController, ViewerState } from './controller';
 
 const fields: readonly VisioSizePositionField[] = ['x', 'y', 'width', 'height', 'angle'];
+/** Accessible names carry the unit; the rows show Visio's short labels with a unit suffix. */
 const labels = {
 	x: 'X (in)',
 	y: 'Y (in)',
@@ -16,6 +17,7 @@ const labels = {
 	height: 'Height (in)',
 	angle: 'Angle (°)',
 };
+const captions = { x: 'X', y: 'Y', width: 'Width', height: 'Height', angle: 'Angle' };
 
 /** Static presentation only; source quantities and edit conversion belong to core. */
 export function createSizePosition(doc: Document): HTMLElement {
@@ -23,19 +25,21 @@ export function createSizePosition(doc: Document): HTMLElement {
 	pane.className = 'size-position';
 	pane.hidden = true;
 	pane.setAttribute('aria-label', 'Size & Position');
+	// Visio's anchored window: a vertical caption strip with its close button, then the rows.
 	const heading = doc.createElement('div');
-	heading.className = 'pane-heading';
+	heading.className = 'size-caption';
 	const title = doc.createElement('strong');
 	title.textContent = 'Size & Position';
 	const close = doc.createElement('button');
 	close.type = 'button';
 	close.setAttribute('aria-label', 'Close Size & Position');
+	close.title = 'Close';
 	close.textContent = '×';
 	heading.append(title, close);
+	const body = doc.createElement('div');
+	body.className = 'size-body';
 	const target = doc.createElement('p');
 	target.dataset.sizeTarget = '';
-	const hint = doc.createElement('p');
-	hint.textContent = 'Drawing inches. X/Y locate the rotation pin; Y increases upward.';
 	const controls = doc.createElement('div');
 	controls.dataset.sizeFields = '';
 	const status = doc.createElement('p');
@@ -46,17 +50,23 @@ export function createSizePosition(doc: Document): HTMLElement {
 	error.dataset.sizeError = '';
 	error.setAttribute('role', 'alert');
 	error.hidden = true;
-	pane.append(heading, target, hint, controls, status, error);
+	body.append(controls, target, status, error);
+	pane.append(heading, body);
 	for (const field of fields) {
 		const label = doc.createElement('label');
-		label.textContent = labels[field];
+		const caption = doc.createElement('span');
+		caption.textContent = captions[field];
+		const unit = doc.createElement('span');
+		unit.className = 'size-unit';
+		unit.setAttribute('aria-hidden', 'true');
+		unit.textContent = field === 'angle' ? 'deg.' : 'in.';
 		const input = doc.createElement('input');
 		input.type = 'number';
 		input.step = 'any';
 		input.dataset.sizeField = field;
 		input.setAttribute('aria-label', labels[field]);
 		if (field === 'width' || field === 'height') input.min = '0';
-		label.append(input);
+		label.append(caption, input, unit);
 		controls.append(label);
 	}
 	return pane;
@@ -228,8 +238,9 @@ export class ViewerSizePosition {
 				!values || !state.edit.sourceAvailable || state.loading || state.edit.busy || this.#pending;
 		}
 		this.#pane.setAttribute('aria-busy', String(state.loading || state.edit.busy || this.#pending));
+		// The rows speak for themselves while a shape is shown; otherwise say what to select.
 		this.#pane.querySelector('[data-size-target]')!.textContent = values
-			? `Shape ${values.shapeId}`
-			: 'Select one local, unconnected 2D shape.';
+			? ''
+			: 'Select a shape to see its size and position.';
 	}
 }

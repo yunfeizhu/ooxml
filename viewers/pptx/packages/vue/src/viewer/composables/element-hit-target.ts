@@ -1,5 +1,5 @@
-import type { PptxElement } from 'pptx-viewer-core';
 import { shouldRenderHitTarget } from 'ooxml-ui/pptx';
+import type { PptxElement } from 'pptx-viewer-core';
 import type { ComputedRef, CSSProperties } from 'vue';
 import { computed } from 'vue';
 

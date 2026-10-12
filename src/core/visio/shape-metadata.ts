@@ -30,6 +30,8 @@ export interface VisioShapeData {
 	prompt?: string;
 	invisible?: boolean;
 	sortKey?: string;
+	/** Cached DataLinked cell: the row came from a linked external data recordset. */
+	dataLinked?: boolean;
 }
 export interface VisioHyperlink {
 	id: string;
@@ -140,6 +142,16 @@ function booleanValue(text: string): boolean | undefined {
 	const value = numeric(text);
 	return value === undefined ? undefined : value !== 0;
 }
+/** VSDX saves Shape Data dates as ISO text (U="DATE"); the model keeps serial days. */
+function isoSerialDays(text: string): number | undefined {
+	const match = /^(\d{4})-(\d{2})-(\d{2})(?:T(\d{2}):(\d{2})(?::(\d{2}(?:\.\d+)?))?)?$/.exec(
+		text.trim(),
+	);
+	if (!match) return undefined;
+	const [year, month, day, hour, minute, second] = match.slice(1).map((part) => Number(part ?? 0));
+	const time = Date.UTC(year!, month! - 1, day!, hour, minute, second);
+	return Number.isFinite(time) ? (time - Date.UTC(1899, 11, 30)) / 86_400_000 : undefined;
+}
 function property(row: Row, budget: VisioMetadataBudget, report: Report): VisioShapeData {
 	const get = (key: string) => cached(row.cells, key, budget, report);
 	const rawType = get('Type'),
@@ -158,6 +170,7 @@ function property(row: Row, budget: VisioMetadataBudget, report: Report): VisioS
 	if (rawValue !== undefined && row.cells.get('Value')?.error === undefined) {
 		if (type === 0 || type === 1 || type === 4) value = budget.retain(rawValue);
 		else if (type === 3) value = booleanValue(rawValue);
+		else if (type === 5) value = numeric(rawValue) ?? isoSerialDays(rawValue);
 		else if (valueKind !== 'unparsed') value = numeric(rawValue);
 	}
 	if (value === undefined) {
@@ -172,6 +185,9 @@ function property(row: Row, budget: VisioMetadataBudget, report: Report): VisioS
 		prompt = get('Prompt'),
 		sortKey = get('SortKey');
 	const invisible = boolean(row.cells, 'Invisible', budget, report);
+	const dataLinked = row.cells.has('DataLinked')
+		? boolean(row.cells, 'DataLinked', budget, report)
+		: undefined;
 	const unit = row.cells.get('Value')?.unit,
 		error = row.cells.get('Value')?.error;
 	return {
@@ -187,6 +203,7 @@ function property(row: Row, budget: VisioMetadataBudget, report: Report): VisioS
 		...(prompt === undefined ? {} : { prompt }),
 		...(sortKey === undefined ? {} : { sortKey }),
 		...(invisible === undefined ? {} : { invisible }),
+		...(dataLinked ? { dataLinked } : {}),
 		...(unit === undefined ? {} : { unit: budget.retain(unit) }),
 		...(error === undefined ? {} : { error: budget.retain(error) }),
 	};

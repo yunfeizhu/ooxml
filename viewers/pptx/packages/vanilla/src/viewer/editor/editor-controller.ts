@@ -1,18 +1,3 @@
-import type {
-	PptxAppProperties,
-	PptxCoreProperties,
-	PptxCustomProperty,
-	PptxCustomShow,
-	PptxElement,
-	PptxHandler,
-	PptxHeaderFooter,
-	PptxLayoutPreview,
-	PptxPresentationProperties,
-	PptxSaveFormat,
-	PptxSection,
-	PptxSlide,
-	TextSegment,
-} from 'pptx-viewer-core';
 import {
 	armEditorKeyboard,
 	cycleSelectableElement,
@@ -29,6 +14,21 @@ import type {
 	ResolvedCustomization,
 	ResolvedKeyboardCustomization,
 } from 'ooxml-ui/pptx';
+import type {
+	PptxAppProperties,
+	PptxCoreProperties,
+	PptxCustomProperty,
+	PptxCustomShow,
+	PptxElement,
+	PptxHandler,
+	PptxHeaderFooter,
+	PptxLayoutPreview,
+	PptxPresentationProperties,
+	PptxSaveFormat,
+	PptxSection,
+	PptxSlide,
+	TextSegment,
+} from 'pptx-viewer-core';
 
 import type { Translator } from '../i18n';
 import type { DrawTool, Store, ViewerState } from '../state';

@@ -144,11 +144,16 @@ describe('session-restore', () => {
 		await expect(probeAutosaveRecovery('slides.pptx')).resolves.toBeNull();
 		await expect(getAutosaveSnapshot('slides.pptx')).resolves.toBeDefined();
 
-		// A fresh tab has no acknowledgement and may offer the preserved copy.
+		// A fresh tab has no acknowledgement, did not write the snapshot itself (its copy of the
+		// modules has no record of it) and may offer the preserved copy.
 		g.sessionStorage = makeSessionStorageStub();
-		await expect(probeAutosaveRecovery('slides.pptx', opened + 1_001)).resolves.toMatchObject({
-			record: { key: 'slides.pptx', timestamp: opened + 1_000 },
-		});
+		vi.resetModules();
+		const fresh = await import('./autosave-recovery');
+		await expect(fresh.probeAutosaveRecovery('slides.pptx', opened + 1_001)).resolves.toMatchObject(
+			{
+				record: { key: 'slides.pptx', timestamp: opened + 1_000 },
+			},
+		);
 	});
 
 	it('ignores an autosave snapshot for a different file', async () => {

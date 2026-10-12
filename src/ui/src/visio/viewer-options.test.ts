@@ -96,4 +96,30 @@ describe('Visio File > Account and Options', () => {
 		expect(JSON.parse(localStorage.getItem('ooxml-office-profile')!).avatarColor).toBe('#c2431f');
 		viewer.destroy();
 	});
+
+	it('switches the status bar between the neutral and Colorful Office themes and remembers it', () => {
+		const { viewer, item, file, dialog, field } = setup();
+		// Neutral by default; a host may set the attribute or property itself.
+		expect(viewer.element.statusBar).toBe('neutral');
+		file().click();
+		item('options').click();
+		const theme = field('officeTheme') as unknown as HTMLSelectElement;
+		expect(theme.value).toBe('neutral');
+		theme.value = 'colorful';
+		theme.dispatchEvent(new Event('change'));
+		dialog.shadowRoot!.querySelector<HTMLButtonElement>('[data-action="ok"]')!.click();
+		expect(viewer.element.getAttribute('status-bar')).toBe('colorful');
+		expect(viewer.element.statusBar).toBe('colorful');
+		expect(localStorage.getItem('ooxml-visio-office-theme')).toBe('colorful');
+		viewer.destroy();
+		// A new viewer starts with the saved choice, unless its host chose one.
+		const next = mountViewer(document.body.appendChild(document.createElement('div')));
+		expect(next.element.statusBar).toBe('colorful');
+		next.destroy();
+		const chosen = document.createElement('visio-viewer');
+		chosen.setAttribute('status-bar', 'neutral');
+		document.body.append(chosen);
+		expect(chosen.statusBar).toBe('neutral');
+		chosen.remove();
+	});
 });

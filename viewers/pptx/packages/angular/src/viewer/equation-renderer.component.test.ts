@@ -18,10 +18,9 @@
  *     produces MathML output.
  */
 import type { SafeHtml } from '@angular/platform-browser';
-import { describe, expect, it } from 'vitest';
-
 import type { OmmlNode } from 'ooxml-ui/pptx';
 import { ommlToMathml, sanitizeMathMl } from 'ooxml-ui/pptx';
+import { describe, expect, it } from 'vitest';
 
 // ---------------------------------------------------------------------------
 // Stub DomSanitizer

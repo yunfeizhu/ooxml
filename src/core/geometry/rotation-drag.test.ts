@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { computeRotation, createRotationDrag } from './rotation-drag';
+import { computeRotation, createRotationDrag, snapAngle } from './rotation-drag';
 
 const center = { x: 50, y: 50 };
 const point = (degrees: number) => ({
@@ -50,4 +50,19 @@ it('preserves signed turns for a caller with unwrapped native angles', () => {
 	expect(drag(point(190))).toBeCloseTo(190);
 	expect(drag(point(280))).toBeCloseTo(280);
 	expect(drag(point(10))).toBeCloseTo(370);
+});
+
+describe('snapAngle', () => {
+	it('snaps to the nearest step within tolerance', () => {
+		expect(snapAngle(13, 15)).toBe(15);
+		expect(snapAngle(2, 15)).toBe(0);
+	});
+
+	it('leaves angles outside tolerance unchanged', () => {
+		expect(snapAngle(8, 15, 3)).toBe(8);
+	});
+
+	it('normalises snapped result to [0, 360)', () => {
+		expect(snapAngle(359, 15)).toBe(0);
+	});
 });

@@ -8,6 +8,7 @@ import {
 } from './clipboard-resources';
 import { clipboardXml, clipboardShapeRoot, assertClipboardXmlLimits } from './clipboard-xml';
 import { duplicateVisioShapes } from './edit-duplicate';
+import { assertClipboardMasters, instanceMasterIds } from './edit-instance-clipboard';
 import { fail } from './package-common';
 
 /** Import detached source fragments after actual resource and page-context compatibility proof. */
@@ -18,6 +19,8 @@ export async function pasteVisioShapes(
 	document: Element,
 	edit: VisioPasteShapesEdit,
 	check: () => void,
+	/** The target page's part, needed when the clipboard holds stencil shapes. */
+	pagePath?: string,
 ): Promise<readonly string[]> {
 	assertClipboardXmlLimits(edit.clipboard, check);
 	const context = await clipboardPageContext(pkg, edit.pageId);
@@ -46,6 +49,10 @@ export async function pasteVisioShapes(
 		);
 	const source = clipboardShapeRoot(edit.clipboard, check);
 	assertClipboardResourceReferences(source, document);
+	if (instanceMasterIds(source).length) {
+		if (!pagePath) fail('EDIT_TARGET_NOT_FOUND', 'Page does not exist.');
+		await assertClipboardMasters(pkg, pagePath, source, edit.clipboard.masters);
+	}
 	return duplicateVisioShapes(
 		pkg,
 		pagePaths,

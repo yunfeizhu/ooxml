@@ -1,10 +1,10 @@
-import type { PptxAction, PptxElement, PptxSlide } from 'pptx-viewer-core';
 import type { ViewerOptions } from 'ooxml-ui/pptx';
 import {
 	buildFieldSubstitutionContext,
 	resolvePresentationAction,
 	shouldConfirmExternalHyperlink,
 } from 'ooxml-ui/pptx';
+import type { PptxAction, PptxElement, PptxSlide } from 'pptx-viewer-core';
 
 import type { SlideCanvasProps, ZoomViewport } from '../components/canvas/canvas-types';
 import type { CanvasSize, TableCellEditorState, ViewerMode } from '../types';

@@ -105,9 +105,9 @@ calls are streamed back to the browser and run against the live deck there, then
 the results stream back to the model. Your key never leaves the server.
 
 ```ts
+import { openai } from '@ai-sdk/openai';
 // A backend route (framework-agnostic helpers from the shared package)
 import { streamText } from 'ai';
-import { openai } from '@ai-sdk/openai';
 import { buildPptxAiTools, buildPptxAiSystemPrompt } from 'pptx-viewer-shared/ai';
 
 export async function POST(request: Request) {

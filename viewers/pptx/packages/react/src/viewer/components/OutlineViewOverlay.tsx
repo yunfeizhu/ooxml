@@ -1,3 +1,9 @@
+import {
+	OUTLINE_LEVEL_ATTR,
+	OUTLINE_ROW_ATTR,
+	OUTLINE_SLIDE_ATTR,
+	OUTLINE_VIEW_ATTR,
+} from 'ooxml-ui/pptx';
 /**
  * PowerPoint's Outline view.
  *
@@ -17,12 +23,6 @@
  * inputs is exactly what the outline is.
  */
 import type { PptxSlide } from 'pptx-viewer-core';
-import {
-	OUTLINE_LEVEL_ATTR,
-	OUTLINE_ROW_ATTR,
-	OUTLINE_SLIDE_ATTR,
-	OUTLINE_VIEW_ATTR,
-} from 'ooxml-ui/pptx';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { LuX } from 'react-icons/lu';

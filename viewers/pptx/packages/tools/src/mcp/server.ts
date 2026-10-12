@@ -29,8 +29,8 @@ import {
 	runMcpTool as runTool,
 	resolveScopedDir as scopedDir,
 	resolveScopedFilePath as scopedFile,
-	type McpContextOptions,
 } from './handlers';
+import type { McpContextOptions } from './handlers';
 
 export function createServer(options?: McpContextOptions): McpServer {
 	const server = new McpServer({

@@ -36,6 +36,8 @@ it('Angular mounts with real native lifecycle and zoneless input/output updates'
 	component.instance.documentChange.subscribe(changed);
 	const selectionChanged = vi.fn();
 	component.instance.selectionChange.subscribe(selectionChanged);
+	const addIn = vi.fn();
+	component.instance.ribbonAddIn.subscribe(addIn);
 	app.attachView(component.hostView);
 	component.changeDetectorRef.detectChanges();
 	const change = {
@@ -48,6 +50,8 @@ it('Angular mounts with real native lifecycle and zoneless input/output updates'
 	const selection = Object.freeze([{ id: 'shape', name: 'Shape', pageId: 'page' }]);
 	emit('selection-change', selection);
 	expect(selectionChanged).toHaveBeenCalledWith(selection);
+	emit('office-ribbon-add-in', { tab: 'reports', command: 'export' });
+	expect(addIn).toHaveBeenCalledWith({ tab: 'reports', command: 'export' });
 	const live = current();
 	const retained = component.instance;
 	await retained.replacePlainText('page', 'shape', 'Changed');

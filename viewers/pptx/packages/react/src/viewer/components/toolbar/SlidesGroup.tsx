@@ -1,6 +1,6 @@
-import type { PptxLayoutOption, PptxLayoutPreview } from 'pptx-viewer-core';
 import { slidesHomeControls } from 'ooxml-ui/pptx';
 import type { HomeLayoutArtwork, RibbonHomeIntent, SlideTemplateId } from 'ooxml-ui/pptx';
+import type { PptxLayoutOption, PptxLayoutPreview } from 'pptx-viewer-core';
 import React, { useCallback, useMemo, useState } from 'react';
 import { createPortal } from 'react-dom';
 

@@ -1,17 +1,3 @@
-/**
- * chart-user-shape-section.ts: "Chart overlay shapes" section (`c:userShapes`
- * drawing overlay), mirroring React's `inspector/ChartUserShapeOptions.tsx`.
- *
- * Lists a chart's overlay shapes as a flat, indented tree: a top-level shape
- * plus, for a `grpSp` group, every shape grouped inside it (arbitrarily
- * nested), each as its own row (W2-F). Add a default text box, delete any
- * row, and edit a `sp`/`cxnSp` row's text/fill/line, a `pic` row's alt text,
- * and any non-group row's position/size. All decision logic (the row list,
- * the default shape, the array edits) lives in `pptx-viewer-shared`'s
- * `chart-user-shape-edit`/`chart-user-shape-tree` modules; this file only
- * maps it onto plain DOM controls (CLAUDE.md Rule 2).
- */
-import type { PptxChartData, PptxChartUserShape } from 'pptx-viewer-core';
 import {
 	createDefaultChartUserShape,
 	createDefaultChartUserShapeGroupChild,
@@ -27,6 +13,20 @@ import {
 	withChartUserShapeRowUpdated,
 } from 'ooxml-ui/pptx';
 import type { ChartUserShapeRow } from 'ooxml-ui/pptx';
+/**
+ * chart-user-shape-section.ts: "Chart overlay shapes" section (`c:userShapes`
+ * drawing overlay), mirroring React's `inspector/ChartUserShapeOptions.tsx`.
+ *
+ * Lists a chart's overlay shapes as a flat, indented tree: a top-level shape
+ * plus, for a `grpSp` group, every shape grouped inside it (arbitrarily
+ * nested), each as its own row (W2-F). Add a default text box, delete any
+ * row, and edit a `sp`/`cxnSp` row's text/fill/line, a `pic` row's alt text,
+ * and any non-group row's position/size. All decision logic (the row list,
+ * the default shape, the array edits) lives in `pptx-viewer-shared`'s
+ * `chart-user-shape-edit`/`chart-user-shape-tree` modules; this file only
+ * maps it onto plain DOM controls (CLAUDE.md Rule 2).
+ */
+import type { PptxChartData, PptxChartUserShape } from 'pptx-viewer-core';
 
 import type { Translator } from '../../i18n';
 import { buildPositionControls } from './chart-user-shape-position-controls';

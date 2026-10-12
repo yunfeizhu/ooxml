@@ -248,7 +248,7 @@ test.describe('Word-style ribbon', () => {
 		await surface.click();
 		await page.keyboard.type('Boxed and shaded');
 		await editor.getByRole('button', { name: 'Shading options' }).click();
-		await editor.getByRole('menuitem', { name: 'Light Blue', exact: true }).click();
+		await editor.getByRole('menuitemradio', { name: 'Light Blue', exact: true }).click();
 		await editor.getByRole('combobox', { name: 'Borders' }).selectOption('all');
 		await expect(surface.locator('p').first()).toHaveCSS('background-color', 'rgb(0, 176, 240)');
 		await expect(surface.locator('p').first()).toHaveCSS('border-bottom-style', 'solid');

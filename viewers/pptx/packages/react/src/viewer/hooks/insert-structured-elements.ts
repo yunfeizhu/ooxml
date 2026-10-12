@@ -1,3 +1,4 @@
+import { buildSmartArtPresetData } from 'ooxml-ui/pptx';
 /**
  * insert-structured-elements: Factory for SmartArt, equation, hyperlink,
  * field, and action-button insertion handlers used by useInsertElements.
@@ -15,7 +16,6 @@ import type {
 	SmartArtLayout,
 } from 'pptx-viewer-core';
 import { elementActionToPptxAction } from 'pptx-viewer-core';
-import { buildSmartArtPresetData } from 'ooxml-ui/pptx';
 
 import type { HyperlinkEditData } from '../components/hyperlink-edit-types';
 import { resolveHyperlinkEditResult } from '../components/hyperlink-edit-utils';

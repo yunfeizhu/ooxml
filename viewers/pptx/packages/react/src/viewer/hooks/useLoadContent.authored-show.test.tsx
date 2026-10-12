@@ -16,6 +16,11 @@ import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 
 import type {
+	CompatibilityWarningToast,
+	ReadOnlyRecommendation,
+	SlideSizeEmu,
+} from 'ooxml-ui/pptx';
+import type {
 	PptxAppProperties,
 	PptxCoreProperties,
 	PptxCustomProperty,
@@ -37,11 +42,6 @@ import type {
 	PptxViewProperties,
 	ParsedTableStyleMap,
 } from 'pptx-viewer-core';
-import type {
-	CompatibilityWarningToast,
-	ReadOnlyRecommendation,
-	SlideSizeEmu,
-} from 'ooxml-ui/pptx';
 import React, { act, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import type { Root } from 'react-dom/client';

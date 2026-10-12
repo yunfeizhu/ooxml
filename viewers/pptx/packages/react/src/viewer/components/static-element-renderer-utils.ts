@@ -1,5 +1,3 @@
-import type { PptxElement, ShapeStyle } from 'pptx-viewer-core';
-import { hasShapeProperties, hasTextProperties } from 'pptx-viewer-core';
 import {
 	getAriaRole,
 	isWedgeCalloutPresetShape,
@@ -7,6 +5,8 @@ import {
 	paintedStrokeWidth,
 	resolveGroupChildFill,
 } from 'ooxml-ui/pptx';
+import type { PptxElement, ShapeStyle } from 'pptx-viewer-core';
+import { hasShapeProperties, hasTextProperties } from 'pptx-viewer-core';
 import type { CSSProperties } from 'react';
 
 import { DEFAULT_FILL_COLOR, DEFAULT_STROKE_COLOR, DEFAULT_TEXT_COLOR } from '../constants';

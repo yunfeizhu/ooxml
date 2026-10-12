@@ -1,9 +1,3 @@
-import type {
-	ContentPartPptxElement,
-	InkPptxElement,
-	PptxElement,
-	ShapeStyle,
-} from 'pptx-viewer-core';
 import {
 	filterRenderedElements,
 	getGroupChildParentFill,
@@ -17,6 +11,12 @@ import {
 } from 'ooxml-ui/pptx';
 import type { ResolvedOleType } from 'ooxml-ui/pptx';
 import { translationsEn } from 'ooxml-ui/pptx/i18n';
+import type {
+	ContentPartPptxElement,
+	InkPptxElement,
+	PptxElement,
+	ShapeStyle,
+} from 'pptx-viewer-core';
 
 import { DEFAULT_TEXT_COLOR, MIN_ELEMENT_SIZE } from '../../constants';
 import {

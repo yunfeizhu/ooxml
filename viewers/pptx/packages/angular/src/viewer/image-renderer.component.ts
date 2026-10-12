@@ -2,8 +2,6 @@ import { NgStyle } from '@angular/common';
 import { ChangeDetectionStrategy, Component, computed, inject, input, signal } from '@angular/core';
 import type { SafeHtml } from '@angular/platform-browser';
 import { DomSanitizer } from '@angular/platform-browser';
-import type { PptxElement } from 'pptx-viewer-core';
-
 import {
 	elementHitTargetStyle,
 	getCachedNativeImageSize,
@@ -12,6 +10,8 @@ import {
 	shouldRenderHitTarget,
 } from 'ooxml-ui/pptx';
 import type { NativeImageSize } from 'ooxml-ui/pptx';
+import type { PptxElement } from 'pptx-viewer-core';
+
 import { ColorChangedImageComponent } from './color-changed-image.component';
 import { getReflectionOverlay } from './element-effect-defs';
 import type { ReflectionOverlay } from './element-effect-defs';
@@ -66,7 +66,15 @@ import { ReflectionMirrorContentComponent } from './reflection-mirror-content.co
 						imgClass="pptx-ng-img"
 					/>
 				} @else {
-					<img [src]="src" alt="" class="pptx-ng-img" [ngStyle]="view().imageStyle" />
+					<!-- Not draggable: the browser's own image drag would cancel the
+					     pointer stream of the editor's move gesture. -->
+					<img
+						[src]="src"
+						alt=""
+						class="pptx-ng-img"
+						draggable="false"
+						[ngStyle]="view().imageStyle"
+					/>
 				}
 			}
 			@if (view().colorWashStyle; as washStyle) {

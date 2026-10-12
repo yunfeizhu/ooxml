@@ -1,6 +1,6 @@
-import type { PptxSlide, PptxSlideTransition } from 'pptx-viewer-core';
 import { beginZoomExcursion, buildZoomTransitionOverride } from 'ooxml-ui/pptx';
 import type { ZoomExcursion, ZoomNavigationTarget } from 'ooxml-ui/pptx';
+import type { PptxSlide, PptxSlideTransition } from 'pptx-viewer-core';
 import { useCallback } from 'react';
 
 /**

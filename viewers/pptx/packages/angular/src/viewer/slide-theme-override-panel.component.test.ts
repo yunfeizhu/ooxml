@@ -1,3 +1,4 @@
+import { keyToLabel, translationsEn } from 'ooxml-ui/pptx/i18n';
 /**
  * slide-theme-override-panel.component.test.ts: the per-slide colour-map
  * override rows.
@@ -14,7 +15,6 @@
 import { COLOR_MAP_ALIAS_KEYS, THEME_COLOR_SCHEME_KEYS } from 'pptx-viewer-core';
 import { describe, expect, it } from 'vitest';
 
-import { keyToLabel, translationsEn } from 'ooxml-ui/pptx/i18n';
 import { themeColorSlotLabelKey } from './schema-token-labels';
 import {
 	COLOR_MAP_ALIAS_LABEL_KEYS,

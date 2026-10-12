@@ -1,3 +1,7 @@
+/**
+ * SlideCanvas: Type definitions for the canvas component props.
+ */
+import type { InlineTextEditSnapshot, ZoomNavigationTarget } from 'ooxml-ui/pptx';
 import type {
 	ConnectorPptxElement,
 	PptxAction,
@@ -8,10 +12,6 @@ import type {
 	ShapePptxElement,
 	CustomGeometrySegment,
 } from 'pptx-viewer-core';
-/**
- * SlideCanvas: Type definitions for the canvas component props.
- */
-import type { InlineTextEditSnapshot, ZoomNavigationTarget } from 'ooxml-ui/pptx';
 import type React from 'react';
 
 import type {

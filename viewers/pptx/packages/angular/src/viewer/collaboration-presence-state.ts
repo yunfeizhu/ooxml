@@ -1,6 +1,6 @@
 import { computed, signal } from '@angular/core';
-
 import { createPresenceProjector, presenceToCursors } from 'ooxml-ui/pptx';
+
 import type { RemoteCursor, RemotePresence } from './collaboration-helpers';
 import type { ActiveSession } from './collaboration-session-setup';
 

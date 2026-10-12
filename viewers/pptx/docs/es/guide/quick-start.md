@@ -12,8 +12,9 @@ Esta pagina recorre cuatro flujos comunes de extremo a extremo. Cada uno es auto
 Use `PptxHandler.create()` para iniciar un nuevo deck, construya diapositivas con la API de construccion fluida, luego `save()` para obtener los bytes.
 
 ```ts
-import { PptxHandler } from 'pptx-viewer-core';
 import { writeFile } from 'node:fs/promises';
+
+import { PptxHandler } from 'pptx-viewer-core';
 
 const { handler, data, createSlide } = await PptxHandler.create({
 	title: 'Mi Presentacion',
@@ -39,8 +40,9 @@ await writeFile('presentacion.pptx', output);
 ## 2. Analizar y editar una presentacion existente
 
 ```ts
-import { PptxHandler } from 'pptx-viewer-core';
 import { readFile, writeFile } from 'node:fs/promises';
+
+import { PptxHandler } from 'pptx-viewer-core';
 
 const handler = new PptxHandler();
 const buffer = await readFile('presentacion.pptx');
@@ -88,8 +90,8 @@ console.log(markdown);
 ## 4. Renderizar con el visualizador React
 
 ```tsx
-import { useState } from 'react';
 import { PowerPointViewer } from 'pptx-react-viewer/viewer';
+import { useState } from 'react';
 
 function App() {
 	const [content, setContent] = useState<Uint8Array>();

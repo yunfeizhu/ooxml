@@ -10,11 +10,11 @@
  */
 import { Injector, runInInjectionContext } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
+import { DEFAULT_VIEWER_OPTIONS } from 'ooxml-ui/pptx';
+import type { TitleBarViewState, ViewerQuickAccessOptions } from 'ooxml-ui/pptx';
 import { Subject } from 'rxjs';
 import { describe, expect, it } from 'vitest';
 
-import { DEFAULT_VIEWER_OPTIONS } from 'ooxml-ui/pptx';
-import type { TitleBarViewState, ViewerQuickAccessOptions } from 'ooxml-ui/pptx';
 import {
 	narrowToExtraQuickAccess,
 	resolveBelowRibbonQuickAccess,

@@ -17,8 +17,6 @@ import {
 	output,
 } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import type { PptxSlideTransition } from 'pptx-viewer-core';
-
 import type { RibbonTransitionDraft, RibbonTransitionsRequestEvent } from 'ooxml-ui/pptx';
 import {
 	applyRibbonTransitionDraft,
@@ -30,6 +28,8 @@ import {
 	ribbonTransitionStockSoundUrl,
 	ribbonTransitionTargets,
 } from 'ooxml-ui/pptx';
+import type { PptxSlideTransition } from 'pptx-viewer-core';
+
 import { playAnimationSound } from './animation-sound';
 import { EditorStateService } from './editor-state.service';
 

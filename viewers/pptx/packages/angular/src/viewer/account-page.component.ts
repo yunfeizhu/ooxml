@@ -13,7 +13,6 @@
  */
 import { ChangeDetectionStrategy, Component, computed, inject, input, signal } from '@angular/core';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
-
 import {
 	AVATAR_COLOR_SWATCHES,
 	clearAllLocalViewerData,
@@ -24,11 +23,8 @@ import {
 	resolveProfileInitial,
 	saveViewerProfile,
 } from 'ooxml-ui/pptx';
-import type {
-	AccountAuthConfig,
-	LocalStorageUsageSummary,
-	ViewerProfile,
-} from 'ooxml-ui/pptx';
+import type { AccountAuthConfig, LocalStorageUsageSummary, ViewerProfile } from 'ooxml-ui/pptx';
+
 import { PPTX_ANGULAR_VIEWER_VERSION } from '../internal/version';
 
 @Component({

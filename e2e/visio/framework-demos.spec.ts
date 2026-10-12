@@ -1,13 +1,14 @@
 import { test, expect } from '@playwright/test';
 import { createVsdxFixture } from './fixture.mjs';
 import { fileBackstage } from './ribbon';
+import { openDemo } from './demo-page';
 
 /** The label every demo, vanilla included, gives its viewer host. */
 const DEMO_LABEL = 'Visio diagram';
 
 // The vanilla binding mounts into the caller's element, which the demo labels itself.
 test('the vanilla demo labels its viewer host', async ({ page }) => {
-	await page.goto('/demo/?sample=1');
+	await openDemo(page);
 	const viewer = page.locator('visio-viewer');
 	await expect(viewer.locator('svg.paper')).toHaveAttribute('aria-label', 'Release workflow');
 	await expect(viewer.locator('xpath=..')).toHaveAttribute('aria-label', DEMO_LABEL);
@@ -22,7 +23,7 @@ for (const framework of ['react', 'vue', 'angular', 'svelte', 'solid']) {
 		const errors: string[] = [];
 		page.on('pageerror', (error) => errors.push(error.message));
 		await page.setViewportSize({ width: 1440, height: 900 });
-		await page.goto(`/demo-${framework}/?sample=1`);
+		await openDemo(page, `/demo-${framework}/?sample=1`);
 		const viewer = page.locator('visio-viewer');
 		await expect(viewer.locator('svg.paper')).toHaveAttribute('aria-label', 'Release workflow');
 		await expect(viewer.getByRole('tab', { name: 'Home', exact: true })).toBeVisible();

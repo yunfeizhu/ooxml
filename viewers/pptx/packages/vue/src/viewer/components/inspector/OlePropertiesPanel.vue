@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { buildOleObjectNamePatch } from 'ooxml-ui/pptx';
 /**
  * OlePropertiesPanel: OLE object summary (type / file name / link status)
  * plus the Object Name editor, at parity with React's `ElementMiscPanels.tsx`
@@ -13,7 +14,6 @@
  */
 import type { OlePptxElement, PptxElement } from 'pptx-viewer-core';
 import { getOleObjectTypeLabel } from 'pptx-viewer-core';
-import { buildOleObjectNamePatch } from 'ooxml-ui/pptx';
 import { computed, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 

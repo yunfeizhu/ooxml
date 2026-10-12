@@ -29,8 +29,6 @@ import {
 } from '@angular/core';
 import { LucideX } from '@lucide/angular';
 import { TranslatePipe } from '@ngx-translate/core';
-import type { PptxSlide } from 'pptx-viewer-core';
-
 import {
 	OUTLINE_LEVEL_ATTR,
 	OUTLINE_ROW_ATTR,
@@ -41,6 +39,8 @@ import {
 	mapOutlineKey,
 } from 'ooxml-ui/pptx';
 import type { CanvasSize, OutlineEdit, OutlineRow } from 'ooxml-ui/pptx';
+import type { PptxSlide } from 'pptx-viewer-core';
+
 import { OUTLINE_VIEW_OVERLAY_STYLES } from './outline-view-overlay.styles';
 
 /** Indent per outline level, in pixels. Level 0 (a title) sits flush left. */

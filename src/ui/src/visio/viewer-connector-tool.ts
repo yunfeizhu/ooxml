@@ -1,58 +1,126 @@
-import type { VisioPage } from 'ooxml-core/visio';
+import {
+	VISIO_GLUE,
+	visioSnapGlue,
+	type VisioConnectorRoute,
+	type VisioPage,
+} from 'ooxml-core/visio';
 import {
 	editErrorMessage,
 	isEditCancellation,
+	visioGlueableShape,
 	visioConnectorCreationCommand,
 	visioDrawIsLargeEnough,
+	visioNearestConnectionPoint,
 } from 'ooxml-core/visio/ui';
 import type { ViewerController, ViewerState } from './controller';
 import { ViewerDrawingGesture } from './viewer-drawing-gesture';
+import { pagePoint } from './viewer-page-point';
 
 const TARGET = 'connectTarget';
+const SVG = 'http://www.w3.org/2000/svg';
+/** Screen distance within which a released end snaps to a connection point. */
+const POINT_SNAP_PX = 8;
+/** What an end released at the pointer would glue to. */
+export interface ConnectorGlueHit {
+	shapeId: string;
+	/** A connection point of the shape (point-to-point glue); otherwise the shape itself. */
+	point?: number;
+	x?: number;
+	y?: number;
+}
 
-/** A page shape the core can glue to: a visible, local, top-level 2D shape. */
+/** A page shape the core can glue to: a visible top-level 2D shape, drawn or from a stencil. */
 export function connectorGlueTarget(page: VisioPage, element: Element | null): string | undefined {
 	let group = element?.closest?.<SVGGElement>('[data-shape-id]');
 	while (group) {
 		const id = group.dataset.shapeId,
 			shape = page.shapes.find((candidate) => candidate.id === id);
-		if (shape)
-			return shape.kind === 'shape' && !shape.hidden && !shape.masterId && !shape.children.length
-				? shape.id
-				: undefined;
+		if (shape) return visioGlueableShape(shape) ? shape.id : undefined;
 		group = group.parentElement?.closest<SVGGElement>('[data-shape-id]');
 	}
 	return undefined;
 }
 
 /**
- * Home > Tools > Connector (Ctrl+3). A drag draws a straight dynamic connector; ends released on
- * shapes are glued to them, so the connector follows when they move. Shapes under the pointer are
- * highlighted as glue targets. Routing is straight; right-angle routing is not performed.
+ * The glue target under a client point: the nearest connection point within a few pixels of it,
+ * else the shape under it. Pointer capture retargets events, so the point itself is hit-tested.
+ */
+export function connectorGlueAt(
+	viewport: HTMLElement,
+	page: VisioPage,
+	event: Pick<PointerEvent, 'clientX' | 'clientY' | 'target'>,
+	zoom: number,
+	/** The drawing's GlueSettings (Snap & Glue): Glue off glues nothing, and connection points can be left out. */
+	glue: number = VISIO_GLUE.connectionPoints,
+): ConnectorGlueHit | undefined {
+	if (glue & VISIO_GLUE.disabled) return undefined;
+	const svg = viewport.querySelector<SVGSVGElement>('svg.paper');
+	const point = svg ? pagePoint(svg, page, event, { snap: false, bounded: false }) : undefined;
+	if (point && svg && glue & VISIO_GLUE.connectionPoints) {
+		const scale = svg.getScreenCTM?.()?.a || 96 * zoom;
+		const hit = visioNearestConnectionPoint(
+			page,
+			{ x: point.x, y: page.height - point.y },
+			POINT_SNAP_PX / scale,
+		);
+		if (hit) return { shapeId: hit.shapeId, point: hit.index, x: hit.x, y: page.height - hit.y };
+	}
+	const root = viewport.getRootNode() as Document | ShadowRoot;
+	const hits =
+		typeof root.elementsFromPoint === 'function'
+			? root.elementsFromPoint(event.clientX, event.clientY)
+			: [event.target as Element];
+	for (const hit of hits) {
+		if (!viewport.contains(hit) || hit.classList?.contains('draw-preview')) continue;
+		const id = connectorGlueTarget(page, hit);
+		if (id) return { shapeId: id };
+	}
+	return undefined;
+}
+
+/**
+ * Home > Tools > Connector (Ctrl+3). A drag draws a dynamic connector in the current route
+ * (right-angle by default); ends released on shapes glue to them, ends released on a connection
+ * point glue to that point. The shape (and point) under the pointer is highlighted.
  */
 export class ViewerConnectorTool {
 	#gesture: ViewerDrawingGesture;
 	#request = 0;
-	#begin: string | undefined;
-	#hover: string | undefined;
+	#begin: ConnectorGlueHit | undefined;
+	#hover: ConnectorGlueHit | undefined;
+	#marker: SVGCircleElement | undefined;
 	constructor(
 		private readonly viewport: HTMLElement,
 		private readonly controller: ViewerController,
-		private readonly options: { active(): boolean; announce(message: string): void },
+		private readonly options: {
+			active(): boolean;
+			announce(message: string): void;
+			/** Route for new connectors (Design > Connectors, Insert > Connector). */
+			route?(): VisioConnectorRoute;
+		},
 	) {
 		this.#gesture = new ViewerDrawingGesture(viewport, controller, {
 			tool: () => (options.active() ? 'line' : undefined),
 			announce: options.announce,
 			finish: async (drag, end) => {
 				const request = ++this.#request;
-				const glue = { begin: this.#begin, end: this.#hover };
+				const begin = this.#begin,
+					hover = this.#hover;
 				try {
 					if (!visioDrawIsLargeEnough('line', drag.start, end) || !this.#gesture.current(drag))
 						return;
-					const command = visioConnectorCreationCommand(drag.page, drag.start, end, {
-						...(glue.begin === undefined ? {} : { begin: glue.begin }),
-						...(glue.end === undefined ? {} : { end: glue.end }),
-					});
+					const command = visioConnectorCreationCommand(
+						drag.page,
+						drag.start,
+						end,
+						{
+							...(begin === undefined ? {} : { begin: begin.shapeId }),
+							...(begin?.point === undefined ? {} : { beginPoint: begin.point }),
+							...(hover === undefined ? {} : { end: hover.shapeId }),
+							...(hover?.point === undefined ? {} : { endPoint: hover.point }),
+						},
+						options.route?.() ?? 'right-angle',
+					);
 					await controller.applyCreationEdits([command], drag.token);
 					if (request === this.#request)
 						options.announce(
@@ -72,7 +140,11 @@ export class ViewerConnectorTool {
 	}
 	/** The shape currently highlighted as a glue target, for tests and status text. */
 	get target(): string | undefined {
-		return this.#hover;
+		return this.#hover?.shapeId;
+	}
+	/** The connection point currently targeted, if any. */
+	get targetPoint(): number | undefined {
+		return this.#hover?.point;
 	}
 	cancel(): void {
 		++this.#request;
@@ -83,7 +155,7 @@ export class ViewerConnectorTool {
 	render(state: ViewerState): void {
 		this.#gesture.render(state);
 		if (!this.options.active()) this.#highlight(undefined);
-		else if (this.#hover) this.#highlight(this.#hover);
+		else if (this.#hover) this.#highlight(this.#hover, true);
 	}
 	wire(): () => void {
 		const Abort = this.viewport.ownerDocument.defaultView?.AbortController ?? AbortController;
@@ -119,33 +191,44 @@ export class ViewerConnectorTool {
 			events.abort();
 		};
 	}
-	#page(): VisioPage | undefined {
+	#targetAt(event: PointerEvent): ConnectorGlueHit | undefined {
 		const state = this.controller.state;
-		return state.document?.pages[state.pageIndex];
+		const page = state.document?.pages[state.pageIndex];
+		return page
+			? connectorGlueAt(
+					this.viewport,
+					page,
+					event,
+					state.zoom,
+					visioSnapGlue(state.document ?? {}).glueSettings,
+				)
+			: undefined;
 	}
-	/** Pointer capture retargets events to the viewport, so hit-test the point itself. */
-	#targetAt(event: PointerEvent): string | undefined {
-		const page = this.#page();
-		if (!page) return undefined;
-		const root = this.viewport.getRootNode() as Document | ShadowRoot;
-		const hits =
-			typeof root.elementsFromPoint === 'function'
-				? root.elementsFromPoint(event.clientX, event.clientY)
-				: [event.target as Element];
-		for (const hit of hits) {
-			if (!this.viewport.contains(hit) || hit.classList?.contains('draw-preview')) continue;
-			const id = connectorGlueTarget(page, hit);
-			if (id) return id;
-		}
-		return undefined;
-	}
-	#highlight(id: string | undefined): void {
-		if (id === undefined && this.#hover === undefined) return;
-		this.#hover = id;
+	#highlight(hit: ConnectorGlueHit | undefined, force = false): void {
+		if (!force && hit?.shapeId === this.#hover?.shapeId && hit?.point === this.#hover?.point)
+			return;
+		this.#hover = hit;
+		const id = hit?.shapeId;
 		for (const group of this.viewport.querySelectorAll<SVGGElement>('[data-connect-target]'))
 			if (group.dataset.shapeId !== id) delete group.dataset[TARGET];
 		if (id)
 			for (const group of this.viewport.querySelectorAll<SVGGElement>('[data-shape-id]'))
 				if (group.dataset.shapeId === id) group.dataset[TARGET] = 'true';
+		this.#marker?.remove();
+		this.#marker = undefined;
+		const svg = this.viewport.querySelector<SVGSVGElement>('svg.paper');
+		if (hit?.point === undefined || hit.x === undefined || hit.y === undefined || !svg) return;
+		// Point-glue feedback: a ring on the target connection point.
+		const marker = this.viewport.ownerDocument.createElementNS(SVG, 'circle') as SVGCircleElement;
+		marker.classList.add('connect-point-target');
+		marker.setAttribute('cx', String(hit.x));
+		marker.setAttribute('cy', String(hit.y));
+		marker.setAttribute(
+			'r',
+			String(5 / (svg.getScreenCTM?.()?.a || 96 * this.controller.state.zoom)),
+		);
+		marker.setAttribute('vector-effect', 'non-scaling-stroke');
+		svg.append(marker);
+		this.#marker = marker;
 	}
 }

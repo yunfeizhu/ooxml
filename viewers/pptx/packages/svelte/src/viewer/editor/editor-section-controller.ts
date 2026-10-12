@@ -1,4 +1,3 @@
-import type { PptxSection } from 'pptx-viewer-core';
 import {
 	addSection,
 	deleteSection,
@@ -8,6 +7,7 @@ import {
 	moveSlidesToSection,
 	renameSection,
 } from 'ooxml-ui/pptx';
+import type { PptxSection } from 'pptx-viewer-core';
 
 import type { EditorState } from './editor-state.svelte';
 

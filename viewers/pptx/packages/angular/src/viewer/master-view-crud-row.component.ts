@@ -7,7 +7,6 @@
  */
 import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
 import { TranslatePipe } from '@ngx-translate/core';
-
 import type { MasterViewCrudAction, MasterViewCrudActionId } from 'ooxml-ui/pptx';
 
 @Component({

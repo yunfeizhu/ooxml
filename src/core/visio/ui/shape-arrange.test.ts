@@ -87,7 +87,7 @@ it('declines duplicate, absent, glued, layered and unsupported targets for the w
 		visioArrangeCommands(scene, ['a', 'b'], { type: 'distribute', axis: 'horizontal' }),
 	).toBeUndefined();
 	for (const patch of [
-		{ masterId: '1' },
+		{ masterId: '1', layerIds: ['locked'] },
 		{ layerIds: ['1'] },
 		{ hidden: true },
 		{ kind: 'group' as const },

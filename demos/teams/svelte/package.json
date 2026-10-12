@@ -10,6 +10,6 @@
 	"dependencies": {
 		"@sveltejs/vite-plugin-svelte": "^7.0.0",
 		"openteams-svelte-viewer": "workspace:*",
-		"svelte": "^5.57.1"
+		"svelte": "^5.57.2"
 	}
 }

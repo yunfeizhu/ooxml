@@ -1,6 +1,5 @@
 import { useChat } from '@ai-sdk/react';
 import type { ChatTransport } from 'ai';
-import type { PptxSlide } from 'pptx-viewer-core';
 import type {
 	PptxAiBridge,
 	PptxAiConfig,
@@ -9,6 +8,7 @@ import type {
 } from 'ooxml-ui/pptx/ai';
 // @vitest-environment happy-dom
 import { translationsEn } from 'ooxml-ui/pptx/i18n';
+import type { PptxSlide } from 'pptx-viewer-core';
 /**
  * AiChatPanel end-to-end integration: the REAL panel, wired to a scripted
  * `kind: 'transport'` stub (no live model, no network) over a small in-memory

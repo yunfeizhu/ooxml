@@ -1,4 +1,12 @@
 <script setup lang="ts">
+import {
+	animationCatalogPresetLabelKey,
+	applyMotionPathPreset,
+	clearMotionPath,
+	getDensePanelTouchTargetPx,
+	motionPathFor,
+	TRIGGER_OPTIONS,
+} from 'ooxml-ui/pptx';
 import type {
 	AnimationPresetInfo,
 	PptxAnimationTimelineAnchor,
@@ -12,14 +20,6 @@ import {
 	EXIT_PRESETS,
 	getAnimationPresetInfo,
 } from 'pptx-viewer-core';
-import {
-	animationCatalogPresetLabelKey,
-	applyMotionPathPreset,
-	clearMotionPath,
-	getDensePanelTouchTargetPx,
-	motionPathFor,
-	TRIGGER_OPTIONS,
-} from 'ooxml-ui/pptx';
 import { computed, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 

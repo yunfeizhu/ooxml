@@ -6,6 +6,7 @@ import { analyzeVisioFormula } from './formula';
 import { executableCellFormula } from './cell-formula';
 import { mapVisioFormulaSyntax } from './formula-source';
 import type { VisioClipboardSnapshot } from './clipboard-types';
+import { assertInstanceClipboardScope } from './edit-instance-clipboard';
 
 /** Count the entire payload before constructing any DOMs, including resources and context. */
 export function assertClipboardXmlLimits(
@@ -91,6 +92,12 @@ export function clipboardShapeRoot(snapshot: VisioClipboardSnapshot, check: () =
 	}
 	if (root.getElementsByTagName('*').length > 100_000)
 		fail('LIMIT_CLIPBOARD', 'Clipboard node limit exceeded.');
-	assertClipboardFormulaScope(root, new Set(snapshot.selectionIds), check);
+	const ids = new Set(snapshot.selectionIds);
+	// A stencil shape's formulas are read by syntax; the analyser does not parse all of them.
+	for (let node = container.firstChild; node; node = node.nextSibling) {
+		const shape = node as Element;
+		if (shape.hasAttribute('Master')) assertInstanceClipboardScope(shape, ids);
+		else assertClipboardFormulaScope(shape, ids, check);
+	}
 	return root;
 }

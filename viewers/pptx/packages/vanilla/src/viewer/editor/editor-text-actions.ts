@@ -1,6 +1,6 @@
-import type { PptxThemeColorRef, TextStyle } from 'pptx-viewer-core';
 import type { ChangeCaseMode } from 'ooxml-ui/pptx';
 import { transformInlineListCase } from 'ooxml-ui/pptx';
+import type { PptxThemeColorRef, TextStyle } from 'pptx-viewer-core';
 
 import type { Store, ViewerState } from '../state';
 import type { ApplyToSelected } from './editor-apply-to-selected';

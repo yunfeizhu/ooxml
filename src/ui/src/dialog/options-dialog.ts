@@ -232,11 +232,12 @@ export class OfficeUiOptionsDialog extends OfficeElement {
 			${category.description ? html`<p class="lead">${category.description}</p>` : ''}
 			${category.disabled ? html`<p class="unavailable">${category.disabled}</p>` : ''}
 			${category.sections.map(
-				(section) => html`<section>
-					<h3>${section.title}</h3>
-					${section.description ? html`<p class="desc">${section.description}</p>` : ''}
-					${section.controls.map((control) => this.control(control))}
-				</section>`,
+				(section) =>
+					html`<section>
+						<h3>${section.title}</h3>
+						${section.description ? html`<p class="desc">${section.description}</p>` : ''}
+						${section.controls.map((control) => this.control(control))}
+					</section>`,
 			)}
 		`;
 	}
@@ -259,17 +260,18 @@ export class OfficeUiOptionsDialog extends OfficeElement {
 						@keydown=${this.onNavKey}
 					>
 						${this.categories.map(
-							(entry) => html`<button
-								type="button"
-								role="tab"
-								id="tab-${entry.id}"
-								data-category=${entry.id}
-								aria-controls="pane"
-								aria-selected=${String(entry.id === this.active)}
-								tabindex=${entry.id === this.active ? 0 : -1}
-								@click=${() => (this.category = entry.id)}
-								>${entry.label}</button
-							>`,
+							(entry) =>
+								html`<button
+									type="button"
+									role="tab"
+									id="tab-${entry.id}"
+									data-category=${entry.id}
+									aria-controls="pane"
+									aria-selected=${String(entry.id === this.active)}
+									tabindex=${entry.id === this.active ? 0 : -1}
+									@click=${() => (this.category = entry.id)}
+									>${entry.label}</button
+								>`,
 						)}
 					</nav>
 					<div

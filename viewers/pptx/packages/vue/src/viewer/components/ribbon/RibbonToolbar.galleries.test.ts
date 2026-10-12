@@ -1,7 +1,7 @@
 import { mount } from '@vue/test-utils';
 import type { VueWrapper } from '@vue/test-utils';
-import type { PptxElement } from 'pptx-viewer-core';
 import { isRibbonControlId, isRibbonGroupId, TOOLBAR_TABS } from 'ooxml-ui/pptx';
+import type { PptxElement } from 'pptx-viewer-core';
 import { describe, expect, it, vi } from 'vitest';
 
 import { createRibbonPropsFixture } from './ribbon-props-fixture';

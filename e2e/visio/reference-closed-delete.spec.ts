@@ -2,6 +2,7 @@ import { expect, test, type Locator } from '@playwright/test';
 import JSZip from 'jszip';
 import type { VisioViewerElement } from 'ooxml-ui/visio';
 import { createVsdxFixture } from './fixture.mjs';
+import { openDemo } from './demo-page';
 
 async function fixture() {
 	const zip = await JSZip.loadAsync(await createVsdxFixture('Closed first'));
@@ -77,20 +78,24 @@ for (const framework of ['vanilla', 'react', 'vue', 'angular', 'svelte', 'solid'
 			});
 		});
 		await page.setViewportSize({ width: 1600, height: 1000 });
-		await page.goto(framework === 'vanilla' ? '/demo/?sample=1' : `/demo-${framework}/?sample=1`);
+		await openDemo(
+			page,
+			framework === 'vanilla' ? '/demo/?sample=1' : `/demo-${framework}/?sample=1`,
+		);
 		const viewer = page.locator('visio-viewer');
 		await page.locator('#file').setInputFiles({
 			name: 'closed-set.vsdx',
 			mimeType: 'application/vnd.ms-visio.drawing',
 			buffer: await fixture(),
 		});
+		await expect(page.locator('#file-name')).toHaveText('closed-set.vsdx');
 		await expect(viewer.locator('svg.paper')).toContainText('Retained control');
 		await viewer.getByRole('tab', { name: 'Home', exact: true }).click();
 		const original = await bytes(viewer);
 		await select(viewer, ['2', '1']);
 		await viewer.locator('.viewport').press('Delete');
 		await expect.poll(() => inventory(viewer)).toEqual({ ids: ['3'], selected: [] });
-		await viewer.locator('[command="undo"] button').click();
+		await viewer.locator('.qat [data-command="undo"]').click();
 		await expect
 			.poll(() => inventory(viewer))
 			.toEqual({ ids: ['1', '2', '3'], selected: ['2', '1'] });
@@ -112,15 +117,15 @@ for (const framework of ['vanilla', 'react', 'vue', 'angular', 'svelte', 'solid'
 		expect(content).toContain('F="Sheet.5!PinX"');
 		expect(content).toContain('F="Sheet.4!PinX"');
 		expect(content).toContain('F="Sheet.3!PinX"');
-		await viewer.locator('[command="undo"] button').click();
+		await viewer.locator('.qat [data-command="undo"]').click();
 		await expect.poll(() => inventory(viewer)).toEqual({ ids: ['3'], selected: [] });
-		await viewer.locator('[command="undo"] button').click();
+		await viewer.locator('.qat [data-command="undo"]').click();
 		await expect
 			.poll(() => inventory(viewer))
 			.toEqual({ ids: ['1', '2', '3'], selected: ['2', '1'] });
 		expect(await bytes(viewer)).toEqual(original);
-		await viewer.locator('[command="redo"] button').click();
-		await viewer.locator('[command="redo"] button').click();
+		await viewer.locator('.qat [data-command="redo"]').click();
+		await viewer.locator('.qat [data-command="redo"]').click();
 		await expect
 			.poll(() => inventory(viewer))
 			.toEqual({ ids: ['3', '4', '5'], selected: ['5', '4'] });

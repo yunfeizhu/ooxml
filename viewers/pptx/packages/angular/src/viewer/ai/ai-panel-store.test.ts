@@ -1,7 +1,7 @@
+import type { AiChangeBatch } from 'ooxml-ui/pptx/ai';
 import type { PptxElement, PptxSlide } from 'pptx-viewer-core';
 import { describe, expect, it } from 'vitest';
 
-import type { AiChangeBatch } from 'ooxml-ui/pptx/ai';
 import { AiPanelStore } from './ai-panel-store';
 
 function el(id: string, type: PptxElement['type']): PptxElement {

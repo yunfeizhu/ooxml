@@ -1,6 +1,6 @@
 import { mount } from '@vue/test-utils';
-import type { PptxElement, PptxSlide } from 'pptx-viewer-core';
 import type { FieldSubstitutionContext } from 'ooxml-ui/pptx';
+import type { PptxElement, PptxSlide } from 'pptx-viewer-core';
 import { describe, expect, it } from 'vitest';
 import { nextTick } from 'vue';
 

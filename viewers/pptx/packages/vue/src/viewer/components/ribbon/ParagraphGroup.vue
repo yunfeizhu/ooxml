@@ -1,13 +1,4 @@
 <script setup lang="ts">
-/**
- * ParagraphGroup: the Home tab's Paragraph group. The list toggles with their
- * Bullets / Numbering library galleries, indent, alignment, line spacing, text
- * direction and columns are all the shared `pptx-ui-ribbon-home-paragraph`
- * element; this adapter reflects the text style and gallery descriptors into it
- * and maps each intent onto the existing undoable text-style edit.
- */
-import { hasTextProperties } from 'pptx-viewer-core';
-import type { PptxElement, TextStyle } from 'pptx-viewer-core';
 import {
 	elementBulletKind,
 	getInlineEditorSelectionResult,
@@ -21,6 +12,15 @@ import {
 	withHomeGalleries,
 } from 'ooxml-ui/pptx';
 import type { RibbonHomeRequestEvent } from 'ooxml-ui/pptx';
+/**
+ * ParagraphGroup: the Home tab's Paragraph group. The list toggles with their
+ * Bullets / Numbering library galleries, indent, alignment, line spacing, text
+ * direction and columns are all the shared `pptx-ui-ribbon-home-paragraph`
+ * element; this adapter reflects the text style and gallery descriptors into it
+ * and maps each intent onto the existing undoable text-style edit.
+ */
+import { hasTextProperties } from 'pptx-viewer-core';
+import type { PptxElement, TextStyle } from 'pptx-viewer-core';
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 

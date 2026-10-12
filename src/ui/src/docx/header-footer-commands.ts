@@ -79,7 +79,10 @@ function withSlot(
 ): DocumentModel {
 	let owner = sectionIndex;
 	const source = sectionsOf(model);
-	while (inherit && owner > 0 && !source[owner]?.[kind]?.[slot]) owner--;
+	if (inherit) {
+		const defines = (index: number): boolean => Boolean(source[index]?.[kind]?.[slot]);
+		while (owner > 0 && !defines(owner)) owner--;
+	}
 	const existing = source[owner]?.[kind]?.[slot];
 	if (!existing) owner = sectionIndex;
 	const next = change(existing);

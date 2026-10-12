@@ -13,6 +13,8 @@ export function parseTable(xml: string, partName: string): Table | undefined {
 	const columns: TableColumn[] = xChildren(xFirst(root, 'tableColumns') ?? root, 'tableColumn').map(
 		(node) => {
 			const column: TableColumn = { name: att(node, 'name') ?? '' };
+			const id = numAttr(node, 'id');
+			if (id !== undefined && Number.isInteger(id) && id >= 0) column.sourceId = id;
 			const fn = att(node, 'totalsRowFunction');
 			if (fn && fn !== 'none') column.totalsRowFunction = fn;
 			const label = att(node, 'totalsRowLabel');

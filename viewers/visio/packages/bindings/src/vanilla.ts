@@ -11,4 +11,7 @@ export type {
 	VsdxSource,
 	ViewerEditState,
 	VsdxExportResult,
+	RibbonAddInCommand,
+	RibbonAddInGroup,
+	RibbonAddInTab,
 } from './common';

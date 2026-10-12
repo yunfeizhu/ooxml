@@ -1,5 +1,5 @@
-import type { PptxSlide } from 'pptx-viewer-core';
 import { PX_PER_INCH, RULER_THICKNESS } from 'ooxml-ui/pptx';
+import type { PptxSlide } from 'pptx-viewer-core';
 import { flushSync, mount, unmount } from 'svelte';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 

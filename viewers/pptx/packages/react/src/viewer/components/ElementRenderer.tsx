@@ -1,4 +1,3 @@
-import { hasShapeProperties, hasTextProperties } from 'pptx-viewer-core';
 import {
 	buildTextStyleOverrideCss,
 	elementHitTargetStyle,
@@ -12,6 +11,7 @@ import {
 	resolveElementInteractivity,
 	shouldRenderHitTarget,
 } from 'ooxml-ui/pptx';
+import { hasShapeProperties, hasTextProperties } from 'pptx-viewer-core';
 import React, { useState, useCallback, useMemo } from 'react';
 import type { CSSProperties } from 'react';
 

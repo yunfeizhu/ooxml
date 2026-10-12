@@ -21,7 +21,6 @@ import {
 	output,
 } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-
 import {
 	presenterConsoleAction,
 	presenterConsoleViewState,
@@ -32,6 +31,7 @@ import type {
 	PresenterConsoleRequestEvent,
 	PresenterConsoleViewState,
 } from 'ooxml-ui/pptx';
+
 import { translationsSignal } from './translations-signal';
 
 @Component({

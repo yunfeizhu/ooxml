@@ -13,12 +13,12 @@ import { signal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { BrowserTestingModule, platformBrowserTesting } from '@angular/platform-browser/testing';
 import { provideTranslateService, TranslateService } from '@ngx-translate/core';
+import type { CompatibilityWarningToast } from 'ooxml-ui/pptx';
+import { compatToastStackStyle } from 'ooxml-ui/pptx';
 import { afterEach, beforeAll, describe, expect, it } from 'vitest';
 
 import { translationsEn } from '../../../../../../src/ui/src/pptx/i18n';
 import { registerPptxWebControls } from '../../../../../../src/ui/src/pptx/web-components';
-import type { CompatibilityWarningToast } from 'ooxml-ui/pptx';
-import { compatToastStackStyle } from 'ooxml-ui/pptx';
 import { CompatToastsComponent } from './compat-toasts.component';
 
 beforeAll(() => {

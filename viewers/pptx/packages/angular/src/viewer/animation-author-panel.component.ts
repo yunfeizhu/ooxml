@@ -36,14 +36,6 @@ import {
 } from '@angular/core';
 import { LucideArrowDown, LucideArrowUp, LucideX } from '@lucide/angular';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
-import type {
-	PptxAfterAnimationAction,
-	PptxAnimationDirection,
-	PptxAnimationTimelineAnchor,
-	PptxElement,
-	PptxElementAnimation,
-} from 'pptx-viewer-core';
-
 import {
 	applyMotionPathPreset,
 	clearMotionPath,
@@ -53,6 +45,14 @@ import {
 	selectedBookmarkOptionValue,
 	setTriggerBookmark,
 } from 'ooxml-ui/pptx';
+import type {
+	PptxAfterAnimationAction,
+	PptxAnimationDirection,
+	PptxAnimationTimelineAnchor,
+	PptxElement,
+	PptxElementAnimation,
+} from 'pptx-viewer-core';
+
 import { AfterAnimationRowComponent } from './after-animation-row.component';
 import {
 	ANIMATION_NUMBER_SETTERS,

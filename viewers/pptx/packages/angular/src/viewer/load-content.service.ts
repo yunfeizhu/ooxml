@@ -1,6 +1,33 @@
 import { DestroyRef, Injectable, computed, inject, signal, untracked } from '@angular/core';
 import { XMLParser } from 'fast-xml-parser';
 import JSZip from 'jszip';
+import {
+	DEFAULT_CANVAS_HEIGHT,
+	DEFAULT_CANVAS_WIDTH,
+	applyImagePathPatches,
+	buildDeckSaveOptions,
+	collectAnimationSoundPaths,
+	collectImagePaths,
+	collectMediaElements,
+	createPresentationLoadResources,
+	describeFontEmbedding,
+	overlayInlineTextSnapshot,
+	overlayMasterViewInlineSnapshot,
+	resolveMediaElementSource,
+	resolveSlideSizeSelection,
+	resolveTableCellImageUrls,
+	resolveTableStyleImageUrls,
+	resolveTextFillBlipUrls,
+	saveDeckWithPassword,
+	slideSizeToCanvasPx,
+} from 'ooxml-ui/pptx';
+import type {
+	CanvasSize,
+	DeckSaveIntent,
+	DeckSaveState,
+	PendingInlineTextEdit,
+	SlideSizeEmu,
+} from 'ooxml-ui/pptx';
 import type {
 	MediaPptxElement,
 	ParsedSignature,
@@ -34,33 +61,6 @@ import {
 	PptxHandler,
 } from 'pptx-viewer-core';
 
-import {
-	DEFAULT_CANVAS_HEIGHT,
-	DEFAULT_CANVAS_WIDTH,
-	applyImagePathPatches,
-	buildDeckSaveOptions,
-	collectAnimationSoundPaths,
-	collectImagePaths,
-	collectMediaElements,
-	createPresentationLoadResources,
-	describeFontEmbedding,
-	overlayInlineTextSnapshot,
-	overlayMasterViewInlineSnapshot,
-	resolveMediaElementSource,
-	resolveSlideSizeSelection,
-	resolveTableCellImageUrls,
-	resolveTableStyleImageUrls,
-	resolveTextFillBlipUrls,
-	saveDeckWithPassword,
-	slideSizeToCanvasPx,
-} from 'ooxml-ui/pptx';
-import type {
-	CanvasSize,
-	DeckSaveIntent,
-	DeckSaveState,
-	PendingInlineTextEdit,
-	SlideSizeEmu,
-} from 'ooxml-ui/pptx';
 import { ViewerOptionsService } from './viewer-options.service';
 
 /**

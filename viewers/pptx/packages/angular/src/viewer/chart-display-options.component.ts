@@ -19,13 +19,6 @@ import {
 	CUSTOM_ELEMENTS_SCHEMA,
 } from '@angular/core';
 import { TranslatePipe } from '@ngx-translate/core';
-import type {
-	ChartPptxElement,
-	PptxBar3DShape,
-	PptxChartData,
-	PptxChartLegendPosition,
-} from 'pptx-viewer-core';
-
 import {
 	bar3DShapePatch,
 	BAR3D_SHAPE_OPTIONS,
@@ -37,6 +30,13 @@ import {
 	SURFACE_WIREFRAME_OPTIONS,
 	surfaceWireframePatch,
 } from 'ooxml-ui/pptx';
+import type {
+	ChartPptxElement,
+	PptxBar3DShape,
+	PptxChartData,
+	PptxChartLegendPosition,
+} from 'pptx-viewer-core';
+
 import { setDataLabels, setLegend } from './chart-advanced-helpers';
 import { patchChartData, patchChartStyle } from './chart-data-helpers';
 import { CHART_EDITOR_STYLES } from './chart-editor-styles';

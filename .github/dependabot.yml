@@ -18,6 +18,10 @@ updates:
       timezone: 'Africa/Johannesburg'
     # Roughly one open PR per group, so a busy registry week cannot spawn dozens of PRs and CI runs.
     open-pull-requests-limit: 10
+    # Wait three days before proposing a new release: most malicious versions are found and pulled
+    # within days. Security updates are not delayed.
+    cooldown:
+      default-days: 3
     versioning-strategy: increase
     labels:
       - 'dependencies'
@@ -98,6 +102,9 @@ updates:
       time: '06:00'
       timezone: 'Africa/Johannesburg'
     open-pull-requests-limit: 3
+    # Same supply-chain delay as the bun entry.
+    cooldown:
+      default-days: 3
     labels:
       - 'dependencies'
       - 'github-actions'

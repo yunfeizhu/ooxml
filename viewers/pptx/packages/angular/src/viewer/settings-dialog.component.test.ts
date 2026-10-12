@@ -1,6 +1,6 @@
+import { VIEWER_OPTIONS_TABS } from 'ooxml-ui/pptx';
 import { beforeEach, describe, expect, it } from 'vitest';
 
-import { VIEWER_OPTIONS_TABS } from 'ooxml-ui/pptx';
 import { resolveOptionsTab } from './settings-dialog.component';
 import { ViewerOptionsService } from './viewer-options.service';
 

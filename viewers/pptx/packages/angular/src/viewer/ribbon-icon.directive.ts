@@ -1,5 +1,4 @@
 import { Directive, ElementRef, inject, Input } from '@angular/core';
-
 import { createRibbonControlIcon } from 'ooxml-ui/pptx';
 
 /** SVG artwork is shared; Angular only supplies the element and control id. */

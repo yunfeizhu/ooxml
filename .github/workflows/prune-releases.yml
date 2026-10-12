@@ -34,31 +34,38 @@ on:
         default: false
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
   prune:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write # deletes release entries (and tags on request)
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
 
-      - uses: actions/setup-node@v7
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7
         with:
           node-version: 24
 
       - name: Prune old releases
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # Inputs reach the script through the environment, never pasted into it.
+          KEEP: ${{ github.event.inputs.keep || '1' }}
+          DRY_RUN: ${{ github.event.inputs.dry_run }}
+          TAGS: ${{ github.event.inputs.tags }}
+          LEGACY: ${{ github.event.inputs.legacy }}
         run: |
-          keep="${{ github.event.inputs.keep || '1' }}"
+          keep="$KEEP"
           flags=""
-          if [ "${{ github.event.inputs.dry_run }}" = "true" ]; then
+          if [ "$DRY_RUN" = "true" ]; then
             flags="$flags --dry-run"
           fi
-          if [ "${{ github.event.inputs.tags }}" = "true" ]; then
+          if [ "$TAGS" = "true" ]; then
             flags="$flags --tags"
           fi
-          if [ "${{ github.event.inputs.legacy }}" = "true" ]; then
+          if [ "$LEGACY" = "true" ]; then
             flags="$flags --legacy"
           fi
           node scripts/prune-releases.mjs --keep "$keep" $flags

@@ -1,4 +1,3 @@
-import type { PptxSlide } from 'pptx-viewer-core';
 import {
 	clampNotesFontSize,
 	formatElapsed,
@@ -14,6 +13,7 @@ import {
 	presenterPrevDisabled,
 } from 'ooxml-ui/pptx';
 import type { AuthoredSlideRange, ShowOrderCustomShow } from 'ooxml-ui/pptx';
+import type { PptxSlide } from 'pptx-viewer-core';
 
 import type { Translator } from '../i18n';
 import { createIcon } from '../ui/icons';

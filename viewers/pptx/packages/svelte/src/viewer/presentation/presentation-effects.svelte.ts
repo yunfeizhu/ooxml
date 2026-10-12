@@ -1,6 +1,6 @@
-import type { PptxSlide } from 'pptx-viewer-core';
 import type { ElementAnimationState } from 'ooxml-ui/pptx';
 import { attachPresentationVisibilityPause } from 'ooxml-ui/pptx';
+import type { PptxSlide } from 'pptx-viewer-core';
 import { untrack } from 'svelte';
 
 import { applyAnimationStyles } from './apply-animation-styles';

@@ -1,3 +1,4 @@
+import { cloneElementForPaste, isTemplateElementId } from 'ooxml-ui/pptx';
 /**
  * useElementClipboard: the in-memory single-element copy / cut / paste buffer.
  *
@@ -8,7 +9,6 @@
  */
 import { cloneElement } from 'pptx-viewer-core';
 import type { PptxElement } from 'pptx-viewer-core';
-import { cloneElementForPaste, isTemplateElementId } from 'ooxml-ui/pptx';
 import type { ComputedRef, Ref } from 'vue';
 import { computed, shallowRef } from 'vue';
 

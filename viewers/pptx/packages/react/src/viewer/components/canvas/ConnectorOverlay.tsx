@@ -1,5 +1,5 @@
-import type { PptxSlide } from 'pptx-viewer-core';
 import { collectConnectorSiteCandidates, getShapeConnectionSites } from 'ooxml-ui/pptx';
+import type { PptxSlide } from 'pptx-viewer-core';
 /**
  * Connector creation overlay: shows connection-site dots on shapes
  * and a live drag-preview line when drawing a new connector.

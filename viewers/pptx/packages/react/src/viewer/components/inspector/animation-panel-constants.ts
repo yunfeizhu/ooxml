@@ -1,3 +1,4 @@
+import { ANIMATION_DIRECTION_LABEL_KEYS } from 'ooxml-ui/pptx';
 import type {
 	PptxAfterAnimationAction,
 	PptxAnimationDirection,
@@ -5,7 +6,6 @@ import type {
 	PptxAnimationSequence,
 	PptxAnimationTimingCurve,
 } from 'pptx-viewer-core';
-import { ANIMATION_DIRECTION_LABEL_KEYS } from 'ooxml-ui/pptx';
 import type React from 'react';
 import {
 	LuArrowDown,

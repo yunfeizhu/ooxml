@@ -1,11 +1,5 @@
 import { expect, it } from 'vitest';
-import {
-	createDocument,
-	createListDefinition,
-	signedTwips,
-	twips,
-	type Paragraph,
-} from '../index';
+import { createDocument, createListDefinition, signedTwips, twips, type Paragraph } from '../index';
 import { adaptDocumentModel } from './adapter';
 import { layoutParagraph } from './paragraph-layout';
 import type { TextMeasurer } from './measure';

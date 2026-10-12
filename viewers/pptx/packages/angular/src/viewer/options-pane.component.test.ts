@@ -16,9 +16,9 @@
    readability, not help it (see chart-view-model.ts for the same rationale). */
 import { Injector, runInInjectionContext } from '@angular/core';
 import type { OutputEmitterRef } from '@angular/core';
+import type { ViewerOptionsNumberControl } from 'ooxml-ui/pptx';
 import { describe, expect, it, vi } from 'vitest';
 
-import type { ViewerOptionsNumberControl } from 'ooxml-ui/pptx';
 import type { OptionValueChange } from './options-pane.component';
 import { OptionsPaneComponent } from './options-pane.component';
 

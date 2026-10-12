@@ -1,4 +1,3 @@
-import type { PptxElement } from 'pptx-viewer-core';
 import {
 	buildParagraphs,
 	elementBulletKind,
@@ -6,6 +5,7 @@ import {
 	initializeInlineListDom,
 	attachInlineListController,
 } from 'ooxml-ui/pptx';
+import type { PptxElement } from 'pptx-viewer-core';
 import { afterEach, describe, expect, it } from 'vitest';
 
 import {

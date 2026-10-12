@@ -1,3 +1,5 @@
+import { buildChartViewModel } from 'ooxml-ui/pptx';
+import type { ChartViewModel, SvgText } from 'ooxml-ui/pptx';
 // @vitest-environment happy-dom
 /**
  * The view model resolves the chart text font (`chartTextFontFamily`) and style
@@ -7,8 +9,6 @@
  * the same chart in different fonts (caught by `e2e/pptx/chart-svg-parity.spec.ts`).
  */
 import type { ChartPptxElement, PptxChartData } from 'pptx-viewer-core';
-import { buildChartViewModel } from 'ooxml-ui/pptx';
-import type { ChartViewModel, SvgText } from 'ooxml-ui/pptx';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 

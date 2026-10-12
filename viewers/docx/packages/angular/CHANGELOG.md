@@ -7,6 +7,12 @@ A release listed with no entries carried no Conventional Commit in this package'
 scope: scripts/release-plan.mjs releases whenever any published file changes, not only on
 conventional commits.
 
+## [0.5.0](https://github.com/ChristopherVR/ooxml/releases/tag/docx-angular-viewer@0.5.0) - 2026-10-10
+
+### Features
+
+- **docx:** Make ribbon add-in tabs a prop and event of every binding ([819c1a3](https://github.com/ChristopherVR/ooxml/commit/819c1a38c2beb9605676d29994b71a7a6f7e4a15))
+
 ## [0.4.10](https://github.com/ChristopherVR/ooxml/releases/tag/docx-angular-viewer@0.4.10) - 2026-10-08
 
 ### Documentation

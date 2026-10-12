@@ -1,11 +1,3 @@
-/**
- * presentation-overlay-helpers.ts
- *
- * Pure functions used by PresentationOverlayComponent.
- * Exported separately so they can be unit-tested without TestBed.
- */
-import type { PptxSlide } from 'pptx-viewer-core';
-
 import {
 	attachPresentationVisibilityPause,
 	firstShowSlideIndex,
@@ -19,6 +11,13 @@ import {
 	stopAllPersistentAudio,
 } from 'ooxml-ui/pptx';
 import type { AuthoredSlideRange, CanvasSize, ShowOrderCustomShow } from 'ooxml-ui/pptx';
+/**
+ * presentation-overlay-helpers.ts
+ *
+ * Pure functions used by PresentationOverlayComponent.
+ * Exported separately so they can be unit-tested without TestBed.
+ */
+import type { PptxSlide } from 'pptx-viewer-core';
 
 /**
  * The `p:showPr/p:sldRg` range restriction, when the deck is authored to open

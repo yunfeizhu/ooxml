@@ -43,3 +43,16 @@ export function createRotationDrag(
 		return rotation;
 	};
 }
+
+/**
+ * Snap an angle to the nearest `step` degrees when within `tolerance`, normalised to [0, 360).
+ * Office editors use it for Shift-drag rotation (step 15). Returns the original angle when no
+ * snap target is close enough.
+ */
+export function snapAngle(angleDeg: number, step = 15, tolerance = step / 2): number {
+	const nearest = Math.round(angleDeg / step) * step;
+	if (Math.abs(angleDeg - nearest) <= tolerance) {
+		return ((nearest % 360) + 360) % 360;
+	}
+	return angleDeg;
+}

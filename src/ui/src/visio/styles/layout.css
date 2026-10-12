@@ -1,0 +1,119 @@
+/* Layout, Assign to Layer, Select by Type, Paste Special and Drawing Explorer dialogs. */
+.viewer-dialog-body {
+	display: grid;
+	gap: 12px;
+	min-width: min(360px, 80vw);
+	max-height: min(60vh, 520px);
+	overflow: auto;
+}
+.viewer-dialog-body > label {
+	display: grid;
+	gap: 4px;
+}
+.viewer-dialog-body input[type='text'],
+.viewer-dialog-body input[type='number'],
+.viewer-dialog-body select {
+	box-sizing: border-box;
+	width: 100%;
+	padding: 6px;
+	color: inherit;
+	background: var(--_vv-surface);
+	border: 1px solid var(--_vv-border);
+	border-radius: 3px;
+}
+.viewer-dialog-body fieldset {
+	display: grid;
+	gap: 4px;
+	margin: 0;
+	padding: 8px 10px;
+	border: 1px solid var(--_vv-border);
+	border-radius: 3px;
+}
+.viewer-dialog-body fieldset[hidden] {
+	display: none;
+}
+.viewer-dialog-choice {
+	display: flex;
+	gap: 6px;
+	align-items: center;
+}
+/* Ruler & Grid and Snap & Glue: a label column, then one column per axis or option list. */
+.ruler-grid-rows {
+	display: grid;
+	grid-template-columns: minmax(120px, auto) 1fr 1fr;
+	gap: 6px 10px;
+	align-items: center;
+}
+.ruler-grid-axis {
+	font-weight: 600;
+}
+.snap-glue-columns {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+	gap: 12px;
+	align-items: start;
+}
+.viewer-dialog [role='alert'] {
+	margin: 0;
+	color: var(--office-error, #b00020);
+}
+.viewer-dialog [role='alert']:empty {
+	display: none;
+}
+.explorer-tree ul {
+	margin: 2px 0 6px;
+	padding-left: 18px;
+	list-style: none;
+}
+.explorer-tree summary {
+	cursor: pointer;
+	font-weight: 600;
+}
+.explorer-tree button {
+	padding: 2px 4px;
+	color: inherit;
+	text-align: left;
+	background: none;
+	border: 1px solid transparent;
+	border-radius: 2px;
+	cursor: pointer;
+}
+.explorer-tree button:hover,
+.explorer-tree button:focus-visible {
+	border-color: var(--_vv-accent);
+}
+.explorer-tree button[aria-current='true'] {
+	font-weight: 600;
+}
+
+/* View > Guides: dashed page guides with a wide transparent hit line for dragging. */
+.guide .guide-line {
+	stroke: var(--_vv-accent);
+	stroke-width: 1px;
+	stroke-dasharray: 4 3;
+	pointer-events: none;
+}
+.guide .guide-hit {
+	stroke: transparent;
+	stroke-width: 9px;
+	pointer-events: stroke;
+}
+.guide[data-orientation='vertical'] .guide-hit {
+	cursor: ew-resize;
+}
+.guide[data-orientation='horizontal'] .guide-hit {
+	cursor: ns-resize;
+}
+.guide[aria-pressed='true'] .guide-line,
+.guide.dragging .guide-line {
+	stroke-width: 2px;
+	stroke-dasharray: none;
+}
+.canvas-area[data-ruler='true'] > .ruler {
+	touch-action: none;
+}
+.backstage-subheading {
+	margin: 20px 0 8px;
+	font-size: 1rem;
+	font-weight: 600;
+}

@@ -1,12 +1,7 @@
 import { NS } from '../../xml/index';
 import { formatAddress, formatRange } from '../address';
 import { dataBarBaseLengths } from '../conditional-extensions';
-import type {
-	CfvoThreshold,
-	ConditionalFormat,
-	ConditionalRule,
-	DataValidation,
-} from '../model';
+import type { CfvoThreshold, ConditionalFormat, ConditionalRule, DataValidation } from '../model';
 import { addFuturePrefixes } from '../read/formula-text';
 import { timePeriodFormula } from '../time-period';
 import { colorXml } from './style-xml';

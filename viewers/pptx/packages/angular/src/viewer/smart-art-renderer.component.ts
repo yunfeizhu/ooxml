@@ -14,9 +14,6 @@ import {
 	viewChild,
 } from '@angular/core';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
-import type { PptxElement, PptxSmartArtData } from 'pptx-viewer-core';
-import { setSmartArtNodeStyle } from 'pptx-viewer-core';
-
 import {
 	buildSmartArtA11y,
 	measureSvgViewportRect,
@@ -37,6 +34,9 @@ import type {
 	SmartArtLayoutResult,
 	SmartArtNodeLabel,
 } from 'ooxml-ui/pptx';
+import type { PptxElement, PptxSmartArtData } from 'pptx-viewer-core';
+import { setSmartArtNodeStyle } from 'pptx-viewer-core';
+
 import { EditorStateService } from './editor-state.service';
 import type { StyleMap } from './element-style';
 import { SLIDE_CONTEXT } from './slide-context';

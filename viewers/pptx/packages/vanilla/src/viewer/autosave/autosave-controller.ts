@@ -1,4 +1,3 @@
-import type { PptxHandler } from 'pptx-viewer-core';
 import type {
 	AutosaveActivation,
 	AutosaveRecord,
@@ -13,6 +12,7 @@ import {
 	saveDeckWithPassword,
 	shouldProbeAutosaveRecovery,
 } from 'ooxml-ui/pptx';
+import type { PptxHandler } from 'pptx-viewer-core';
 
 import type { Store, ViewerState } from '../state';
 

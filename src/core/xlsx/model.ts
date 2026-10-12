@@ -480,6 +480,8 @@ export interface AutoFilterColumn {
 
 export interface TableColumn {
 	name: string;
+	/** Original table-column id, keeping source metadata attached through renames and shifts. */
+	sourceId?: number;
 	totalsRowFunction?: string;
 	totalsRowLabel?: string;
 	calculatedColumnFormula?: string;

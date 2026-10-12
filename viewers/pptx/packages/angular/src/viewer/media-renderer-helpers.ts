@@ -1,7 +1,6 @@
-import type { MediaCaptionTrack, MediaPptxElement, PptxElement } from 'pptx-viewer-core';
-
 import { mediaFallbackVisual, mediaSurfaceOf, registerCrossSlideAudio } from 'ooxml-ui/pptx';
 import type { MediaFallbackVisual, MediaSurface } from 'ooxml-ui/pptx';
+import type { MediaCaptionTrack, MediaPptxElement, PptxElement } from 'pptx-viewer-core';
 
 export { registerCrossSlideAudio };
 

@@ -2,8 +2,14 @@ import { buildXml } from '../xml/index';
 import { fail, type VisioPackageLimits } from './package-common';
 import { attribute, children } from './sheet';
 import { inspectXml, inspectNamespaces } from './xml-validation';
-import { localTextTarget } from './edit-text-target';
+import { localTextTarget, textTarget } from './edit-text-target';
 import { encodeVisioPlainText, decodeVisioPlainText } from './plain-text';
+import { replaceInstanceText, type MasterTemplate } from './edit-text-instance';
+
+const plain = (node: Element) =>
+	Array.from(node.childNodes).every((item) => item.nodeType === 3 || item.nodeType === 4);
+const hasFields = (shape: Element) =>
+	children(shape, 'Section').some((section) => attribute(section, 'N') === 'Field');
 
 export async function replacePlainText(
 	root: Element,
@@ -12,16 +18,28 @@ export async function replacePlainText(
 	text: string,
 	check: () => void,
 	assertDependencies: (shape: Element, text: Element) => Promise<void>,
+	masterTemplate?: MasterTemplate,
 ): Promise<boolean> {
+	const found = textTarget(root, shapeId, check);
+	if (found.masterId !== undefined) {
+		if (!masterTemplate)
+			fail('UNSUPPORTED_TEXT_EDIT', 'Stencil shapes cannot be edited without their masters.');
+		const template = await masterTemplate(found.masterId, found.masterShapeId);
+		check();
+		return replaceInstanceText(found.node, template, text);
+	}
 	const target = localTextTarget(root, document, shapeId, check);
 	const texts = children(target, 'Text');
 	if (texts.length !== 1)
 		fail('UNSUPPORTED_TEXT_EDIT', 'Editing requires one existing local Text element.');
 	const node = texts[0]!;
-	if (Array.from(node.childNodes).some((item) => item.nodeType !== 3 && item.nodeType !== 4))
+	if (!plain(node))
 		fail('UNSUPPORTED_TEXT_EDIT', 'Rich text, fields and unknown text markup cannot be edited.');
-	if (children(target, 'Section').some((section) => attribute(section, 'N') === 'Field'))
-		fail('UNSUPPORTED_TEXT_EDIT', 'Shapes with text fields cannot be edited.');
+	if (hasFields(target))
+		fail(
+			'UNSUPPORTED_TEXT_EDIT',
+			'Replacing all text would remove its text fields; edit the text around the fields instead.',
+		);
 	if (decodeVisioPlainText(node.textContent ?? '') === text) return false;
 	await assertDependencies(target, node);
 	check();

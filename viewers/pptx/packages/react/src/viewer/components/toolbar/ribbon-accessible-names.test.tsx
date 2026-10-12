@@ -1,7 +1,7 @@
-// @vitest-environment happy-dom
-import type { PptxElement } from 'pptx-viewer-core';
 import { registerPptxWebControls } from 'ooxml-ui/pptx';
 import { keyToLabel, translationsEn } from 'ooxml-ui/pptx/i18n';
+// @vitest-environment happy-dom
+import type { PptxElement } from 'pptx-viewer-core';
 import React, { act } from 'react';
 import { createRoot } from 'react-dom/client';
 /**

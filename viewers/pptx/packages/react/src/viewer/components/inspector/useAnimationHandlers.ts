@@ -1,3 +1,17 @@
+import {
+	applyMotionPathPreset,
+	buildAnimationTimelineBars,
+	buildAnimationTimelineRows,
+	clearMotionPath,
+	directionValuesFor,
+	getEffectSoundState,
+	setAfterAnimation,
+	setAfterAnimationColor,
+	setEffectSound,
+	setEffectStockSound,
+	setTrigger,
+	setTriggerBookmark,
+} from 'ooxml-ui/pptx';
 /* oxlint-disable eslint/one-var -- each hook call below is its own independent
    piece of state/memoization; merging them into one `const` statement would
    hurt readability (and has previously broken the React compiler's ability to
@@ -15,20 +29,6 @@ import type {
 	PptxAnimationTrigger,
 } from 'pptx-viewer-core';
 import { hasTextProperties } from 'pptx-viewer-core';
-import {
-	applyMotionPathPreset,
-	buildAnimationTimelineBars,
-	buildAnimationTimelineRows,
-	clearMotionPath,
-	directionValuesFor,
-	getEffectSoundState,
-	setAfterAnimation,
-	setAfterAnimationColor,
-	setEffectSound,
-	setEffectStockSound,
-	setTrigger,
-	setTriggerBookmark,
-} from 'ooxml-ui/pptx';
 import React, { useCallback, useMemo } from 'react';
 
 import { getElementLabel } from '../../utils';

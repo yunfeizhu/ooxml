@@ -90,21 +90,31 @@ describe('read-only inherited transforms during local master moves', () => {
 		);
 		await refusal(await source((pins + dimensions).replace(cell('LocPinY', 2, 'Height*0.5'), '')));
 	});
-	it('refuses inherited transform pin dependencies and unproven local pins', async () => {
-		await refusal(
+	it('recomputes an inherited transform that reads the pin and refuses unproven local pins', async () => {
+		// The pin-only proof refuses a master LocPinX that reads PinX; the instance path refreshes
+		// its inherited cache instead, as Visio does.
+		const dependent = await editVsdx(
 			await source(
 				(pins + dimensions).replace(cell('LocPinX', 1.5, 'Width*0.5'), cell('LocPinX', 2, 'PinX')),
 			),
+			[move],
 		);
+		expect(
+			await (await JSZip.loadAsync(dependent.bytes)).file('visio/pages/page1.xml')!.async('string'),
+		).toContain('<Cell N="LocPinX" V="5" U="IN" F="Inh"/>');
 		await refusal(await source(pins + dimensions, cell('PinY', 3)));
 		await refusal(await source(pins + dimensions, cell('PinX', 2, 'Inh') + cell('PinY', 3)));
 	});
-	it('retains atomic mastered resize/delete refusals after admitted inherited moves', async () => {
-		for (const edit of [
-			{ type: 'resize-shape' as const, pageId: '0', shapeId: '1', width: 5, height: 5 },
-			{ type: 'delete-shape' as const, pageId: '0', shapeId: '1' },
-		])
-			await refusal(await source(), [move, edit]);
+	it('retains the atomic mastered delete refusal after an admitted inherited move', async () => {
+		await refusal(await source(), [move, { type: 'delete-shape', pageId: '0', shapeId: '1' }]);
+	});
+	it('resizes the instance in the same transaction as an admitted move', async () => {
+		const result = await editVsdx(await source(), [
+			move,
+			{ type: 'resize-shape', pageId: '0', shapeId: '1', width: 5, height: 5 },
+		]);
+		const shape = (await parseVsdx(result.bytes)).pages[0]!.shapes[0]!;
+		expect([shape.width, shape.height]).toEqual([5, 5]);
 	});
 	it('moves two independent instances without altering their common master', async () => {
 		const bytes = await source(
@@ -149,7 +159,7 @@ describe('read-only inherited transforms during local master moves', () => {
 			['Width', '3', 'Inh'],
 		]);
 	});
-	it('refuses a transitive inherited LocPin dependency on an edited pin', async () => {
+	it('recomputes a transitive inherited LocPin dependency on an edited pin', async () => {
 		const template =
 			(pins + dimensions).replace(
 				cell('LocPinX', 1.5, 'Width*0.5'),
@@ -158,7 +168,14 @@ describe('read-only inherited transforms during local master moves', () => {
 			'<Section N="User"><Row N="Offset">' +
 			cell('Value', 2, 'PinX') +
 			'</Row></Section>';
-		await refusal(await source(template));
+		const result = await editVsdx(await source(template), [move]);
+		const page = await (
+			await JSZip.loadAsync(result.bytes)
+		)
+			.file('visio/pages/page1.xml')!
+			.async('string');
+		expect(page).toContain('<Cell N="LocPinX" V="5" U="IN" F="Inh"/>');
+		expect(page).toContain('<Row N="Offset"><Cell N="Value" V="5" F="Inh"/></Row>');
 	});
 	it('refuses inherited dimensions depending on another resized or deleted page shape in the batch', async () => {
 		const template =

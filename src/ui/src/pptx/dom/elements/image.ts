@@ -133,6 +133,10 @@ export const renderImageElement: ElementRenderer = (element, zIndex, context) =>
 	});
 	img.src = src;
 	img.alt = '';
+	// A press on the picture belongs to the editor's move gesture. Left
+	// draggable, the browser starts its own image drag and cancels the pointer
+	// stream a few pixels in, so the picture stops following the cursor.
+	img.setAttribute('draggable', 'false');
 	if (fx.filter) {
 		img.style.filter = fx.filter;
 	}

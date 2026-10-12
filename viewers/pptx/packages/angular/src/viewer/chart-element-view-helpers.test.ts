@@ -1,3 +1,17 @@
+import {
+	advanceChartMarkDrag,
+	advanceChartValueDrag,
+	applyChartPartHighlight,
+	beginChartMarkDrag,
+	beginChartValueDrag,
+	buildChartMarkDragGeometry,
+	CHART_PART_SELECTED_CLASS,
+	chartPartToAttrs,
+	findChartPartTarget,
+	isSameChartPart,
+	resolveRevealedChartData,
+	withChartTitle,
+} from 'ooxml-ui/pptx';
 /* oxlint-disable eslint/one-var -- pervasive pre-existing pattern in this file:
    independent handler-local `const`s, not one statement */
 /**
@@ -14,20 +28,6 @@
 import type { ChartPptxElement, PptxChartData, PptxElement, PptxSlide } from 'pptx-viewer-core';
 import { describe, expect, it } from 'vitest';
 
-import {
-	advanceChartMarkDrag,
-	advanceChartValueDrag,
-	applyChartPartHighlight,
-	beginChartMarkDrag,
-	beginChartValueDrag,
-	buildChartMarkDragGeometry,
-	CHART_PART_SELECTED_CLASS,
-	chartPartToAttrs,
-	findChartPartTarget,
-	isSameChartPart,
-	resolveRevealedChartData,
-	withChartTitle,
-} from 'ooxml-ui/pptx';
 import {
 	chartCanEditParts,
 	chartDragCommitData,

@@ -18,9 +18,9 @@
  */
 import { ChangeDetectionStrategy, Component, computed, input, output, signal } from '@angular/core';
 import { TranslatePipe } from '@ngx-translate/core';
+import type { ToolbarActionId } from 'ooxml-ui/pptx';
 import type { PptxElement } from 'pptx-viewer-core';
 
-import type { ToolbarActionId } from 'ooxml-ui/pptx';
 import { RibbonAnimationsSectionComponent } from './ribbon-animations-section.component';
 import { RibbonContextualSectionComponent } from './ribbon-contextual-section.component';
 import { isContextualRibbonTab } from './ribbon-contextual-tabs';

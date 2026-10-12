@@ -6,14 +6,10 @@ import {
 	output,
 } from '@angular/core';
 import { TranslatePipe } from '@ngx-translate/core';
+import { DESIGN_RIBBON_COMMANDS, DESIGN_RIBBON_GROUPS, designCommandState } from 'ooxml-ui/pptx';
+import type { RibbonControlId } from 'ooxml-ui/pptx';
 import type { PptxElement } from 'pptx-viewer-core';
 
-import {
-	DESIGN_RIBBON_COMMANDS,
-	DESIGN_RIBBON_GROUPS,
-	designCommandState,
-} from 'ooxml-ui/pptx';
-import type { RibbonControlId } from 'ooxml-ui/pptx';
 import { RibbonGalleryComponent } from './ribbon-gallery.component';
 
 @Component({

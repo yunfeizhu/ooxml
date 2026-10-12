@@ -1,4 +1,21 @@
 import type {
+	CompatibilityWarningToast,
+	ReadOnlyRecommendation,
+	SlideSizeEmu,
+} from 'ooxml-ui/pptx';
+import {
+	applyImagePathPatches,
+	compatibilityWarningToasts,
+	createPresentationLoadResources,
+	readOnlyRecommendation,
+	resolveAuthoredCustomShowId,
+	resolveInitialSlideIndex,
+	resolveTableCellImageUrls,
+	resolveTableStyleImageUrls,
+	resolveTextFillBlipUrls,
+	seedRecentColors,
+} from 'ooxml-ui/pptx';
+import type {
 	PptxAppProperties,
 	MediaPptxElement,
 	PptxElement,
@@ -22,23 +39,6 @@ import type {
 	ParsedTableStyleMap,
 } from 'pptx-viewer-core';
 import { PptxHandler, EncryptedFileError } from 'pptx-viewer-core';
-import type {
-	CompatibilityWarningToast,
-	ReadOnlyRecommendation,
-	SlideSizeEmu,
-} from 'ooxml-ui/pptx';
-import {
-	applyImagePathPatches,
-	compatibilityWarningToasts,
-	createPresentationLoadResources,
-	readOnlyRecommendation,
-	resolveAuthoredCustomShowId,
-	resolveInitialSlideIndex,
-	resolveTableCellImageUrls,
-	resolveTableStyleImageUrls,
-	resolveTextFillBlipUrls,
-	seedRecentColors,
-} from 'ooxml-ui/pptx';
 /**
  * useLoadContent: Handles loading/parsing PPTX content into viewer state.
  *

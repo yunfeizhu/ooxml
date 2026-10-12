@@ -13,13 +13,11 @@ for (const framework of FRAMEWORKS)
 			const sample = native.cases.find((item) => item.referenceName === reference)!;
 			await openLanding(page, framework);
 			const name = `${reference}.xlsx`;
-			await page
-				.locator('#landing-file')
-				.setInputFiles({
-					name,
-					mimeType: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-					buffer: await nativeChartFixture(sample.parts, 'Aptos Narrow'),
-				});
+			await page.locator('#landing-file').setInputFiles({
+				name,
+				mimeType: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+				buffer: await nativeChartFixture(sample.parts, 'Aptos Narrow'),
+			});
 			const host = editor(page);
 			await expect(host.getByText(name, { exact: true })).toBeVisible();
 			const title = host.locator('.xg-chart svg text').filter({ hasText: 'Native style' });

@@ -13,9 +13,9 @@
 import { ChangeDetectionStrategy, Component, computed, inject, input, output } from '@angular/core';
 import { LucideCrosshair, LucideGitMerge, LucidePin, LucidePinOff, LucideX } from '@lucide/angular';
 import { TranslatePipe } from '@ngx-translate/core';
+import { focusTargetChips, isTwoTableFocus, mergeTablesDirective } from 'ooxml-ui/pptx/ai';
 import type { PptxSlide } from 'pptx-viewer-core';
 
-import { focusTargetChips, isTwoTableFocus, mergeTablesDirective } from 'ooxml-ui/pptx/ai';
 import { AiPanelStore } from './ai-panel-store';
 
 @Component({

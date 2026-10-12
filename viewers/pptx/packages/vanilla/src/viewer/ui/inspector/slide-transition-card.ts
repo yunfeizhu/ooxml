@@ -1,9 +1,3 @@
-import type { PptxSlideTransition, PptxTransitionType } from 'pptx-viewer-core';
-import {
-	TRANSITION_PATTERN_OPTIONS,
-	TRANSITION_THRUBLK_TYPES,
-	TRANSITION_VALID_DIRECTIONS,
-} from 'pptx-viewer-core';
 import {
 	buildDirectionGrid,
 	SLIDE_TRANSITION_OPTIONS,
@@ -12,6 +6,12 @@ import {
 	TRANSITION_ORIENTATION_TYPES,
 	TRANSITION_SPEED_OPTIONS,
 } from 'ooxml-ui/pptx';
+import type { PptxSlideTransition, PptxTransitionType } from 'pptx-viewer-core';
+import {
+	TRANSITION_PATTERN_OPTIONS,
+	TRANSITION_THRUBLK_TYPES,
+	TRANSITION_VALID_DIRECTIONS,
+} from 'pptx-viewer-core';
 
 import type { Translator } from '../../i18n';
 import { createEl } from '../../render';

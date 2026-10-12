@@ -1,6 +1,6 @@
 import { mount } from '@vue/test-utils';
-import type { MediaPptxElement } from 'pptx-viewer-core';
 import { hasPersistentAudio, stopAllPersistentAudio } from 'ooxml-ui/pptx';
+import type { MediaPptxElement } from 'pptx-viewer-core';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { nextTick } from 'vue';
 

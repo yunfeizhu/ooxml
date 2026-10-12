@@ -1,5 +1,3 @@
-import { hasTextProperties } from 'pptx-viewer-core';
-import type { PptxElement, TextStyle } from 'pptx-viewer-core';
 import type { InlineTextEditSnapshot } from 'ooxml-ui/pptx';
 import {
 	beginShapeAdjustment,
@@ -15,6 +13,8 @@ import {
 	resolveInlineEditNormAutofitShrink,
 	setPendingCaretPoint,
 } from 'ooxml-ui/pptx';
+import { hasTextProperties } from 'pptx-viewer-core';
+import type { PptxElement, TextStyle } from 'pptx-viewer-core';
 /** useCanvasInteractions: Canvas interaction handlers for the PowerPoint editor. */
 import { useLayoutEffect, useRef } from 'react';
 

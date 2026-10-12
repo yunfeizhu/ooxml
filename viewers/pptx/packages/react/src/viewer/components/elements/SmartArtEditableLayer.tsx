@@ -1,6 +1,6 @@
-import type { PptxSmartArtData } from 'pptx-viewer-core';
 import { findSmartArtNodeText } from 'ooxml-ui/pptx';
 import type { InlineEditRect } from 'ooxml-ui/pptx';
+import type { PptxSmartArtData } from 'pptx-viewer-core';
 import React from 'react';
 
 import { SmartArtInlineNodeEditor } from './SmartArtInlineNodeEditor';

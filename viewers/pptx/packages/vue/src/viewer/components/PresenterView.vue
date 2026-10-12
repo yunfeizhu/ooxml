@@ -1,4 +1,16 @@
 <script setup lang="ts">
+import {
+	createInitialPresentationSnapshot,
+	PRESENTER_CONSOLE_CLASSES,
+	PRESENTER_RAIL_LABEL_KEYS,
+	presenterPaneAdvancesOnClick,
+	stepPresenterZoom,
+} from 'ooxml-ui/pptx';
+import type {
+	AuthoredSlideRange,
+	PresentationPointerTool,
+	PresentationSnapshot,
+} from 'ooxml-ui/pptx';
 /**
  * PresenterView - PowerPoint's presenter console: the control strip across the
  * top, the current slide (left, 70%), a rail (right, 30%) with clock, timer,
@@ -14,18 +26,6 @@
  * navigation is owned by the host; this component only emits intents.
  */
 import type { PptxSlide } from 'pptx-viewer-core';
-import {
-	createInitialPresentationSnapshot,
-	PRESENTER_CONSOLE_CLASSES,
-	PRESENTER_RAIL_LABEL_KEYS,
-	presenterPaneAdvancesOnClick,
-	stepPresenterZoom,
-} from 'ooxml-ui/pptx';
-import type {
-	AuthoredSlideRange,
-	PresentationPointerTool,
-	PresentationSnapshot,
-} from 'ooxml-ui/pptx';
 import { computed, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 

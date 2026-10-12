@@ -27,9 +27,9 @@
 import { NgStyle } from '@angular/common';
 import { ChangeDetectionStrategy, Component, computed, input, output } from '@angular/core';
 import { TranslatePipe } from '@ngx-translate/core';
+import type { CanvasSize } from 'ooxml-ui/pptx';
 import type { PptxSlide } from 'pptx-viewer-core';
 
-import type { CanvasSize } from 'ooxml-ui/pptx';
 import { MobileSheetComponent } from './mobile-sheet.component';
 import { SlideCanvasComponent } from './slide-canvas.component';
 import { thumbnailHeight, thumbnailZoom } from './slide-sorter-overlay-helpers';

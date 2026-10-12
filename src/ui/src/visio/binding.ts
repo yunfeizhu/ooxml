@@ -72,6 +72,8 @@ export function mountViewer(container: HTMLElement, initial: ViewerOptions = {})
 			else if (key === 'zoom' && options.zoom !== undefined) element.zoom = options.zoom;
 			else if (key === 'showToolbar' && options.showToolbar !== undefined)
 				element.showToolbar = options.showToolbar;
+			else if (key === 'ribbonAddIns' && options.ribbonAddIns !== undefined)
+				element.ribbonAddIns = options.ribbonAddIns;
 		}
 	}
 	update(initial);

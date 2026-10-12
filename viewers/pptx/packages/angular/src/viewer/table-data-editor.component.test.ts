@@ -1,3 +1,11 @@
+import {
+	appendTableElementColumn,
+	appendTableElementRow,
+	buildTableDataGrid,
+	removeLastTableElementColumn,
+	removeLastTableElementRow,
+	setCellText,
+} from 'ooxml-ui/pptx';
 /**
  * table-data-editor.component.test.ts: unit tests for the model that drives the
  * inspector's table data editor.
@@ -17,15 +25,6 @@
  */
 import type { TablePptxElement } from 'pptx-viewer-core';
 import { describe, expect, it } from 'vitest';
-
-import {
-	appendTableElementColumn,
-	appendTableElementRow,
-	buildTableDataGrid,
-	removeLastTableElementColumn,
-	removeLastTableElementRow,
-	setCellText,
-} from 'ooxml-ui/pptx';
 
 function tableElement(): TablePptxElement {
 	return {

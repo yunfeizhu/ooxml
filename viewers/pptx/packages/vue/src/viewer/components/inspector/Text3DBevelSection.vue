@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import type { BevelPresetType } from 'pptx-viewer-core';
 import { BEVEL_PRESETS } from 'ooxml-ui/pptx';
+import type { BevelPresetType } from 'pptx-viewer-core';
 import { useI18n } from 'vue-i18n';
 
 import { clamp, emuToPt } from '../../composables/useTextEffects';

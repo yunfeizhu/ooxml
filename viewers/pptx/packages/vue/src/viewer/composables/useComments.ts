@@ -1,7 +1,3 @@
-/* oxlint-disable eslint/one-var -- pervasive pre-existing pattern in this file
-   (each mutator is a short sequence of independent `const`s); merging them
-   isn't a style choice here. */
-import type { PptxComment, PptxCommentMention } from 'pptx-viewer-core';
 // The comment-array mutations themselves are pure and shared with every
 // other binding; this composable only wires them to Vue's reactivity.
 import {
@@ -11,6 +7,10 @@ import {
 	replyToCommentInList,
 	toggleCommentResolvedInList,
 } from 'ooxml-ui/pptx';
+/* oxlint-disable eslint/one-var -- pervasive pre-existing pattern in this file
+   (each mutator is a short sequence of independent `const`s); merging them
+   isn't a style choice here. */
+import type { PptxComment, PptxCommentMention } from 'pptx-viewer-core';
 import { computed, toValue } from 'vue';
 import type { ComputedRef, MaybeRefOrGetter } from 'vue';
 

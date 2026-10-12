@@ -11,9 +11,9 @@
  * satisfied by an option core ignored.
  */
 import JSZip from 'jszip';
+import { resolveSlideSizeSelection, SLIDE_SIZE_PRESETS } from 'ooxml-ui/pptx';
 import { PptxHandler } from 'pptx-viewer-core';
 import type { PptxSlide } from 'pptx-viewer-core';
-import { resolveSlideSizeSelection, SLIDE_SIZE_PRESETS } from 'ooxml-ui/pptx';
 import { describe, expect, it } from 'vitest';
 
 import type { EditorSnapshot } from './editor-document-state';

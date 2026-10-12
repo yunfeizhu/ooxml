@@ -1,3 +1,5 @@
+import { createDefaultChartElement, newTableElement } from 'ooxml-ui/pptx';
+import type { InsertChartKind } from 'ooxml-ui/pptx';
 /**
  * useInsertElements: Handlers for inserting new elements (text, shape,
  * table, SmartArt, equation, field, action button, ink, freeform)
@@ -11,8 +13,6 @@ import type {
 	InkPptxElement,
 	SmartArtLayout,
 } from 'pptx-viewer-core';
-import { createDefaultChartElement, newTableElement } from 'ooxml-ui/pptx';
-import type { InsertChartKind } from 'ooxml-ui/pptx';
 
 import type { HyperlinkEditData } from '../components/hyperlink-edit-types';
 import { DEFAULT_TABLE_ROWS, DEFAULT_TABLE_COLUMNS, DEFAULT_TEXT_FONT_SIZE } from '../constants';

@@ -1,3 +1,9 @@
+import {
+	clampTransitionNumber,
+	TRANSITION_MORPH_OPTIONS,
+	TRANSITION_ORIENTATION_TYPES,
+	TRANSITION_SPEED_OPTIONS,
+} from 'ooxml-ui/pptx';
 /**
  * SlideTransitionSection: the SLIDE TRANSITION card of the no-selection
  * inspector, rendered by `PresentationPropertiesPanel` immediately after SLIDE
@@ -20,12 +26,6 @@ import {
 	TRANSITION_THRUBLK_TYPES,
 	TRANSITION_VALID_DIRECTIONS,
 } from 'pptx-viewer-core';
-import {
-	clampTransitionNumber,
-	TRANSITION_MORPH_OPTIONS,
-	TRANSITION_ORIENTATION_TYPES,
-	TRANSITION_SPEED_OPTIONS,
-} from 'ooxml-ui/pptx';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 

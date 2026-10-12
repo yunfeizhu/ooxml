@@ -1,14 +1,10 @@
 import { dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
+import { hasPersistentAudio, registerPersistentAudio, stopAllPersistentAudio } from 'ooxml-ui/pptx';
 import type { PptxSlide } from 'pptx-viewer-core';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-import {
-	hasPersistentAudio,
-	registerPersistentAudio,
-	stopAllPersistentAudio,
-} from 'ooxml-ui/pptx';
 import { componentSource } from './component-source.test-support';
 import {
 	attachShowVisibilityPause,

@@ -6,7 +6,7 @@
  * controls are suppressed + pointer-events off so clicks select/move the
  * element; preview/present play normally.
  */
-import type { PptxElement } from 'pptx-viewer-core';
+
 import {
 	ONLINE_VIDEO_IFRAME_ALLOW,
 	ONLINE_VIDEO_IFRAME_SANDBOX,
@@ -22,6 +22,7 @@ import {
 	startMediaAutoplay,
 } from 'ooxml-ui/pptx';
 import type { MediaPlaybackSource, MediaTrimFadeSource } from 'ooxml-ui/pptx';
+import type { PptxElement } from 'pptx-viewer-core';
 import type { CSSProperties } from 'vue';
 import { computed, nextTick, onBeforeUnmount, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
@@ -327,6 +328,7 @@ const hitTargetStyle = useElementHitTargetStyle(
 			<img
 				:src="posterSrc"
 				alt=""
+				draggable="false"
 				:style="{
 					width: '100%',
 					height: '100%',

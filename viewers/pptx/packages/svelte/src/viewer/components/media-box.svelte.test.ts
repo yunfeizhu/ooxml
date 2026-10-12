@@ -1,5 +1,5 @@
-import type { PptxElement } from 'pptx-viewer-core';
 import { hasPersistentAudio, stopAllPersistentAudio } from 'ooxml-ui/pptx';
+import type { PptxElement } from 'pptx-viewer-core';
 import { flushSync, mount, unmount } from 'svelte';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 

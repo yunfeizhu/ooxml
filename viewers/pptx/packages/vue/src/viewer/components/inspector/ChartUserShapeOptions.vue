@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import type { PptxChartData } from 'pptx-viewer-core';
 import type { ChartUserShapeRow, ChartUserShapeRowPatch } from 'ooxml-ui/pptx';
 import {
 	createDefaultChartUserShape,
@@ -15,6 +14,7 @@ import {
 	withChartUserShapeRowTextUpdated,
 	withChartUserShapeRowUpdated,
 } from 'ooxml-ui/pptx';
+import type { PptxChartData } from 'pptx-viewer-core';
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 

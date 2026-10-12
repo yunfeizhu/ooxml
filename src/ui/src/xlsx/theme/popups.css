@@ -94,55 +94,10 @@
 	outline: none;
 }
 
-/* Colour picker: Automatic, Theme Colors (ten columns over five tints), Standard Colors, More. */
+/* Colour picker: the shared office-ui-color-grid in a ribbon popover. */
 .ribbon-popover.color-grid {
 	display: block;
-	width: 236px;
-	padding: 8px 10px;
-}
-.color-grid-title {
-	margin: 6px 0 4px;
-	color: var(--muted);
-	font-weight: 600;
-	font-size: 11px;
-}
-.color-grid-cells {
-	display: grid;
-	grid-template-columns: repeat(10, 20px);
-	gap: 2px 3px;
-}
-.color-grid .swatch {
-	width: 20px;
-	height: 20px;
-	padding: 0;
-	border: 1px solid var(--line);
-	border-radius: 2px;
-	background: var(--swatch);
-	cursor: pointer;
-}
-.color-grid .swatch:hover,
-.color-grid .swatch:focus-visible {
-	outline: 2px solid var(--xl);
-	outline-offset: 1px;
-}
-.color-grid-command {
-	display: flex;
-	align-items: center;
-	gap: 8px;
-	width: 100%;
-	margin: 2px 0;
-	padding: 5px 6px;
-	border: 0;
-	border-radius: 3px;
-	background: none;
-	color: inherit;
-	font: inherit;
-	text-align: left;
-	cursor: pointer;
-}
-.color-grid-command:hover,
-.color-grid-command:focus-visible {
-	background: var(--accent-soft);
+	padding: 4px;
 }
 .color-grid-input {
 	position: absolute;

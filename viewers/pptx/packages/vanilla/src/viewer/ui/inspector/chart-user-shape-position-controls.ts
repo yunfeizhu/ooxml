@@ -1,3 +1,5 @@
+import type { ChartUserShapeRow, ChartUserShapeRowPatch } from 'ooxml-ui/pptx';
+import { getChartUserShapeRowChartBox } from 'ooxml-ui/pptx';
 /**
  * Position/size controls for one chart overlay row, split out of
  * `chart-user-shape-section.ts` to stay under this repo's file-size
@@ -13,8 +15,6 @@
  * a top-level `relSizeAnchor` row already edits.
  */
 import type { PptxChartData } from 'pptx-viewer-core';
-import type { ChartUserShapeRow, ChartUserShapeRowPatch } from 'ooxml-ui/pptx';
-import { getChartUserShapeRowChartBox } from 'ooxml-ui/pptx';
 
 import type { Translator } from '../../i18n';
 import {

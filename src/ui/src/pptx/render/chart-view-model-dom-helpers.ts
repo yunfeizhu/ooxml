@@ -46,6 +46,7 @@ export function renderPatternDef(doc: Document, input: ChartSvgDef): SVGElement 
 			def.kind === 'linearGradient'
 				? createSvgEl(doc, 'linearGradient', {
 						id: def.id,
+						...(def.gradientUnits ? { gradientUnits: def.gradientUnits } : {}),
 						x1: def.x1,
 						y1: def.y1,
 						x2: def.x2,

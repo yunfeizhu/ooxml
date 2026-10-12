@@ -1,6 +1,6 @@
+import { downloadBlob } from 'ooxml-ui/pptx';
 import { SvgExporter } from 'pptx-viewer-core';
 import type { PptxData, PptxSlide, SvgExportOptions } from 'pptx-viewer-core';
-import { downloadBlob } from 'ooxml-ui/pptx';
 
 export type SvgExportSingleSlideOptions = SvgExportOptions;
 export type SvgExportAllOptions = SvgExportOptions;

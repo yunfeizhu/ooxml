@@ -1,4 +1,3 @@
-import type { OlePptxElement } from 'pptx-viewer-core';
 import type { ResolvedOleType } from 'ooxml-ui/pptx';
 import {
 	formatBytes,
@@ -11,6 +10,7 @@ import {
 	isBrowserOpenableMime,
 	resolveOleType,
 } from 'ooxml-ui/pptx';
+import type { OlePptxElement } from 'pptx-viewer-core';
 
 import { styleToString } from '../style';
 

@@ -18,7 +18,6 @@ description: 将 .pptx ArrayBuffer 加载到 pptx-viewer，先以只读方式渲
 ```ts
 import { Component, signal } from '@angular/core';
 import { PowerPointViewerComponent } from 'pptx-angular-viewer';
-
 // Base chrome styles (toolbar, thumbnails, layout). Import once, e.g. in styles.css or main.ts.
 import 'pptx-angular-viewer/styles';
 

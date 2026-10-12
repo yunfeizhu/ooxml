@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import type { ContentPartPptxElement, PptxElement } from 'pptx-viewer-core';
 import {
 	buildContentPartStrokes,
 	contentPartViewBox,
 	getContentPartReplayStyles,
 	INK_REPLAY_KEYFRAMES,
 } from 'ooxml-ui/pptx';
+import type { ContentPartPptxElement, PptxElement } from 'pptx-viewer-core';
 import type { CSSProperties } from 'vue';
 import { computed, watchEffect } from 'vue';
 

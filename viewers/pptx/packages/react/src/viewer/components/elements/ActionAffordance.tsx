@@ -1,12 +1,3 @@
-/**
- * The on-canvas affordances for an element carrying a PowerPoint Action
- * Setting: the amber "has action" badge and the hover link tooltip.
- *
- * The decision, the fallback text chain and the styling all live in
- * `pptx-viewer-shared` (`render/element-action-affordance`); this file is only
- * the React view of them, so the five bindings cannot drift apart again.
- */
-import type { PptxElement } from 'pptx-viewer-core';
 import {
 	ACTION_INDICATOR_CLASS,
 	ACTION_INDICATOR_ICON_PATH,
@@ -19,6 +10,15 @@ import {
 	resolveElementActionAffordance,
 } from 'ooxml-ui/pptx';
 import type { ElementActionAffordance } from 'ooxml-ui/pptx';
+/**
+ * The on-canvas affordances for an element carrying a PowerPoint Action
+ * Setting: the amber "has action" badge and the hover link tooltip.
+ *
+ * The decision, the fallback text chain and the styling all live in
+ * `pptx-viewer-shared` (`render/element-action-affordance`); this file is only
+ * the React view of them, so the five bindings cannot drift apart again.
+ */
+import type { PptxElement } from 'pptx-viewer-core';
 import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 

@@ -30,7 +30,7 @@ on:
         type: string
 
 permissions:
-  contents: write
+  contents: read
 
 # One release at a time: two overlapping runs would race on the version-bump commit and the tags.
 # Re-publish dispatches (`tag` set) never touch the bump commit or tags, and get a group per tag:
@@ -47,6 +47,9 @@ jobs:
       github.event_name == 'schedule' ||
       (github.event_name == 'workflow_dispatch' && inputs.tag == '')
     runs-on: ubuntu-latest
+    # Commits the version bump and pushes the tags.
+    permissions:
+      contents: write
     outputs:
       any_released: ${{ steps.tagged.outputs.any_released || 'false' }}
       release_sha: ${{ steps.tagged.outputs.release_sha || '' }}
@@ -59,17 +62,17 @@ jobs:
       # on the bypass list; it is used in place of GITHUB_TOKEN when present. A PAT push, unlike a
       # GITHUB_TOKEN one, triggers workflows, but the release commit carries `[skip ci]`, which
       # GitHub honours natively.
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           fetch-depth: 0
           token: ${{ secrets.RELEASE_TOKEN || github.token }}
           persist-credentials: true
 
-      - uses: actions/setup-node@v7
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7
         with:
           node-version: 24
 
-      - uses: oven-sh/setup-bun@v2
+      - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
         with:
           bun-version: 1.4.2
 
@@ -157,7 +160,8 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           # Stage each released package's changelog and manifest (version bump) AND the lockfile,
           # so package.json + bun.lock in the repo always match what is published and the tag
-          # points at a commit whose manifests are truthful.
+          # points at a commit whose manifests are truthful. The paths are split into words on purpose.
+          # shellcheck disable=SC2046
           git add $(node -p "const p=require('./release-plan.json');p.order.filter(k=>p.packages[k].release).flatMap(k=>[p.packages[k].manifest,p.packages[k].changelog]).join(' ')") bun.lock
           if git diff --cached --quiet; then
             echo "No release changes to commit"
@@ -238,7 +242,7 @@ jobs:
       # re-running the planner. Artifact names are unique per run.
       - name: Upload release plan for publish job
         if: steps.tagged.outputs.any_released == 'true'
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
         with:
           name: release-plan-${{ github.run_id }}
           path: release-plan.json
@@ -296,25 +300,25 @@ jobs:
 
       - name: Checkout the release commit
         if: inputs.tag == ''
-        uses: actions/checkout@v7
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           fetch-depth: 0
           ref: ${{ needs.release.outputs.release_sha }}
 
       - name: Checkout the dispatched commit (re-publish)
         if: inputs.tag != ''
-        uses: actions/checkout@v7
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           fetch-depth: 0
           ref: ${{ github.sha }}
 
       - name: Download release plan
         if: inputs.tag == ''
-        uses: actions/download-artifact@v8
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8
         with:
           name: release-plan-${{ github.run_id }}
 
-      - uses: actions/setup-node@v7
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7
         with:
           node-version: 24
 
@@ -346,23 +350,23 @@ jobs:
     steps:
       - name: Checkout the release commit
         if: inputs.tag == ''
-        uses: actions/checkout@v7
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           fetch-depth: 0
           ref: ${{ needs.release.outputs.release_sha }}
 
       - name: Checkout the dispatched commit (re-publish)
         if: inputs.tag != ''
-        uses: actions/checkout@v7
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           fetch-depth: 0
           ref: ${{ github.sha }}
 
-      - uses: actions/setup-node@v7
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7
         with:
           node-version: 24
 
-      - uses: oven-sh/setup-bun@v2
+      - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
         with:
           bun-version: 1.4.2
 
@@ -371,7 +375,7 @@ jobs:
       - run: bun run build
 
       - name: Share the core build
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
         with:
           name: core-dist-${{ github.run_id }}
           path: src/core/dist
@@ -396,7 +400,7 @@ jobs:
       # Auto mode: the release commit the release job pushed (so manifests carry the new versions).
       - name: Checkout the release commit
         if: inputs.tag == ''
-        uses: actions/checkout@v7
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           fetch-depth: 0
           ref: ${{ needs.release.outputs.release_sha }}
@@ -404,33 +408,42 @@ jobs:
       # Re-publish mode: the dispatched commit (the manifest check below ties it to the tag).
       - name: Checkout the dispatched commit (re-publish)
         if: inputs.tag != ''
-        uses: actions/checkout@v7
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           fetch-depth: 0
           ref: ${{ github.sha }}
 
       - name: Download release plan
         if: inputs.tag == ''
-        uses: actions/download-artifact@v8
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8
         with:
           name: release-plan-${{ github.run_id }}
 
-      # Node 24 plus npm >= 11.5.1 is required for trusted publishing and --provenance.
-      - uses: actions/setup-node@v7
+      # Node 24 plus npm >= 11.5.1 is required for trusted publishing and --provenance. Node 24
+      # bundles npm 11.5.1 or newer since 24.6, so the bundled npm is used as is (an unpinned
+      # global install would be an npm command Scorecard cannot pin) and checked below.
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7
         with:
           node-version: 24
           registry-url: https://registry.npmjs.org
 
-      - run: npm install --global npm@^11.5.1
+      - name: Check npm supports trusted publishing
+        run: |
+          version="$(npm --version)"
+          if [ "$(printf '%s\n' 11.5.1 "$version" | sort -V | head -n 1)" != "11.5.1" ]; then
+            echo "::error::npm $version is older than 11.5.1, which trusted publishing needs."
+            exit 1
+          fi
+          echo "npm $version"
 
-      - uses: oven-sh/setup-bun@v2
+      - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
         with:
           bun-version: 1.4.2
 
       - run: bun install --frozen-lockfile
 
       - name: Restore the core build
-        uses: actions/download-artifact@v8
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8
         with:
           name: core-dist-${{ github.run_id }}
           path: src/core/dist
@@ -459,6 +472,7 @@ jobs:
           INPUT_TAG: ${{ inputs.tag }}
           GROUP: ${{ matrix.group }}
         run: |
+          # publish-released.mjs runs `npm publish --provenance` once per package in the group.
           if [ -n "$INPUT_TAG" ]; then
             node scripts/publish-released.mjs --tag "$INPUT_TAG" --group "$GROUP"
           else
@@ -474,10 +488,51 @@ jobs:
     permissions:
       contents: read
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           ref: ${{ inputs.tag == '' && needs.release.outputs.release_sha || github.sha }}
-      - uses: actions/setup-node@v7
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7
         with:
           node-version: 24
       - run: node scripts/check-published.mjs --wait-minutes 20
+
+  # Attaches each published tarball and a keyless sigstore bundle to its GitHub release, so the
+  # release assets are signed (OpenSSF Scorecard "Signed-Releases"). It runs after the packages are
+  # verifiable on the registry and never gates publishing: a failure here leaves the npm release
+  # intact and only the signatures missing. Re-run it with a `tag` dispatch.
+  sign-release:
+    name: sign release assets
+    needs: [release, publish, verify-published]
+    if: always() && !cancelled() && needs.publish.result == 'success'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # uploads the release assets
+      id-token: write # keyless sigstore signing with the workflow identity
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          ref: ${{ inputs.tag == '' && needs.release.outputs.release_sha || github.sha }}
+          persist-credentials: false # gh authenticates with GH_TOKEN; git needs no credentials
+
+      - name: Download release plan
+        if: inputs.tag == ''
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8
+        with:
+          name: release-plan-${{ github.run_id }}
+
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7
+        with:
+          node-version: 24
+
+      - uses: sigstore/cosign-installer@6f9f17788090df1f26f669e9d70d6ae9567deba6 # v4.1.2
+
+      - name: Sign and attach the release assets
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          INPUT_TAG: ${{ inputs.tag }}
+        run: |
+          if [ -n "$INPUT_TAG" ]; then
+            node scripts/sign-release-assets.mjs --tag "$INPUT_TAG"
+          else
+            node scripts/sign-release-assets.mjs --plan release-plan.json
+          fi

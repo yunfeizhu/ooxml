@@ -58,6 +58,7 @@ describe('typed event contract', () => {
 			'dirty-change': true,
 			'presence-send': true,
 			'collaboration-send': true,
+			'office-ribbon-add-in': true,
 		};
 		expect([...DOCX_EDITOR_EVENTS].sort()).toEqual(Object.keys(complete).sort());
 	});

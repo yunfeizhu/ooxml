@@ -12,9 +12,9 @@ import {
 const disabled = (reason: string) => ({ disabled: `Not available yet. ${reason}` });
 
 /**
- * Visio's File > Options categories, in Visio's order. Only User name and Initials are honoured
- * today (they are the local profile, also used as the identity in a shared session); every other
- * setting is shown disabled with the capability it is waiting for.
+ * Visio's File > Options categories, in Visio's order. User name and Initials (the local profile,
+ * also the identity in a shared session) and Office Theme (the status bar's look) are honoured;
+ * every other setting is shown disabled with the capability it is waiting for.
  */
 export const VISIO_OPTION_CATEGORIES: readonly OfficeOptionCategory[] = [
 	{
@@ -54,6 +54,17 @@ export const VISIO_OPTION_CATEGORIES: readonly OfficeOptionCategory[] = [
 				controls: [
 					{ kind: 'text', key: 'userName', label: 'User name', maxLength: 64 },
 					{ kind: 'text', key: 'userInitials', label: 'Initials', maxLength: 2 },
+					{
+						kind: 'select',
+						key: 'officeTheme',
+						label: 'Office Theme',
+						info: 'Colorful gives the status bar the Visio colour, White keeps it neutral and Black is the dark theme.',
+						choices: [
+							{ value: 'colorful', label: 'Colorful' },
+							{ value: 'neutral', label: 'White' },
+							{ value: 'dark', label: 'Black' },
+						],
+					},
 				],
 			},
 		],
@@ -145,8 +156,36 @@ type OptionsDialog = HTMLElement & {
 };
 type Account = HTMLElement & { profile: OfficeProfile };
 
-function profileValues(profile: OfficeProfile): OfficeOptionValues {
+/** The status bar's look: Visio's product colour ("Colorful") or the neutral suite bar. */
+export type StatusBarTheme = 'colorful' | 'neutral';
+const THEME_KEY = 'ooxml-visio-office-theme';
+export const isStatusBarTheme = (value: unknown): value is StatusBarTheme =>
+	value === 'colorful' || value === 'neutral';
+/** The Office Theme remembered on this device, if any (storage may be unavailable). */
+export function readStatusBarTheme(): StatusBarTheme | undefined {
+	try {
+		const stored = globalThis.localStorage?.getItem(THEME_KEY);
+		return isStatusBarTheme(stored) ? stored : undefined;
+	} catch {
+		return undefined;
+	}
+}
+function writeStatusBarTheme(theme: StatusBarTheme): void {
+	try {
+		globalThis.localStorage?.setItem(THEME_KEY, theme);
+	} catch {
+		// Kept for this session only.
+	}
+}
+
+/** Office Theme as Options offers it: the two light looks, or the dark theme. */
+export type OfficeThemeChoice = StatusBarTheme | 'dark';
+const isOfficeThemeChoice = (value: unknown): value is OfficeThemeChoice =>
+	value === 'dark' || isStatusBarTheme(value);
+
+function profileValues(profile: OfficeProfile, officeTheme: OfficeThemeChoice): OfficeOptionValues {
 	return {
+		officeTheme,
 		miniToolbar: false,
 		livePreview: false,
 		screenTips: 'descriptions',
@@ -176,6 +215,11 @@ export class ViewerProfile {
 	constructor(
 		root: ShadowRoot,
 		private readonly onProfile: (profile: OfficeProfile) => void = () => {},
+		/** Reads and applies the Office Theme on the viewer element. */
+		private readonly theme: { get(): OfficeThemeChoice; set(theme: OfficeThemeChoice): void } = {
+			get: () => 'neutral',
+			set: () => {},
+		},
 	) {
 		this.#dialog = root.querySelector<OptionsDialog>('office-ui-options-dialog')!;
 		this.#account = root.querySelector<Account>('office-ui-account');
@@ -186,7 +230,7 @@ export class ViewerProfile {
 	}
 	/** Open Visio Options, on General as Visio does. */
 	showOptions(category = 'general'): void {
-		this.#dialog.values = profileValues(this.#profile);
+		this.#dialog.values = profileValues(this.#profile, this.theme.get());
 		this.#dialog.category = category;
 		this.#dialog.show();
 	}
@@ -198,6 +242,11 @@ export class ViewerProfile {
 			'office-options-change',
 			(event) => {
 				const { values } = (event as OfficeOptionsChangeEvent).detail;
+				if (isOfficeThemeChoice(values.officeTheme) && values.officeTheme !== this.theme.get()) {
+					this.theme.set(values.officeTheme);
+					// The light looks are remembered here; light or dark is the host's preference.
+					if (values.officeTheme !== 'dark') writeStatusBarTheme(values.officeTheme);
+				}
 				const initial = String(values.userInitials ?? '').trim();
 				this.#update({
 					displayName: String(values.userName ?? '').trim(),
@@ -223,6 +272,6 @@ export class ViewerProfile {
 	}
 	#sync(): void {
 		if (this.#account) this.#account.profile = this.#profile;
-		this.#dialog.values = profileValues(this.#profile);
+		this.#dialog.values = profileValues(this.#profile, this.theme.get());
 	}
 }

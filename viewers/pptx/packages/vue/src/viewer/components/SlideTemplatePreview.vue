@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import type { PptxSlide } from 'pptx-viewer-core';
 import { buildSlideTemplateContent } from 'ooxml-ui/pptx';
 import type { SlideTemplateId } from 'ooxml-ui/pptx';
+import type { PptxSlide } from 'pptx-viewer-core';
 import { computed } from 'vue';
 
 import SlideStage from './SlideStage.vue';

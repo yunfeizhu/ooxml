@@ -32,7 +32,6 @@ import {
 	CUSTOM_ELEMENTS_SCHEMA,
 } from '@angular/core';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
-
 import {
 	scaleSlidesForSizeChange,
 	SLIDE_SIZE_PRESETS,
@@ -47,6 +46,7 @@ import type {
 	SlideSizePreset,
 	SlideSizeRescaleMode,
 } from 'ooxml-ui/pptx';
+
 import { EditorStateService } from './editor-state.service';
 import { INSPECTOR_CARD_STYLES } from './inspector-card-styles';
 import { LoadContentService } from './load-content.service';

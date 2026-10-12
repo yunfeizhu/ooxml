@@ -1,4 +1,3 @@
-import type { PptxSlide } from 'pptx-viewer-core';
 /**
  * The slide-sorter keymap, wired into React.
  *
@@ -32,6 +31,7 @@ import type { PptxSlide } from 'pptx-viewer-core';
  * survived to be called. A stable listener identity removes the race outright.
  */
 import { clampSorterZoom, isEditorTextInputTarget, mapSlideSorterKey } from 'ooxml-ui/pptx';
+import type { PptxSlide } from 'pptx-viewer-core';
 import { useEffect, useRef } from 'react';
 import type React from 'react';
 

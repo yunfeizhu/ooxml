@@ -1,4 +1,3 @@
-import type { PptxElement } from 'pptx-viewer-core';
 import {
 	ONLINE_VIDEO_IFRAME_ALLOW,
 	ONLINE_VIDEO_IFRAME_SANDBOX,
@@ -7,6 +6,7 @@ import {
 } from 'ooxml-ui/pptx';
 import type { MediaSurface } from 'ooxml-ui/pptx';
 import { translationsEn } from 'ooxml-ui/pptx/i18n';
+import type { PptxElement } from 'pptx-viewer-core';
 import React from 'react';
 
 import { VideoWithMetadata, AudioWithMetadata } from './media-components';

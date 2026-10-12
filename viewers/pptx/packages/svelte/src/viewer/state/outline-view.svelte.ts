@@ -1,3 +1,5 @@
+import { applyOutlineEdit, buildOutline, mapOutlineKey, OUTLINE_ROW_ATTR } from 'ooxml-ui/pptx';
+import type { CanvasSize, OutlineEdit, OutlineRow } from 'ooxml-ui/pptx';
 /**
  * Outline-view session: the reactive shell around the shared outline model.
  *
@@ -12,13 +14,6 @@
  * to disagree about what Enter does.
  */
 import type { PptxSlide } from 'pptx-viewer-core';
-import {
-	applyOutlineEdit,
-	buildOutline,
-	mapOutlineKey,
-	OUTLINE_ROW_ATTR,
-} from 'ooxml-ui/pptx';
-import type { CanvasSize, OutlineEdit, OutlineRow } from 'ooxml-ui/pptx';
 
 export interface OutlineViewSessionInput {
 	getSlides: () => PptxSlide[];

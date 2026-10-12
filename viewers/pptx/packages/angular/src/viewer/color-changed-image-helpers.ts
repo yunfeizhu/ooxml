@@ -1,6 +1,5 @@
-import type { PptxElement } from 'pptx-viewer-core';
-
 import { DEFAULT_COLOR_CHANGE_TOLERANCE } from 'ooxml-ui/pptx';
+import type { PptxElement } from 'pptx-viewer-core';
 
 /**
  * Pure (Angular-free) helpers for the `<a:clrChange>` colour-change image

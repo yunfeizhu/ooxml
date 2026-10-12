@@ -9,11 +9,7 @@
  * synthetic AI tab shows only when the host configured an assistant AND did
  * not hide its page; both decisions live in `pptx-viewer-shared`.
  */
-import {
-	customizeOptionsTabs,
-	isOptionsPageVisible,
-	VIEWER_OPTIONS_TABS,
-} from 'ooxml-ui/pptx';
+import { customizeOptionsTabs, isOptionsPageVisible, VIEWER_OPTIONS_TABS } from 'ooxml-ui/pptx';
 import type { ViewerOptionsTabDefinition, ViewerOptionsTabId } from 'ooxml-ui/pptx';
 import { computed, ref, watch } from 'vue';
 import type { ComputedRef, Ref } from 'vue';

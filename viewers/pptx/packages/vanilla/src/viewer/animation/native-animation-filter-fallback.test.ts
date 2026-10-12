@@ -1,3 +1,4 @@
+import { buildTimeline } from 'ooxml-ui/pptx';
 /**
  * Regression test: `p:animEffect/@filter` playback reaches the Vanilla
  * binding. Vanilla's presentation playback (`presentation-playback.ts`)
@@ -7,7 +8,6 @@
  * shared (`render/animation-filter-effects.ts`).
  */
 import type { PptxNativeAnimation } from 'pptx-viewer-core';
-import { buildTimeline } from 'ooxml-ui/pptx';
 import { describe, expect, it } from 'vitest';
 
 describe('vanilla: native animation @filter fallback', () => {

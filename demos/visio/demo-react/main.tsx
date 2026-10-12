@@ -1,22 +1,21 @@
 /** @jsxImportSource react */
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { createRoot } from 'react-dom/client';
 import { VisioViewer, type ViewerHandle } from '../../../viewers/visio/packages/bindings/src/react';
 import { createWorkspace } from '../demo/workspace';
 
-// The React demo: <VisioViewer> with a ref handle and the document as React state.
+// The React demo: <VisioViewer> with a ref handle.
 const workspace = createWorkspace();
 
 function App() {
 	const viewer = useRef<ViewerHandle>(null);
-	const [document, setDocument] = useState(workspace.initialDocument);
 	useEffect(() => {
-		if (viewer.current) workspace.attach(viewer.current, setDocument);
+		if (viewer.current) workspace.attach(viewer.current);
 	}, []);
 	return (
 		<VisioViewer
 			ref={viewer}
-			document={document}
+			document={workspace.initialDocument}
 			events={workspace.events}
 			aria-label="Visio diagram"
 		/>

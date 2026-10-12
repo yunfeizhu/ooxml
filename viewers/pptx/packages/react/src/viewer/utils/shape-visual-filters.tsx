@@ -1,6 +1,6 @@
+import { hexToRgbUnit } from 'ooxml-ui/pptx';
 import type { PptxElement } from 'pptx-viewer-core';
 import { hasShapeProperties, isImageLikeElement } from 'pptx-viewer-core';
-import { hexToRgbUnit } from 'ooxml-ui/pptx';
 import React from 'react';
 
 import { normalizeHexColor, colorWithOpacity } from './color';

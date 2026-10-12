@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { hasTextProperties } from 'pptx-viewer-core';
-	import { fontHomeControls, homeSnapshotTranslator, textColorOf } from 'ooxml-ui/pptx';
+	import { fontHomeControls, homeSnapshotTranslator, textColorOf,transformInlineListCase } from 'ooxml-ui/pptx';
 	import type { RibbonHomeRequestEvent } from 'ooxml-ui/pptx';
 	import { useTranslator } from '../../../../i18n/context';
 	import type { EditorState } from '../../../editor/editor-state.svelte';
@@ -18,8 +18,7 @@
 		toggleTextFlagPatch,
 		toggleTextShadowPatch,
 	} from '../../../editor';
-	import { transformInlineListCase } from 'ooxml-ui/pptx';
-
+	
 	/**
 	 * The whole Home Font strip is the shared `pptx-ui-ribbon-home-font` element:
 	 * character toggles, Text Shadow, size steps, Clear Formatting, Character
@@ -86,7 +85,7 @@
 			case 'changeCase': {
 				const mode = value as Parameters<typeof changeCasePatch>[1];
 				editor.patchSelected((current, snapshot) => {
-					if (!snapshot) return changeCasePatch(current, mode);
+					if (!snapshot) {return changeCasePatch(current, mode);}
 					const { text, textSegments } = transformInlineListCase(snapshot, null, mode);
 					return { text, textSegments };
 				});

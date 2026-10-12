@@ -20,8 +20,8 @@ Validation on 2026-10-01:
   two tests passed; Svelte Review: five tests passed; Vanilla Review and ribbon:
   31 tests passed. Design and contextual gallery adapter regressions also passed.
 - `bunx playwright test e2e/ribbon-contextual-migration.spec.ts
-e2e/ribbon-gallery-migration.spec.ts e2e/ribbon-review-migration.spec.ts
---workers=2`: 45 tests passed across all five bindings, including actual
+  e2e/ribbon-gallery-migration.spec.ts e2e/ribbon-review-migration.spec.ts
+  --workers=2`: 45 tests passed across all five bindings, including actual
   chart/SmartArt edits, save/reload, native comments/language actions, customization,
   keyboard focus, narrow layouts, 44px touch targets and forced colors.
 

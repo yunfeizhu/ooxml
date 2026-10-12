@@ -1,7 +1,7 @@
+import { buildImageBiLevelTable, buildImageLuminanceTransfer } from 'ooxml-ui/pptx';
 import type { PptxElement, PptxImageEffects } from 'pptx-viewer-core';
 import { describe, expect, it } from 'vitest';
 
-import { buildImageBiLevelTable, buildImageLuminanceTransfer } from 'ooxml-ui/pptx';
 import { buildAngularImageRenderView } from './image-renderer-helpers';
 
 function image(imageEffects?: PptxImageEffects, extra: Partial<PptxElement> = {}): PptxElement {

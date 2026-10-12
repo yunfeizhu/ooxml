@@ -1,6 +1,6 @@
 import JSZip from 'jszip';
-import type { PptxElement } from 'pptx-viewer-core';
 import { MAX_ZOOM_SCALE, MIN_ZOOM_SCALE } from 'ooxml-ui/pptx';
+import type { PptxElement } from 'pptx-viewer-core';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { openInlineEditor } from './editor/inline-text-editor';
@@ -236,8 +236,8 @@ describe('createPptxViewer', () => {
 		const tabRowActions = container.querySelector('.pptxv-tabrow-actions');
 		expect(tabRowActions?.querySelector('button[aria-label="Record"]')).toBeTruthy();
 		const shared = tabRowActions?.querySelector('pptx-ui-ribbon-actions')?.shadowRoot;
-		expect(shared?.querySelector<HTMLElement>('[part="share"]')?.hidden).toBe(false);
-		expect(shared?.querySelector<HTMLElement>('[part="comments"]')?.hidden).toBe(false);
+		expect(shared?.querySelector<HTMLElement>('[part="share"]')?.hidden).toBeFalsy();
+		expect(shared?.querySelector<HTMLElement>('[part="comments"]')?.hidden).toBeFalsy();
 		expect(container.querySelector('[data-pptx-inspector]')?.getAttribute('aria-label')).toBe(
 			'Properties',
 		);

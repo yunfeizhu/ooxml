@@ -1,10 +1,10 @@
-import type { PptxElement } from 'pptx-viewer-core';
 import type {
 	InspectorSectionAnchor,
 	ResizeHandleId,
 	ShapeAdjustmentHandleDescriptor,
 	SnapLine,
 } from 'ooxml-ui/pptx';
+import type { PptxElement } from 'pptx-viewer-core';
 
 import type { ContextMenuCellTarget } from '../editor/context-menu-dispatch';
 import type { EditorController } from '../editor/editor-controller.svelte';

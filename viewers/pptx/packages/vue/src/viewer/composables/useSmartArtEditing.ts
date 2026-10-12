@@ -1,4 +1,10 @@
 import {
+	rebuildDrawingShapesIfCleared,
+	resolvePalette,
+	smartArtLayoutSwitchPatch,
+} from 'ooxml-ui/pptx';
+import type { BoundingBox } from 'ooxml-ui/pptx';
+import {
 	addSmartArtNode,
 	addSmartArtNodeAsChild,
 	promoteSmartArtNode,
@@ -15,12 +21,6 @@ import type {
 	SmartArtLayoutType,
 	SmartArtStyle,
 } from 'pptx-viewer-core';
-import {
-	rebuildDrawingShapesIfCleared,
-	resolvePalette,
-	smartArtLayoutSwitchPatch,
-} from 'ooxml-ui/pptx';
-import type { BoundingBox } from 'ooxml-ui/pptx';
 import { computed } from 'vue';
 import type { ComputedRef, Ref } from 'vue';
 

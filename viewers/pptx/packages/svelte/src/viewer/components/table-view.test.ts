@@ -1,6 +1,6 @@
-import type { PptxElement, PptxTableCell, PptxTableData } from 'pptx-viewer-core';
 import type { CellTextRun } from 'ooxml-ui/pptx';
 import { DEFAULT_FONT_FAMILY } from 'ooxml-ui/pptx';
+import type { PptxElement, PptxTableCell, PptxTableData } from 'pptx-viewer-core';
 import { flushSync, mount, unmount } from 'svelte';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 

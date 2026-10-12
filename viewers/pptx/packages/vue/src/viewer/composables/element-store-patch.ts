@@ -1,3 +1,10 @@
+import {
+	isGroupMember,
+	isTemplateElementId,
+	slideSpaceElement,
+	updateElementInTree,
+	walkAndPatchElements,
+} from 'ooxml-ui/pptx';
 /**
  * element-store-patch.ts: the "write one element back, without a history entry"
  * primitive the live canvas gestures share.
@@ -15,13 +22,6 @@
  * @module composables/element-store-patch
  */
 import type { PptxElement, PptxSlide } from 'pptx-viewer-core';
-import {
-	isGroupMember,
-	isTemplateElementId,
-	slideSpaceElement,
-	updateElementInTree,
-	walkAndPatchElements,
-} from 'ooxml-ui/pptx';
 import type { Ref } from 'vue';
 
 import { setTemplateElements } from './template-editing';

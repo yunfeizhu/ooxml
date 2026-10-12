@@ -25,7 +25,7 @@ it('shares additive pointer selection and paints every selected shape', () => {
 	expect(ui.selected()).toEqual(['s1', 's2']);
 	expect(ui.shape('s1').getAttribute('aria-pressed')).toBe('true');
 	expect(ui.shape('s2').getAttribute('aria-pressed')).toBe('true');
-	expect(ui.root.querySelector('[data-shape-status]')?.getAttribute('value')).toBe(
+	expect(ui.root.querySelector('[data-width-status]')?.getAttribute('value')).toBe(
 		'2 shapes selected',
 	);
 	ui.click('s1', { ctrlKey: true });

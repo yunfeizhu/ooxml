@@ -14,11 +14,11 @@
  * @module angular-viewer/editor-context-menu-dispatch.test
  */
 
+import type { ContextMenuCommandId } from 'ooxml-ui/pptx';
+import { buildContextMenuEntries } from 'ooxml-ui/pptx';
 import type { TablePptxElement, XmlObject } from 'pptx-viewer-core';
 import { describe, expect, it, vi } from 'vitest';
 
-import type { ContextMenuCommandId } from 'ooxml-ui/pptx';
-import { buildContextMenuEntries } from 'ooxml-ui/pptx';
 import { isMergedTableCell, tableMenuContext } from './editor-context-menu-context';
 import type { ContextMenuActions, TableCommandOp } from './editor-context-menu-dispatch';
 import { runContextMenuCommand, tableCommandOp } from './editor-context-menu-dispatch';

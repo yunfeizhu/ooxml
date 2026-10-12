@@ -1,3 +1,9 @@
+import {
+	applyMasterViewCrudAction,
+	masterViewCrudActions,
+	masterViewCrudFailureKey,
+} from 'ooxml-ui/pptx';
+import type { MasterViewCrudAction, MasterViewCrudActionId, MasterViewTarget } from 'ooxml-ui/pptx';
 /**
  * useMasterViewCrud: the Slide Master view sidebar's
  * Insert/Duplicate/Delete/Rename Layout and Slide Master commands.
@@ -15,16 +21,6 @@
  * target.
  */
 import type { PptxData, PptxHandler, PptxSlideMaster } from 'pptx-viewer-core';
-import {
-	applyMasterViewCrudAction,
-	masterViewCrudActions,
-	masterViewCrudFailureKey,
-} from 'ooxml-ui/pptx';
-import type {
-	MasterViewCrudAction,
-	MasterViewCrudActionId,
-	MasterViewTarget,
-} from 'ooxml-ui/pptx';
 import { computed, ref } from 'vue';
 import type { ComputedRef, Ref, ShallowRef } from 'vue';
 import { useI18n } from 'vue-i18n';

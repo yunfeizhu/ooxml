@@ -1,3 +1,8 @@
+import {
+	overlayInlineTextSnapshot,
+	overlayMasterViewInlineSnapshot,
+	partitionTemplateElements,
+} from 'ooxml-ui/pptx';
 import type {
 	PptxAppProperties,
 	PptxCoreProperties,
@@ -13,11 +18,6 @@ import type {
 	PptxSlideMaster,
 	PptxTagCollection,
 } from 'pptx-viewer-core';
-import {
-	overlayInlineTextSnapshot,
-	overlayMasterViewInlineSnapshot,
-	partitionTemplateElements,
-} from 'ooxml-ui/pptx';
 
 import { createEditorSnapshot, saveEditorDocument } from './editor-document-state';
 import type { EditorSnapshot } from './editor-document-state';

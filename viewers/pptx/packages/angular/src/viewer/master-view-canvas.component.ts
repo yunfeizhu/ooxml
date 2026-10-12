@@ -1,15 +1,5 @@
 import { ChangeDetectionStrategy, Component, computed, input, output, signal } from '@angular/core';
 import type {
-	MasterViewTab,
-	PptxElement,
-	PptxHandoutMaster,
-	PptxNotesMaster,
-	PptxSlide,
-	PptxSlideMaster,
-	TextStyle,
-} from 'pptx-viewer-core';
-
-import type {
 	CanvasSize,
 	InlineListController,
 	InlineTextEditSnapshot,
@@ -24,6 +14,16 @@ import {
 	masterViewPseudoSlide,
 	updateMasterViewElement,
 } from 'ooxml-ui/pptx';
+import type {
+	MasterViewTab,
+	PptxElement,
+	PptxHandoutMaster,
+	PptxNotesMaster,
+	PptxSlide,
+	PptxSlideMaster,
+	TextStyle,
+} from 'pptx-viewer-core';
+
 import { InlineListSession } from './inline-list-session';
 import { formatInlineListStyle } from './ribbon-text-helpers';
 import { SlideCanvasComponent } from './slide-canvas.component';

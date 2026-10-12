@@ -1,10 +1,10 @@
-import type { PptxPresentationProperties, PptxThemeOption } from 'pptx-viewer-core';
 import {
 	printPropertiesFrameSlides,
 	printPropertiesSlidesPerPage,
 	withFrameSlides,
 	withSlidesPerPage,
 } from 'ooxml-ui/pptx';
+import type { PptxPresentationProperties, PptxThemeOption } from 'pptx-viewer-core';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 

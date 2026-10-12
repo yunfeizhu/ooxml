@@ -21,6 +21,60 @@ export { buildGradientDef };
 import type { ChartSvgGradientDef } from './chart-svg-def-types';
 import type { ChartViewModel, SvgPrimitive } from './chart-view-model-types';
 
+/** The series a line stroke (polyline or smoothed path) belongs to, if it is one. */
+function lineSeriesOf(primitive: SvgPrimitive): number | undefined {
+	if (primitive.kind !== 'polyline' && primitive.kind !== 'path') return undefined;
+	const { part, stroke } = primitive;
+	return part?.role === 'series' && stroke !== undefined && stroke !== 'none'
+		? part.seriesIndex
+		: undefined;
+}
+
+/**
+ * Extent of a polyline's points or a path's coordinates. Series lines are built
+ * from absolute `M`/`L`/`C` pairs, so every number pair is a point; a smoothed
+ * line's control points can widen the box slightly, which only stretches the ramp.
+ */
+function lineBounds(primitives: SvgPrimitive[]) {
+	const xs: number[] = [];
+	const ys: number[] = [];
+	for (const p of primitives) {
+		const text = p.kind === 'polyline' ? p.points : p.kind === 'path' ? p.d : '';
+		const nums = text.match(/-?\d*\.?\d+(?:e-?\d+)?/giu)?.map(Number) ?? [];
+		for (let i = 0; i + 1 < nums.length; i += 2) {
+			xs.push(nums[i]);
+			ys.push(nums[i + 1]);
+		}
+	}
+	if (xs.length === 0) return undefined;
+	return {
+		x: Math.min(...xs),
+		y: Math.min(...ys),
+		w: Math.max(...xs) - Math.min(...xs),
+		h: Math.max(...ys) - Math.min(...ys),
+	};
+}
+
+/**
+ * A line series' outline gradient (`a:ln/a:gradFill`) as a user-space def across
+ * the drawn line. Bounding-box units would drop the paint on a flat line, whose
+ * box has no height. Only linear outline gradients are painted; a path (radial)
+ * one keeps the solid series colour.
+ */
+function lineGradientDef(
+	id: string,
+	gradient: NonNullable<PptxChartData['series'][number]['lineGradientFill']>,
+	lines: SvgPrimitive[],
+): ChartSvgGradientDef | undefined {
+	const box = lineBounds(lines);
+	const def = buildGradientDef(id, gradient);
+	if (!box || def.kind !== 'linearGradient') return undefined;
+	const at = (fx: number, fy: number) => [box.x + fx * box.w, box.y + fy * box.h];
+	const [x1, y1] = at(def.x1, def.y1);
+	const [x2, y2] = at(def.x2, def.y2);
+	return { ...def, gradientUnits: 'userSpaceOnUse', x1, y1, x2, y2 };
+}
+
 function paintSeries(
 	primitive: SvgPrimitive,
 	seriesFills: ReadonlyMap<number, string>,
@@ -71,6 +125,28 @@ export function withGradientFills(
 			seriesFills.set(si, `url(#${idFor(`s${si}`)})`);
 		}
 	});
+	const lineStrokes = new Map<number, string>();
+	chartData.series.forEach((series, si) => {
+		if (!series.lineGradientFill) return;
+		const def = lineGradientDef(
+			idFor(`line-s${si}`),
+			series.lineGradientFill,
+			next.primitives.filter((p) => lineSeriesOf(p) === si),
+		);
+		if (!def) return;
+		defs.push(def);
+		lineStrokes.set(si, `url(#${def.id})`);
+	});
+	if (lineStrokes.size > 0) {
+		next = {
+			...next,
+			primitives: next.primitives.map((p) => {
+				const si = lineSeriesOf(p);
+				const url = si === undefined ? undefined : lineStrokes.get(si);
+				return url ? { ...p, stroke: url } : p;
+			}),
+		};
+	}
 	if (seriesFills.size > 0) {
 		next = {
 			...next,

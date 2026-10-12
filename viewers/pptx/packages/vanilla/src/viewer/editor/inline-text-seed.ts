@@ -1,5 +1,5 @@
-import type { TextSegment } from 'pptx-viewer-core';
 import { isBulletMarkerSegment } from 'ooxml-ui/pptx';
+import type { TextSegment } from 'pptx-viewer-core';
 
 /** Existing plain editor seed, separate from the native list-session producer. */
 export function seedPlainInlineText(

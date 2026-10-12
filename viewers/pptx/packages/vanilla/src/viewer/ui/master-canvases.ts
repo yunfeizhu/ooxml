@@ -1,10 +1,10 @@
-import type { PptxHandoutMaster, PptxNotesMaster } from 'pptx-viewer-core';
 import type { CanvasSize } from 'ooxml-ui/pptx';
 import {
 	computeHandoutSlotLayout,
 	NOTES_MASTER_PLACEHOLDER_RECTS,
 	resolveNotesSchematicBodyFontSizePx,
 } from 'ooxml-ui/pptx';
+import type { PptxHandoutMaster, PptxNotesMaster } from 'pptx-viewer-core';
 
 import type { Translator } from '../i18n';
 import { createEl } from '../render';

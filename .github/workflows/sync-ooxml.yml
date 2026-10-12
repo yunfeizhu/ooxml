@@ -44,28 +44,30 @@ on:
         required: false
 
 permissions:
-  contents: write
-  issues: write
+  contents: read
 
 jobs:
   sync:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write # pushes the dependency bump
+      issues: write # reports a failed verification
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           ref: main
           token: ${{ secrets.RELEASE_TOKEN || github.token }}
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           repository: ChristopherVR/ooxml
           ref: main
           path: .ooxml-tooling
           sparse-checkout: scripts/sync-ooxml-deps.mjs
           sparse-checkout-cone-mode: false
-      - uses: actions/setup-node@v7
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7
         with:
           node-version: ${{ inputs.node-version }}
-      - uses: oven-sh/setup-bun@v2
+      - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
         with:
           bun-version: ${{ inputs.bun-version }}
 
@@ -77,15 +79,20 @@ jobs:
         id: install
         if: steps.bump.outputs.changed == 'true'
         shell: bash
+        # The caller's command reaches bash through the environment, never pasted into the script.
+        env:
+          COMMAND: ${{ inputs.install-command }}
         run: |
-          { ${{ inputs.install-command }}; } 2>&1 | tee "$RUNNER_TEMP/install.log"
+          { bash -c "$COMMAND"; } 2>&1 | tee "$RUNNER_TEMP/install.log"
 
       - name: Verify
         id: verify
         if: steps.bump.outputs.changed == 'true'
         shell: bash
+        env:
+          COMMAND: ${{ inputs.verify-command }}
         run: |
-          { ${{ inputs.verify-command }}; } 2>&1 | tee "$RUNNER_TEMP/verify.log"
+          { bash -c "$COMMAND"; } 2>&1 | tee "$RUNNER_TEMP/verify.log"
 
       - name: Push the bump
         if: steps.bump.outputs.changed == 'true' && steps.verify.outcome == 'success'

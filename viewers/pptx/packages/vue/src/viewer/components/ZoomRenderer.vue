@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import type { PptxElement, ZoomPptxElement } from 'pptx-viewer-core';
-import { isZoomElement } from 'pptx-viewer-core';
 import { buildSummaryZoomView, resolveZoomNavigationTarget } from 'ooxml-ui/pptx';
 import type { SummaryZoomTileView } from 'ooxml-ui/pptx';
+import type { PptxElement, ZoomPptxElement } from 'pptx-viewer-core';
+import { isZoomElement } from 'pptx-viewer-core';
 import type { CSSProperties } from 'vue';
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';

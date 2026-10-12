@@ -10,11 +10,10 @@ import type { Signal } from '@angular/core';
  */
 import { toSignal } from '@angular/core/rxjs-interop';
 import type { TranslateService } from '@ngx-translate/core';
-import { merge } from 'rxjs';
-import { map, startWith } from 'rxjs/operators';
-
 import { homeSnapshotTranslator } from 'ooxml-ui/pptx';
 import type { RibbonHomeFamily } from 'ooxml-ui/pptx';
+import { merge } from 'rxjs';
+import { map, startWith } from 'rxjs/operators';
 
 /** Changes on every language or dictionary update; must run in an injection context. */
 export function homeLanguage(translation: TranslateService | null): Signal<number> {

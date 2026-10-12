@@ -1,5 +1,5 @@
-import type { PptxElement } from 'pptx-viewer-core';
 import { MEDIA_FULLSCREEN_OVERLAY_STYLE, isMediaFullscreenActive } from 'ooxml-ui/pptx';
+import type { PptxElement } from 'pptx-viewer-core';
 import { computed, ref, watch } from 'vue';
 import type { ComputedRef, CSSProperties } from 'vue';
 import { useI18n } from 'vue-i18n';

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { getSlideTransitionAnimations, SLIDE_TRANSITION_KEYFRAMES } from 'ooxml-ui/pptx';
 /**
  * TransitionPreview: click-to-play thumbnail of the configured transition,
  * matching React's `inspector/TransitionPreview.tsx`.
@@ -14,7 +15,6 @@
  * the settings did not change.
  */
 import type { PptxSlideTransition } from 'pptx-viewer-core';
-import { getSlideTransitionAnimations, SLIDE_TRANSITION_KEYFRAMES } from 'ooxml-ui/pptx';
 import { computed, onBeforeUnmount, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 

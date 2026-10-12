@@ -1,3 +1,5 @@
+import type { ToolbarActionId } from 'ooxml-ui/pptx';
+import { isPanelVisible } from 'ooxml-ui/pptx';
 /**
  * ViewerBottomPanels: SlideNotesPanel + StatusBar wrapper.
  *
@@ -5,8 +7,6 @@
  * when the viewer is not in presentation mode.
  */
 import type { PptxSlide, PptxTextStyleLevels, TextSegment } from 'pptx-viewer-core';
-import type { ToolbarActionId } from 'ooxml-ui/pptx';
-import { isPanelVisible } from 'ooxml-ui/pptx';
 
 import type { AutosaveStatus } from '../hooks/useAutosave';
 import { useToolbarVisibility } from '../hooks/useToolbarVisibility';

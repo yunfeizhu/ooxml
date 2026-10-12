@@ -1,5 +1,5 @@
-import type { PptxSlideTransition } from 'pptx-viewer-core';
 import { getSlideTransitionAnimations } from 'ooxml-ui/pptx';
+import type { PptxSlideTransition } from 'pptx-viewer-core';
 
 import { ensurePresentationKeyframes } from '../../animation/animation-dom';
 import type { Translator } from '../../i18n';

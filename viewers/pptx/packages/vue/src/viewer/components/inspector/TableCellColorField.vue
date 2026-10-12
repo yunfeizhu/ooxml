@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import type { PptxThemeColorRef } from 'pptx-viewer-core';
 import type { ThemeColorPickerCommit } from 'ooxml-ui/pptx';
+import type { PptxThemeColorRef } from 'pptx-viewer-core';
 import { computed } from 'vue';
 
 import DebouncedColorInput from './DebouncedColorInput.vue';

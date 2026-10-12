@@ -8,14 +8,7 @@ import type {
 	Workbook,
 	Worksheet,
 } from '../../index';
-import {
-	MAX_COL,
-	MAX_ROW,
-	currentRegion,
-	getCell,
-	normalizeRange,
-	styleAt,
-} from '../../index';
+import { MAX_COL, MAX_ROW, currentRegion, getCell, normalizeRange, styleAt } from '../../index';
 import type { Command } from '../commands';
 import type { EditorContext } from '../context';
 

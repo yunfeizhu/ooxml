@@ -221,7 +221,7 @@ it('never pastes a prepared internal snapshot in place of invalid clipboard text
 	expect(controller.exportVsdx().bytes).toEqual(bytes);
 	expect(controller.state.edit.canUndo).toBe(false);
 	controller.setDocument(controller.state.document);
-	expect(() => controller.captureClipboardToken()).toThrow('source-backed');
+	expect(() => controller.captureClipboardToken()).toThrow('Open a .vsdx file');
 	controller.destroy();
 });
 

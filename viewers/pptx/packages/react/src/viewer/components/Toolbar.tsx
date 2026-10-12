@@ -15,6 +15,7 @@ import { EditingSection } from './toolbar/EditingSection';
 import { FileSection } from './toolbar/FileSection';
 import { HomeSection } from './toolbar/HomeSection';
 import { InsertSection } from './toolbar/InsertSection';
+import { RibbonAddInSection, useRibbonAddInTabs } from './toolbar/ribbon-add-ins';
 import { RibbonTabBar } from './toolbar/RibbonTabBar';
 import { TabRowActions } from './toolbar/TabRowActions';
 import { TextSection } from './toolbar/TextSection';
@@ -47,6 +48,7 @@ export function Toolbar(p: ToolbarProps): React.ReactElement {
 	);
 	const fallBackHome = useCallback(() => onSetToolbarSection('home'), [onSetToolbarSection]);
 	const contextual = useContextualRibbonTab(p.selectedElement, customization, fallBackHome);
+	const addIns = useRibbonAddInTabs(fallBackHome);
 	// Groups collapse into popup buttons when the window is too narrow, as in Office.
 	const detachOverflow = useRef<(() => void) | null>(null);
 	// Font, Paragraph and Drawing launchers open the Properties pane (there are no modal dialogs).
@@ -81,9 +83,11 @@ export function Toolbar(p: ToolbarProps): React.ReactElement {
 
 	// While a contextual tab is shown no fixed section renders; the one render
 	// between losing that tab and the fallback landing already shows Home.
-	const section: ToolbarSection | null = contextual.active
+	// A host's add-in tab works the same way.
+	const extraTab = contextual.active !== null || addIns.active !== null;
+	const section: ToolbarSection | null = extraTab
 		? null
-		: contextual.fellBack
+		: contextual.fellBack || addIns.fellBack
 			? 'home'
 			: toolbarSection;
 	const sFil = section === 'file';
@@ -110,14 +114,24 @@ export function Toolbar(p: ToolbarProps): React.ReactElement {
 			{showRibbon && (
 				<RibbonTabBar
 					isTabVisible={isTabVisible}
-					activeSection={contextual.active ? null : section}
+					activeSection={extraTab ? null : section}
 					contextualTabs={contextual.visible}
-					activeContextual={contextual.active}
+					activeContextual={addIns.active ? null : contextual.active}
 					onSelectSection={(id) => {
 						contextual.select(null);
+						addIns.select(null);
 						onSetToolbarSection(id);
 					}}
-					onSelectContextual={contextual.select}
+					onSelectContextual={(id) => {
+						addIns.select(null);
+						contextual.select(id);
+					}}
+					addInTabs={addIns.visible}
+					activeAddIn={addIns.active?.id ?? null}
+					onSelectAddIn={(id) => {
+						contextual.select(null);
+						addIns.select(id);
+					}}
 				>
 					<TabRowActions
 						onEnterRehearsalMode={p.canEdit ? p.onEnterRehearsalMode : undefined}
@@ -342,7 +356,9 @@ export function Toolbar(p: ToolbarProps): React.ReactElement {
 
 					<ToolbarLateTabs p={p} section={section} />
 
-					{contextual.active && <ContextualTabSection tab={contextual.active} />}
+					{contextual.active && !addIns.active && <ContextualTabSection tab={contextual.active} />}
+
+					{addIns.active && <RibbonAddInSection tab={addIns.active} />}
 				</div>
 			)}
 		</div>

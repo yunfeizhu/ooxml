@@ -1,3 +1,5 @@
+import type { DiagonalBorderInfo, TableStyleContext } from 'ooxml-ui/pptx';
+import { cellParagraphBlocks, getCellDiagonalBorders, tableCellCss } from 'ooxml-ui/pptx';
 /* oxlint-disable eslint/one-var -- pervasive pre-existing pattern in this file
    (many independent short-lived `const`s per function, several separated by
    comments or guard clauses); merging them isn't a style choice here. */
@@ -16,8 +18,6 @@
  */
 import type { PptxElement, PptxTableCell, TablePptxElement } from 'pptx-viewer-core';
 
-import type { DiagonalBorderInfo, TableStyleContext } from 'ooxml-ui/pptx';
-import { cellParagraphBlocks, getCellDiagonalBorders, tableCellCss } from 'ooxml-ui/pptx';
 import type { StyleMap } from './element-style';
 import type { CellParagraph } from './table-cell-style';
 import {

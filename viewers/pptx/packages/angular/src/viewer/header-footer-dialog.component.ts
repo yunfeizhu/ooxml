@@ -9,9 +9,9 @@ import {
 	CUSTOM_ELEMENTS_SCHEMA,
 } from '@angular/core';
 import { TranslatePipe } from '@ngx-translate/core';
+import { cloneHeaderFooterDraft, patchHeaderFooterDraft } from 'ooxml-ui/pptx';
 import type { PptxHeaderFooter } from 'pptx-viewer-core';
 
-import { cloneHeaderFooterDraft, patchHeaderFooterDraft } from 'ooxml-ui/pptx';
 import type { DialogFooterActionSpec } from './dialog-footer.component';
 import { DialogFooterComponent } from './dialog-footer.component';
 

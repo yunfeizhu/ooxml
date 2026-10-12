@@ -1,4 +1,3 @@
-import type { PptxAction, PptxElement, PptxElementAnimation, PptxSlide } from 'pptx-viewer-core';
 import type { ToolbarActionId } from 'ooxml-ui/pptx';
 import {
 	buildFieldSubstitutionContext,
@@ -8,6 +7,7 @@ import {
 	shouldConfirmExternalHyperlink,
 	toggleBlackboard,
 } from 'ooxml-ui/pptx';
+import type { PptxAction, PptxElement, PptxElementAnimation, PptxSlide } from 'pptx-viewer-core';
 /**
  * ViewerCanvasArea: The `<main>` element containing the slide canvas,
  * find/replace panel, and presentation annotation / toolbar overlays.

@@ -39,8 +39,8 @@ import {
 	viewChild,
 } from '@angular/core';
 import { TranslatePipe } from '@ngx-translate/core';
-
 import { activateModalFocus } from 'ooxml-ui/pptx';
+
 import { IsMobileService } from './is-mobile';
 
 /**

@@ -1,3 +1,4 @@
+import { COMMON_FONT_SIZES } from 'ooxml-ui/pptx';
 /**
  * RibbonFontControlsComponent's font-size ladder, Angular binding.
  *
@@ -8,7 +9,6 @@
  */
 import { describe, expect, it } from 'vitest';
 
-import { COMMON_FONT_SIZES } from 'ooxml-ui/pptx';
 import { componentSource } from './component-source.test-support';
 import { FONT_SIZES, steppedFontSizePt } from './ribbon-font-controls.component';
 

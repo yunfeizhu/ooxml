@@ -1,5 +1,3 @@
-// @vitest-environment happy-dom
-import type { PptxElement, TextStyle } from 'pptx-viewer-core';
 import {
 	getActiveInlineListSelection,
 	inlineListBodyText,
@@ -11,6 +9,9 @@ import {
 	reconcileSlidesInYDoc,
 	readSlidesFromYDoc,
 } from 'ooxml-ui/pptx';
+// @vitest-environment happy-dom
+/* oxlint-disable react/jsx-no-constructed-context-values -- test renders, not a component re-render. */
+import type { PptxElement, TextStyle } from 'pptx-viewer-core';
 import React, { act } from 'react';
 /**
  * Regression test for the inline formatting shortcut wiring.
@@ -22,7 +23,7 @@ import React, { act } from 'react';
  */
 import { createRoot } from 'react-dom/client';
 import type { Root } from 'react-dom/client';
-import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
+import { describe, it, expect, beforeEach, afterEach, vi, test } from 'vitest';
 import * as Y from 'yjs';
 
 import { ElementRenderer } from './ElementRenderer';
@@ -106,7 +107,7 @@ function collaborationFactories(doc: Y.Doc) {
 	};
 }
 
-it('retires a native editor when the slide changes but its cloned element is identical', () => {
+test('retires a native editor when the slide changes but its cloned element is identical', () => {
 	const doc = new Y.Doc();
 	const element = makeTextElement();
 	const factories = collaborationFactories(doc);
@@ -139,7 +140,7 @@ it('retires a native editor when the slide changes but its cloned element is ide
 		expect(cancel).toHaveBeenCalledOnce();
 		act(() => editor.dispatchEvent(new FocusEvent('focusout', { bubbles: true })));
 		expect(commit).not.toHaveBeenCalled();
-		expect(readSlidesFromYDoc(doc).map((slide) => slide.elements[0])).toEqual([
+		expect(readSlidesFromYDoc(doc).map((slide) => slide.elements[0])).toStrictEqual([
 			expect.objectContaining({ text: 'Hello' }),
 			expect.objectContaining({ text: 'Hello' }),
 		]);
@@ -150,7 +151,7 @@ it('retires a native editor when the slide changes but its cloned element is ide
 	}
 });
 
-it('keeps collaborative native text through React rerenders and unrelated model reconciliation', () => {
+test('keeps collaborative native text through React rerenders and unrelated model reconciliation', () => {
 	const doc = new Y.Doc();
 	const element = makeTextElement();
 	const factories = collaborationFactories(doc);
@@ -211,7 +212,7 @@ it('keeps collaborative native text through React rerenders and unrelated model 
 	}
 });
 
-it('keeps inherited list shapes on the existing local editing path', () => {
+test('keeps inherited list shapes on the existing local editing path', () => {
 	const patcher = createCollaborationLivePatcher();
 	vi.spyOn(patcher, 'isActive').mockReturnValue(true);
 	const begin = vi.spyOn(patcher, 'beginTextEdit');

@@ -34,7 +34,7 @@ import {
 	PDF_CARD,
 	pdfPageCount,
 	PNG_CARD,
-	progressAppears,
+	watchProgress,
 } from './support/exports';
 import { byBinding } from './support/menu-report';
 import { acrossFrameworks } from './support/parity';
@@ -108,8 +108,11 @@ test.describe('export formats', () => {
 				const downloadDone = page
 					.waitForEvent('download', { timeout: 120_000 })
 					.catch(() => undefined);
+				// Watch from before the click: a small deck exports in under a second, so polling
+				// afterwards can miss a modal that was up for a few frames.
+				const progressShown = await watchProgress(page, /export as pdf/iu);
 				await exportCard(page, PDF_CARD).click();
-				const progressSeen = await progressAppears(page, /export as pdf/iu, 60_000);
+				const progressSeen = await progressShown(60_000);
 				if (!progressSeen) {
 					// Let a modal-less export finish before the page closes under it.
 					await downloadDone;

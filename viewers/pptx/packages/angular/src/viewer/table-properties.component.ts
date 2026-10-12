@@ -21,8 +21,6 @@ import {
 	CUSTOM_ELEMENTS_SCHEMA,
 } from '@angular/core';
 import { TranslatePipe } from '@ngx-translate/core';
-import type { ParsedTableStyleMap, PptxTableData, TablePptxElement } from 'pptx-viewer-core';
-
 import type { TableStylePreset } from 'ooxml-ui/pptx';
 import {
 	applyTableStylePreset,
@@ -32,6 +30,8 @@ import {
 	TABLE_STYLE_PRESETS,
 	tableStyleAssignmentUpdate,
 } from 'ooxml-ui/pptx';
+import type { ParsedTableStyleMap, PptxTableData, TablePptxElement } from 'pptx-viewer-core';
+
 import { isCheckboxControl } from './control-event-targets';
 import { patchTableData } from './table-data-helpers';
 import type { TableBooleanFlag } from './table-properties-helpers';

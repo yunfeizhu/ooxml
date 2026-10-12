@@ -6,9 +6,9 @@
  * the same chart in different fonts (caught by `e2e/pptx/chart-svg-parity.spec.ts`).
  */
 import { mount } from '@vue/test-utils';
-import type { ChartPptxElement, PptxChartData } from 'pptx-viewer-core';
 import { buildChartViewModel } from 'ooxml-ui/pptx';
 import type { ChartViewModel, SvgText } from 'ooxml-ui/pptx';
+import type { ChartPptxElement, PptxChartData } from 'pptx-viewer-core';
 import { describe, expect, it } from 'vitest';
 
 import ChartViewModelSvg from './ChartViewModelSvg.vue';

@@ -1,3 +1,4 @@
+// @vitest-fresh-modules: asserts the layout switch before the lazy built-in layout library loads.
 import type {
 	PptxElement,
 	PptxSmartArtData,

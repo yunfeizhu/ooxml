@@ -7,9 +7,4 @@
  * viewer barrel, and the colocated tests are unchanged.
  */
 export type { FindResult, FindOptions, ReplaceResult } from 'ooxml-ui/pptx';
-export {
-	findInSlides,
-	applyFindReplacements,
-	replaceMatch,
-	replaceInSlides,
-} from 'ooxml-ui/pptx';
+export { findInSlides, applyFindReplacements, replaceMatch, replaceInSlides } from 'ooxml-ui/pptx';

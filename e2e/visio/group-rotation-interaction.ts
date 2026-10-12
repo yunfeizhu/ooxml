@@ -1,5 +1,6 @@
 import { expect, type Locator, type Page } from '@playwright/test';
 import type { VisioDocument } from 'ooxml-core/visio';
+import { editSelection } from './ribbon';
 export async function rotateGroup(
 	page: Page,
 	viewer: Locator,
@@ -14,9 +15,7 @@ export async function rotateGroup(
 	await expect(shape).toHaveAttribute('data-selected', 'true');
 	await expect(viewer.locator('[command="flip-horizontal"]')).toHaveAttribute('disabled', '');
 	if (mode === 'control') {
-		await viewer.locator('.edit-controls summary').click();
-		await viewer.locator('[data-geometry-field="angle"]').fill(String((angle * 180) / Math.PI));
-		await viewer.locator('[data-geometry-action="rotate-shape"]').click();
+		await editSelection(viewer, { type: 'rotate-shape', angle });
 	} else if (mode === 'menu') {
 		const position = viewer.locator('[data-menu="position"]');
 		await position.getByRole('button', { name: 'Position', exact: true }).click();

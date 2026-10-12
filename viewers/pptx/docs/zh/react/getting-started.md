@@ -18,7 +18,6 @@ description: 将 .pptx 内容加载到 PowerPointViewer，从只读预览开始�
 ```tsx
 import { PowerPointViewer } from 'pptx-react-viewer';
 import { useEffect, useState } from 'react';
-
 // If your app does NOT use Tailwind CSS v4, import the bundled stylesheet once
 // at your entry point (see Theming for the three styling modes):
 import 'pptx-react-viewer/styles';
@@ -83,8 +82,8 @@ export function FilePickerViewer() {
 
 ```tsx
 import { PowerPointViewer } from 'pptx-react-viewer';
-import { useRef, useState } from 'react';
 import type { PowerPointViewerHandle } from 'pptx-react-viewer';
+import { useRef, useState } from 'react';
 
 export function Editor({ initial }: { initial: Uint8Array }) {
 	const ref = useRef<PowerPointViewerHandle>(null);

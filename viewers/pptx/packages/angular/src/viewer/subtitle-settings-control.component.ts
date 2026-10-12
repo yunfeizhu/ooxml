@@ -1,12 +1,12 @@
 import { ChangeDetectionStrategy, Component, CUSTOM_ELEMENTS_SCHEMA, inject } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-
 import {
 	subtitleSettingsFromOptions,
 	subtitleSettingsLabels,
 	updateSubtitleSettings,
 } from 'ooxml-ui/pptx';
 import type { SubtitleSettingsChangeEvent } from 'ooxml-ui/pptx';
+
 import { ViewerOptionsService } from './viewer-options.service';
 
 @Component({

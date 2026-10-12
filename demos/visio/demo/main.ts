@@ -11,8 +11,4 @@ const viewer = mountViewer(host, {
 	document: workspace.initialDocument,
 	events: workspace.events,
 });
-workspace.attach(
-	viewer,
-	(document) => viewer.update({ document, pageIndex: 0 }),
-	() => viewer.destroy(),
-);
+workspace.attach(viewer, () => viewer.destroy());

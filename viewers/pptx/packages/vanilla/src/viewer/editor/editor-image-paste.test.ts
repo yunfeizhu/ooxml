@@ -1,5 +1,5 @@
-import type { PptxHandler, PptxSlide } from 'pptx-viewer-core';
 import { attachEditorImagePaste } from 'ooxml-ui/pptx';
+import type { PptxHandler, PptxSlide } from 'pptx-viewer-core';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { createInitialViewerState, createStore } from '../state';

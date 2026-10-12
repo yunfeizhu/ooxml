@@ -16,7 +16,6 @@
  */
 import { ChangeDetectionStrategy, Component, computed, input, output } from '@angular/core';
 import { TranslatePipe } from '@ngx-translate/core';
-
 import { TRANSITION_DIR_ARROWS, buildDirectionGrid } from 'ooxml-ui/pptx';
 
 /** One rendered grid slot: a direction token, or a blank spacer. */

@@ -15,10 +15,10 @@
  */
 
 import { Injectable } from '@angular/core';
-import type { PptxData, PptxSaveFormat, PptxSlide, SvgExportOptions } from 'pptx-viewer-core';
-
 import { downloadBlob } from 'ooxml-ui/pptx';
 import type { RasterizeElementTilesResult } from 'ooxml-ui/pptx';
+import type { PptxData, PptxSaveFormat, PptxSlide, SvgExportOptions } from 'pptx-viewer-core';
+
 import {
 	buildTiledPdf,
 	renderElementPngBlob,

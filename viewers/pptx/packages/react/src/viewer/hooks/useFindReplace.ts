@@ -1,4 +1,3 @@
-import type { PptxSlide } from 'pptx-viewer-core';
 import {
 	applyFindReplacements,
 	findInSlides,
@@ -6,6 +5,7 @@ import {
 	mapCustomizedEditorKey,
 } from 'ooxml-ui/pptx';
 import type { FindResult, ResolvedKeyboardCustomization } from 'ooxml-ui/pptx';
+import type { PptxSlide } from 'pptx-viewer-core';
 import { useState, useCallback, useEffect, useRef } from 'react';
 
 // The match descriptor and the search / replace implementations are shared with

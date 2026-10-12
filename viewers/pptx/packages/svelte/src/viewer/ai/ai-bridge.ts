@@ -10,6 +10,15 @@
  */
 
 import type {
+	PptxAiBridge,
+	PptxAiDataUpdater,
+	PptxAiDeckMeta,
+	PptxAiElementUpdate,
+	PptxAiNotifyLevel,
+	PptxAiSlidesUpdater,
+} from 'ooxml-ui/pptx/ai';
+import { applyElementUpdate, deckDataFieldChanged } from 'ooxml-ui/pptx/ai';
+import type {
 	ParsedTableStyleMap,
 	PptxAppProperties,
 	PptxCoreProperties,
@@ -23,15 +32,6 @@ import type {
 	PptxTheme,
 	PptxViewProperties,
 } from 'pptx-viewer-core';
-import type {
-	PptxAiBridge,
-	PptxAiDataUpdater,
-	PptxAiDeckMeta,
-	PptxAiElementUpdate,
-	PptxAiNotifyLevel,
-	PptxAiSlidesUpdater,
-} from 'ooxml-ui/pptx/ai';
-import { applyElementUpdate, deckDataFieldChanged } from 'ooxml-ui/pptx/ai';
 
 /** Live editor accessors the bridge closes over (all read from viewer runes). */
 export interface SvelteAiBridgeDeps {

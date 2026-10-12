@@ -1,4 +1,3 @@
-import type { ChartPptxElement, PptxElement } from 'pptx-viewer-core';
 import {
 	applyChartElementToggle,
 	applyChartStylePreset,
@@ -8,6 +7,7 @@ import {
 	restoreFilteredSeries,
 } from 'ooxml-ui/pptx';
 import type { ChartQuickActionsDescriptor, ChartQuickElementKey } from 'ooxml-ui/pptx';
+import type { ChartPptxElement, PptxElement } from 'pptx-viewer-core';
 
 import type { Translator } from '../i18n';
 import type { Store, ViewerState } from '../state';

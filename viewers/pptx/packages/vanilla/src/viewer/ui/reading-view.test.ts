@@ -1,3 +1,8 @@
+import {
+	READING_VIEW_ATTR,
+	READING_VIEW_COUNTER_ATTR,
+	READING_VIEW_STAGE_ATTR,
+} from 'ooxml-ui/pptx';
 /**
  * Reading View, VanillaJS binding.
  *
@@ -9,11 +14,6 @@
  * rather than a second slide show.
  */
 import type { PptxSlide } from 'pptx-viewer-core';
-import {
-	READING_VIEW_ATTR,
-	READING_VIEW_COUNTER_ATTR,
-	READING_VIEW_STAGE_ATTR,
-} from 'ooxml-ui/pptx';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { createTranslator } from '../i18n';

@@ -7,6 +7,12 @@ A release listed with no entries carried no Conventional Commit in this package'
 scope: scripts/release-plan.mjs releases whenever any published file changes, not only on
 conventional commits.
 
+## [2.41.6](https://github.com/ChristopherVR/ooxml/releases/tag/@christophervr/pptx-viewer@2.41.6) - 2026-10-11
+
+### Styling
+
+- **pptx:** Format the pptx viewer with its own oxfmt configuration ([7ca9f51](https://github.com/ChristopherVR/ooxml/commit/7ca9f51be7d0926e28cc5913792cfc1c966c0d35))
+
 ## [2.41.5](https://github.com/ChristopherVR/ooxml/releases/tag/@christophervr/pptx-viewer@2.41.5) - 2026-10-08
 
 ### Documentation

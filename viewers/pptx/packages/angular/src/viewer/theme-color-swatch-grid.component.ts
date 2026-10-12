@@ -18,8 +18,6 @@
  */
 import { ChangeDetectionStrategy, Component, computed, inject, input, output } from '@angular/core';
 import { TranslatePipe } from '@ngx-translate/core';
-import type { PptxThemeColorRef } from 'pptx-viewer-core';
-
 import type { ThemeColorPickerCommit } from 'ooxml-ui/pptx';
 import {
 	buildThemeColorSwatchGrid,
@@ -27,6 +25,8 @@ import {
 	themeColorSwatchRows,
 	themeSwatchCommit,
 } from 'ooxml-ui/pptx';
+import type { PptxThemeColorRef } from 'pptx-viewer-core';
+
 import { LoadContentService } from './load-content.service';
 
 @Component({

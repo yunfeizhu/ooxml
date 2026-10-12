@@ -41,8 +41,6 @@ import {
 } from '@angular/core';
 import { LucideChevronDown, LucideChevronRight } from '@lucide/angular';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
-import type { PptxSlide, PptxTextStyleLevels, TextSegment } from 'pptx-viewer-core';
-
 import type { NotesInlineCommand, NotesParagraphCommand } from 'ooxml-ui/pptx';
 import {
 	DEBOUNCE_MS,
@@ -59,6 +57,8 @@ import {
 	segmentsToEditorHtml,
 	segmentsToPlainText,
 } from 'ooxml-ui/pptx';
+import type { PptxSlide, PptxTextStyleLevels, TextSegment } from 'pptx-viewer-core';
+
 import { NotesToolbarComponent } from './notes-toolbar.component';
 
 @Component({

@@ -42,7 +42,7 @@ export function visioPictureInsertCommand(
 export function normalizeVisioHyperlinkAddress(value: string): string {
 	const address = value.trim();
 	if (!address || /^[a-z][a-z\d+.-]*:/i.test(address) || /\s/.test(address)) return address;
-	if (/^[^@/]+@[^@/]+\.[^@/]+$/.test(address)) return `mailto:${address}`;
+	if (isEmailAddress(address)) return `mailto:${address}`;
 	const host = /^([^/?#:]+)/.exec(address)?.[1] ?? '';
 	if (
 		/^www\./i.test(host) ||
@@ -52,6 +52,14 @@ export function normalizeVisioHyperlinkAddress(value: string): string {
 	)
 		return `https://${address}`;
 	return address;
+}
+
+/** `local@domain.tld`: one @, no slash, and a dot inside the domain (split, not a backtracking regex). */
+function isEmailAddress(address: string): boolean {
+	const [local, domain, ...rest] = address.split('@');
+	if (rest.length || !local || !domain || address.includes('/')) return false;
+	const dot = domain.indexOf('.', 1);
+	return dot > 0 && dot < domain.length - 1;
 }
 
 /** Where following a shape's link goes: a safe external URL or a page of this drawing. */

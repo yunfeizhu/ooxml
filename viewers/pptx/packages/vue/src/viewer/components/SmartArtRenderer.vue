@@ -1,12 +1,4 @@
 <script setup lang="ts">
-import type {
-	PptxElement,
-	PptxSmartArtChrome,
-	PptxSmartArtDrawingShape,
-	PptxSmartArtNode,
-	SmartArtStyle,
-} from 'pptx-viewer-core';
-import { setSmartArtNodeStyle } from 'pptx-viewer-core';
 import {
 	buildChromeStyle,
 	buildSmartArtA11y,
@@ -29,6 +21,14 @@ import type {
 	SmartArtConnectorPaint,
 	SmartArtNodeLabel,
 } from 'ooxml-ui/pptx';
+import type {
+	PptxElement,
+	PptxSmartArtChrome,
+	PptxSmartArtDrawingShape,
+	PptxSmartArtNode,
+	SmartArtStyle,
+} from 'pptx-viewer-core';
+import { setSmartArtNodeStyle } from 'pptx-viewer-core';
 import type { CSSProperties } from 'vue';
 import { computed, nextTick, ref } from 'vue';
 import { useI18n } from 'vue-i18n';

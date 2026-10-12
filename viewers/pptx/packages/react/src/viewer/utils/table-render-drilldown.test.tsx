@@ -1,3 +1,4 @@
+import { translationsEn } from 'ooxml-ui/pptx/i18n';
 // @vitest-environment happy-dom
 /**
  * G8 (OpenXML parity audit, D3): `a:graphicFrameLocks/@noDrilldown` was
@@ -6,7 +7,6 @@
  * only on `options.editable`.
  */
 import type { TablePptxElement, XmlObject } from 'pptx-viewer-core';
-import { translationsEn } from 'ooxml-ui/pptx/i18n';
 import React, { act } from 'react';
 import { createRoot } from 'react-dom/client';
 import type { Root } from 'react-dom/client';

@@ -15,6 +15,15 @@ import {
 	satisfies,
 } from './release-plan.mjs';
 
+// Run from a git hook, the environment names this repository (GIT_DIR and friends), and every git
+// command below, the planner's included, would then commit, tag and configure it instead of the
+// throwaway repositories.
+for (const name of Object.keys(process.env)) {
+	if (/^GIT_(?:DIR|WORK_TREE|INDEX_FILE|COMMON_DIR|OBJECT_DIRECTORY|PREFIX)$/.test(name)) {
+		delete process.env[name];
+	}
+}
+
 const CORE = PACKAGES.core.npm;
 const UI = PACKAGES.ui.npm;
 const roots = [];

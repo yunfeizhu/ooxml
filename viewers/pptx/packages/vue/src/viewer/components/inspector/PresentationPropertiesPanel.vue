@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { SlideSizeEmu } from 'ooxml-ui/pptx';
 /**
  * PresentationPropertiesPanel: the no-selection Properties tab body, mirroring
  * React's `inspector/PresentationPropertiesPanel.tsx` section order:
@@ -21,7 +22,6 @@ import type {
 	PptxTheme,
 	PptxThemeOption,
 } from 'pptx-viewer-core';
-import type { SlideSizeEmu } from 'ooxml-ui/pptx';
 import { computed, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 

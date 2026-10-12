@@ -8,6 +8,7 @@ export * from './base';
 export * from './controls';
 export * from './glyph';
 export * from './icons';
+export * from './ribbon/add-in-tabs';
 export * from './presence';
 export * from './smartart';
 export * from './teams/index';
@@ -34,6 +35,7 @@ export const OFFICE_UI_TAGS = [
 	'office-ui-status-item',
 	'office-ui-zoom-slider',
 	'office-ui-tab-strip',
+	'office-ui-task-pane',
 	'office-ui-options-dialog',
 	'office-ui-account',
 	'office-ui-ribbon',
@@ -53,6 +55,9 @@ export const OFFICE_UI_TAGS = [
 	'office-ui-ribbon-section',
 	'office-ui-gallery',
 	'office-ui-comments-pane',
+	'office-ui-symbol-picker',
+	'office-ui-color-grid',
+	'office-ui-color-custom',
 	'office-ui-presence',
 	'office-ui-smartart',
 	...TEAMS_TAGS,

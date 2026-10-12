@@ -13,16 +13,16 @@ import type { Type, WritableSignal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { BrowserTestingModule, platformBrowserTesting } from '@angular/platform-browser/testing';
 import { provideTranslateService, TranslateService } from '@ngx-translate/core';
-import type { PptxElement, PptxSlide, ShapePptxElement } from 'pptx-viewer-core';
-import { afterEach, beforeAll, describe, expect, it } from 'vitest';
-
-import { translationsEn } from '../../../../../../src/ui/src/pptx/i18n/translations-en';
 import {
 	EMPTY_RESOLVED_CUSTOMIZATION,
 	RIBBON_HOME_FAMILIES,
 	resolveCustomization,
 	ribbonCustomizationCss,
 } from 'ooxml-ui/pptx';
+import type { PptxElement, PptxSlide, ShapePptxElement } from 'pptx-viewer-core';
+import { afterEach, beforeAll, describe, expect, it } from 'vitest';
+
+import { translationsEn } from '../../../../../../src/ui/src/pptx/i18n/translations-en';
 import {
 	readViewerTestResource,
 	resolveViewerComponentResources,

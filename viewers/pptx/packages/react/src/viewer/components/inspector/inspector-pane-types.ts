@@ -1,3 +1,4 @@
+import type { SlideSizeEmu, SlideSizeRescaleMode } from 'ooxml-ui/pptx';
 import type {
 	PptxAppProperties,
 	PptxComment,
@@ -18,7 +19,6 @@ import type {
 	TextStyle,
 	ParsedTableStyleMap,
 } from 'pptx-viewer-core';
-import type { SlideSizeEmu, SlideSizeRescaleMode } from 'ooxml-ui/pptx';
 
 import type { CanvasSize, TableCellEditorState, ViewerMode } from '../../types';
 

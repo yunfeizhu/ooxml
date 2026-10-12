@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import type { TextStyle } from 'pptx-viewer-core';
 import { normalizeHexColor } from 'ooxml-ui/pptx';
+import type { TextStyle } from 'pptx-viewer-core';
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 

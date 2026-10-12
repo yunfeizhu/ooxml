@@ -12,9 +12,8 @@
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
 
-import { describe, expect, it } from 'vitest';
-
 import { formatMediaTime, mediaTimelineGeometry, mediaTrimEndSeconds } from 'ooxml-ui/pptx';
+import { describe, expect, it } from 'vitest';
 
 describe('mediaTrimTimelineComponent end label', () => {
 	it('derives the end label from the shared distance-from-tail conversion', () => {

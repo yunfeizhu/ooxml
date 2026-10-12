@@ -1,13 +1,3 @@
-import type {
-	PptxElement,
-	PptxElementWithShapeStyle,
-	PptxElementWithText,
-	PptxThemeColorRef,
-	ShapeStyle,
-	TextSegment,
-	TextStyle,
-} from 'pptx-viewer-core';
-import { hasShapeProperties, hasTextProperties } from 'pptx-viewer-core';
 import type { ChangeCaseMode } from 'ooxml-ui/pptx';
 import {
 	applyCaseTransformToSegments,
@@ -18,6 +8,16 @@ import {
 	textFontSizePxToPt,
 	updateTextSegmentStyle,
 } from 'ooxml-ui/pptx';
+import type {
+	PptxElement,
+	PptxElementWithShapeStyle,
+	PptxElementWithText,
+	PptxThemeColorRef,
+	ShapeStyle,
+	TextSegment,
+	TextStyle,
+} from 'pptx-viewer-core';
+import { hasShapeProperties, hasTextProperties } from 'pptx-viewer-core';
 
 import { currentInlineEditorText } from './inline-text-editor';
 

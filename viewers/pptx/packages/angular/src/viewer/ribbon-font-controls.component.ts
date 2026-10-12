@@ -7,8 +7,6 @@ import {
 	input,
 } from '@angular/core';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
-import type { PptxElement, PptxThemeColorRef } from 'pptx-viewer-core';
-
 import type { RibbonHomeRequestEvent } from 'ooxml-ui/pptx';
 import {
 	COMMON_FONT_SIZES,
@@ -21,6 +19,8 @@ import {
 } from 'ooxml-ui/pptx';
 import { resolveDefaultFontFamily } from 'ooxml-ui/pptx/render/font-catalog';
 import type { ChangeCaseMode } from 'ooxml-ui/pptx/render/text-case-transform';
+import type { PptxElement, PptxThemeColorRef } from 'pptx-viewer-core';
+
 import { CustomFontsService } from './custom-fonts.service';
 import { EditorStateService } from './editor-state.service';
 import { LoadContentService } from './load-content.service';

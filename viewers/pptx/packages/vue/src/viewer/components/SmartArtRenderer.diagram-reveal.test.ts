@@ -1,6 +1,6 @@
 import { mount } from '@vue/test-utils';
-import type { PptxElement, PptxSmartArtData, PptxSmartArtNode } from 'pptx-viewer-core';
 import type { ElementAnimationState } from 'ooxml-ui/pptx';
+import type { PptxElement, PptxSmartArtData, PptxSmartArtNode } from 'pptx-viewer-core';
 import { describe, expect, it } from 'vitest';
 
 import SmartArtRenderer from './SmartArtRenderer.vue';

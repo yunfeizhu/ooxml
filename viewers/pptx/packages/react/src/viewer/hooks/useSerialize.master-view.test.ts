@@ -23,7 +23,7 @@ import type {
 import type React from 'react';
 import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, test } from 'vitest';
 
 import { useSerialize } from './useSerialize';
 import type { UseSerializeInput } from './useSerialize';
@@ -31,7 +31,7 @@ import type { UseSerializeInput } from './useSerialize';
 const MASTER_PATH = 'ppt/slideMasters/slideMaster1.xml';
 const LAYOUT_PATH = 'ppt/slideLayouts/slideLayout1.xml';
 
-it('uses the mounted collaborative snapshot instead of an old pending draft on Save', async () => {
+test('uses the mounted collaborative snapshot instead of an old pending draft on Save', async () => {
 	const { handler, savedSlides } = recordingHandler();
 	const snapshot = {
 		elementId: 'text',
@@ -60,7 +60,7 @@ it('uses the mounted collaborative snapshot instead of an old pending draft on S
 	});
 });
 
-it.each(['composition-active', 'input-active'])(
+test.each(['composition-active', 'input-active'])(
 	'does not serialize an unfinished %s draft',
 	async (reason) => {
 		const { handler, seen } = recordingHandler();
@@ -74,7 +74,7 @@ it.each(['composition-active', 'input-active'])(
 				},
 			},
 		});
-		expect(await save()).toBeNull();
+		await expect(save()).resolves.toBeNull();
 		expect(seen).toHaveLength(0);
 	},
 );

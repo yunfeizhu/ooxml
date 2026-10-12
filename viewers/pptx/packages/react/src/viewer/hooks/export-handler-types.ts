@@ -1,3 +1,4 @@
+import type { SlideSizeEmu } from 'ooxml-ui/pptx';
 import type {
 	PptxAppProperties,
 	PptxCoreProperties,
@@ -13,7 +14,6 @@ import type {
 	PptxTagCollection,
 	PptxTheme,
 } from 'pptx-viewer-core';
-import type { SlideSizeEmu } from 'ooxml-ui/pptx';
 /**
  * Types and utility helpers for export handlers.
  */

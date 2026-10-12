@@ -1,3 +1,4 @@
+import { keyToLabel, translationsEn } from 'ooxml-ui/pptx/i18n';
 /**
  * Tests for the Angular SmartArt inspector logic.
  *
@@ -12,7 +13,6 @@ import type { PptxSmartArtData, PptxSmartArtNode } from 'pptx-viewer-core';
 import { resetSmartArtEditCounter } from 'pptx-viewer-core';
 import { beforeEach, describe, expect, it } from 'vitest';
 
-import { keyToLabel, translationsEn } from 'ooxml-ui/pptx/i18n';
 import {
 	addSmartArtNode,
 	addSmartArtNodeAsChild,

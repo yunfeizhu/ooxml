@@ -1,6 +1,6 @@
-import type { PptxHandler, ImagePptxElement } from 'pptx-viewer-core';
 import { attachEditorImagePaste } from 'ooxml-ui/pptx';
 import type { EditorImagePasteTarget } from 'ooxml-ui/pptx';
+import type { PptxHandler, ImagePptxElement } from 'pptx-viewer-core';
 
 import type { Store, ViewerState } from '../state';
 

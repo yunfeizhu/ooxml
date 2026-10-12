@@ -1,5 +1,3 @@
-import { getSubstituteFontFamily, parsePanoseString } from 'pptx-viewer-core';
-import type { PptxElement, TextSegment, TextStyle } from 'pptx-viewer-core';
 import {
 	authoredLetterSpacingPx,
 	eastAsianBreaksForRun,
@@ -15,6 +13,8 @@ import {
 	stripUnderlineDecoration,
 } from 'ooxml-ui/pptx';
 import type { EastAsianBreakOptions, ParagraphRun, RunStyle } from 'ooxml-ui/pptx';
+import { getSubstituteFontFamily, parsePanoseString } from 'pptx-viewer-core';
+import type { PptxElement, TextSegment, TextStyle } from 'pptx-viewer-core';
 import React from 'react';
 
 import { DEFAULT_TEXT_FONT_SIZE, DEFAULT_FONT_FAMILY, HYPERLINK_COLOR } from '../constants';

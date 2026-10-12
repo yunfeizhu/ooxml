@@ -1,6 +1,6 @@
+import { reflowSmartArtData, setCellText, shouldCommitSmartArtNodeText } from 'ooxml-ui/pptx';
 import { setSmartArtNodeStyle, updateSmartArtNodeText } from 'pptx-viewer-core';
 import type { PptxChartData } from 'pptx-viewer-core';
-import { reflowSmartArtData, setCellText, shouldCommitSmartArtNodeText } from 'ooxml-ui/pptx';
 
 import type { EditorState } from '../editor/editor-state.svelte';
 

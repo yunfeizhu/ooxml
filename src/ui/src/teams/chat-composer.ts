@@ -246,19 +246,20 @@ export class OfficeUiChatComposer extends TeamsElement {
 					this.files.length
 						? html`<ul class="pending">
 								${this.files.map(
-									(f, i) => html`<li>
-										<button
-											type="button"
-											aria-label=${`Remove ${f.name}`}
-											@click=${() => {
-												this.files = this.files.filter((_, j) => j !== i);
-												this.focusMessage();
-												this.saveDraft();
-											}}
-										>
-											<span class="file-label" title=${f.name}>${f.name}</span>${icon('close')}
-										</button>
-									</li>`,
+									(f, i) =>
+										html`<li>
+											<button
+												type="button"
+												aria-label=${`Remove ${f.name}`}
+												@click=${() => {
+													this.files = this.files.filter((_, j) => j !== i);
+													this.focusMessage();
+													this.saveDraft();
+												}}
+											>
+												<span class="file-label" title=${f.name}>${f.name}</span>${icon('close')}
+											</button>
+										</li>`,
 								)}
 							</ul>`
 						: nothing
@@ -288,25 +289,26 @@ export class OfficeUiChatComposer extends TeamsElement {
 							this.emojiOpen
 								? html`<div class="picker" role="menu">
 										${EMOJI.map(
-											(e) => html`<button
-												type="button"
-												role="menuitem"
-												@click=${() => {
-													const area = this.renderRoot.querySelector('textarea');
-													const start = area?.selectionStart ?? this.value.length,
-														end = area?.selectionEnd ?? start;
-													this.value = this.value.slice(0, start) + e + this.value.slice(end);
-													void this.updateComplete.then(() => {
-														area?.focus({ preventScroll: true });
-														area?.setSelectionRange(start + e.length, start + e.length);
-													});
-													this.saveDraft();
-													this.emojiOpen = false;
-													this.renderRoot.querySelector('textarea')?.focus();
-												}}
-											>
-												${e}
-											</button>`,
+											(e) =>
+												html`<button
+													type="button"
+													role="menuitem"
+													@click=${() => {
+														const area = this.renderRoot.querySelector('textarea');
+														const start = area?.selectionStart ?? this.value.length,
+															end = area?.selectionEnd ?? start;
+														this.value = this.value.slice(0, start) + e + this.value.slice(end);
+														void this.updateComplete.then(() => {
+															area?.focus({ preventScroll: true });
+															area?.setSelectionRange(start + e.length, start + e.length);
+														});
+														this.saveDraft();
+														this.emojiOpen = false;
+														this.renderRoot.querySelector('textarea')?.focus();
+													}}
+												>
+													${e}
+												</button>`,
 										)}
 									</div>`
 								: nothing

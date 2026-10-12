@@ -1,3 +1,18 @@
+import {
+	cancelCropUpdate,
+	canCropElement,
+	cropFill,
+	cropFit,
+	cropFrameOf,
+	cropModeKeyAction,
+	cropSessionChanged,
+	cropToAspectRatio,
+	CROP_ASPECT_PRESETS,
+	getImageSrc,
+	readCropInsets,
+	startCropSession,
+} from 'ooxml-ui/pptx';
+import type { CropElementUpdate, CropRestoreUpdate, CropSession } from 'ooxml-ui/pptx';
 /**
  * usePictureCrop: PowerPoint's on-canvas picture crop mode for the Vue editor.
  *
@@ -16,21 +31,6 @@
  *   key press is swallowed so the editor's own Escape does not also run.
  */
 import type { PptxElement, PptxSlide } from 'pptx-viewer-core';
-import {
-	cancelCropUpdate,
-	canCropElement,
-	cropFill,
-	cropFit,
-	cropFrameOf,
-	cropModeKeyAction,
-	cropSessionChanged,
-	cropToAspectRatio,
-	CROP_ASPECT_PRESETS,
-	getImageSrc,
-	readCropInsets,
-	startCropSession,
-} from 'ooxml-ui/pptx';
-import type { CropElementUpdate, CropRestoreUpdate, CropSession } from 'ooxml-ui/pptx';
 import { computed, onScopeDispose, shallowRef, watch } from 'vue';
 import type { Ref } from 'vue';
 

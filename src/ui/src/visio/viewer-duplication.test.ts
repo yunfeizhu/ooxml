@@ -1,3 +1,4 @@
+// @vitest-environment jsdom
 import { afterEach, expect, it } from 'vitest';
 import { parseVsdx } from 'ooxml-core/visio';
 import JSZip from 'jszip';

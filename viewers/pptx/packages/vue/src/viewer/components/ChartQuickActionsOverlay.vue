@@ -1,5 +1,13 @@
 <script setup lang="ts">
 import { Filter, Paintbrush, Plus } from 'lucide-vue-next';
+import {
+	applyChartElementToggle,
+	applyChartStylePreset,
+	buildChartQuickActionsDescriptor,
+	CHART_QUICK_ACTION_BUTTON_SIZE,
+	hideChartSeries,
+	restoreFilteredSeries,
+} from 'ooxml-ui/pptx';
 /**
  * ChartQuickActionsOverlay: PowerPoint's three floating quick-action icons
  * ("Chart Elements" +, "Chart Styles" paintbrush, "Chart Filters" funnel)
@@ -20,14 +28,6 @@ import { Filter, Paintbrush, Plus } from 'lucide-vue-next';
  * (Series-only Chart Filters, no trendline/error-bar/up-down-bars rows).
  */
 import type { ChartPptxElement, PptxElement } from 'pptx-viewer-core';
-import {
-	applyChartElementToggle,
-	applyChartStylePreset,
-	buildChartQuickActionsDescriptor,
-	CHART_QUICK_ACTION_BUTTON_SIZE,
-	hideChartSeries,
-	restoreFilteredSeries,
-} from 'ooxml-ui/pptx';
 import { computed, onBeforeUnmount, onMounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 

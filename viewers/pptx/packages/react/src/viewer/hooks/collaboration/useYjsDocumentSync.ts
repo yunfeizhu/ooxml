@@ -1,5 +1,3 @@
-/** Synchronize viewer slides with the shared granular Yjs slide schema. */
-import type { PptxElement, PptxHandlerSaveOptions, PptxSlide } from 'pptx-viewer-core';
 import type {
 	CollabLoadOrigin,
 	CollaborationConfig,
@@ -13,6 +11,8 @@ import {
 	observeYDocSlides,
 	shouldRoomSlidesReplaceLoad,
 } from 'ooxml-ui/pptx';
+/** Synchronize viewer slides with the shared granular Yjs slide schema. */
+import type { PptxElement, PptxHandlerSaveOptions, PptxSlide } from 'pptx-viewer-core';
 import { useEffect, useRef } from 'react';
 import type { Doc as YDoc } from 'yjs';
 

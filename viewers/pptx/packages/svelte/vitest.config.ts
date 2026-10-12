@@ -3,6 +3,8 @@ import { resolve } from 'node:path';
 import { svelte } from '@sveltejs/vite-plugin-svelte';
 import { defineConfig } from 'vitest/config';
 
+import { isolationProjects } from '../../scripts/vitest-isolation.mjs';
+
 export default defineConfig({
 	// Shared UI sources and their raw CSS now live outside the viewer workspace.
 	server: { fs: { allow: [resolve(__dirname, '../../../..')] } },
@@ -62,7 +64,7 @@ export default defineConfig({
 		globals: true,
 		environment: 'happy-dom',
 		maxWorkers: 4,
-		include: ['src/**/*.test.ts'],
+		projects: isolationProjects('svelte', __dirname, 'happy-dom'),
 		setupFiles: ['./src/web-controls.test-setup.ts'],
 		// The component suite parses a real .pptx fixture per test.
 		testTimeout: 30000,

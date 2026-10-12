@@ -9,10 +9,28 @@ import {
 	snapshotPictureInsert,
 } from '../edit-metadata-commands';
 import { isVisioGroupEdit, snapshotGroupEdit } from '../edit-group-commands';
+import { isVisioPageSetupEdit, snapshotPageSetupEdit } from '../edit-page-setup-commands';
+import { isVisioDiagramPartEdit, snapshotDiagramPartEdit } from '../edit-diagram-parts-commands';
+import { snapshotShapeDataEdit } from '../edit-shape-data-commands';
+import { isVisioDataEdit, snapshotDataEdit } from '../edit-data-commands';
+import { snapshotAssignLayers } from '../edit-layer-commands';
+import { snapshotLayerProperties } from '../edit-layer-properties';
+import { snapshotMasterInstance } from '../edit-master-instance';
+import { snapshotStencilMasterDrop } from '../edit-master-drop';
+import { isVisioGuideEdit, snapshotGuideEdit } from '../edit-guide-commands';
 import { snapshotResizeAnchor } from '../resize-anchor';
-import { snapshotConnectorGlue } from '../edit-commands';
+import {
+	isVisioConnectorEdit,
+	snapshotConnectorEdit,
+	snapshotConnectorGlue,
+	snapshotConnectorRoute,
+} from '../edit-connector-commands';
 import { snapshotTextRanges } from '../edit-text-range-commands';
+import { snapshotTextFieldInsert } from '../edit-text-field-commands';
 import { snapshotPathCreation } from '../edit-path-commands';
+import { snapshotPageTheme } from '../edit-page-theme-commands';
+import { isVisioCommentEdit, snapshotCommentEdit } from '../edit-comment-commands';
+import { snapshotSubprocessEdit } from '../edit-subprocess-commands';
 
 /** Bound cloning and strip arbitrary host properties. Semantic validation belongs to core. */
 export function snapshotEdits(edits: readonly VisioEdit[]): VisioEdit[] {
@@ -20,6 +38,8 @@ export function snapshotEdits(edits: readonly VisioEdit[]): VisioEdit[] {
 		throw new Error('At most 1000 edits are accepted per operation.');
 	let characters = 0;
 	return edits.map((command): VisioEdit => {
+		// Snap & Glue belongs to the drawing, not to a page.
+		if (command?.type === 'set-snap-glue') return snapshotPageSetupEdit(command);
 		if (
 			!command ||
 			typeof command.pageId !== 'string' ||
@@ -31,8 +51,21 @@ export function snapshotEdits(edits: readonly VisioEdit[]): VisioEdit[] {
 		if (command.type === 'paste-shapes') return snapshotPasteShapes(command);
 		if (command.type === 'change-shape') return snapshotChangeShape(command);
 		if (command.type === 'insert-picture') return snapshotPictureInsert(command);
+		if (command.type === 'set-page-theme') return snapshotPageTheme(command);
+		if (command.type === 'assign-layers') return snapshotAssignLayers(command);
+		if (command.type === 'set-layer-properties') return snapshotLayerProperties(command);
+		if (command.type === 'insert-master-instance') return snapshotMasterInstance(command);
+		if (command.type === 'drop-stencil-master') return snapshotStencilMasterDrop(command);
+		if (isVisioGuideEdit(command)) return snapshotGuideEdit(command);
 		if (isVisioMetadataEdit(command)) return snapshotMetadataEdit(command);
 		if (isVisioGroupEdit(command)) return snapshotGroupEdit(command);
+		if (isVisioPageSetupEdit(command)) return snapshotPageSetupEdit(command);
+		if (isVisioCommentEdit(command)) return snapshotCommentEdit(command);
+		if (command.type === 'create-subprocess') return snapshotSubprocessEdit(command);
+		if (isVisioDiagramPartEdit(command)) return snapshotDiagramPartEdit(command);
+		if (command.type === 'set-shape-data') return snapshotShapeDataEdit(command);
+		if (isVisioDataEdit(command)) return snapshotDataEdit(command);
+		if (isVisioConnectorEdit(command)) return snapshotConnectorEdit(command);
 		if (command.type === 'reorder-page') {
 			if (!Number.isSafeInteger(command.index) || command.index < 0 || command.index > 1_000_000)
 				throw new Error('Invalid page order index.');
@@ -108,6 +141,8 @@ export function snapshotEdits(edits: readonly VisioEdit[]): VisioEdit[] {
 			case 'create-line': {
 				numbers(command.beginX, command.beginY, command.endX, command.endY);
 				const connect = snapshotConnectorGlue(command.connect, command.shapeId);
+				const route =
+					command.route === undefined ? undefined : snapshotConnectorRoute(command.route);
 				return {
 					type: command.type,
 					...target,
@@ -116,12 +151,15 @@ export function snapshotEdits(edits: readonly VisioEdit[]): VisioEdit[] {
 					endX: command.endX,
 					endY: command.endY,
 					...(connect ? { connect } : {}),
+					...(route ? { route } : {}),
 				};
 			}
 			case 'replace-plain-text':
 				return { type: command.type, ...target, text: text(command.text) };
 			case 'replace-text-ranges':
 				return snapshotTextRanges(command, text);
+			case 'insert-text-field':
+				return snapshotTextFieldInsert(command);
 			case 'delete-shape':
 				return { type: command.type, ...target };
 			case 'rotate-shape':

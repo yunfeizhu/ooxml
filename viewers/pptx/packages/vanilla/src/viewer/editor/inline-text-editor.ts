@@ -1,5 +1,3 @@
-import type { PptxElement } from 'pptx-viewer-core';
-import { hasTextProperties } from 'pptx-viewer-core';
 import {
 	canInteractWithElement,
 	attachInlineListController,
@@ -18,6 +16,8 @@ import type {
 	InlineTextEditSnapshot,
 	CollaborationInlineEditor,
 } from 'ooxml-ui/pptx';
+import type { PptxElement } from 'pptx-viewer-core';
+import { hasTextProperties } from 'pptx-viewer-core';
 
 import { createEl, getTextBlockStyle } from '../render';
 import type { InlineEditorSession, OpenInlineEditorOptions } from './inline-text-editor-types';

@@ -2,6 +2,8 @@ import { resolve } from 'node:path';
 
 import { defineConfig } from 'vitest/config';
 
+import { isolationProjects } from '../../scripts/vitest-isolation.mjs';
+
 export default defineConfig({
 	// The demo's own test (included below) lives in demos/pptx at the repository root, outside the
 	// workspace root Vite would otherwise allow it to serve files from (viewers/pptx).
@@ -68,10 +70,9 @@ export default defineConfig({
 		// 3.5-5.5s on the hosted CI runner, where vitest's 5s default failed five
 		// tests in CI run 36183962014. Matches core and svelte, which set 30s.
 		testTimeout: 30_000,
-		include: [
-			'src/**/*.test.ts',
+		projects: isolationProjects('vanilla', __dirname, 'happy-dom', [
 			'../../../../demos/pptx/demo-vanilla/src/host-owned-inline-editor.test.ts',
-		],
+		]),
 		setupFiles: ['./src/web-controls.test-setup.ts'],
 	},
 });

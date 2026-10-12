@@ -14,8 +14,6 @@
  * (e.g. plain unit tests) still get the English fallback.
  */
 import type { TranslateService } from '@ngx-translate/core';
-import type { OlePptxElement } from 'pptx-viewer-core';
-
 import {
 	formatBytes,
 	getOleTypeLabel,
@@ -24,6 +22,7 @@ import {
 	oleActionsVisible,
 	resolveOleType,
 } from 'ooxml-ui/pptx';
+import type { OlePptxElement } from 'pptx-viewer-core';
 
 // Re-export the shared pure helpers so existing local imports keep working.
 export {

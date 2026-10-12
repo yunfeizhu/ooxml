@@ -1,6 +1,3 @@
-import type { PptxElement, ShapeStyle } from 'pptx-viewer-core';
-import { describe, expect, it } from 'vitest';
-
 import {
 	colorWithOpacity,
 	getBoxShadowCss,
@@ -16,6 +13,8 @@ import {
 	getOuterShadowCss,
 	normalizeHexColor,
 } from 'ooxml-ui/pptx';
+import type { PptxElement, ShapeStyle } from 'pptx-viewer-core';
+import { describe, expect, it } from 'vitest';
 
 function shape(shapeStyle?: ShapeStyle, overrides: Partial<PptxElement> = {}): PptxElement {
 	return {

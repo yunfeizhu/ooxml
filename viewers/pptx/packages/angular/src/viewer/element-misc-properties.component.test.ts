@@ -21,9 +21,6 @@ import path from 'node:path';
 
 import { Injector, runInInjectionContext, signal } from '@angular/core';
 import type { InputSignal, OutputEmitterRef } from '@angular/core';
-import type { OlePptxElement, PptxElement, ShapeStyle } from 'pptx-viewer-core';
-import { describe, expect, it, vi } from 'vitest';
-
 import {
 	buildOleObjectNamePatch,
 	CONNECTOR_ARROW_CONTROLS,
@@ -31,6 +28,9 @@ import {
 	connectorArrowValue,
 } from 'ooxml-ui/pptx';
 import { keyToLabel, translationsEn } from 'ooxml-ui/pptx/i18n';
+import type { OlePptxElement, PptxElement, ShapeStyle } from 'pptx-viewer-core';
+import { describe, expect, it, vi } from 'vitest';
+
 import {
 	ARROW_SIZE_VALUES,
 	connectorStylePatch,

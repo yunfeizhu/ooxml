@@ -11,9 +11,8 @@
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
 
-import { describe, expect, it } from 'vitest';
-
 import { buildContextMenuEntries } from 'ooxml-ui/pptx';
+import { describe, expect, it } from 'vitest';
 
 const SOURCE = readFileSync(
 	path.join(import.meta.dirname, 'editor-context-menu.component.ts'),

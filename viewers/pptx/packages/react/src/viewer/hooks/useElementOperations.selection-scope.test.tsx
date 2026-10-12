@@ -1,3 +1,10 @@
+import type { InlineTextSelection } from 'ooxml-ui/pptx';
+import {
+	attachInlineListController,
+	createInlineListSeed,
+	initializeInlineListDom,
+	inlineListBodyText,
+} from 'ooxml-ui/pptx';
 // @vitest-environment happy-dom
 /**
  * Selection-scoped text edits through the real `useElementOperations` hook.
@@ -10,13 +17,6 @@
  * the paragraphs the selection intersects.
  */
 import type { PptxElement, PptxSlide, TextSegment } from 'pptx-viewer-core';
-import type { InlineTextSelection } from 'ooxml-ui/pptx';
-import {
-	attachInlineListController,
-	createInlineListSeed,
-	initializeInlineListDom,
-	inlineListBodyText,
-} from 'ooxml-ui/pptx';
 import React, { act } from 'react';
 import { createRoot } from 'react-dom/client';
 import type { Root } from 'react-dom/client';

@@ -14,7 +14,6 @@
  */
 
 import { Injectable, signal } from '@angular/core';
-
 import { rulerDragToGuidePosition } from 'ooxml-ui/pptx';
 import type { CanvasSize } from 'ooxml-ui/pptx';
 

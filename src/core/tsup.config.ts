@@ -11,6 +11,7 @@ export default defineConfig({
 		'chart/index': 'chart/index.ts',
 		'text/index': 'text/index.ts',
 		'i18n/index': 'i18n/index.ts',
+		'ribbon/index': 'ribbon/index.ts',
 		'geometry/index': 'geometry/index.ts',
 		'xml/index': 'xml/index.ts',
 		'opc/index': 'opc/index.ts',

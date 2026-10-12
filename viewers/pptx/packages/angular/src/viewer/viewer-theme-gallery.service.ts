@@ -14,6 +14,7 @@
 
 import { computed, inject, Injectable, signal } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
+import type { ThemeEditorEdit } from 'ooxml-ui/pptx';
 import { applyThemeToData, reResolveElementColors, reResolveElementFonts } from 'pptx-viewer-core';
 import type {
 	PptxData,
@@ -22,7 +23,6 @@ import type {
 	PptxThemePreset,
 } from 'pptx-viewer-core';
 
-import type { ThemeEditorEdit } from 'ooxml-ui/pptx';
 import { EditorStateService } from './editor-state.service';
 import { LoadContentService } from './load-content.service';
 import type { TemplateElementsBySlideId } from './template-mode';

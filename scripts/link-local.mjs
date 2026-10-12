@@ -100,7 +100,7 @@ function main() {
 		backupFd = openSync(backupPath, 'wx');
 	} catch (error) {
 		if (error?.code === 'EEXIST')
-			throw new Error(`${BACKUP} exists: already linked (use --restore)`);
+			throw new Error(`${BACKUP} exists: already linked (use --restore)`, { cause: error });
 		throw error;
 	}
 	if (!args.includes('--no-build'))

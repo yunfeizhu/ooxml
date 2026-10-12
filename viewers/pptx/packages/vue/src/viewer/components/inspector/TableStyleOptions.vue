@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import type { ParsedTableStyleMap, PptxTableData } from 'pptx-viewer-core';
 import type { TableInspectorChanges } from 'ooxml-ui/pptx';
 import {
 	applyTableStylePreset,
 	TABLE_STYLE_PRESETS,
 	tableStyleAssignmentUpdate,
 } from 'ooxml-ui/pptx';
+import type { ParsedTableStyleMap, PptxTableData } from 'pptx-viewer-core';
 import { ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 

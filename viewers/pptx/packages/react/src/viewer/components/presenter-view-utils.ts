@@ -1,3 +1,4 @@
+import { notesSegmentsToSpans } from 'ooxml-ui/pptx';
 /**
  * presenter-view-utils
  *
@@ -9,7 +10,6 @@
  * nodes.
  */
 import type { TextSegment } from 'pptx-viewer-core';
-import { notesSegmentsToSpans } from 'ooxml-ui/pptx';
 import React from 'react';
 
 export {

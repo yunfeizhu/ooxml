@@ -1,5 +1,5 @@
-import type { PptxSlide, PptxSlideTransition } from 'pptx-viewer-core';
 import { resolveTransitionDurationMs, resolveTransitionSoundAction } from 'ooxml-ui/pptx';
+import type { PptxSlide, PptxSlideTransition } from 'pptx-viewer-core';
 
 import type { PresentationTransitionOverlayState } from './types';
 import type { SeedSlideAnimationOptions } from './useAnimationPlayback';

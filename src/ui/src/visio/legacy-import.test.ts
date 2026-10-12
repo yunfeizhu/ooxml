@@ -21,13 +21,13 @@ describe('legacy VSD preview routing', () => {
 		controller.cancelLoad();
 		controller.cancelEdit();
 		expect(controller.state.edit.sourceAvailable).toBe(false);
-		expect(() => controller.exportVsdx()).toThrow('Load a VSDX');
+		expect(() => controller.exportVsdx()).toThrow('Open a .vsdx file');
 		await expect(controller.replacePlainText('1', '1', 'x')).rejects.toThrow();
 		expect(editor).not.toHaveBeenCalled();
 		// A caller changing the mutable scene cannot grant source-format privileges.
 		legacy.format = 'vsdx';
-		expect(() => controller.exportVsdx()).toThrow('Load a VSDX');
-		await expect(controller.undo()).rejects.toThrow('Load a VSDX');
+		expect(() => controller.exportVsdx()).toThrow('Open a .vsdx file');
+		await expect(controller.undo()).rejects.toThrow('Open a .vsdx file');
 		controller.destroy();
 	});
 	it('keeps original VSDX export enabled when returning from a legacy preview', async () => {

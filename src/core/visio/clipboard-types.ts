@@ -11,6 +11,11 @@ export interface VisioClipboardSnapshot {
 	shapes: readonly { shapeId: string; xml: string }[];
 	resources: readonly { path: string; xml: string }[];
 	pageContext: string;
+	/**
+	 * The masters captured stencil shapes are instances of: the master ID in the source drawing and
+	 * what identifies the master itself. A paste needs the same master under the same ID.
+	 */
+	masters?: readonly { id: string; identity: string }[];
 }
 export const VISIO_CLIPBOARD_MAGIC = 'OOXML-VISIO-SHAPES/1\n';
 export const VISIO_CLIPBOARD_MAX_CHARS = 8 * 1024 * 1024;
@@ -72,7 +77,25 @@ export function snapshotVisioClipboard(value: VisioClipboardSnapshot): VisioClip
 		new Set(resources.map((resource) => resource.path)).size !== resources.length
 	)
 		fail('INVALID_CLIPBOARD', 'Clipboard mappings and resources must be unique and complete.');
+	const masters =
+		value.masters === undefined
+			? undefined
+			: Array.isArray(value.masters) && value.masters.length <= 1000
+				? value.masters.map((master) => {
+						if (
+							!master ||
+							typeof master !== 'object' ||
+							typeof master.identity !== 'string' ||
+							master.identity.length > 4096
+						)
+							fail('INVALID_CLIPBOARD', 'Invalid clipboard master.');
+						return { id: clipboardId(master.id), identity: text(master.identity) };
+					})
+				: fail('INVALID_CLIPBOARD', 'Invalid clipboard masters.');
+	if (masters && new Set(masters.map((master) => master.id)).size !== masters.length)
+		fail('INVALID_CLIPBOARD', 'Clipboard masters must be unique.');
 	return {
+		...(masters?.length ? { masters } : {}),
 		format: 'ooxml.visio-shapes',
 		version: 1,
 		sourcePageId,

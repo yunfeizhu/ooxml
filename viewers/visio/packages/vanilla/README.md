@@ -48,7 +48,8 @@ input.addEventListener('change', async () => {
 ## API
 
 The shared properties are `document` (a parsed `VisioDocument`, or `null` to clear),
-`pageIndex` (zero-based), `zoom` (`1` means 100%), `showToolbar` and `events`.
+`pageIndex` (zero-based), `zoom` (`1` means 100%), `showToolbar`, `ribbonAddIns` (tabs the host adds
+after Help) and `events`.
 The callback map uses `document-load`, `document-change`, `document-error`,
 `page-change`, `zoom-change` and `shape-select`. File loading uses the imperative
 `load(File | Blob | Uint8Array | ArrayBuffer)` handle; `document` is not a file URL.

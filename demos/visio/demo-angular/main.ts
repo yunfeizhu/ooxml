@@ -1,5 +1,5 @@
 import '@angular/compiler';
-import { ChangeDetectorRef, Component, ViewChild, inject, type AfterViewInit } from '@angular/core';
+import { Component, ViewChild, type AfterViewInit } from '@angular/core';
 import { bootstrapApplication } from '@angular/platform-browser';
 import { VisioViewerComponent } from '../../../viewers/visio/packages/bindings/src/angular';
 import { createWorkspace } from '../demo/workspace';
@@ -18,13 +18,9 @@ class AppComponent implements AfterViewInit {
 	@ViewChild(VisioViewerComponent) viewer?: VisioViewerComponent;
 	document = workspace.initialDocument;
 	readonly events = workspace.events;
-	private readonly changes = inject(ChangeDetectorRef);
 	ngAfterViewInit(): void {
 		if (!this.viewer) return;
-		workspace.attach(this.viewer, (next) => {
-			this.document = next;
-			this.changes.detectChanges();
-		});
+		workspace.attach(this.viewer);
 	}
 }
 

@@ -1,3 +1,15 @@
+import {
+	addChartCategory,
+	addChartSeries,
+	hideChartSeries,
+	patchChartData as sharedPatchChartData,
+	removeChartCategory,
+	removeChartSeries,
+	restoreFilteredSeries,
+	setChartCategoryLabel,
+	setChartCellValue,
+	setDataLabelsRangeCache,
+} from 'ooxml-ui/pptx';
 /**
  * useChartEditing: the framework-thin wiring layer for Vue's advanced chart
  * inspector. It owns the clone-mutate-emit plumbing so the `ChartPanel.vue`
@@ -24,18 +36,6 @@ import type {
 	PptxChartStyle,
 	PptxChartTrendline,
 } from 'pptx-viewer-core';
-import {
-	addChartCategory,
-	addChartSeries,
-	hideChartSeries,
-	patchChartData as sharedPatchChartData,
-	removeChartCategory,
-	removeChartSeries,
-	restoreFilteredSeries,
-	setChartCategoryLabel,
-	setChartCellValue,
-	setDataLabelsRangeCache,
-} from 'ooxml-ui/pptx';
 import type { ComputedRef } from 'vue';
 
 import { useChartOpEditing } from './useChartOpEditing';

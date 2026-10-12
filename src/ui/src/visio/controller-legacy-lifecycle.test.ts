@@ -32,10 +32,10 @@ async function expectReadOnly(viewer: ViewerController) {
 		canRedo: false,
 		busy: false,
 	});
-	expect(() => viewer.exportVsdx()).toThrow('Load a VSDX');
-	await expect(viewer.undo()).rejects.toThrow('Load a VSDX');
-	await expect(viewer.redo()).rejects.toThrow('Load a VSDX');
-	await expect(viewer.replacePlainText('0', '1', 'blocked')).rejects.toThrow('Load a VSDX');
+	expect(() => viewer.exportVsdx()).toThrow('Open a .vsdx file');
+	await expect(viewer.undo()).rejects.toThrow('Open a .vsdx file');
+	await expect(viewer.redo()).rejects.toThrow('Open a .vsdx file');
+	await expect(viewer.replacePlainText('0', '1', 'blocked')).rejects.toThrow('Open a .vsdx file');
 }
 
 describe('source format across legacy load lifecycles', () => {

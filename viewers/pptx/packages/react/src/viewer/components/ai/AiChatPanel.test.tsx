@@ -1,8 +1,8 @@
 import { useChat } from '@ai-sdk/react';
-import type { PptxSlide } from 'pptx-viewer-core';
 import type { PptxAiBridge, PptxAiConfig } from 'ooxml-ui/pptx/ai';
 // @vitest-environment happy-dom
 import { translationsEn } from 'ooxml-ui/pptx/i18n';
+import type { PptxSlide } from 'pptx-viewer-core';
 /**
  * AiChatPanel tests: with a no-op `kind: 'transport'` connection (so no network
  * and no model), the panel bootstraps a real session, reaches the ready state,

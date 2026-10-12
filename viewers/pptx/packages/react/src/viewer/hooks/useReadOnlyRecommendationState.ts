@@ -1,6 +1,6 @@
-import type { PptxModifyVerifier } from 'pptx-viewer-core';
 import { checkModifyPassword, readOnlyRecommendation } from 'ooxml-ui/pptx';
 import type { ReadOnlyRecommendation } from 'ooxml-ui/pptx';
+import type { PptxModifyVerifier } from 'pptx-viewer-core';
 import { useCallback, useEffect, useState } from 'react';
 
 /** Why the last password attempt failed; see `checkModifyPassword` (`pptx-viewer-shared`). */

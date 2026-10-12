@@ -1,8 +1,3 @@
-/**
- * useGroupAlignLayerHandlers: Group/ungroup, flip, alignment,
- * layer-order, and merge shapes handlers extracted from useElementManipulation.
- */
-import type { PptxElement, PptxSlide, GroupPptxElement } from 'pptx-viewer-core';
 import {
 	alignElements,
 	bringForward,
@@ -15,6 +10,11 @@ import {
 	ungroupElements,
 } from 'ooxml-ui/pptx';
 import type { AlignEdge, DistributeAxis } from 'ooxml-ui/pptx';
+/**
+ * useGroupAlignLayerHandlers: Group/ungroup, flip, alignment,
+ * layer-order, and merge shapes handlers extracted from useElementManipulation.
+ */
+import type { PptxElement, PptxSlide, GroupPptxElement } from 'pptx-viewer-core';
 
 import { isTemplateElementId } from '../utils';
 import { generateElementId } from '../utils/generate-id';

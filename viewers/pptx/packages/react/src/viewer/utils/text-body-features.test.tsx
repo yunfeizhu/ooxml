@@ -1,3 +1,4 @@
+import { getTextBodyRotationTransform } from 'ooxml-ui/pptx';
 /**
  * Regression tests for the `a:bodyPr` text-body features that used to render in
  * React ONLY (multi-column bodies, tab stops, `@rot`) or in no binding at all
@@ -9,7 +10,6 @@
  * decisions reach React and not only the four that fold them into one style.
  */
 import type { PptxElement } from 'pptx-viewer-core';
-import { getTextBodyRotationTransform } from 'ooxml-ui/pptx';
 import { describe, expect, it } from 'vitest';
 
 import { getTextLayoutStyle } from './text-layout';

@@ -29,9 +29,9 @@ import {
 	signal,
 	ViewEncapsulation,
 } from '@angular/core';
-
 import { aiChangeAnimationCss, changeGhostStyle } from 'ooxml-ui/pptx/ai';
 import type { AiChangeBatch, AiElementChange } from 'ooxml-ui/pptx/ai';
+
 import type { StyleMap } from '../element-style';
 
 @Component({

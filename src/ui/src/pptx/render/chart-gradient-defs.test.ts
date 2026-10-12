@@ -86,3 +86,95 @@ describe('withGradientFills through buildChartViewModel', () => {
 		expect(vm.defs?.map((d) => d.kind)).toStrictEqual(['radialGradient', 'linearGradient']);
 	});
 });
+
+describe('line series outline gradient (a:ln/a:gradFill)', () => {
+	const line = (values: number[]) =>
+		buildChartViewModel({
+			id: 'chart 1',
+			type: 'chart',
+			x: 0,
+			y: 0,
+			width: 400,
+			height: 300,
+			chartData: {
+				chartType: 'line',
+				categories: values.map((_, i) => String(i)),
+				series: [
+					{
+						name: 'S1',
+						values,
+						color: '#800F85',
+						lineGradientFill: { type: 'linear', angle: 0, stops },
+					},
+				],
+			},
+		} as never);
+	const strokes = (vm: ReturnType<typeof line>) =>
+		vm.primitives.filter((p) => p.part?.role === 'series' && 'stroke' in p);
+
+	it('strokes the series line with a gradient laid along the line in user space', () => {
+		const vm = line([1, 3, 2]);
+		expect(strokes(vm).length).toBeGreaterThan(0);
+		expect(
+			strokes(vm).every((p) => 'stroke' in p && p.stroke === 'url(#chart_1-grad-line-s0)'),
+		).toBeTruthy();
+		const def = vm.defs?.find((d) => d.id === 'chart_1-grad-line-s0');
+		expect(def).toMatchObject({ kind: 'linearGradient', gradientUnits: 'userSpaceOnUse' });
+		if (def?.kind !== 'linearGradient') throw new Error('expected a linear gradient');
+		expect(def.x2).toBeGreaterThan(def.x1);
+		expect(def.y2).toBe(def.y1);
+	});
+
+	it('still paints a perfectly flat line (zero-height bounds)', () => {
+		const vm = line([2, 2, 2]);
+		const def = vm.defs?.find((d) => d.id === 'chart_1-grad-line-s0');
+		if (def?.kind !== 'linearGradient') throw new Error('expected a linear gradient');
+		expect(def.gradientUnits).toBe('userSpaceOnUse');
+		expect(def.x2).toBeGreaterThan(def.x1);
+	});
+
+	it('lays a smoothed line gradient across the curve as well', () => {
+		const vm = buildChartViewModel({
+			id: 'chart 1',
+			type: 'chart',
+			x: 0,
+			y: 0,
+			width: 400,
+			height: 300,
+			chartData: {
+				chartType: 'line',
+				categories: ['a', 'b', 'c'],
+				series: [
+					{
+						name: 'S1',
+						values: [1, 3, 2],
+						smooth: true,
+						lineGradientFill: { type: 'linear', angle: 0, stops },
+					},
+				],
+			},
+		} as never);
+		const path = vm.primitives.find((p) => p.kind === 'path' && p.part?.role === 'series');
+		expect(path && 'stroke' in path ? path.stroke : undefined).toBe('url(#chart_1-grad-line-s0)');
+	});
+
+	it('leaves the markers on their own fill', () => {
+		const vm = line([1, 3, 2]);
+		const marks = vm.primitives.filter((p) => p.part?.role === 'dataPoint');
+		expect(marks.every((p) => !('fill' in p) || !String(p.fill).startsWith('url('))).toBeTruthy();
+	});
+
+	it('writes gradientUnits on the vanilla gradient node', () => {
+		const node = renderPatternDef(document, {
+			kind: 'linearGradient',
+			id: 'g',
+			gradientUnits: 'userSpaceOnUse',
+			x1: 10,
+			y1: 5,
+			x2: 90,
+			y2: 5,
+			stops: [],
+		});
+		expect(node.getAttribute('gradientUnits')).toBe('userSpaceOnUse');
+	});
+});

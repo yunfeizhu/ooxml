@@ -3,6 +3,7 @@
  * tab with labelled groups and dialog launchers, KeyTips, hidden actions and overflow folding. The tab
  * row, File button, collapse and peek belong to the shared `office-ui-ribbon`. Structure and look follow docx-viewer's ribbon.ts.
  */
+import { syncRibbonAddIns, type RibbonAddInTab } from '../../ribbon/add-in-tabs';
 import type { EditorContext } from 'ooxml-core/xlsx/ui';
 import { defineRibbon } from '../../controls';
 import { commandButton, el, renderControl, type RenderScope } from './controls';
@@ -32,6 +33,8 @@ export interface Ribbon {
 	/** Rebuilds all tabs (after a locale change or newly registered tabs). */
 	rebuild(): void;
 	selectTab(id: string): void;
+	/** Tabs a host adds after Excel's own (`ribbonAddIns` of the editor). */
+	setAddIns(tabs: readonly RibbonAddInTab[]): void;
 	activeTab(): string | undefined;
 	/** Alt / F10: focus the selected tab and show the tab KeyTips. */
 	showKeyTips(): void;
@@ -135,8 +138,14 @@ export function createRibbon(ctx: EditorContext, handlers: RibbonHandlers): Ribb
 	let scope: RenderScope = { ctx, doc, updates: [], isHidden: handlers.isHidden };
 	let tabs: RibbonTab[] = [];
 	let stopOverflow = () => {};
+	let addIns: readonly RibbonAddInTab[] = [];
+	const syncAddIns = () => syncRibbonAddIns(root, addIns, { panelClass: 'ribbon-panel' });
 
-	const panels = () => [...[...root.children].filter((node): node is HTMLElement => node.classList.contains('ribbon-panel'))];
+	const panels = () => [
+		...[...root.children].filter((node): node is HTMLElement =>
+			node.classList.contains('ribbon-panel'),
+		),
+	];
 	const panelFor = (id: string) => panels().find((panel) => panel.dataset.tab === id);
 
 	const select = (id: string) => {
@@ -176,6 +185,7 @@ export function createRibbon(ctx: EditorContext, handlers: RibbonHandlers): Ribb
 			}
 			root.append(panel);
 		}
+		syncAddIns();
 		refresh();
 		stopOverflow = attachRibbonOverflow(root);
 	};
@@ -201,6 +211,15 @@ export function createRibbon(ctx: EditorContext, handlers: RibbonHandlers): Ribb
 		refresh,
 		rebuild: build,
 		selectTab: select,
+		setAddIns: (next) => {
+			addIns = next;
+			const before = root.querySelector('[data-add-in]');
+			syncAddIns();
+			// Equal tabs keep their panels; only new panels need the overflow measured again.
+			if (root.querySelector('[data-add-in]') === before) return;
+			stopOverflow();
+			stopOverflow = attachRibbonOverflow(root);
+		},
 		activeTab: () => root.selected || undefined,
 		showKeyTips: () => {
 			root.focusTab();

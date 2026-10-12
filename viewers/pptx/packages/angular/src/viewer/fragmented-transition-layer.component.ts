@@ -1,8 +1,8 @@
 import { NgStyle } from '@angular/common';
 import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
+import type { CanvasSize, FragmentedLayer } from 'ooxml-ui/pptx';
 import type { PptxSlide } from 'pptx-viewer-core';
 
-import type { CanvasSize, FragmentedLayer } from 'ooxml-ui/pptx';
 import type { StyleMap } from './element-style';
 import { SlideCanvasComponent } from './slide-canvas.component';
 import { transitionSlideBoxSize } from './transition-helpers';

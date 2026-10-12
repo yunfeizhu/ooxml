@@ -1,3 +1,9 @@
+import type { AuthoredSlideRange } from 'ooxml-ui/pptx';
+import {
+	firstShowSlideIndex,
+	presentationEntrySlideIndex,
+	resolveShowSlideIndexes,
+} from 'ooxml-ui/pptx';
 /**
  * usePresentationControls: entering and leaving the slide show, including the
  * two variants that need extra state set up first (presenter view and
@@ -9,12 +15,6 @@
  * lifecycle instead of in the SFC where the ordering is easy to break.
  */
 import type { PptxCustomShow, PptxSlide } from 'pptx-viewer-core';
-import type { AuthoredSlideRange } from 'ooxml-ui/pptx';
-import {
-	firstShowSlideIndex,
-	presentationEntrySlideIndex,
-	resolveShowSlideIndexes,
-} from 'ooxml-ui/pptx';
 import type { ComputedRef, Ref, ShallowRef } from 'vue';
 import { computed, ref } from 'vue';
 

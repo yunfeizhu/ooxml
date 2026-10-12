@@ -2,6 +2,7 @@ import { expect, test } from '@playwright/test';
 import { parseVsdx } from 'ooxml-core/visio';
 import type { VisioViewerElement } from 'ooxml-ui/visio';
 import { createVsdxFixture } from './fixture.mjs';
+import { openDemo } from './demo-page';
 
 test('Insert pictures, links and ScreenTips survive export and follow with Ctrl+click', async ({
 	page,
@@ -16,7 +17,7 @@ test('Insert pictures, links and ScreenTips survive export and follow with Ctrl+
 		};
 	});
 	await page.setViewportSize({ width: 1600, height: 1000 });
-	await page.goto('/demo/?sample=1');
+	await openDemo(page);
 	const viewer = page.locator('visio-viewer');
 	// The sample loads first; a file chosen before it finishes would be replaced.
 	await expect(viewer.locator('svg.paper')).toContainText('Release workflow');
@@ -25,6 +26,7 @@ test('Insert pictures, links and ScreenTips survive export and follow with Ctrl+
 		mimeType: 'application/vnd.ms-visio.drawing',
 		buffer: await createVsdxFixture('Insert target'),
 	});
+	await expect(page.locator('#file-name')).toHaveText('Insert.vsdx');
 	await expect(viewer.locator('svg.paper')).toContainText('Insert target');
 	await viewer.getByRole('tab', { name: 'Insert', exact: true }).click();
 	await expect(viewer.locator('[command="pictures"] button')).toBeEnabled();

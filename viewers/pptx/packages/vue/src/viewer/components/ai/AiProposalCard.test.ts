@@ -1,7 +1,7 @@
 import { mount } from '@vue/test-utils';
-import type { PptxSlide } from 'pptx-viewer-core';
 import { ProposalStore } from 'ooxml-ui/pptx/ai';
 import type { PptxAiBridge } from 'ooxml-ui/pptx/ai';
+import type { PptxSlide } from 'pptx-viewer-core';
 import { describe, expect, it } from 'vitest';
 
 import AiProposalCard from './AiProposalCard.vue';

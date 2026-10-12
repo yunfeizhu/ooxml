@@ -1,8 +1,7 @@
-import type { PptxElement, PptxSlide } from 'pptx-viewer-core';
-import { describe, expect, it } from 'vitest';
-
 import { computeFocusTargets, focusTargetChips, isTwoTableFocus } from 'ooxml-ui/pptx/ai';
 import type { PptxAiFocusedTarget } from 'ooxml-ui/pptx/ai';
+import type { PptxElement, PptxSlide } from 'pptx-viewer-core';
+import { describe, expect, it } from 'vitest';
 
 function el(id: string, type: PptxElement['type']): PptxElement {
 	return { type, id, name: '', x: 0, y: 0, width: 10, height: 10 } as PptxElement;

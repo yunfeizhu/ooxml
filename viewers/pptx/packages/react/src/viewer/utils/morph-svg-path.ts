@@ -6,9 +6,4 @@
  *
  * @module utils/morph-svg-path
  */
-export {
-	parseSvgPath,
-	serializeSvgPath,
-	equalizePaths,
-	interpolatePaths,
-} from 'ooxml-ui/pptx';
+export { parseSvgPath, serializeSvgPath, equalizePaths, interpolatePaths } from 'ooxml-ui/pptx';

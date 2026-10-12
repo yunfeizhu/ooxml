@@ -1,14 +1,14 @@
-import type { PptxHandler } from 'pptx-viewer-core';
-import { EncryptedFileError } from 'pptx-viewer-core';
 import {
 	compatibilityWarningToasts,
 	describeFontEmbedding,
 	partitionTemplateElements,
 	readOnlyRecommendation,
 	resolveAuthoredCustomShowId,
+	resolveInitialSlideIndex,
 } from 'ooxml-ui/pptx';
-import { resolveInitialSlideIndex } from 'ooxml-ui/pptx';
 import type { CollabLoadOrigin } from 'ooxml-ui/pptx';
+import type { PptxHandler } from 'pptx-viewer-core';
+import { EncryptedFileError } from 'pptx-viewer-core';
 
 import type { EditorController } from './editor';
 import { seedDeckViewPreferences } from './editor';

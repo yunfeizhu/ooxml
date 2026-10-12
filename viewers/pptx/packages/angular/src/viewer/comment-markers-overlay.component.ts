@@ -17,10 +17,9 @@
 
 import { ChangeDetectionStrategy, Component, computed, inject, input, output } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import type { PptxComment } from 'pptx-viewer-core';
-
 import type { CommentMarkerDescriptor } from 'ooxml-ui/pptx';
 import { buildCommentMarkers, COMMENT_MARKER_SIZE } from 'ooxml-ui/pptx';
+import type { PptxComment } from 'pptx-viewer-core';
 
 @Component({
 	selector: 'pptx-comment-markers-overlay',

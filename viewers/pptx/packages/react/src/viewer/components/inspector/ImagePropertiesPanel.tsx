@@ -1,5 +1,5 @@
-import type { PptxElement, PptxImageLikeElement } from 'pptx-viewer-core';
 import { imageResetPatch, imageResetState } from 'ooxml-ui/pptx';
+import type { PptxElement, PptxImageLikeElement } from 'pptx-viewer-core';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 

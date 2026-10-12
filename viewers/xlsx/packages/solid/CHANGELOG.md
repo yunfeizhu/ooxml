@@ -7,6 +7,12 @@ A release listed with no entries carried no Conventional Commit in this package'
 scope: scripts/release-plan.mjs releases whenever any published file changes, not only on
 conventional commits.
 
+## [0.6.0](https://github.com/ChristopherVR/ooxml/releases/tag/xlsx-solid-viewer@0.6.0) - 2026-10-10
+
+### Features
+
+- **xlsx:** Make ribbon add-in tabs a prop and event of every binding ([691f553](https://github.com/ChristopherVR/ooxml/commit/691f5531b9f5b4a5a5ac0645b43c8c0fc55be5d8))
+
 ## [0.5.1](https://github.com/ChristopherVR/ooxml/releases/tag/xlsx-solid-viewer@0.5.1) - 2026-10-08
 
 ### Documentation

@@ -1,7 +1,7 @@
 import { flushPromises, mount } from '@vue/test-utils';
 import type { VueWrapper } from '@vue/test-utils';
 import type { ViewerCustomization } from 'ooxml-ui/pptx';
-import { afterEach, describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import PowerPointViewer from './PowerPointViewer.vue';
 import type { PowerPointViewerExpose } from './types';
@@ -125,5 +125,54 @@ describe('powerPointViewer UI customization', () => {
 		viewer.showRibbonGroup('home.editing');
 		await flushPromises();
 		expect(style.element.textContent).not.toContain('home.editing');
+	});
+});
+
+describe('powerPointViewer host ribbon tabs', () => {
+	const reports = (run: () => void) => [
+		{
+			id: 'reports',
+			label: 'Reports',
+			groups: [{ label: 'Export', commands: [{ id: 'export', label: 'Export', run }] }],
+		},
+	];
+
+	it('adds the host tab after Help, runs its command and returns to Home when it is removed', async () => {
+		const run = vi.fn();
+		const heard = vi.fn();
+		mounted = mount(PowerPointViewer, {
+			props: { content: null, canEdit: true, ribbonAddIns: reports(run) },
+			attachTo: document.body,
+		});
+		await flushPromises();
+		const root = mounted.element as HTMLElement;
+		root.addEventListener('office-ribbon-add-in', (event) => heard((event as CustomEvent).detail));
+		const tab = () => root.querySelector<HTMLButtonElement>('[data-ribbon-add-in-tab]');
+		const selected = () =>
+			// The ribbon's own tab row: the viewer has other tab lists (inspector).
+			[
+				...root.querySelectorAll(
+					'[data-pptx-chrome="ribbon-tabs"] [role="tab"][aria-selected="true"]',
+				),
+			].map((item) => item.textContent?.trim());
+		expect([...root.querySelectorAll('[data-pptx-chrome="ribbon-tabs"] [role="tab"]')].at(-1)).toBe(
+			tab(),
+		);
+		expect(root.querySelector('pptx-ui-ribbon-add-in')).toBeNull();
+		tab()!.click();
+		await flushPromises();
+		expect(selected()).toStrictEqual(['Reports']);
+		const command = root.querySelector('pptx-ui-ribbon-add-in pptx-ui-ribbon-command')!;
+		expect(command.getAttribute('label')).toBe('Export');
+		// The host tab replaces the fixed tab's groups rather than joining them.
+		expect(root.querySelector('[data-ribbon-group="home.font"]')).toBeNull();
+		command.shadowRoot!.querySelector('button')!.click();
+		expect(run).toHaveBeenCalledOnce();
+		expect(heard).toHaveBeenCalledWith({ tab: 'reports', command: 'export' });
+		await mounted.setProps({ ribbonAddIns: [] });
+		await flushPromises();
+		expect(tab()).toBeNull();
+		expect(root.querySelector('pptx-ui-ribbon-add-in')).toBeNull();
+		expect(selected()).toStrictEqual(['Home']);
 	});
 });

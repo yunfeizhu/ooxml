@@ -1,6 +1,6 @@
-import type { PptxThemeColorRef } from 'pptx-viewer-core';
 import type { RibbonGalleryId, ShapePresetType } from 'ooxml-ui/pptx';
 import { drawingHomeControls, homeGalleryControls, withHomeGalleries } from 'ooxml-ui/pptx';
+import type { PptxThemeColorRef } from 'pptx-viewer-core';
 
 import type { Translator } from '../../../i18n';
 import { createEl } from '../../../render';

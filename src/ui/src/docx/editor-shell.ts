@@ -1,3 +1,5 @@
+import { syncRibbonAddIns } from '../ribbon/add-in-tabs';
+import { refitRibbon } from './ribbon-overflow';
 import { applyShellLabels } from './shell-labels';
 import type { DocumentModel } from 'ooxml-core/docx';
 import { createDocument } from 'ooxml-core/docx';
@@ -199,10 +201,21 @@ export function buildShell(core: EditorCore, api: ShellApi): void {
 	if (core.pendingFileName) chrome.fileName = core.pendingFileName;
 	root.append(style, frame);
 	Object.assign(shell, { toolbar, canvas, paper });
+	applyRibbonAddIns(core);
 	// After the toolbar is registered: the File tab label is localized through the shell.
 	chrome.setLocale(core.locale);
 	applyViewOptions(core);
 	attachEditorInteractions(core, frame);
 	element.setAttribute('role', 'region');
 	applyShellLabels(element, paper, core.locale);
+}
+
+/** Renders the host's add-in tabs (`ribbonAddIns`) after Word's own, once the ribbon exists. */
+export function applyRibbonAddIns(core: EditorCore): void {
+	const toolbar = core.shell.toolbar;
+	if (!toolbar) return;
+	const before = toolbar.querySelector('[data-add-in]');
+	syncRibbonAddIns(toolbar, core.ribbonAddIns, { panelClass: 'ribbon-panel' });
+	// Equal tabs keep their panels; only new panels change what fits.
+	if (toolbar.querySelector('[data-add-in]') !== before) refitRibbon(toolbar);
 }

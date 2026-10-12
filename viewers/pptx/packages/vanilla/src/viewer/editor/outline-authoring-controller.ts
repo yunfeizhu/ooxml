@@ -1,10 +1,10 @@
-import type { PptxElement } from 'pptx-viewer-core';
 import type {
 	EditPointsElementPatch,
 	FreeformToolKind,
 	ResolvedCustomization,
 } from 'ooxml-ui/pptx';
 import { canEditElementPoints, isEditPointsEnabled } from 'ooxml-ui/pptx';
+import type { PptxElement } from 'pptx-viewer-core';
 
 import type { Translator } from '../i18n';
 import type { Store, ViewerState } from '../state';

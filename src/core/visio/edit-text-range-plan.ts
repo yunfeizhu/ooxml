@@ -7,12 +7,15 @@ export function textRangeNodes(
 	node: Element,
 	edit: VisioTextRangesEdit,
 ): { changed: boolean; nodes: Node[] } {
-	const tokens: { node: Node; start: number; end: number }[] = [];
+	const tokens: { node: Node; start: number; end: number; field?: boolean }[] = [];
 	let stored = '';
 	for (const part of Array.from(node.childNodes)) {
 		const start = stored.length;
+		// A field is one atomic token: its cached text counts, but ranges may not enter it.
+		const field = part.nodeType === 1 && (part as Element).localName === 'fld';
 		if (part.nodeType === 3 || part.nodeType === 4) stored += part.nodeValue ?? '';
-		tokens.push({ node: part, start, end: stored.length });
+		else if (field) stored += part.textContent ?? '';
+		tokens.push({ node: part, start, end: stored.length, ...(field ? { field } : {}) });
 	}
 	if (decodeVisioPlainText(stored) !== edit.expectedText)
 		fail('EDIT_STALE_TEXT', 'Original text no longer matches the range command.');
@@ -20,6 +23,15 @@ export function textRangeNodes(
 		(range) => edit.expectedText.slice(range.start, range.end) !== range.text,
 	);
 	if (!changed) return { changed: false, nodes: [] };
+	for (const token of tokens)
+		if (
+			token.field &&
+			edit.ranges.some((range) => range.start < token.end && range.end > token.start)
+		)
+			fail(
+				'UNSUPPORTED_TEXT_RANGE',
+				'Text fields are atomic: edit the text around a field, not the field itself.',
+			);
 	const starts: number[] = [],
 		deltas: number[] = [];
 	let delta = 0;
@@ -78,7 +90,11 @@ export function textRangeNodes(
 	let first = 0;
 	for (const token of tokens) {
 		if (token.node.nodeType === 1) {
-			output.push({ position: position(token.start), priority: 0, node: token.node });
+			output.push({
+				position: position(token.start),
+				priority: token.field ? 2 : 0,
+				node: token.node,
+			});
 			continue;
 		}
 		const end = length ? token.end : Math.min(token.end, edit.expectedText.length);

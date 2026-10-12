@@ -1,11 +1,7 @@
+import type { EnvelopeGlyphPlacement, EnvelopeSegmentInput, WarpParagraph } from 'ooxml-ui/pptx';
+import { buildGlyphEnvelopeBlock, hasGlyphEnvelope } from 'ooxml-ui/pptx';
 import type { PptxElementWithText, TextSegment, TextStyle } from 'pptx-viewer-core';
 import { getSubstituteFontFamily } from 'pptx-viewer-core';
-import type {
-	EnvelopeGlyphPlacement,
-	EnvelopeSegmentInput,
-	WarpParagraph,
-} from 'ooxml-ui/pptx';
-import { buildGlyphEnvelopeBlock, hasGlyphEnvelope } from 'ooxml-ui/pptx';
 import type { ComputedRef } from 'vue';
 import { computed } from 'vue';
 

@@ -1,3 +1,5 @@
+import type { AiCanvasHighlight, PptxAiFocusedTarget, ToolCanvasTarget } from 'ooxml-ui/pptx/ai';
+import { computeFocusTargets } from 'ooxml-ui/pptx/ai';
 /**
  * The framework-free AI panel controller: the Vanilla analog of React's
  * `useAiPanelController`. It owns the assistant's "scope" (focused targets +
@@ -15,12 +17,6 @@
  * the bridge's `getFocusedTargets`) re-read state on every `subscribe` notify.
  */
 import type { PptxElement } from 'pptx-viewer-core';
-import type {
-	AiCanvasHighlight,
-	PptxAiFocusedTarget,
-	ToolCanvasTarget,
-} from 'ooxml-ui/pptx/ai';
-import { computeFocusTargets } from 'ooxml-ui/pptx/ai';
 
 import type { Store, ViewerState } from '../state';
 

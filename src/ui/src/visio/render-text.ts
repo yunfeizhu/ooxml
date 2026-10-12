@@ -2,6 +2,7 @@ import type { VisioText } from 'ooxml-core/visio';
 import { matrix, safeColor, svgElement } from './render-svg';
 import type { TextLayoutBudget } from './text-layout';
 import { layoutParagraphs } from './paragraph-layout';
+import { runBaselineShift, runDisplaySize, runDisplayText } from './text-run-style';
 
 /** Browser-font layout is approximate until compared with the licensed Visio reference corpus. */
 export function renderText(
@@ -83,11 +84,18 @@ export function renderText(
 			row.setAttribute('textLength', String(line.availableWidth));
 			row.setAttribute('lengthAdjust', 'spacing');
 		}
+		let shift = 0;
 		for (const run of line.runs) {
 			const span = svgElement('tspan');
-			span.textContent = run.text;
+			span.textContent = runDisplayText(run.text, run);
 			span.setAttribute('font-family', run.fontFamily);
-			span.setAttribute('font-size', String(run.fontSize));
+			span.setAttribute('font-size', String(runDisplaySize(run)));
+			if (run.textCase === 'small-caps') span.setAttribute('font-variant', 'small-caps');
+			if (run.letterSpacing) span.setAttribute('letter-spacing', String(run.letterSpacing));
+			// Super/subscript: relative dy moves the baseline and the next run moves it back.
+			const target = runBaselineShift(run);
+			if (target !== shift) span.setAttribute('dy', String(target - shift));
+			shift = target;
 			span.setAttribute('fill', safeColor(run.color));
 			span.setAttribute('fill-opacity', String(run.opacity ?? text.opacity ?? 1));
 			if (run.bold) span.setAttribute('font-weight', 'bold');

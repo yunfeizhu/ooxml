@@ -8,11 +8,11 @@
  * service stays within the repo's per-file size budget.
  */
 
+import { createWriteBackScheduler, readSlidesFromYDoc } from 'ooxml-ui/pptx';
+import type { CollaborationConfig, YDocLike } from 'ooxml-ui/pptx';
 import { PptxHandler } from 'pptx-viewer-core';
 import type { PptxHandlerSaveOptions, PptxSlide } from 'pptx-viewer-core';
 
-import { createWriteBackScheduler, readSlidesFromYDoc } from 'ooxml-ui/pptx';
-import type { CollaborationConfig, YDocLike } from 'ooxml-ui/pptx';
 import { buildSaveSlides } from './template-mode';
 import type { TemplateElementsBySlideId } from './template-mode';
 

@@ -1,3 +1,4 @@
+// @vitest-own-worker: asserts that `window` does not exist, which another file in a worker may define.
 /**
  * Tests for useYjsProvider: the transport layer of the collaboration system.
  *

@@ -1,7 +1,3 @@
-/* oxlint-disable eslint/one-var -- independent, unrelated locals; merging them
-   into one statement would hurt readability. */
-import type { ParsedTableStyleMap, PptxElement, TablePptxElement } from 'pptx-viewer-core';
-import { updateMergeAttrsInRawXml } from 'pptx-viewer-core';
 import {
 	applyTableStylePreset,
 	evenColumnWidths,
@@ -9,6 +5,10 @@ import {
 	redistributeColumnWidth,
 	tableStyleAssignmentUpdate,
 } from 'ooxml-ui/pptx';
+/* oxlint-disable eslint/one-var -- independent, unrelated locals; merging them
+   into one statement would hurt readability. */
+import type { ParsedTableStyleMap, PptxElement, TablePptxElement } from 'pptx-viewer-core';
+import { updateMergeAttrsInRawXml } from 'pptx-viewer-core';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 

@@ -386,9 +386,11 @@ export class OfficeUiContextMenu extends OfficeElement {
 		let group: { heading: string; rows: TemplateResult[] } | undefined;
 		const closeGroup = () => {
 			if (!group) return;
-			out.push(html`<div role="group" aria-label=${group.heading}>
-				<div class="heading" aria-hidden="true">${group.heading}</div>${group.rows}</div
-			>`);
+			out.push(
+				html`<div role="group" aria-label=${group.heading}>
+					<div class="heading" aria-hidden="true">${group.heading}</div>${group.rows}</div
+				>`,
+			);
 			group = undefined;
 		};
 		this.model.items.forEach((item, index) => {

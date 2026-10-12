@@ -18,9 +18,9 @@
  * @module viewer/recent-colors
  */
 import { inject, Injectable, signal } from '@angular/core';
+import { mruColorsPatch, pushRecentColor, seedRecentColors } from 'ooxml-ui/pptx';
 import type { PptxData } from 'pptx-viewer-core';
 
-import { mruColorsPatch, pushRecentColor, seedRecentColors } from 'ooxml-ui/pptx';
 import { LoadContentService } from './load-content.service';
 
 @Injectable()

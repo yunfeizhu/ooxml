@@ -1,9 +1,10 @@
-import type { RibbonContextualTabId, ToolbarActionId } from 'ooxml-ui/pptx';
+import type { RibbonAddInTab, RibbonContextualTabId, ToolbarActionId } from 'ooxml-ui/pptx';
 import {
 	buildTabRowActionsState,
 	contextualTabLabelKey,
 	filterVisibleTabs,
 	isActionHidden,
+	RIBBON_ADD_IN_TAB_ATTR,
 	RIBBON_CONTEXTUAL_TAB_ATTR,
 } from 'ooxml-ui/pptx';
 
@@ -14,7 +15,9 @@ import type { RibbonTabId } from './ribbon-types';
 
 export interface RibbonTabBar {
 	el: HTMLElement;
-	setActive(tab: RibbonTabId | RibbonContextualTabId): void;
+	setActive(tab: RibbonTabId | RibbonContextualTabId | string): void;
+	/** Show the host's add-in tabs after the fixed tabs and before the contextual ones. */
+	setAddInTabs(tabs: readonly RibbonAddInTab[]): void;
 	/**
 	 * Show the selection's contextual tabs (Shape Format, Picture Format, ...)
 	 * after the fixed tabs, PowerPoint-style.
@@ -46,7 +49,7 @@ export interface RibbonTabBarActions {
 export function createRibbonTabBar(
 	doc: Document,
 	t: Translator,
-	onSelect: (tab: RibbonTabId | RibbonContextualTabId) => void,
+	onSelect: (tab: RibbonTabId | RibbonContextualTabId | string) => void,
 	hiddenActions?: readonly ToolbarActionId[],
 	actions?: RibbonTabBarActions,
 ): RibbonTabBar {
@@ -76,15 +79,45 @@ export function createRibbonTabBar(
 
 	const contextualButtons = new Map<RibbonContextualTabId, HTMLButtonElement>();
 	let contextualIds: readonly RibbonContextualTabId[] = [];
-	let activeTab: RibbonTabId | RibbonContextualTabId | null = null;
+	const addInButtons = new Map<string, HTMLButtonElement>();
+	let activeTab: RibbonTabId | RibbonContextualTabId | string | null = null;
 	let trailing: HTMLElement | null = null;
 	const reflectActive = (): void => {
-		const all: Array<[string, HTMLButtonElement]> = [...buttons, ...contextualButtons];
+		const all: Array<[string, HTMLButtonElement]> = [
+			...buttons,
+			...addInButtons,
+			...contextualButtons,
+		];
 		for (const [id, btn] of all) {
 			const active = id === activeTab;
 			btn.classList.toggle('is-active', active);
 			btn.setAttribute('aria-selected', String(active));
 		}
+	};
+	const setAddInTabs = (tabs: readonly RibbonAddInTab[]): void => {
+		for (const [id, btn] of addInButtons) {
+			if (!tabs.some((tab) => tab.id === id)) {
+				btn.remove();
+				addInButtons.delete(id);
+			}
+		}
+		// Before the contextual tabs (and the trailing spacer), in the host's order.
+		const anchor = contextualButtons.values().next().value ?? trailing;
+		for (const tab of tabs) {
+			let btn = addInButtons.get(tab.id);
+			if (!btn) {
+				btn = createEl(doc, 'button', 'pptxv-ribbon-tab');
+				btn.type = 'button';
+				btn.setAttribute('role', 'tab');
+				btn.setAttribute(RIBBON_ADD_IN_TAB_ATTR, tab.id);
+				btn.addEventListener('click', () => onSelect(tab.id));
+				addInButtons.set(tab.id, btn);
+			}
+			// The host's own label: it is not a translation key.
+			btn.textContent = tab.label;
+			strip.insertBefore(btn, anchor);
+		}
+		reflectActive();
 	};
 	const setContextualTabs = (tabs: readonly RibbonContextualTabId[]): void => {
 		if (tabs.length === contextualIds.length && tabs.every((id, i) => contextualIds[i] === id)) {
@@ -149,6 +182,7 @@ export function createRibbonTabBar(
 			activeTab = tab;
 			reflectActive();
 		},
+		setAddInTabs,
 		setContextualTabs,
 		setHiddenTabs(hidden) {
 			for (const [id, btn] of buttons) {

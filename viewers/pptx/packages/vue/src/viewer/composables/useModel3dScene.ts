@@ -1,3 +1,5 @@
+import { modelDataToBlobUrl, mountModel3D } from 'ooxml-ui/pptx';
+import type { Model3DHandle } from 'ooxml-ui/pptx';
 /**
  * useModel3dScene: Vue composable that drives the shared vanilla-three
  * {@link mountModel3D} controller for a GLB/GLTF 3D model element.
@@ -19,8 +21,6 @@
  * the consumer does not install it.
  */
 import type { Model3DPptxElement } from 'pptx-viewer-core';
-import { modelDataToBlobUrl, mountModel3D } from 'ooxml-ui/pptx';
-import type { Model3DHandle } from 'ooxml-ui/pptx';
 import { onScopeDispose, ref, watch } from 'vue';
 import type { Ref } from 'vue';
 

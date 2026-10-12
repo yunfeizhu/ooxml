@@ -9,7 +9,6 @@
  * outside the viewer subtree (thumbnails, export, tests).
  */
 import { Injectable, signal } from '@angular/core';
-
 import type { ChartPartRef } from 'ooxml-ui/pptx';
 
 /** A selected chart sub-part, scoped to the chart element that owns it. */

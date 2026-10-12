@@ -1,9 +1,9 @@
 import { Component, Input } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { BrowserTestingModule, platformBrowserTesting } from '@angular/platform-browser/testing';
+import { createRibbonControlIcon } from 'ooxml-ui/pptx';
 import { afterEach, beforeAll, describe, expect, it } from 'vitest';
 
-import { createRibbonControlIcon } from 'ooxml-ui/pptx';
 import { RibbonIconDirective } from './ribbon-icon.directive';
 
 @Component({

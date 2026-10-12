@@ -1,4 +1,3 @@
-import type { TextSegment } from 'pptx-viewer-core';
 import type { InlineListRun, ParagraphRun } from 'ooxml-ui/pptx';
 import {
 	segmentStyleToCss,
@@ -7,6 +6,7 @@ import {
 	applyUnderlineVariant,
 	nestedTextDecorationStyle,
 } from 'ooxml-ui/pptx';
+import type { TextSegment } from 'pptx-viewer-core';
 import React from 'react';
 
 import { renderParagraphRun } from './text-segment-render';

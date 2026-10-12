@@ -13,15 +13,15 @@
  * element dispatches.
  */
 import { Injector, runInInjectionContext } from '@angular/core';
-import type { PptxSlide } from 'pptx-viewer-core';
-import { describe, expect, it, vi } from 'vitest';
-
 import {
 	EFFECT_SOUND_CATALOGUE,
 	TRANSITION_PREVIEW_ATTR,
 	transitionSoundOptions,
 } from 'ooxml-ui/pptx';
 import type { RibbonTransitionsIntent } from 'ooxml-ui/pptx';
+import type { PptxSlide } from 'pptx-viewer-core';
+import { describe, expect, it, vi } from 'vitest';
+
 import { EditorStateService } from './editor-state.service';
 import { RibbonTransitionsSectionComponent } from './ribbon-transitions-section.component';
 

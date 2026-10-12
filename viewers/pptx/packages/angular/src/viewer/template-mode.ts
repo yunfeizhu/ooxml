@@ -1,3 +1,4 @@
+import { canInteractWithElement, isTemplateElement } from 'ooxml-ui/pptx';
 /**
  * template-mode.ts: separate-state model + per-element interactivity gate for the
  * editTemplateMode feature.
@@ -18,8 +19,6 @@
  * @module viewer/template-mode
  */
 import type { PptxElement, PptxSlide } from 'pptx-viewer-core';
-
-import { canInteractWithElement, isTemplateElement } from 'ooxml-ui/pptx';
 
 /** Map of slide id -> the inherited template (master/layout) elements for it. */
 export type TemplateElementsBySlideId = Record<string, PptxElement[]>;

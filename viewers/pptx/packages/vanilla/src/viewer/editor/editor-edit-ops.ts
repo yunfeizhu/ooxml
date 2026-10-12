@@ -1,8 +1,3 @@
-/* oxlint-disable eslint/one-var -- pervasive pre-existing pattern in this file
-   (many independent short-lived `const`s per action); merging them isn't a
-   style choice here. */
-import type { PptxElement, PptxHandler, SmartArtLayout } from 'pptx-viewer-core';
-import { isImageLikeElement, MIN_ELEMENT_SIZE } from 'pptx-viewer-core';
 import {
 	appendElementOnSlide,
 	canInteractWithElement,
@@ -15,6 +10,11 @@ import {
 	shapeOutlineChange,
 } from 'ooxml-ui/pptx';
 import type { Guide, InsertChartKind, ShapePresetType } from 'ooxml-ui/pptx';
+/* oxlint-disable eslint/one-var -- pervasive pre-existing pattern in this file
+   (many independent short-lived `const`s per action); merging them isn't a
+   style choice here. */
+import type { PptxElement, PptxHandler, SmartArtLayout } from 'pptx-viewer-core';
+import { isImageLikeElement, MIN_ELEMENT_SIZE } from 'pptx-viewer-core';
 
 import type { Translator } from '../i18n';
 import type { Store, ViewerState } from '../state';

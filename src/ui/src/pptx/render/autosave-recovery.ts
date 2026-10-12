@@ -17,7 +17,11 @@
  */
 
 import { getAcknowledgedAutosaveRecoveryTimestamp } from './autosave-recovery-acknowledgement';
-import { deleteAutosaveSnapshot, getAutosaveSnapshot } from './autosave-store';
+import {
+	deleteAutosaveSnapshot,
+	getAutosaveSnapshot,
+	wasWrittenByThisPage,
+} from './autosave-store';
 import type { AutosaveRecord } from './autosave-store';
 
 /** Snapshots older than this are not offered: the session they belong to is gone. */
@@ -220,6 +224,12 @@ export async function probeAutosaveRecovery(
 	}
 	try {
 		const record = await getAutosaveSnapshot(filePath);
+		// What this page autosaved a moment ago is its own work, not something to recover: a deck
+		// that loads in two steps, or one that autosaves before its first probe settles, would
+		// otherwise be offered back to itself.
+		if (record && wasWrittenByThisPage(record.key, record.timestamp)) {
+			return null;
+		}
 		const prompt = autosaveRecoveryPrompt({
 			record: record
 				? { key: record.key, timestamp: record.timestamp, size: record.size }

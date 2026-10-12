@@ -1,4 +1,3 @@
-import type { PptxElement, PptxSlide } from 'pptx-viewer-core';
 import {
 	canInteractWithElement,
 	createGestureController,
@@ -6,6 +5,7 @@ import {
 	resolveElementInteractivity,
 } from 'ooxml-ui/pptx';
 import type { ElementInteractivity, GestureController } from 'ooxml-ui/pptx';
+import type { PptxElement, PptxSlide } from 'pptx-viewer-core';
 import type { ComputedRef, Ref } from 'vue';
 
 import { useConnectorReroute } from './connector-reroute-store';

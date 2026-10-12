@@ -1,3 +1,8 @@
+import {
+	resolveRevealedDrawingShapeNodeIds,
+	resolveRevealedDrawingShapes,
+	resolveRevealedSmartArtNodes,
+} from 'ooxml-ui/pptx';
 /**
  * Staged `p:bldDgm` diagram-build reveal wiring for the Angular SmartArt
  * renderer.
@@ -9,12 +14,6 @@
  */
 import type { PptxSmartArtDrawingShape, PptxSmartArtNode } from 'pptx-viewer-core';
 import { describe, expect, it } from 'vitest';
-
-import {
-	resolveRevealedDrawingShapeNodeIds,
-	resolveRevealedDrawingShapes,
-	resolveRevealedSmartArtNodes,
-} from 'ooxml-ui/pptx';
 
 function node(id: string, text: string): PptxSmartArtNode {
 	return { id, text };

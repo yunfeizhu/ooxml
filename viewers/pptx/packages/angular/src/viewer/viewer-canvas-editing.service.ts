@@ -15,6 +15,13 @@
  */
 
 import { inject, Injectable, signal } from '@angular/core';
+import {
+	buildInlineTextCommitPatch,
+	overlayInlineTextSnapshot,
+	publishLiveInlineText,
+	slideSpaceElement,
+} from 'ooxml-ui/pptx';
+import type { InlineListController, InlineTextEditSnapshot } from 'ooxml-ui/pptx';
 import type {
 	InkPptxElement,
 	PptxElement,
@@ -25,13 +32,6 @@ import type {
 } from 'pptx-viewer-core';
 import { hasTextProperties } from 'pptx-viewer-core';
 
-import {
-	buildInlineTextCommitPatch,
-	overlayInlineTextSnapshot,
-	publishLiveInlineText,
-	slideSpaceElement,
-} from 'ooxml-ui/pptx';
-import type { InlineListController, InlineTextEditSnapshot } from 'ooxml-ui/pptx';
 import { CollaborationService } from './collaboration.service';
 import { EditorStateService } from './editor-state.service';
 import { InlineListSession } from './inline-list-session';

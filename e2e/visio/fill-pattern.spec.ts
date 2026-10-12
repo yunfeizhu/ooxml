@@ -2,6 +2,7 @@ import { test, expect } from '@playwright/test';
 import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import type { VisioDocument, VisioShape } from 'ooxml-core/visio';
+import { openDemo } from './demo-page';
 
 for (const sample of [
 	{ name: 'opaque', directory: process.env.VISIO_NATIVE_FILL_PATTERNS_DIR },
@@ -28,7 +29,10 @@ for (const sample of [
 			page,
 		}) => {
 			test.skip(!directory, 'Set VISIO_NATIVE_FILL_PATTERNS_DIR to the native oracle directory.');
-			await page.goto(framework === 'vanilla' ? '/demo/?sample=1' : `/demo-${framework}/?sample=1`);
+			await openDemo(
+				page,
+				framework === 'vanilla' ? '/demo/?sample=1' : `/demo-${framework}/?sample=1`,
+			);
 			await page.locator('#file').setInputFiles(join(directory!, 'fill-patterns.vsdx'));
 			await expect(page.locator('#file-name')).toHaveText('fill-patterns.vsdx');
 			const references = await Promise.all(

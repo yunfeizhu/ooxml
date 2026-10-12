@@ -245,18 +245,8 @@ export function applyResize(
  */
 export { computeRotation } from 'ooxml-core/geometry';
 
-/**
- * Snap an angle to the nearest `step` degrees when within `tolerance`.
- * Used for Shift-to-snap rotation (e.g. step = 15). Returns the original angle
- * when no snap target is close enough.
- */
-export function snapAngle(angleDeg: number, step = 15, tolerance = step / 2): number {
-	const nearest = Math.round(angleDeg / step) * step;
-	if (Math.abs(angleDeg - nearest) <= tolerance) {
-		return ((nearest % 360) + 360) % 360;
-	}
-	return angleDeg;
-}
+/** Shift-drag rotation snapping; the implementation lives in ooxml-core/geometry. */
+export { snapAngle } from 'ooxml-core/geometry';
 
 // ---------------------------------------------------------------------------
 // Grid snapping (resize)

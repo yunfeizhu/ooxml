@@ -9,7 +9,6 @@ import {
 	signal,
 } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-
 import { buildReviewRibbon } from 'ooxml-ui/pptx';
 import type { RibbonCommandRequestEvent } from 'ooxml-ui/pptx';
 

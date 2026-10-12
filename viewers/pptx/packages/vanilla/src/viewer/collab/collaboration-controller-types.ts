@@ -4,13 +4,13 @@
  * stays within the repo's 300 LOC ceiling. Types only, no runtime code.
  */
 
-import type { PptxHandler, PptxHandlerSaveOptions } from 'pptx-viewer-core';
 import type {
 	CollabLoadOrigin,
 	CollaborationConfig,
 	CollaborationLivePatcher,
 	ConnectionStatus,
 } from 'ooxml-ui/pptx';
+import type { PptxHandler, PptxHandlerSaveOptions } from 'pptx-viewer-core';
 
 import type { Store, ViewerState } from '../state';
 

@@ -21,7 +21,8 @@ function menuOwner(element: Element): OfficeUiMenuButton | undefined {
  * `disabled`, `main-disabled` (split command only), `title`, `keyshortcuts`. The menu uses the top layer (`popover`) so ribbon
  * overflow never clips it. Keyboard: Enter, Space or ArrowDown open; arrows, Home and End move;
  * Escape and Tab close; focus returns to the trigger. Choosing an item closes the menu; its
- * `office-command` bubbles to the host.
+ * `office-command` bubbles to the host. A child marked `data-menu-item` (a colour grid, say) takes
+ * part in that focus order through its own `focus()`.
  */
 export class OfficeUiMenuButton extends OfficeElement {
 	static override styles = controlStyles(css);
@@ -93,7 +94,8 @@ export class OfficeUiMenuButton extends OfficeElement {
 		return [...this.querySelectorAll<Item>('*')].filter(
 			(item) =>
 				(item instanceof OfficeUiMenuItem ||
-					(item instanceof OfficeUiMenuButton && present(item.submenu))) &&
+					(item instanceof OfficeUiMenuButton && present(item.submenu)) ||
+					item.hasAttribute('data-menu-item')) &&
 				!present(item.disabled) &&
 				!item.hidden &&
 				menuOwner(item) === this,

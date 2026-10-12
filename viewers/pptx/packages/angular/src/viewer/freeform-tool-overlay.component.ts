@@ -28,10 +28,9 @@ import {
 	viewChild,
 } from '@angular/core';
 import { TranslatePipe } from '@ngx-translate/core';
-import type { ShapePptxElement } from 'pptx-viewer-core';
-
 import type { CanvasSize, FreeformToolKind, FreeformToolView } from 'ooxml-ui/pptx';
 import { attachOverlayKeyboard, clientToSlidePoint, FreeformToolSession } from 'ooxml-ui/pptx';
+import type { ShapePptxElement } from 'pptx-viewer-core';
 
 const PREVIEW_COLOR = '#2f528f';
 

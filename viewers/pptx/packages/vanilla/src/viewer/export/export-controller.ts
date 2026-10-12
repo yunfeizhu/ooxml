@@ -1,4 +1,3 @@
-import type { PptxData } from 'pptx-viewer-core';
 import {
 	downloadDataUrl,
 	exportAbortError,
@@ -8,6 +7,7 @@ import {
 	rasterResultToPngDataUrl,
 	resolveExportBaseName,
 } from 'ooxml-ui/pptx';
+import type { PptxData } from 'pptx-viewer-core';
 
 import type { Store, ViewerState } from '../state';
 import type { ExportGifOptions } from './export-gif';

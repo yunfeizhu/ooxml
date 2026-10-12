@@ -13,7 +13,6 @@
  * matching both PowerPoint's behaviour and the reference binding.
  */
 import { ChevronLeft, ChevronRight, X } from 'lucide-vue-next';
-import type { PptxSlide } from 'pptx-viewer-core';
 import {
 	canGoNext,
 	canGoPrevious,
@@ -21,6 +20,7 @@ import {
 	READING_VIEW_ATTR,
 	READING_VIEW_COUNTER_ATTR,
 } from 'ooxml-ui/pptx';
+import type { PptxSlide } from 'pptx-viewer-core';
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 

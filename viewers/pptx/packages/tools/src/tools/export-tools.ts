@@ -1,5 +1,6 @@
 // Compatibility exports: all document operations are owned by OOXML core.
 import { apiToolsExportTools as operations } from 'ooxml-core/pptx/automation';
+
 export type ExportToSvgParams = operations.ExportToSvgParams;
 export type ExportToSvgResult = operations.ExportToSvgResult;
 export const exportToSvg = operations.exportToSvg;

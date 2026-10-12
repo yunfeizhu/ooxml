@@ -4,8 +4,8 @@ import { BrowserTestingModule, platformBrowserTesting } from '@angular/platform-
 import { provideTranslateService, TranslateService } from '@ngx-translate/core';
 import { afterEach, beforeAll, describe, expect, it } from 'vitest';
 
-import { translationsZhCN } from '../../../locales/src';
 import { translationsEn } from '../../../../../../src/ui/src/pptx/i18n/translations-en';
+import { translationsZhCN } from '../../../locales/src';
 import { AnimationTimelineComponent } from './animation-timeline.component';
 
 beforeAll(() => {

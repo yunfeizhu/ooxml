@@ -34,8 +34,8 @@ npm install react react-dom framer-motion lucide-react react-icons jspdf jszip f
 ## Quick start
 
 ```tsx
-import { useState } from 'react';
 import { PowerPointViewer } from 'pptx-react-viewer';
+import { useState } from 'react';
 // Not using Tailwind? Import the bundled stylesheet once at your app entry:
 import 'pptx-react-viewer/styles';
 
@@ -63,8 +63,8 @@ The component fills its parent, so give the parent a height. That's the whole se
 To read the edited presentation back out as bytes, pass a `ref` and call `getContent()`:
 
 ```tsx
-import { useRef } from 'react';
 import { PowerPointViewer, type PowerPointViewerHandle } from 'pptx-react-viewer';
+import { useRef } from 'react';
 
 const viewerRef = useRef<PowerPointViewerHandle>(null);
 
@@ -123,6 +123,7 @@ const bytes = await viewerRef.current?.getContent(); // Uint8Array of a valid .p
 | `onStopCollaboration`                                                      | `() => void`                            | n/a      | Called when the collaboration session stops                                                                                                                                                                                                                                                                                                                    |
 | `theme`                                                                    | `ViewerTheme`                           | n/a      | Theme configuration for customising colours, radius, and CSS vars                                                                                                                                                                                                                                                                                              |
 | `hiddenActions`                                                            | `ToolbarActionId[]`                     | n/a      | Hide individual toolbar buttons and/or ribbon tabs (e.g. `['share', 'broadcast']`) instead of the whole toolbar; omitted hides nothing                                                                                                                                                                                                                         |
+| `ribbonAddIns`                                                             | `RibbonAddInTab[]`                      | n/a      | Ribbon tabs the host adds after Help; a command runs its `run` callback and raises `office-ribbon-add-in` (see the customization guide)                                                                                                                                                                                                                        |
 | `customization`                                                            | `ViewerCustomization`                   | -        | Hide, lock or remap any part of the UI (ribbon tabs/buttons, File > Options pages/sections/settings, File tab, context menus, shortcuts, panels, AI/collaboration, dialogs); the same helpers (`hideRibbonTab`, `lockSetting`, ...) are on the `ref` handle. See the [UI Customization guide](https://christophervr.github.io/ooxml/pptx/guide/customization). |
 | `defaultThemeKey`                                                          | `string`                                | n/a      | Initial File > Options > Appearance selection when no persisted preference exists                                                                                                                                                                                                                                                                              |
 | `availableThemes`                                                          | `ThemeCatalogEntry[]`                   | n/a      | Theme choices offered by File > Options > Appearance (defaults to the built-in catalog)                                                                                                                                                                                                                                                                        |

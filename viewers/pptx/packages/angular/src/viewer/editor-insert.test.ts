@@ -6,11 +6,11 @@ import {
 	ɵChangeDetectionScheduler as ChangeDetectionScheduler,
 	ɵEffectScheduler as EffectScheduler,
 } from '@angular/core';
+import { INSERT_CHART_TYPES } from 'ooxml-ui/pptx';
+import { createImageElementFromFile } from 'ooxml-ui/pptx/render/image-file-insertion';
 import type { ImagePptxElement, PptxSlide } from 'pptx-viewer-core';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
-import { INSERT_CHART_TYPES } from 'ooxml-ui/pptx';
-import { createImageElementFromFile } from 'ooxml-ui/pptx/render/image-file-insertion';
 import {
 	newChartElement,
 	newEquationElement,

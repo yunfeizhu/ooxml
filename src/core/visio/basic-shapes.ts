@@ -27,6 +27,8 @@ export type VisioOutlinePoint = readonly [x: number, y: number];
 export interface VisioBasicOutline {
 	/** Closed paths, drawn in order; each becomes one Geometry section. */
 	paths: readonly (readonly VisioOutlinePoint[])[];
+	/** Open, unfilled polylines drawn over the paths (interior marks such as a flowchart's bars). */
+	lines?: readonly (readonly VisioOutlinePoint[])[];
 	/** Corner radius as a fraction of the shorter side, written to the Rounding cell. */
 	rounding?: number;
 }

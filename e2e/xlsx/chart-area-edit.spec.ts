@@ -51,7 +51,7 @@ for (const framework of FRAMEWORKS)
 			expect(chartElementFill(await saved(), part).kind).toBe('none');
 			await kind.selectOption('solid');
 			await pane.getByRole('button', { name: 'Color', exact: true }).click();
-			await host.getByRole('menuitem', { name: 'Blue', exact: true }).click();
+			await host.getByRole('menuitemradio', { name: 'Blue', exact: true }).click();
 			const solidTransparency = pane.getByRole('spinbutton', { name: 'Transparency', exact: true });
 			await solidTransparency.fill('37');
 			await solidTransparency.dispatchEvent('change');

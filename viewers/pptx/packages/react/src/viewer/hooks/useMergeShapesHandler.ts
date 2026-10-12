@@ -1,3 +1,8 @@
+import {
+	applyMergeShapesPlan,
+	canMergeShapes as canMergeSelection,
+	planMergeShapes,
+} from 'ooxml-ui/pptx';
 /**
  * useMergeShapesHandler: PowerPoint's Shape Format > Merge Shapes (Union,
  * Combine, Fragment, Intersect, Subtract).
@@ -8,11 +13,6 @@
  * to React state as ONE slide update (one undo step) and selects the result.
  */
 import type { MergeShapeOperation, PptxElement, PptxSlide } from 'pptx-viewer-core';
-import {
-	applyMergeShapesPlan,
-	canMergeShapes as canMergeSelection,
-	planMergeShapes,
-} from 'ooxml-ui/pptx';
 
 import type { EditorHistoryResult } from './useEditorHistory';
 import type { ElementOperations } from './useElementOperations';

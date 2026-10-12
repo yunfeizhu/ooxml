@@ -1,3 +1,4 @@
+import { clampTransitionNumber, mergeSlideTransition } from 'ooxml-ui/pptx';
 /**
  * Unit coverage for the pure logic behind the inspector's newer format panels
  * (3D text, slide transition). The Angular suite is deliberately TestBed-free,
@@ -6,7 +7,6 @@
  */
 import { describe, expect, it } from 'vitest';
 
-import { clampTransitionNumber, mergeSlideTransition } from 'ooxml-ui/pptx';
 import { TEXT_3D_TOP_BEVEL_KEYS, bevelSizePatch } from './text-3d-bevel-section.component';
 
 describe('text 3d bevel patches', () => {

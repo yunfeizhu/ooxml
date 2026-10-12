@@ -4,12 +4,6 @@
    helps. */
 import { ChangeDetectionStrategy, Component, computed, input, output, signal } from '@angular/core';
 import { TranslatePipe } from '@ngx-translate/core';
-import type {
-	PptxAnimationTimelineAnchor,
-	PptxElement,
-	PptxElementAnimation,
-} from 'pptx-viewer-core';
-
 import {
 	animationEffectLabelKey,
 	applyAnimationTimelineOrder,
@@ -18,6 +12,12 @@ import {
 	reorderAnimationTimelineRows,
 } from 'ooxml-ui/pptx';
 import type { AnimationTimelineBar, AnimationTimelineRow } from 'ooxml-ui/pptx';
+import type {
+	PptxAnimationTimelineAnchor,
+	PptxElement,
+	PptxElementAnimation,
+} from 'pptx-viewer-core';
+
 import { getAnimationElementLabel } from './animation-author-view';
 import { previewAngularAnimation, stopAngularAnimationPreview } from './animation-preview-player';
 

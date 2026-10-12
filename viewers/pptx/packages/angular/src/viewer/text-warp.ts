@@ -1,3 +1,16 @@
+import {
+	ALL_CLASSIFIED_PRESETS as SHARED_ALL_CLASSIFIED_PRESETS,
+	classifyTextWarp,
+	DEFAULT_FONT_FAMILY,
+	groupIntoParagraphs,
+	hasGlyphEnvelope,
+	substituteFieldText,
+} from 'ooxml-ui/pptx';
+import type {
+	FieldSubstitutionContext,
+	WarpCategory as SharedWarpCategory,
+	WarpParagraph,
+} from 'ooxml-ui/pptx';
 /**
  * Text-warp (WordArt) descriptor resolver for the Angular viewer.
  *
@@ -31,19 +44,6 @@
 import type { PptxElement, PptxTextWarpPreset, TextSegment } from 'pptx-viewer-core';
 import { hasTextProperties } from 'pptx-viewer-core';
 
-import {
-	ALL_CLASSIFIED_PRESETS as SHARED_ALL_CLASSIFIED_PRESETS,
-	classifyTextWarp,
-	DEFAULT_FONT_FAMILY,
-	groupIntoParagraphs,
-	hasGlyphEnvelope,
-	substituteFieldText,
-} from 'ooxml-ui/pptx';
-import type {
-	FieldSubstitutionContext,
-	WarpCategory as SharedWarpCategory,
-	WarpParagraph,
-} from 'ooxml-ui/pptx';
 import { buildGlyphWarpDef } from './text-warp-glyph';
 import type { TextWarpGlyphDef } from './text-warp-glyph';
 import { getWarpPath, shouldUseSvgWarp } from './warp-path-generators';

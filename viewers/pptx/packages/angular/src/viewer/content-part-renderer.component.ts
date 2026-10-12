@@ -1,8 +1,6 @@
 import { NgStyle } from '@angular/common';
 import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import type { ContentPartPptxElement, PptxElement } from 'pptx-viewer-core';
-
 import { elementHitTargetStyle, shouldRenderHitTarget } from 'ooxml-ui/pptx';
 import type { ContentPartStrokeView } from 'ooxml-ui/pptx/render/content-part-strokes';
 import {
@@ -13,6 +11,8 @@ import {
 	getContentPartReplayStyles,
 	INK_REPLAY_KEYFRAMES,
 } from 'ooxml-ui/pptx/render/ink-rendering';
+import type { ContentPartPptxElement, PptxElement } from 'pptx-viewer-core';
+
 import { DynamicStyleComponent } from './dynamic-style.component';
 import type { StyleMap } from './element-style';
 import { buildInkContainerStyle } from './ink-renderer-helpers';

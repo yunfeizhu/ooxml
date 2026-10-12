@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { resolveNotesSchematicBodyFontSizePx } from 'ooxml-ui/pptx';
 /**
  * NotesMasterCanvas - a faithful preview of the notes master page.
  *
@@ -15,7 +16,6 @@
  * Props : `{ notesMaster, canvasSize, notesCanvasSize?, slideThumbnail?, notesText?, slideNumber? }`
  */
 import type { PptxElement, PptxNotesMaster } from 'pptx-viewer-core';
-import { resolveNotesSchematicBodyFontSizePx } from 'ooxml-ui/pptx';
 import type { CSSProperties } from 'vue';
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';

@@ -229,6 +229,8 @@ export async function assertVisioMasterIndependence(
 		check();
 		if (--steps < 0) problem('Master dependency proof exceeded its cell budget.');
 		name = name.toLowerCase();
+		// The ShapeSheet constants parse as names.
+		if (name === 'true' || name === 'false') return;
 		const pageShapeId = attribute(binding.instance, 'ID');
 		if (pageShapeId !== undefined && directAffected(binding.pageId, pageShapeId, name))
 			problem('Effective master cache depends on an edited page cell.');
@@ -237,7 +239,10 @@ export async function assertVisioMasterIndependence(
 		if (active.has(id) || active.size >= 64)
 			problem('Master dependency proof is cyclic or too deep.');
 		active.add(id);
-		const source = binding.cells.get(name);
+		// Formulas name the first text rows as Char.x and Para.x.
+		const source =
+			binding.cells.get(name) ??
+			binding.cells.get(name.replace(/^char\./, 'character.0.').replace(/^para\./, 'paragraph.0.'));
 		if (!source) {
 			const defaults: Record<string, string> = {
 				locpinx: 'width',
@@ -251,7 +256,9 @@ export async function assertVisioMasterIndependence(
 			};
 			const dimension = defaults[name];
 			if (dimension) inspect(binding, dimension);
-			else if (!themeCell.test(name)) problem(`Missing effective master reference ${name}.`);
+			// Text format cells left to the document defaults are never geometry-dependent.
+			else if (!themeCell.test(name) && !/^(char|para)\./.test(name))
+				problem(`Missing effective master reference ${name}.`);
 		} else {
 			const formula = executableCellFormula(attribute(source.node, 'F'));
 			if (formula && !inertDoubleClickFormula(attribute(source.node, 'N') ?? '', formula)) {
@@ -262,20 +269,55 @@ export async function assertVisioMasterIndependence(
 						!Array.from(text.getElementsByTagName('*')).some(
 							(node) => node.localName.toLowerCase() === 'fld',
 						));
-				let analysis: ReturnType<typeof analyzeVisioMasterFormula>;
+				// A formula this proof cannot follow (menus, container lookups, add-on calls: every
+				// Visio stencil shape has some) still cannot read another page shape without naming
+				// its sheet, and within its own shape it must not name an edited cell.
+				const opaque = (reason: string) => {
+					// Page and document cells are not edited here; a sheet returned by a function
+					// (a container lookup) counts only for the cell read from it.
+					const own = formula.replace(/\b(ThePage|TheDoc)\s*!/gi, '');
+					for (const match of own.matchAll(/\)\s*!\s*([A-Za-z_][A-Za-z_0-9.]*)/g))
+						if (changed.some((item) => item.cell.toLowerCase() === match[1]!.toLowerCase()))
+							problem(reason);
+					// A numbered sheet may be a page shape (always, inside a string); its cell must
+					// not be an edited or dependent one.
+					const named = own
+						.replace(/\)\s*!/g, '')
+						.replace(/\bSheet\.(\d+)\s*!\s*([A-Za-z_][A-Za-z_0-9.]*)/gi, (_, sheet, cell) => {
+							if (
+								directAffected(binding.pageId, sheet, cell) ||
+								query({ pageId: binding.pageId, shapeId: sheet, cell }, changed)
+							)
+								problem(reason);
+							return '';
+						});
+					if (/[A-Za-z_0-9.]\s*!/.test(named)) problem(reason);
+					if (pageShapeId !== undefined)
+						for (const token of formula.match(/[A-Za-z_][A-Za-z_0-9.]*/g) ?? [])
+							if (directAffected(binding.pageId, pageShapeId, token)) problem(reason);
+				};
+				let analysis: ReturnType<typeof analyzeVisioMasterFormula> | undefined;
 				try {
 					analysis = analyzeVisioMasterFormula(formula, { textFieldFree });
 				} catch (error) {
-					problem(
+					opaque(
 						`Cannot analyze effective master formula: ${error instanceof Error ? error.message : 'invalid formula'}`,
 					);
 				}
-				if (analysis.dynamic) problem('Effective master formula has unknown dynamic dependencies.');
-				for (const ref of analysis.references) {
+				if (analysis?.dynamic) opaque('Effective master formula has unknown dynamic dependencies.');
+				for (const ref of analysis?.references ?? []) {
 					if (
-						analysis.readsText &&
+						analysis!.readsText &&
 						ref.shapeId === undefined &&
 						ref.cell.toLowerCase() === 'thetext'
+					)
+						continue;
+					// Names an opaque formula mentions that are not cells of this shape (page and
+					// document cells, function keywords) have nothing to follow.
+					if (
+						analysis!.dynamic &&
+						ref.shapeId === undefined &&
+						!binding.cells.has(ref.cell.toLowerCase())
 					)
 						continue;
 					if (ref.shapeId === undefined) inspect(binding, ref.cell);
@@ -294,7 +336,7 @@ export async function assertVisioMasterIndependence(
 						inspect(pageInput(binding.pageId, ref.shapeId), ref.cell);
 					}
 				}
-				if (analysis.readsText)
+				if (analysis?.readsText)
 					for (const cell of binding.cells.keys())
 						if (
 							/^(character\.|paragraph\.|tabs\.|leftmargin$|rightmargin$|topmargin$|bottommargin$)/i.test(

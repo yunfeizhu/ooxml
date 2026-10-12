@@ -15,13 +15,13 @@ import {
 	CUSTOM_ELEMENTS_SCHEMA,
 } from '@angular/core';
 import { TranslatePipe } from '@ngx-translate/core';
-
 import type { TableStyleEditorDescriptor, TableStyleEditorFieldEdit } from 'ooxml-ui/pptx';
 import {
 	TABLE_STYLE_BORDER_SIDE_LABEL_KEYS,
 	TABLE_STYLE_BORDER_SIDES,
 	TABLE_STYLE_DASH_PRESETS,
 } from 'ooxml-ui/pptx';
+
 import { isSelectControl, isCheckboxControl } from './control-event-targets';
 import { ThemeColorSwatchGridComponent } from './theme-color-swatch-grid.component';
 

@@ -154,6 +154,16 @@ describe('formatSnapshotSize', () => {
  * the autosave engine is found again, offered, and either loaded or dropped.
  * Everything above this line is decision logic; this is the round trip.
  */
+/**
+ * Write a snapshot the way another tab's copy of the module would, so that this page did not
+ * write it: the probe offers snapshots from other tabs and ignores the page's own.
+ */
+async function savedByAnotherTab(key: string, data: Uint8Array): Promise<void> {
+	vi.resetModules();
+	const other = await import('./autosave-store');
+	await other.saveAutosaveSnapshot(key, data);
+}
+
 describe('probeAutosaveRecovery against a real store', () => {
 	type GlobalWithIdb = typeof globalThis & {
 		indexedDB?: IDBFactory;
@@ -167,9 +177,27 @@ describe('probeAutosaveRecovery against a real store', () => {
 		sessionStorage.clear();
 	});
 
+	it('does not offer the snapshot this page autosaved itself', async () => {
+		await saveAutosaveSnapshot('deck.pptx', new Uint8Array([1, 2, 3, 4]));
+
+		await expect(probeAutosaveRecovery('deck.pptx')).resolves.toBeNull();
+		// It is still stored: another tab, or this one after a reload, is offered it.
+		await expect(getAutosaveSnapshot('deck.pptx')).resolves.toBeDefined();
+	});
+
+	it('offers a snapshot another tab wrote after this page last autosaved', async () => {
+		await saveAutosaveSnapshot('deck.pptx', new Uint8Array([1, 2, 3, 4]));
+		await new Promise((done) => setTimeout(done, 5));
+		await savedByAnotherTab('deck.pptx', new Uint8Array([5, 6, 7, 8]));
+
+		await expect(probeAutosaveRecovery('deck.pptx')).resolves.toMatchObject({
+			record: { key: 'deck.pptx' },
+		});
+	});
+
 	it('offers back the bytes the autosave engine wrote', async () => {
 		const bytes = new Uint8Array([0x50, 0x4b, 0x03, 0x04, 9, 9, 9]);
-		await saveAutosaveSnapshot('deck.pptx', bytes);
+		await savedByAnotherTab('deck.pptx', bytes);
 
 		const offer = await probeAutosaveRecovery('deck.pptx');
 		expect(offer?.prompt.filePath).toBe('deck.pptx');
@@ -178,7 +206,7 @@ describe('probeAutosaveRecovery against a real store', () => {
 
 	it('threads a public file name into the prompt without changing the lookup key', async () => {
 		const storageKey = '/private/autosave/8f2c9a';
-		await saveAutosaveSnapshot(storageKey, new Uint8Array([1, 2, 3, 4]));
+		await savedByAnotherTab(storageKey, new Uint8Array([1, 2, 3, 4]));
 
 		const offer = await probeAutosaveRecovery(storageKey, Date.now(), 'Quarterly review.pptx');
 
@@ -187,7 +215,7 @@ describe('probeAutosaveRecovery against a real store', () => {
 	});
 
 	it('keeps accepted bytes stored but does not re-offer the exact snapshot in this tab', async () => {
-		await saveAutosaveSnapshot('deck.pptx', new Uint8Array([1, 2, 3, 4]));
+		await savedByAnotherTab('deck.pptx', new Uint8Array([1, 2, 3, 4]));
 		const offer = await probeAutosaveRecovery('deck.pptx');
 		acceptAutosaveRecovery(offer!.record);
 		acknowledgeAutosaveRecovery(offer!.record);
@@ -197,7 +225,7 @@ describe('probeAutosaveRecovery against a real store', () => {
 	});
 
 	it('offers the same stored snapshot again in a fresh tab', async () => {
-		await saveAutosaveSnapshot('deck.pptx', new Uint8Array([1, 2, 3, 4]));
+		await savedByAnotherTab('deck.pptx', new Uint8Array([1, 2, 3, 4]));
 		const offer = await probeAutosaveRecovery('deck.pptx');
 		acknowledgeAutosaveRecovery(offer!.record);
 		sessionStorage.clear();
@@ -208,7 +236,7 @@ describe('probeAutosaveRecovery against a real store', () => {
 	});
 
 	it('re-offers a snapshot when its load acknowledgement is rolled back', async () => {
-		await saveAutosaveSnapshot('deck.pptx', new Uint8Array([1, 2, 3, 4]));
+		await savedByAnotherTab('deck.pptx', new Uint8Array([1, 2, 3, 4]));
 		const offer = await probeAutosaveRecovery('deck.pptx');
 		acknowledgeAutosaveRecovery(offer!.record);
 		clearAutosaveRecoveryAcknowledgement(offer!.record);
@@ -221,12 +249,12 @@ describe('probeAutosaveRecovery against a real store', () => {
 	it('offers a newer snapshot for an acknowledged document', async () => {
 		const firstTimestamp = Date.now();
 		const now = vi.spyOn(Date, 'now').mockReturnValue(firstTimestamp);
-		await saveAutosaveSnapshot('deck.pptx', new Uint8Array([1, 2, 3, 4]));
+		await savedByAnotherTab('deck.pptx', new Uint8Array([1, 2, 3, 4]));
 		const first = await probeAutosaveRecovery('deck.pptx', firstTimestamp);
 		acknowledgeAutosaveRecovery(first!.record);
 
 		now.mockReturnValue(firstTimestamp + 1);
-		await saveAutosaveSnapshot('deck.pptx', new Uint8Array([5, 6, 7, 8]));
+		await savedByAnotherTab('deck.pptx', new Uint8Array([5, 6, 7, 8]));
 		now.mockRestore();
 
 		await expect(probeAutosaveRecovery('deck.pptx', firstTimestamp + 2)).resolves.toMatchObject({
@@ -235,11 +263,11 @@ describe('probeAutosaveRecovery against a real store', () => {
 	});
 
 	it('does not let accepting a newer deck suppress an older deck', async () => {
-		await saveAutosaveSnapshot('older.pptx', new Uint8Array([1, 2, 3, 4]));
+		await savedByAnotherTab('older.pptx', new Uint8Array([1, 2, 3, 4]));
 		await new Promise<void>((resolve) => {
 			setTimeout(resolve, 2);
 		});
-		await saveAutosaveSnapshot('newer.pptx', new Uint8Array([5, 6, 7, 8]));
+		await savedByAnotherTab('newer.pptx', new Uint8Array([5, 6, 7, 8]));
 
 		const newer = await probeAutosaveRecovery('newer.pptx');
 		acceptAutosaveRecovery(newer!.record);
@@ -251,7 +279,7 @@ describe('probeAutosaveRecovery against a real store', () => {
 	});
 
 	it('deletes the snapshot when the user discards it', async () => {
-		await saveAutosaveSnapshot('deck.pptx', new Uint8Array([1, 2, 3, 4]));
+		await savedByAnotherTab('deck.pptx', new Uint8Array([1, 2, 3, 4]));
 		const offer = await probeAutosaveRecovery('deck.pptx');
 		await discardAutosaveRecovery(offer!.record);
 		await expect(getAutosaveSnapshot('deck.pptx')).resolves.toBeUndefined();
@@ -259,7 +287,7 @@ describe('probeAutosaveRecovery against a real store', () => {
 	});
 
 	it('propagates a discard delete failure and leaves the snapshot available', async () => {
-		await saveAutosaveSnapshot('deck.pptx', new Uint8Array([1, 2, 3, 4]));
+		await savedByAnotherTab('deck.pptx', new Uint8Array([1, 2, 3, 4]));
 		const offer = await probeAutosaveRecovery('deck.pptx');
 		const originalTransaction = IDBDatabase.prototype.transaction;
 		const transaction = vi
@@ -281,7 +309,7 @@ describe('probeAutosaveRecovery against a real store', () => {
 	});
 
 	it('rejects when IndexedDB cannot create the delete transaction', async () => {
-		await saveAutosaveSnapshot('deck.pptx', new Uint8Array([1, 2, 3, 4]));
+		await savedByAnotherTab('deck.pptx', new Uint8Array([1, 2, 3, 4]));
 		const transaction = vi
 			.spyOn(IDBDatabase.prototype, 'transaction')
 			.mockImplementationOnce(() => {

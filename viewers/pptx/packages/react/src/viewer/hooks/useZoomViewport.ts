@@ -1,4 +1,3 @@
-import type { PptxElement } from 'pptx-viewer-core';
 import {
 	clampZoomScale,
 	createViewerZoomStore,
@@ -6,6 +5,7 @@ import {
 	mapEditingWheel,
 } from 'ooxml-ui/pptx';
 import type { ViewerZoomState, ViewerZoomStore, ViewportFitOptions } from 'ooxml-ui/pptx';
+import type { PptxElement } from 'pptx-viewer-core';
 import { useRef, useCallback, useEffect } from 'react';
 
 import { MIN_ELEMENT_SIZE, ZOOM_TO_SELECTION_PADDING } from '../constants';

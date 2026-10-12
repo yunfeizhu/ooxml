@@ -33,9 +33,7 @@ export function initVisioTheme(win) {
 			/* Only the same-origin demo may receive the preference. */
 		}
 	}
-	function toggle() {
-		const dark = preference ? preference === 'dark' : media.matches;
-		const next = dark ? 'light' : 'dark';
+	function choose(next) {
 		apply(next);
 		try {
 			win.localStorage.setItem(key, next);
@@ -43,6 +41,17 @@ export function initVisioTheme(win) {
 		} catch {
 			/* Session theme still applies. */
 		}
+	}
+	function toggle() {
+		const dark = preference ? preference === 'dark' : media.matches;
+		choose(dark ? 'light' : 'dark');
+	}
+	/** The editor's File > Options > Office Theme asks its page for light or dark. */
+	function request(event) {
+		const scheme = event.detail?.scheme;
+		if (scheme !== 'dark' && scheme !== 'light') return;
+		event.preventDefault();
+		choose(scheme);
 	}
 	function storage(event) {
 		if (event.key === key || event.key === null) apply(event.newValue);
@@ -60,11 +69,13 @@ export function initVisioTheme(win) {
 	}
 	apply(preference);
 	button?.addEventListener('click', toggle);
+	win.addEventListener('office-theme-request', request);
 	win.addEventListener('storage', storage);
 	media.addEventListener?.('change', systemChange);
 	win.document.getElementById('live-viewer')?.addEventListener('load', syncFrame);
 	return () => {
 		button?.removeEventListener('click', toggle);
+		win.removeEventListener('office-theme-request', request);
 		win.removeEventListener('storage', storage);
 		media.removeEventListener?.('change', systemChange);
 		win.document.getElementById('live-viewer')?.removeEventListener('load', syncFrame);

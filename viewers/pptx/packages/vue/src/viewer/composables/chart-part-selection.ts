@@ -1,5 +1,5 @@
-import type { PptxElement } from 'pptx-viewer-core';
 import type { ChartPartRef } from 'ooxml-ui/pptx';
+import type { PptxElement } from 'pptx-viewer-core';
 import type { InjectionKey, Ref } from 'vue';
 import { inject, provide, ref, watchEffect } from 'vue';
 

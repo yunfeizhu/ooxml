@@ -1,7 +1,7 @@
 <script setup lang="ts">
+import { imageResetPatch, imageResetState } from 'ooxml-ui/pptx';
 import type { PptxElement, PptxImageEffects } from 'pptx-viewer-core';
 import { isImageLikeElement } from 'pptx-viewer-core';
-import { imageResetPatch, imageResetState } from 'ooxml-ui/pptx';
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 

@@ -1,5 +1,5 @@
-import type { TextSegment } from 'pptx-viewer-core';
 import type { FieldSubstitutionContext, MobileSheetKey } from 'ooxml-ui/pptx';
+import type { TextSegment } from 'pptx-viewer-core';
 
 import type { Translator } from '../../i18n/translator';
 import type { EditorState } from '../editor/editor-state.svelte';

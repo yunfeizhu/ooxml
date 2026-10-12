@@ -1,3 +1,9 @@
+import {
+	ensureBarFacePicturePixelSampled,
+	getCachedBarFacePicturePixelColor,
+	resetBarFacePicturePixelCacheForTests,
+	resolveUntargetedBarFaceFill,
+} from 'ooxml-ui/pptx';
 // @vitest-environment happy-dom
 /**
  * Regression test for the async first-pixel colour sample cache
@@ -16,12 +22,6 @@
  * DOM-free at the shared level, `chart-3d-depth.test.ts`).
  */
 import type { ChartPptxElement, PptxChartData } from 'pptx-viewer-core';
-import {
-	ensureBarFacePicturePixelSampled,
-	getCachedBarFacePicturePixelColor,
-	resetBarFacePicturePixelCacheForTests,
-	resolveUntargetedBarFaceFill,
-} from 'ooxml-ui/pptx';
 import React, { act } from 'react';
 import { createRoot } from 'react-dom/client';
 import type { Root } from 'react-dom/client';

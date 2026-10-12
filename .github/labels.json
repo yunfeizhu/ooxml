@@ -163,5 +163,45 @@
 		"name": "viewer: teams",
 		"color": "fad8c7",
 		"description": "OpenTeams viewer, demos and tests"
+	},
+	{
+		"name": "stale",
+		"color": "ededed",
+		"description": "No activity for a while; closes soon unless updated"
+	},
+	{
+		"name": "pinned",
+		"color": "0e8a16",
+		"description": "Never marked stale"
+	},
+	{
+		"name": "broken-links",
+		"color": "d93f0b",
+		"description": "Dead links found by the weekly link check"
+	},
+	{
+		"name": "size: XS",
+		"color": "3cbf00",
+		"description": "Fewer than 10 changed lines"
+	},
+	{
+		"name": "size: S",
+		"color": "5d9801",
+		"description": "Fewer than 100 changed lines"
+	},
+	{
+		"name": "size: M",
+		"color": "7f7203",
+		"description": "Fewer than 500 changed lines"
+	},
+	{
+		"name": "size: L",
+		"color": "a14c05",
+		"description": "Fewer than 1,000 changed lines"
+	},
+	{
+		"name": "size: XL",
+		"color": "c32607",
+		"description": "1,000 or more changed lines"
 	}
 ]

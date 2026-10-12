@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { schemaLabel, THEME_COLOR_SLOT_LABEL_KEYS } from 'ooxml-ui/pptx';
 /**
  * SlideThemeOverridePanel: per-slide colour-map override editing (Vue port of
  * React's `SlideThemeOverridePanel`). Toggles and edits the slide's
@@ -15,7 +16,6 @@ import {
 	DEFAULT_COLOR_MAP,
 	THEME_COLOR_SCHEME_KEYS,
 } from 'pptx-viewer-core';
-import { schemaLabel, THEME_COLOR_SLOT_LABEL_KEYS } from 'ooxml-ui/pptx';
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 

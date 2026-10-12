@@ -43,7 +43,7 @@
 		"lint:fix": "oxlint --fix"
 	},
 	"dependencies": {
-		"emf-converter": "4.8.21",
+		"emf-converter": "4.11.2",
 		"ooxml-core": "*",
 		"ooxml-ui": "*"
 	},
@@ -52,11 +52,11 @@
 		"@types/node": "^22.20.5",
 		"jsdom": "^30.1.2",
 		"jszip": "^3.10.2",
-		"oxfmt": "^0.71.0",
-		"oxlint": "^1.86.0",
-		"postcss": "^8.5.28",
+		"oxfmt": "^0.72.0",
+		"oxlint": "^1.87.0",
+		"postcss": "^8.5.29",
 		"typescript": "~6.0.3",
-		"vite": "^8.3.2",
+		"vite": "^8.3.3",
 		"vitest": "^5.0.3"
 	},
 	"engines": {

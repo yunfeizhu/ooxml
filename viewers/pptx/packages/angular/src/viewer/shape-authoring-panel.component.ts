@@ -6,9 +6,6 @@ import {
 	output,
 	CUSTOM_ELEMENTS_SCHEMA,
 } from '@angular/core';
-import type { PptxElement, ShapeStyle } from 'pptx-viewer-core';
-import { hasShapeProperties } from 'pptx-viewer-core';
-
 import {
 	clampShapeAdjustmentValue,
 	DEFAULT_ROUND_RECT_ADJUSTMENT,
@@ -17,6 +14,8 @@ import {
 	SHAPE_PRESET_DEFS,
 	SHAPE_QUICK_STYLES,
 } from 'ooxml-ui/pptx';
+import type { PptxElement, ShapeStyle } from 'pptx-viewer-core';
+import { hasShapeProperties } from 'pptx-viewer-core';
 
 export function shapeTypePatch(element: PptxElement, shapeType: string): Partial<PptxElement> {
 	if (!hasShapeProperties(element)) {

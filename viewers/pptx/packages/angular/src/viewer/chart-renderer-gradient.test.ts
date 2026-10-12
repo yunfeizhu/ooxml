@@ -35,4 +35,30 @@ describe('chartRenderer gradient fills', () => {
 		expect(vm.defs?.map((d) => d.kind)).toStrictEqual(['radialGradient', 'linearGradient']);
 		expect(vm.areaFill).toBe('url(#c-grad-area)');
 	});
+
+	it('strokes a line series with its outline gradient in user space', () => {
+		const element = {
+			id: 'c',
+			type: 'chart',
+			x: 0,
+			y: 0,
+			width: 400,
+			height: 300,
+			chartData: {
+				chartType: 'line',
+				categories: ['A', 'B'],
+				series: [
+					{
+						name: 'S',
+						values: [1, 1],
+						lineGradientFill: { type: 'linear', angle: 0, stops },
+					},
+				],
+			},
+		} as ChartPptxElement;
+		const vm = buildChartViewModel(element);
+		expect(vm.defs).toContainEqual(
+			expect.objectContaining({ id: 'c-grad-line-s0', gradientUnits: 'userSpaceOnUse' }),
+		);
+	});
 });

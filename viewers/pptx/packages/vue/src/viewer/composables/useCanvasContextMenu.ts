@@ -1,7 +1,4 @@
-import {
-	buildCanvasContextMenuEntries,
-	customizeCanvasContextMenuEntries,
-} from 'ooxml-ui/pptx';
+import { buildCanvasContextMenuEntries, customizeCanvasContextMenuEntries } from 'ooxml-ui/pptx';
 import type { ResolvedCustomization } from 'ooxml-ui/pptx';
 import { computed, ref } from 'vue';
 import type { ComputedRef, Ref } from 'vue';

@@ -1,4 +1,3 @@
-import type { PptxElement, PptxTableData, TablePptxElement } from 'pptx-viewer-core';
 import type {
 	CellCoord,
 	ContextMenuCommandId,
@@ -24,6 +23,7 @@ import {
 	removeTableElementRow,
 	resolveEditPointsAvailability,
 } from 'ooxml-ui/pptx';
+import type { PptxElement, PptxTableData, TablePptxElement } from 'pptx-viewer-core';
 
 import type { EditorState } from './editor-state.svelte';
 

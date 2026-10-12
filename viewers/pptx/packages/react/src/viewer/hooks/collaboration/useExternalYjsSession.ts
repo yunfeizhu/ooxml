@@ -3,10 +3,7 @@ import {
 	observeExternalCollaborationSession,
 	registerCollaborationTeardown,
 } from 'ooxml-ui/pptx';
-import type {
-	BorrowedCollaborationAwareness,
-	ExternalCollaborationSession,
-} from 'ooxml-ui/pptx';
+import type { BorrowedCollaborationAwareness, ExternalCollaborationSession } from 'ooxml-ui/pptx';
 import { useEffect, useState } from 'react';
 
 import type { UseYjsProviderResult } from './useYjsProvider';

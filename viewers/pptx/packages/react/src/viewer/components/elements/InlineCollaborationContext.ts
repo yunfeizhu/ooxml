@@ -1,5 +1,5 @@
-import type { PptxElement } from 'pptx-viewer-core';
 import type { CollaborationLivePatcher, InlineListReadResult } from 'ooxml-ui/pptx';
+import type { PptxElement } from 'pptx-viewer-core';
 import { createContext } from 'react';
 
 /** Explicitly scoped to one mounted canvas, including custom editor shells. */

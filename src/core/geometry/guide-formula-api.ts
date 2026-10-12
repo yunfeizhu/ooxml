@@ -6,12 +6,7 @@
  */
 
 import type { GeometryGuide, GeometryContext } from './guide-formula-eval';
-import {
-	ANGLE_SCALE,
-	parseFormula,
-	evaluateFormula,
-	resolveOperand,
-} from './guide-formula-eval';
+import { ANGLE_SCALE, parseFormula, evaluateFormula, resolveOperand } from './guide-formula-eval';
 import { at } from './indexed';
 
 // ---------------------------------------------------------------------------

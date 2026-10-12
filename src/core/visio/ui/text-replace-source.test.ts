@@ -46,9 +46,8 @@ describe('source-backed atomic text replacement plans', () => {
 	});
 	it.each([
 		cell('LockTextEdit', 1),
-		'<Section N="Field"><Row IX="0"><Cell N="Value" V="a"/></Row></Section>',
-		'<Section N="User"><Row N="Dependent"><Cell N="Value" V="1" F="TEXTWIDTH(TheText)"/></Row></Section>',
-	])('refuses a late matched protected/field shape atomically %#', async (extra) => {
+		'<Section N="User"><Row N="Dependent"><Cell N="Value" V="1" F="SHAPETEXT(TheText)"/></Row></Section>',
+	])('refuses a late matched protected/dependent shape atomically %#', async (extra) => {
 		const bytes = await source(extra),
 			before = bytes.slice(),
 			document = await parseVsdx(bytes);
@@ -84,7 +83,7 @@ describe('source-backed atomic text replacement plans', () => {
 			).bytes,
 		).toEqual(bytes);
 	});
-	it('includes matched master text and refuses the complete source transaction', async () => {
+	it('replaces matched text in a stencil instance with the local shapes, in one transaction', async () => {
 		const bytes = await fixture({
 			masters: [{ id: '0', shapes: local('1', 'a') }],
 			pages: [
@@ -97,7 +96,8 @@ describe('source-backed atomic text replacement plans', () => {
 		const document = await parseVsdx(bytes),
 			plan = visioTextReplacePlan(document, request);
 		expect(plan.edits).toHaveLength(2);
-		await expect(editVsdx(bytes, plan.edits)).rejects.toThrow(/Master-linked/);
+		const saved = await parseVsdx((await editVsdx(bytes, plan.edits)).bytes);
+		expect(saved.pages[0]!.shapes.map((item) => item.text.plainText)).toEqual(['$&', '$&']);
 	});
 	it('deletes literal text and preserves exact repeated no-op source bytes', async () => {
 		const bytes = await source(),

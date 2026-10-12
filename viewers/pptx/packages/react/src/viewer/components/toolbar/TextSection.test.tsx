@@ -1,3 +1,8 @@
+import {
+	attachInlineListController,
+	createInlineListSeed,
+	initializeInlineListDom,
+} from 'ooxml-ui/pptx';
 // @vitest-environment happy-dom
 /**
  * TextSection (ribbon Home > Font / Paragraph groups):
@@ -10,11 +15,6 @@
  *   cells keep their cell-style path.
  */
 import type { PptxElement, TextSegment, TextStyle } from 'pptx-viewer-core';
-import {
-	attachInlineListController,
-	createInlineListSeed,
-	initializeInlineListDom,
-} from 'ooxml-ui/pptx';
 import React, { act } from 'react';
 import { createRoot } from 'react-dom/client';
 import type { Root } from 'react-dom/client';

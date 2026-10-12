@@ -61,13 +61,10 @@ The package exposes several entry points (from `package.json` `exports`):
 ```ts
 // Root entry - viewer, theme utilities, i18n helper re-exports
 import { PowerPointViewer } from 'pptx-vue-viewer';
-
-// Viewer sub-entry - the component plus renderers and the curated composables
-import { PowerPointViewer } from 'pptx-vue-viewer/viewer';
-
 // vue-i18n dictionary (single-brace interpolation, converted from the shared dictionary)
 import { translationsEn } from 'pptx-vue-viewer/i18n';
-
+// Viewer sub-entry - the component plus renderers and the curated composables
+import { PowerPointViewer } from 'pptx-vue-viewer/viewer';
 // Bundled stylesheet, for apps that don't already use Tailwind CSS v4
 import 'pptx-vue-viewer/styles';
 ```

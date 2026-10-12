@@ -4,6 +4,7 @@ import { join } from 'node:path';
 import { parseVsdx, type VisioDocument } from 'ooxml-core/visio';
 import { visioStraightLineHandles } from 'ooxml-core/visio/ui';
 import { dragLineEndpoint } from './line-endpoint';
+import { history } from './ribbon';
 
 interface GradientEditSample {
 	shapeId: string;
@@ -28,7 +29,6 @@ export async function prepareNativeGradientEdit(
 	await expect(page.locator('#file-name')).toHaveText(filename);
 	if (pointerEditing) {
 		const viewer = page.locator('visio-viewer');
-		await viewer.locator('.edit-controls summary').click();
 		for (const item of samples) {
 			const edit = item.endpointEdit!;
 			const { line, handle, before, after } = await dragLineEndpoint(
@@ -38,15 +38,9 @@ export async function prepareNativeGradientEdit(
 				edit.x,
 				edit.y,
 			);
-			await viewer
-				.locator('.edit-controls')
-				.getByRole('button', { name: 'Undo', exact: true })
-				.click();
+			await history(viewer, 'Undo').click();
 			await expect(line).toHaveAttribute('transform', before);
-			await viewer
-				.locator('.edit-controls')
-				.getByRole('button', { name: 'Redo', exact: true })
-				.click();
+			await history(viewer, 'Redo').click();
 			await expect(line).toHaveAttribute('transform', after);
 			await expect(handle).toBeVisible();
 		}

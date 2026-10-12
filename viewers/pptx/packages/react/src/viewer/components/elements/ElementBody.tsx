@@ -1,3 +1,4 @@
+import { getGroupChildParentFill, mediaTransportVisible, oleActionsVisible } from 'ooxml-ui/pptx';
 import type {
 	ChartPptxElement,
 	ContentPartPptxElement,
@@ -8,11 +9,6 @@ import type {
 	ZoomPptxElement,
 } from 'pptx-viewer-core';
 import { isInkElement } from 'pptx-viewer-core';
-import {
-	getGroupChildParentFill,
-	mediaTransportVisible,
-	oleActionsVisible,
-} from 'ooxml-ui/pptx';
 import React from 'react';
 
 import {

@@ -131,8 +131,8 @@ console.log(result.elements);
 如需通过代码嵌入服务器，而非使用 CLI，可以使用 `/mcp` 入口的工厂函数：
 
 ```ts
-import { createServer } from 'pptx-viewer-mcp/mcp';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
+import { createServer } from 'pptx-viewer-mcp/mcp';
 
 const server = createServer(); // McpServer with all 67 tools registered
 await server.connect(new StdioServerTransport());
@@ -143,6 +143,8 @@ await server.connect(new StdioServerTransport());
 `executeToolWithContext` 封装**加载 → 工具 → 保存**周期；存在活动协作房间时，会通过 Y.Doc 传递变化，替代或补充磁盘写入：
 
 ```ts
+import { readFile, writeFile } from 'node:fs/promises';
+
 import {
 	executeToolWithContext,
 	replaceText,
@@ -150,7 +152,6 @@ import {
 	type FileSystemProvider,
 	type CollaborationProvider,
 } from 'pptx-viewer-mcp';
-import { readFile, writeFile } from 'node:fs/promises';
 
 // Minimal file-system-only provider
 const filesystem: FileSystemProvider = {

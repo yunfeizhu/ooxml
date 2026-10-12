@@ -1,9 +1,9 @@
-import type { PptxElement, PptxSlide } from 'pptx-viewer-core';
 import {
 	effectiveDirection,
 	effectiveTimingCurve,
 	getDensePanelTouchTargetPx,
 } from 'ooxml-ui/pptx';
+import type { PptxElement, PptxSlide } from 'pptx-viewer-core';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { LuPlay } from 'react-icons/lu';

@@ -1,8 +1,3 @@
-/**
- * Test-only in-memory {@link PptxAiBridge} for the React AI hook tests. Kept out
- * of any build entry point (only imported from `*.test.*`).
- */
-import type { PptxSlide, PptxTheme } from 'pptx-viewer-core';
 import type {
 	PptxAiBridge,
 	PptxAiDeckMeta,
@@ -10,6 +5,11 @@ import type {
 	PptxAiFocusedTarget,
 	PptxAiSlidesUpdater,
 } from 'ooxml-ui/pptx/ai';
+/**
+ * Test-only in-memory {@link PptxAiBridge} for the React AI hook tests. Kept out
+ * of any build entry point (only imported from `*.test.*`).
+ */
+import type { PptxSlide, PptxTheme } from 'pptx-viewer-core';
 
 function defaultSlides(): PptxSlide[] {
 	return [

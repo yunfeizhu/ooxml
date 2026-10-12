@@ -1,10 +1,10 @@
 import { NgStyle } from '@angular/common';
 import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
 import { TranslatePipe } from '@ngx-translate/core';
-import type { OlePptxElement, PptxElement } from 'pptx-viewer-core';
-
 import { getOleIconShapes, openUrlInNewTab } from 'ooxml-ui/pptx';
 import type { OleIconShape } from 'ooxml-ui/pptx';
+import type { OlePptxElement, PptxElement } from 'pptx-viewer-core';
+
 import type { StyleMap } from './element-style';
 import {
 	buildOleActionModel,

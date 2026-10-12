@@ -18,8 +18,6 @@ import {
 	input,
 	output,
 } from '@angular/core';
-import type { PptxSlide } from 'pptx-viewer-core';
-
 import type {
 	ContextMenuRequestEvent,
 	ContextMenuViewState,
@@ -27,6 +25,8 @@ import type {
 	SlidePaneContextMenuEntry,
 } from 'ooxml-ui/pptx';
 import { buildSlidePaneContextMenuEntries, slidePaneViewItems } from 'ooxml-ui/pptx';
+import type { PptxSlide } from 'pptx-viewer-core';
+
 import type { MenuTranslate } from './context-menu-translate';
 import { injectMenuTranslate } from './context-menu-translate';
 import type { SlidePaneContextMenuActions } from './slide-pane-context-menu-dispatch';

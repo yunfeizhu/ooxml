@@ -146,6 +146,46 @@ layers and announces truncation; the API allows at most 25,000 document-scoped
 overrides. SVG and print artifacts continue to use saved visibility. Layer
 colors, editing and saved print policy are not implemented.
 
+## Ribbon add-in tabs
+
+A host can add tabs after Help, as an add-in does in Visio. `ribbonAddIns` is a
+property of the element and a prop of every framework binding, and
+`office-ribbon-add-in` is part of the event map:
+
+```tsx
+const tabs = [
+	{
+		id: 'reports',
+		label: 'Reports',
+		groups: [
+			{
+				label: 'Export',
+				commands: [{ id: 'export', label: 'Export', icon: 'save', run: () => exportReport() }],
+			},
+		],
+	},
+];
+
+<VisioViewer
+	ribbonAddIns={tabs}
+	events={{ 'office-ribbon-add-in': ({ tab, command }) => track(tab, command) }}
+/>;
+```
+
+Vue takes `:ribbon-add-ins` and emits `office-ribbon-add-in`; Angular takes
+`[ribbonAddIns]` and has the `(ribbonAddIn)` output; the vanilla binding takes
+`mountViewer(host, { ribbonAddIns })` and `viewer.update({ ribbonAddIns })`. On
+the element itself, set `element.ribbonAddIns` and listen for the DOM event.
+
+A command runs its `run` callback and then raises the event. Leaving the prop
+out keeps the current tabs; an empty array removes them. Passing an equal
+descriptor again, as a framework does on every render, keeps the panels and
+only replaces the callbacks. The descriptor (`RibbonAddInTab`, from
+`ooxml-core/ribbon`, also exported by `ooxml-ui` and every framework package) is
+shared with the Word, Excel and PowerPoint editors. A tab cannot take the id of
+a built-in tab (`home`, `insert`, `design`, `data`, `process`, `review`, `view`,
+`help`).
+
 ## Static SVG export
 
 `exportPageSvg(model, pageIndex, { maxBytes })` and each mounted/native handle's
@@ -283,10 +323,14 @@ An explicit fill pattern overrides the solid pattern implied by `fillColor`;
 transparency requires explicit paint replacement, while ordinary inherited solid
 theme paints are supported.
 
-The shared Line menu exposes No Line and built-in patterns. Both paint menus and
-the shape context menu open Fill & Line. The dialog applies only changed fields
-in one atomic selection transaction. Mixed or unavailable source values remain
-unset until changed. All six native bindings use the existing `applyEdits()` and
+The shared Line menu exposes No Line and built-in patterns. Both paint menus'
+More Options and the shape context menu open the Format Shape task pane, which
+applies each change at once as one selection transaction. Mixed source values
+show as empty until changed. `fillColorTheme`, `lineColorTheme` and (on
+`format-text`) `fontColorTheme` name the Theme Colors swatch a colour came
+from, so it is saved as Visio's theme formula; `beginArrow`, `endArrow`,
+`beginArrowSize`, `endArrowSize`, `lineCap` and `rounding` set the line ends,
+cap and corner rounding. All six native bindings use the existing `applyEdits()` and
 reactive document/selection events; no framework-specific paint engine is added.
 `visioShapeFormattingState(shapes)` provides aggregate source paint values for
 custom controls. These values are separate from gradient/tile opacity multipliers.
@@ -406,7 +450,7 @@ using default and custom Text Only/Arial 18 pt styles, with core outputs reopene
 in Visio. These saved-style cases do not measure interactive GUI defaults; see
 the [verification record](verification.md).
 
-Insert > Blank Page routes through the existing source-backed page insertion
+Insert > New Page routes through the existing source-backed page insertion
 command, then selects the new page. It shares the page bar's insertion behavior,
 undo/redo and source admission; this does not add template-backed page creation.
 

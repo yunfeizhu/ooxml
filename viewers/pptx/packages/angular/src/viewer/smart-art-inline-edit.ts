@@ -18,10 +18,10 @@
  * @module angular-viewer/smart-art-inline-edit
  */
 
-import type { PptxElement, PptxSlide, PptxSmartArtData } from 'pptx-viewer-core';
-
 import type { RenderedNode } from 'ooxml-ui/pptx';
 import { canDrillDown, isTemplateElementId, projectSmartArtViewBoxRect } from 'ooxml-ui/pptx';
+import type { PptxElement, PptxSlide, PptxSmartArtData } from 'pptx-viewer-core';
+
 import { updateSmartArtNodeText } from './editor-insert';
 
 /**

@@ -1,10 +1,10 @@
-import { hasTextProperties } from 'pptx-viewer-core';
 import {
 	getOverflowSegments,
 	getTextBodyRotationTransform,
 	isLinkedTextBox as isLinkedTextBoxElement,
 	placeholderPromptDescriptor,
 } from 'ooxml-ui/pptx';
+import { hasTextProperties } from 'pptx-viewer-core';
 import React from 'react';
 
 import { DEFAULT_TEXT_COLOR } from '../../constants';

@@ -1,12 +1,11 @@
-import type { PptxElement } from 'pptx-viewer-core';
-import { hasTextProperties } from 'pptx-viewer-core';
-
 import type { InlineTextEditSnapshot, NormAutofitShrinkResult } from 'ooxml-ui/pptx';
 import {
 	buildInlineTextCommitPatch,
 	resolveInlineEditAutoFitHeight,
 	resolveInlineEditNormAutofitShrink,
 } from 'ooxml-ui/pptx';
+import type { PptxElement } from 'pptx-viewer-core';
+import { hasTextProperties } from 'pptx-viewer-core';
 
 /**
  * The exact composition `SlideCanvasComponent#commitText` performs to decide

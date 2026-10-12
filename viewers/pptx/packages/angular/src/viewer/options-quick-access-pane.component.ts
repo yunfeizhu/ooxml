@@ -9,7 +9,6 @@
  */
 import { ChangeDetectionStrategy, Component, computed, input, output, signal } from '@angular/core';
 import { TranslatePipe } from '@ngx-translate/core';
-
 import {
 	addQuickAccessCommand,
 	availableQuickAccessCommands,

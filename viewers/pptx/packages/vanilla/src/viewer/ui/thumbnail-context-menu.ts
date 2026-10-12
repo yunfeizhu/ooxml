@@ -1,3 +1,5 @@
+import { buildSlidePaneContextMenuEntries, slidePaneViewItems } from 'ooxml-ui/pptx';
+import type { SlidePaneContextMenuCommandId } from 'ooxml-ui/pptx';
 /**
  * The slides pane's thumbnail right-click menu: New Slide, Duplicate, Delete,
  * Layout, Hide, Add Section. Sibling of `canvas-context-menu.ts` (the
@@ -6,8 +8,6 @@
  * render, dismiss) and the routing from a command id to an editor operation.
  */
 import type { PptxSlide } from 'pptx-viewer-core';
-import { buildSlidePaneContextMenuEntries, slidePaneViewItems } from 'ooxml-ui/pptx';
-import type { SlidePaneContextMenuCommandId } from 'ooxml-ui/pptx';
 
 import type { EditActions } from '../editor';
 import { collectLayoutOptions } from '../editor/editing-chrome-sync';

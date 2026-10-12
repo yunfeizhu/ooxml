@@ -1,3 +1,4 @@
+import type { CustomShow, ShowOrderCustomShow } from 'ooxml-ui/pptx';
 /**
  * custom-shows-deck.ts: translating custom shows between the DECK's key space
  * and the dialog's.
@@ -16,8 +17,6 @@
  * without an injection context.
  */
 import type { PptxCustomShow } from 'pptx-viewer-core';
-
-import type { CustomShow, ShowOrderCustomShow } from 'ooxml-ui/pptx';
 
 /** The two slide keys a custom show can be expressed in. */
 export interface CustomShowSlideKeys {

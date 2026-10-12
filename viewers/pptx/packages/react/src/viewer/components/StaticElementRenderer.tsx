@@ -1,11 +1,11 @@
-import type { GroupPptxElement } from 'pptx-viewer-core';
-import { hasTextProperties } from 'pptx-viewer-core';
 import {
 	getAriaLabel,
 	getAriaRoleDescription,
 	getGroupChildParentFill,
 	isElementRendered,
 } from 'ooxml-ui/pptx';
+import type { GroupPptxElement } from 'pptx-viewer-core';
+import { hasTextProperties } from 'pptx-viewer-core';
 import React from 'react';
 
 import {

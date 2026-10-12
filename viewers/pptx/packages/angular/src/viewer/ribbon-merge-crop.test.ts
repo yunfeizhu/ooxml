@@ -9,11 +9,11 @@ import type { Type } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { BrowserTestingModule, platformBrowserTesting } from '@angular/platform-browser/testing';
 import { provideTranslateService, TranslateService } from '@ngx-translate/core';
+import { registerPptxWebControls } from 'ooxml-ui/pptx';
 import type { PptxElement, PptxSlide, ShapePptxElement } from 'pptx-viewer-core';
 import { afterEach, beforeAll, describe, expect, it } from 'vitest';
 
 import { translationsEn } from '../../../../../../src/ui/src/pptx/i18n/translations-en';
-import { registerPptxWebControls } from 'ooxml-ui/pptx';
 import {
 	readViewerTestResource,
 	resolveViewerComponentResources,

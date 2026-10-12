@@ -49,12 +49,7 @@ export function resolveNavigationKey(key: string): NavigationAction | undefined 
  * in one place for all five bindings; these names stay because they are part of
  * this package's public API.
  */
-export {
-	ZOOM_MAX_PERCENT,
-	ZOOM_MIN_PERCENT,
-	zoomInPercent,
-	zoomOutPercent,
-} from 'ooxml-ui/pptx';
+export { ZOOM_MAX_PERCENT, ZOOM_MIN_PERCENT, zoomInPercent, zoomOutPercent } from 'ooxml-ui/pptx';
 
 /**
  * Fit-to-viewport scale for a canvas inside a viewport, with breathing room.

@@ -1,4 +1,3 @@
-import type { PptxSection, PptxSlide, PptxSlideMaster } from 'pptx-viewer-core';
 import {
 	computeVirtualRange,
 	EDITOR_THUMBNAIL_WIDTH,
@@ -7,6 +6,7 @@ import {
 	SLIDE_VIRTUALIZATION_THRESHOLD,
 } from 'ooxml-ui/pptx';
 import type { CanvasSize } from 'ooxml-ui/pptx';
+import type { PptxSection, PptxSlide, PptxSlideMaster } from 'pptx-viewer-core';
 
 import type { EditActions } from '../editor';
 import type { Translator } from '../i18n';

@@ -1,4 +1,3 @@
-import type { TextStyle, Text3DStyle, BevelPresetType, MaterialPresetType } from 'pptx-viewer-core';
 import {
 	BEVEL_PRESETS,
 	MATERIAL_PRESETS,
@@ -6,6 +5,7 @@ import {
 	text3dPtToEmu as ptToEmu,
 	toggleText3dExtrusion,
 } from 'ooxml-ui/pptx';
+import type { TextStyle, Text3DStyle, BevelPresetType, MaterialPresetType } from 'pptx-viewer-core';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 

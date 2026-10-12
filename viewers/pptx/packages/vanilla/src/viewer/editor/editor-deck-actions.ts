@@ -1,3 +1,12 @@
+import type { SlideSizeEmu, SlideSizeRescaleMode } from 'ooxml-ui/pptx';
+import {
+	applyTableStyleDelete,
+	applyTableStyleMapChange,
+	resolveSlideSizeSelection,
+	scaleSlidesForSizeChange,
+	slideSizeToCanvasPx,
+	updateSlide,
+} from 'ooxml-ui/pptx';
 import type {
 	ParsedTableStyleMap,
 	PptxData,
@@ -9,15 +18,6 @@ import type {
 	PptxThemeFontScheme,
 } from 'pptx-viewer-core';
 import { applyThemeToData, reResolveElementColors, reResolveElementFonts } from 'pptx-viewer-core';
-import type { SlideSizeEmu, SlideSizeRescaleMode } from 'ooxml-ui/pptx';
-import {
-	applyTableStyleDelete,
-	applyTableStyleMapChange,
-	resolveSlideSizeSelection,
-	scaleSlidesForSizeChange,
-	slideSizeToCanvasPx,
-	updateSlide,
-} from 'ooxml-ui/pptx';
 
 import type { Store, ViewerState } from '../state';
 import type { EditorOps } from './editor-operations';

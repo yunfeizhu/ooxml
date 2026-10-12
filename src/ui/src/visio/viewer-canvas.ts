@@ -25,7 +25,7 @@ export class ViewerCanvas {
 		private readonly viewport: HTMLElement,
 		private readonly notes: HTMLUListElement,
 		private readonly notesPanel: HTMLElement,
-		private readonly inspector: HTMLDetailsElement,
+		private readonly inspector: HTMLElement,
 	) {}
 	get warnings(): readonly string[] {
 		return this.#warnings;
@@ -92,6 +92,9 @@ export class ViewerCanvas {
 			svg.style.height = `${page.height * 96 * state.zoom}px`;
 			// Viewer-only grid spacing: quarter-inch minor and one-inch major lines.
 			svg.style.setProperty('--vv-inch', `${96 * state.zoom}px`);
+			// One screen pixel in drawing inches: Visio never draws a line thinner than that, so
+			// hairlines and 0.75 pt lines stay visible when zoomed out.
+			svg.style.setProperty('--vv-hairline', String(1 / (96 * state.zoom)));
 		}
 		this.#mark(state, changed);
 		return changed;
@@ -137,8 +140,6 @@ export class ViewerCanvas {
 			const inspected = selectedShape(state.document, selection, state.pageIndex);
 			if (inspected !== this.#inspected) {
 				this.#inspected = inspected;
-				this.inspector.hidden = !inspected;
-				if (inspected) this.inspector.open = true;
 				this.inspector
 					.querySelector('div')!
 					.replaceChildren(...(inspected ? [shapeDetails(inspected)] : []));

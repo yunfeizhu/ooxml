@@ -1,6 +1,8 @@
 import { NgTemplateOutlet } from '@angular/common';
 import { ChangeDetectionStrategy, Component, computed, input, output } from '@angular/core';
 import { TranslatePipe } from '@ngx-translate/core';
+import { masterViewBackgroundColor } from 'ooxml-ui/pptx';
+import type { MasterViewCrudAction, MasterViewCrudActionId } from 'ooxml-ui/pptx';
 import type {
 	MasterViewTab,
 	PptxHandoutMaster,
@@ -8,8 +10,6 @@ import type {
 	PptxSlideMaster,
 } from 'pptx-viewer-core';
 
-import { masterViewBackgroundColor } from 'ooxml-ui/pptx';
-import type { MasterViewCrudAction, MasterViewCrudActionId } from 'ooxml-ui/pptx';
 import { MasterViewCrudRowComponent } from './master-view-crud-row.component';
 
 const HANDOUT_COUNTS = [1, 2, 3, 4, 6, 9] as const;

@@ -1,3 +1,9 @@
+import {
+	OUTLINE_LEVEL_ATTR,
+	OUTLINE_ROW_ATTR,
+	OUTLINE_SLIDE_ATTR,
+	OUTLINE_VIEW_ATTR,
+} from 'ooxml-ui/pptx';
 /**
  * Outline view, VanillaJS binding.
  *
@@ -9,12 +15,6 @@
  * a read-only viewer stays read-only.
  */
 import type { PptxElement, PptxSlide, TextPptxElement, TextSegment } from 'pptx-viewer-core';
-import {
-	OUTLINE_LEVEL_ATTR,
-	OUTLINE_ROW_ATTR,
-	OUTLINE_SLIDE_ATTR,
-	OUTLINE_VIEW_ATTR,
-} from 'ooxml-ui/pptx';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { createTranslator } from '../i18n';

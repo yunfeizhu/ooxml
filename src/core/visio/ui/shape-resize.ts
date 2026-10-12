@@ -25,9 +25,13 @@ export interface VisioResizeFrame {
 /** Only orthonormal ordinary local shapes have a scene-proven rectangular resize frame. */
 export function visioResizeShape(page: VisioPage, id: string): VisioShape | undefined {
 	const shape = visioMovementShape(page, id);
-	// Groups move but do not resize: members carry no group-scaling formulas yet.
+	// Groups drawn here move but do not resize: members carry no group-scaling formulas yet. A
+	// stencil group resizes: its sub-shapes follow it through the master's formulas.
+	// Layered local shapes move, but core resize admission still refuses their layer membership;
+	// stencil shapes are resized on their (unlocked) stencil layer.
 	return shape &&
-		!shape.children.length &&
+		(!shape.children.length || !!shape.masterId) &&
+		(!shape.layerIds?.length || !!shape.masterId) &&
 		visioResizeFrame(shape, { width: shape.width, height: shape.height }, { x: 0, y: 0 })
 		? shape
 		: undefined;

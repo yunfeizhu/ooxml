@@ -2,7 +2,11 @@
 import { convertMetafileToSvgTree } from 'emf-converter';
 import { editVsdx, parseVsdx } from 'ooxml-core/visio';
 import type { EditWorkerRequest } from './worker-editor';
+import { installBrowserTextMeasurer } from './text-measurer';
 const worker = self as unknown as DedicatedWorkerGlobalScope;
+// Shapes that size themselves from their text are measured with this browser's fonts when the
+// core's own tables do not cover them.
+installBrowserTextMeasurer();
 worker.onmessage = async (event: MessageEvent<EditWorkerRequest>) => {
 	if (event.origin && event.origin !== self.location.origin) return;
 	try {

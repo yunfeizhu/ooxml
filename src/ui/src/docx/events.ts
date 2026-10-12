@@ -1,4 +1,5 @@
 import type { DocumentModel } from 'ooxml-core/docx';
+import type { RibbonAddInCommandDetail } from 'ooxml-core/ribbon';
 import type { StepBatch } from 'ooxml-core/docx/ui';
 import type { FileCommandDetail } from './file-commands';
 import type { PageChangeDetail } from './page-sync';
@@ -29,6 +30,8 @@ export interface DocxEditorEventMap {
 	'presence-send': CustomEvent<PresenceMessage>;
 	/** Local steps are pending; transport the batch to the collaboration authority. */
 	'collaboration-send': CustomEvent<StepBatch>;
+	/** A command of a host tab (`ribbonAddIns`) was chosen. */
+	'office-ribbon-add-in': CustomEvent<RibbonAddInCommandDetail>;
 }
 
 export type DocxEditorEventName = keyof DocxEditorEventMap;
@@ -49,6 +52,7 @@ export const DOCX_EDITOR_EVENTS = [
 	'dirty-change',
 	'presence-send',
 	'collaboration-send',
+	'office-ribbon-add-in',
 ] as const satisfies readonly DocxEditorEventName[];
 
 /** Typed listener for plain elements (such as the ribbon) that are not a `<docx-editor>`. */

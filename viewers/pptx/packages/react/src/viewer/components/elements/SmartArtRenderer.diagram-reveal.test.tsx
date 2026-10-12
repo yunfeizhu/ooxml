@@ -1,5 +1,5 @@
-import type { PptxSmartArtData, SmartArtPptxElement } from 'pptx-viewer-core';
 import type { ElementAnimationState } from 'ooxml-ui/pptx';
+import type { PptxSmartArtData, SmartArtPptxElement } from 'pptx-viewer-core';
 import React from 'react';
 /**
  * Staged `p:bldDgm` diagram-build reveal wiring.

@@ -1,6 +1,6 @@
-import type { PptxElement, PptxLayoutPreview, PptxSlide } from 'pptx-viewer-core';
 import { createBackstagePresentation, templateSchemeFromTheme } from 'ooxml-ui/pptx';
 import type { ToolbarActionId } from 'ooxml-ui/pptx';
+import type { PptxElement, PptxLayoutPreview, PptxSlide } from 'pptx-viewer-core';
 
 import type { ToolbarProps } from '../components/toolbar/toolbar-types';
 import type { ViewerMode } from '../types';

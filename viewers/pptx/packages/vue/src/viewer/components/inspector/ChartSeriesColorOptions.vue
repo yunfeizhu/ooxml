@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { X } from 'lucide-vue-next';
-import type { PptxChartSeries } from 'pptx-viewer-core';
 import { seriesColorClearState } from 'ooxml-ui/pptx';
+import type { PptxChartSeries } from 'pptx-viewer-core';
 import { useI18n } from 'vue-i18n';
 
 import { injectRecentColors } from '../../composables/recent-colors-context';

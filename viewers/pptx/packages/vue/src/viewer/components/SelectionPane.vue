@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { Eye, EyeOff, GripVertical } from 'lucide-vue-next';
+import { resolveSelectionPaneRename, restoreEditorKeyboardFocus } from 'ooxml-ui/pptx';
 import { hasTextProperties } from 'pptx-viewer-core';
 import type { PptxElement } from 'pptx-viewer-core';
-import { resolveSelectionPaneRename, restoreEditorKeyboardFocus } from 'ooxml-ui/pptx';
 import { computed, nextTick, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 

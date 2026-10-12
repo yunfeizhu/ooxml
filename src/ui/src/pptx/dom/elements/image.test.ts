@@ -314,3 +314,22 @@ describe('renderImageElement tiled-picture native size', () => {
 		await vi.waitFor(() => expect(tile?.style.backgroundSize).toBe('80px 100px'));
 	});
 });
+
+describe('renderImageElement native drag (issue #44)', () => {
+	it('marks the picture img as not draggable', () => {
+		// Regression: a press on a picture started the browser's own image drag,
+		// which cancels the pointer stream, so the editor's move gesture died a
+		// few pixels in and a drag ghost followed the cursor instead.
+		const element: ImagePptxElement = {
+			type: 'image',
+			id: 'image-drag',
+			x: 0,
+			y: 0,
+			width: 100,
+			height: 100,
+			imageData: 'data:image/png;base64,source',
+		};
+		const node = renderImageElement(element, 0, context()) as HTMLElement;
+		expect(node.querySelector('img')?.getAttribute('draggable')).toBe('false');
+	});
+});

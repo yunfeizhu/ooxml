@@ -14,14 +14,9 @@ import { readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
+import { buildNotesPrintHtml, resolveNotesSegments, segmentsToEditorHtml } from 'ooxml-ui/pptx';
 import type { PptxSlide, PptxTextStyleLevels } from 'pptx-viewer-core';
 import { describe, expect, it } from 'vitest';
-
-import {
-	buildNotesPrintHtml,
-	resolveNotesSegments,
-	segmentsToEditorHtml,
-} from 'ooxml-ui/pptx';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 

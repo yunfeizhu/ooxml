@@ -23,15 +23,15 @@ import path from 'node:path';
  */
 import { Injector, runInInjectionContext, signal } from '@angular/core';
 import type { InputSignal } from '@angular/core';
-import type { PptxSlide } from 'pptx-viewer-core';
-import { describe, expect, it } from 'vitest';
-
 import {
 	READING_VIEW_ATTR,
 	READING_VIEW_COUNTER_ATTR,
 	READING_VIEW_STAGE_ATTR,
 } from 'ooxml-ui/pptx';
 import type { CanvasSize } from 'ooxml-ui/pptx';
+import type { PptxSlide } from 'pptx-viewer-core';
+import { describe, expect, it } from 'vitest';
+
 import { ReadingViewOverlayComponent } from './reading-view-overlay.component';
 
 const CANVAS: CanvasSize = { width: 960, height: 540 };

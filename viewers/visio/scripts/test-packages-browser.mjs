@@ -77,7 +77,7 @@ try {
 	assert.equal(saved.pages[0].shapes[0].text.plainText, 'Published browser edit');
 	if (workspaceRuntime) {
 		const frameworks = await page.evaluate(
-			(bytes) => window.verifyWorkspaceBindings(bytes),
+			(data) => window.verifyWorkspaceBindings(data),
 			[...readFileSync(resolve(consumer, 'fixture.vsdx'))],
 		);
 		assert.deepEqual(frameworks, ['react', 'vue', 'solid', 'angular', 'svelte', 'vanilla']);

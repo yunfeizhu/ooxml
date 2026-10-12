@@ -7,11 +7,7 @@
  * tests pin that React actually renders what they return.
  */
 import type { ResolvedCustomization, ViewerCustomization, ViewerOptions } from 'ooxml-ui/pptx';
-import {
-	cloneViewerOptions,
-	DEFAULT_VIEWER_OPTIONS,
-	resolveCustomization,
-} from 'ooxml-ui/pptx';
+import { cloneViewerOptions, DEFAULT_VIEWER_OPTIONS, resolveCustomization } from 'ooxml-ui/pptx';
 import React, { act } from 'react';
 import { createRoot } from 'react-dom/client';
 import type { Root } from 'react-dom/client';

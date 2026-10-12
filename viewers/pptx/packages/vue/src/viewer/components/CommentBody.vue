@@ -1,4 +1,9 @@
 <script setup lang="ts">
+import {
+	COMMENT_MENTION_ATTRIBUTE,
+	COMMENT_MENTION_CLASS,
+	commentTextSegments,
+} from 'ooxml-ui/pptx';
 /**
  * CommentBody: renders a comment's text with its `@`-mentions highlighted.
  *
@@ -7,11 +12,6 @@
  * only maps the resulting descriptor onto spans.
  */
 import type { PptxComment } from 'pptx-viewer-core';
-import {
-	COMMENT_MENTION_ATTRIBUTE,
-	COMMENT_MENTION_CLASS,
-	commentTextSegments,
-} from 'ooxml-ui/pptx';
 import { computed } from 'vue';
 
 const props = defineProps<{

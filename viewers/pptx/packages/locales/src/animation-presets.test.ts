@@ -21,7 +21,6 @@
 import { describe, expect, it } from 'vitest';
 
 import { translationsDe, translationsEs, translationsFr, translationsZhCN } from '.';
-import { ALL_ANIMATION_PRESETS } from '../../core/src';
 import { translationsEn } from '../../../../../src/ui/src/pptx/i18n';
 import {
 	ANIMATION_PRESET_VALUES,
@@ -32,6 +31,7 @@ import {
 	MOTION_PATH_PRESETS,
 	motionPathPresetLabelKey,
 } from '../../../../../src/ui/src/pptx/render/motion-path-presets';
+import { ALL_ANIMATION_PRESETS } from '../../core/src';
 
 /** Every i18n key an animation preset can be rendered through. */
 const PRESET_KEYS: readonly string[] = [

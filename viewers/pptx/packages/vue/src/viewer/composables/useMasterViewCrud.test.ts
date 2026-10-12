@@ -1,11 +1,11 @@
 // oxlint-disable react-hooks/rules-of-hooks
 import { mount } from '@vue/test-utils';
-import type { PptxData, PptxHandler, PptxSlideMaster } from 'pptx-viewer-core';
 import type {
 	MasterLayoutCrudFailure,
 	MasterViewCrudApplySuccess,
 	MasterViewTarget,
 } from 'ooxml-ui/pptx';
+import type { PptxData, PptxHandler, PptxSlideMaster } from 'pptx-viewer-core';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { defineComponent, h, shallowRef } from 'vue';
 

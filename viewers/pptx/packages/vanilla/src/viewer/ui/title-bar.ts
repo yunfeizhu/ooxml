@@ -1,8 +1,4 @@
-import {
-	buildTitleBarState,
-	registerPptxWebControls,
-	resolveTitleBarStrip,
-} from 'ooxml-ui/pptx';
+import { buildTitleBarState, registerPptxWebControls, resolveTitleBarStrip } from 'ooxml-ui/pptx';
 import type {
 	PptxUiTitleBarElement,
 	TitleBarCommandSearchEvent,

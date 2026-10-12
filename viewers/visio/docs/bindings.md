@@ -26,9 +26,10 @@ All adapters accept the same properties:
 - `pageIndex`: zero-based page index
 - `zoom`: scale, where `1` means 100%
 - `showToolbar`: toolbar visibility
+- `ribbonAddIns`: tabs the host adds after Help (see [Ribbon add-in tabs](api.md#ribbon-add-in-tabs))
 - `events`: typed callback map using literal event names
 
-The event map currently contains `document-load`, `document-change`, `document-error`, `page-change`, `zoom-change`, and `shape-select`. It is derived from the canonical contract. All adapters pass every event; none parse documents or own another renderer.
+The event map currently contains `document-load`, `document-change`, `document-error`, `page-change`, `zoom-change`, `shape-select`, `selection-change` and `office-ribbon-add-in`. It is derived from the canonical contract. All adapters pass every event; none parse documents or own another renderer.
 
 Property updates are partial. Native framework snapshots are diffed so unrelated rerenders do not undo an imperative load or a user-changed viewport. Omitted or `undefined` properties preserve current viewer state. `null` explicitly clears the document. Removing the `events` prop clears callback-map handlers. Supply a new document object for an external replacement; in-place mutation is not a supported reactivity mechanism. Page and zoom interactions may update internal viewer state; the props request changes when their framework updates them.
 

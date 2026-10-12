@@ -1,4 +1,3 @@
-import type { PptxAction, PptxSlide, PptxSlideTransition } from 'pptx-viewer-core';
 import {
 	hasShowSlideAfter,
 	nextShowSlideIndex,
@@ -8,6 +7,7 @@ import {
 	buildZoomTransitionOverride,
 } from 'ooxml-ui/pptx';
 import type { ZoomExcursion } from 'ooxml-ui/pptx';
+import type { PptxAction, PptxSlide, PptxSlideTransition } from 'pptx-viewer-core';
 import { useRef, useCallback } from 'react';
 
 import type { ViewerMode } from '../../types';

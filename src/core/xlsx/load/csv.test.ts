@@ -3,13 +3,7 @@ import { getCell } from '../cells';
 import type { Cell } from '../model';
 import { styleAt } from '../styles';
 import { createWorkbook } from '../workbook';
-import {
-	csvToWorkbook,
-	detectDelimiter,
-	parseCsv,
-	sheetNameFromFileName,
-	sheetToCsv,
-} from './csv';
+import { csvToWorkbook, detectDelimiter, parseCsv, sheetNameFromFileName, sheetToCsv } from './csv';
 
 describe('parseCsv', () => {
 	it('reads quoted fields with doubled quotes, delimiters and embedded line breaks', () => {

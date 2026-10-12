@@ -43,6 +43,8 @@ export type ChartSvgGradientDef =
 	| {
 			kind: 'linearGradient';
 			id: string;
+			/** Absent means `objectBoundingBox`; strokes use user space (a flat line has no height). */
+			gradientUnits?: 'userSpaceOnUse';
 			x1: number;
 			y1: number;
 			x2: number;

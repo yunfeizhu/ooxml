@@ -13,7 +13,6 @@
  * is re-exported so the colocated unit tests keep their historical import path.
  */
 import type { Options as Html2CanvasOptions } from 'html2canvas-pro';
-
 import { _testing } from 'ooxml-ui/pptx/export/canvas-color-fix';
 import { prepareHtml2CanvasClone } from 'ooxml-ui/pptx/export/html2canvas-clone';
 

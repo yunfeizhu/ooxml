@@ -7,16 +7,26 @@ import { applyTeamsProps, listenTeamsEvents, type TeamsApp, type TeamsProps } fr
 /** The props of `<teams-app>` plus the class list of its host element. */
 export type TeamsElementProps = TeamsProps & { className?: string | undefined };
 
-const KEYS = ['workspaceId', 'userName', 'userId', 'config', 'uploadFile', 'openers', 'embeds'] as const;
+const KEYS = [
+	'workspaceId',
+	'userName',
+	'userId',
+	'config',
+	'uploadFile',
+	'openers',
+	'embeds',
+] as const;
 
 /**
  * Copies the defined, shared props out of a framework's props/instance object. `undefined` means
  * "not provided"; `config` keeps an explicit `null`. Handlers are not copied: events go through
  * the `get` callback of `bindTeams`.
  */
-export function pickTeamsProps(source: { [K in (typeof KEYS)[number]]?: TeamsProps[K] | undefined } & {
-	className?: string | undefined;
-}): TeamsElementProps {
+export function pickTeamsProps(
+	source: { [K in (typeof KEYS)[number]]?: TeamsProps[K] | undefined } & {
+		className?: string | undefined;
+	},
+): TeamsElementProps {
 	const picked: Record<string, unknown> = {};
 	for (const key of KEYS) if (source[key] !== undefined) picked[key] = source[key];
 	if (source.className) picked.className = source.className;

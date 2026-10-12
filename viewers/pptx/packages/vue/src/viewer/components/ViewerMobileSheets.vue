@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { isPanelVisible } from 'ooxml-ui/pptx';
+import type { ViewerPanelId } from 'ooxml-ui/pptx';
 /**
  * ViewerMobileSheets: the phone chrome (bottom bar plus the slides / notes /
  * format / comments bottom sheets that stand in for the desktop rails).
@@ -19,8 +21,6 @@ import type {
 	PptxSlide,
 	TextSegment,
 } from 'pptx-viewer-core';
-import { isPanelVisible } from 'ooxml-ui/pptx';
-import type { ViewerPanelId } from 'ooxml-ui/pptx';
 import { useI18n } from 'vue-i18n';
 
 import type { UseCommentsWiringResult } from '../composables/useCommentsWiring';

@@ -1,5 +1,5 @@
-import type { PptxSlide } from 'pptx-viewer-core';
 import type { ZoomNavigationTarget } from 'ooxml-ui/pptx';
+import type { PptxSlide } from 'pptx-viewer-core';
 import { getContext, setContext } from 'svelte';
 
 export const ZoomNavigationContextKey = Symbol('pptx-svelte-zoom-navigation');

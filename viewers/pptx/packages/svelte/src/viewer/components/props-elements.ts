@@ -1,5 +1,5 @@
-import type { PptxChartData, PptxElement, ShapeStyle } from 'pptx-viewer-core';
 import type { ElementAnimationState, RenderParagraph } from 'ooxml-ui/pptx';
+import type { PptxChartData, PptxElement, ShapeStyle } from 'pptx-viewer-core';
 
 import type { SmartArtView } from '../render';
 

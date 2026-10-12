@@ -14,14 +14,13 @@
  */
 import { computed, signal } from '@angular/core';
 import type { Signal, WritableSignal } from '@angular/core';
-import type { PptxCommentMention, PptxModernCommentAuthor } from 'pptx-viewer-core';
-
 import type { CommentMentionInsertion, CommentMentionQuery } from 'ooxml-ui/pptx';
 import {
 	commentMentionQuery,
 	insertCommentMention,
 	matchCommentMentionAuthors,
 } from 'ooxml-ui/pptx';
+import type { PptxCommentMention, PptxModernCommentAuthor } from 'pptx-viewer-core';
 
 export interface CommentMentionInput {
 	/** Authors matching the in-progress `@`-token, best match first. */

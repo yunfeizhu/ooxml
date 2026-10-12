@@ -9,7 +9,6 @@
  * `ribbon-file-section.component.ts`'s `protected readonly date = formatBackstageDate;`).
  */
 import type { Signal } from '@angular/core';
-
 import { isActionHidden } from 'ooxml-ui/pptx';
 import type { ToolbarActionId } from 'ooxml-ui/pptx';
 

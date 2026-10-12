@@ -4,10 +4,10 @@
  * pre-crop picture, and Escape restores the picture leaving no undo step.
  */
 import { Injector, runInInjectionContext } from '@angular/core';
+import { beginCropDrag, dragCropHandle } from 'ooxml-ui/pptx';
 import type { PptxElement, PptxSlide } from 'pptx-viewer-core';
 import { describe, expect, it } from 'vitest';
 
-import { beginCropDrag, dragCropHandle } from 'ooxml-ui/pptx';
 import { EditorStateService } from './editor-state.service';
 import { PictureCropService } from './picture-crop.service';
 

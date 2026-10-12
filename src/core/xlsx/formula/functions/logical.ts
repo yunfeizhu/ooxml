@@ -59,7 +59,7 @@ function ifFn(args: LazyArg[], ctx: CallContext): Value {
 	const branch = (truthy: boolean): Value => {
 		const arg = args[truthy ? 1 : 2];
 		if (arg) return arg.get();
-		return truthy ? true : false;
+		return truthy;
 	};
 	if (cond instanceof Matrix) return elementwise(cond, branch, ctx);
 	if (isError(cond)) return cond;

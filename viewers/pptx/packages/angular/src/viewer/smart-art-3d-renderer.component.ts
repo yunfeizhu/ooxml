@@ -13,8 +13,6 @@ import {
 	viewChild,
 } from '@angular/core';
 import { TranslatePipe } from '@ngx-translate/core';
-import type { PptxElement } from 'pptx-viewer-core';
-
 import {
 	commitSmartArtNodeFill,
 	elementHitTargetStyle,
@@ -25,6 +23,8 @@ import {
 	smartArtNodeAtPoint,
 } from 'ooxml-ui/pptx';
 import type { InlineEditRect, TextStyleAnimationDescriptor } from 'ooxml-ui/pptx';
+import type { PptxElement } from 'pptx-viewer-core';
+
 import { EditorStateService } from './editor-state.service';
 import { getContainerStyle } from './element-style';
 import type { StyleMap } from './element-style';

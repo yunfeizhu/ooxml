@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { DEFAULT_VIEWER_OPTIONS, resolveDefaultPrintSettings } from 'ooxml-ui/pptx';
 /**
  * PrintDialog - full-featured print options dialog for the Vue viewer.
  *
@@ -20,7 +21,6 @@
  *  - `close` : the dialog was dismissed.
  */
 import type { PptxSlide } from 'pptx-viewer-core';
-import { DEFAULT_VIEWER_OPTIONS, resolveDefaultPrintSettings } from 'ooxml-ui/pptx';
 import { computed, inject, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 

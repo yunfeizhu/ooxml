@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { mediaTrimEndMsFromSeconds, mediaTrimEndSeconds } from 'ooxml-ui/pptx';
 /**
  * MediaTrimTimeline: the draggable trim scrubber, ported from React's
  * `TrimTimeline`. Shows the trimmed region, a playhead, two drag handles, and
@@ -10,7 +11,6 @@
  * All state is derived from props; the parent owns trim + playhead values.
  */
 import type { MediaBookmark } from 'pptx-viewer-core';
-import { mediaTrimEndMsFromSeconds, mediaTrimEndSeconds } from 'ooxml-ui/pptx';
 import { computed, onBeforeUnmount, ref } from 'vue';
 
 import { clamp } from '../../composables/useMediaEditing';

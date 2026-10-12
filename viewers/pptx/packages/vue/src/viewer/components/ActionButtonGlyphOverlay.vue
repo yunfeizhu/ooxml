@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import type { PptxElement } from 'pptx-viewer-core';
 import { ACTION_BUTTON_PRESETS } from 'ooxml-ui/pptx';
+import type { PptxElement } from 'pptx-viewer-core';
 import { computed } from 'vue';
 
 /**

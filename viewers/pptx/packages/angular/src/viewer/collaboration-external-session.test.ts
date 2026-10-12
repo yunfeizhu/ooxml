@@ -1,14 +1,14 @@
 import { DestroyRef, Injector } from '@angular/core';
-import type { PptxSlide } from 'pptx-viewer-core';
-import { afterEach, describe, expect, it, vi } from 'vitest';
-import * as Y from 'yjs';
-
 import type {
 	CollaborationConfig,
 	ExternalCollaborationSession,
 	ExternalCollaborationSnapshot,
 } from 'ooxml-ui/pptx';
 import { readSlidesFromYDoc, reconcileSlidesInYDoc } from 'ooxml-ui/pptx';
+import type { PptxSlide } from 'pptx-viewer-core';
+import { afterEach, describe, expect, it, vi } from 'vitest';
+import * as Y from 'yjs';
+
 import { createWebrtcBundle, createWebsocketBundle } from './collaboration-providers';
 import { WriteBackScheduler } from './collaboration-writeback';
 import { CollaborationService } from './collaboration.service';

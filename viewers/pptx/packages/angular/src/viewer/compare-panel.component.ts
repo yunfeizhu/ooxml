@@ -15,8 +15,8 @@
 import { ChangeDetectionStrategy, Component, computed, input, output, signal } from '@angular/core';
 import { LucideCheck, LucideX } from '@lucide/angular';
 import { TranslatePipe } from '@ngx-translate/core';
-
 import type { CanvasSize, CompareResult } from 'ooxml-ui/pptx';
+
 import { SlideDiffRowComponent } from './slide-diff-row.component';
 
 @Component({

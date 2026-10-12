@@ -1,8 +1,5 @@
 import { Component, ElementRef, inject, input, output, viewChild } from '@angular/core';
 import type { AfterViewInit, OnChanges, OnDestroy } from '@angular/core';
-import type { PptxElement, TextStyle } from 'pptx-viewer-core';
-import { hasTextProperties } from 'pptx-viewer-core';
-
 import {
 	attachCollaborationInlineEditor,
 	attachInlineListController,
@@ -20,6 +17,9 @@ import type {
 	InlineListSeed,
 	InlineTextEditSnapshot,
 } from 'ooxml-ui/pptx';
+import type { PptxElement, TextStyle } from 'pptx-viewer-core';
+import { hasTextProperties } from 'pptx-viewer-core';
+
 import {
 	resolveCommitTextAutoFitHeight,
 	resolveCommitTextNormAutofitShrink,

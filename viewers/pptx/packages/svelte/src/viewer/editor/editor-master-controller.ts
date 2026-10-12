@@ -1,3 +1,5 @@
+import { masterViewElements, replaceMasterViewElements } from 'ooxml-ui/pptx';
+import type { MasterViewDocument } from 'ooxml-ui/pptx';
 import type {
 	MasterViewTab,
 	PptxElement,
@@ -5,8 +7,6 @@ import type {
 	PptxNotesMaster,
 	PptxSlideMaster,
 } from 'pptx-viewer-core';
-import { masterViewElements, replaceMasterViewElements } from 'ooxml-ui/pptx';
-import type { MasterViewDocument } from 'ooxml-ui/pptx';
 
 import type { EditorState } from './editor-state.svelte';
 

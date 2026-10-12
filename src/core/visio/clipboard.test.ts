@@ -241,12 +241,17 @@ describe('source XML clipboard capture and paste', () => {
 			}),
 		).toThrow();
 	});
-	it('coarse helper excludes masters, lines, foreign shapes and glued leaves', async () => {
+	it('coarse helper takes stencil shapes and excludes lines and shapes glued to another', async () => {
 		const page = (
 			await parseVsdx(
 				await source(local('1', 'A', '', 'Master="1"') + local('2', 'B', cell('OneD', 1))),
 			)
 		).pages[0]!;
+		// A stencil shape is copied as an instance; a connector glued to it stays behind.
+		expect(visioClipboardShape(page, '1')).toBe(page.shapes[0]);
+		page.connectors = [{ fromShapeId: '9', toShapeId: '1', fromCell: 'BeginX', toCell: 'PinX' }];
+		expect(visioClipboardShape(page, '1')).toBe(page.shapes[0]);
+		page.connectors = [{ fromShapeId: '1', toShapeId: '9', fromCell: 'BeginX', toCell: 'PinX' }];
 		expect(visioClipboardShape(page, '1')).toBeUndefined();
 		expect(visioClipboardShape(page, '2')).toBeUndefined();
 	});

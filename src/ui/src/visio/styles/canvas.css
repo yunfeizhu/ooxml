@@ -13,36 +13,203 @@
 	stroke-dasharray: 0.08 0.05;
 }
 
+/* Visio's selection: white handles with a grey outline on a thin grey frame. */
 .paper [data-line-endpoint],
 .paper [data-resize-handle],
 .rotation-overlay [data-rotation-handle] {
-	fill: var(--_vv-accent);
-	stroke: white;
-	stroke-width: 1.5px;
+	fill: #fff;
+	stroke: var(--_vv-handle, #7a7a7a);
+	stroke-width: 1.25px;
 	cursor: crosshair;
 	touch-action: none;
 	pointer-events: all;
 }
+.paper [data-resize-handle]:hover,
+.paper [data-line-endpoint]:hover,
+.rotation-overlay [data-rotation-handle]:hover {
+	fill: var(--_vv-accent-soft, #dfe5f6);
+}
+.paper [data-resize-handle='n'],
+.paper [data-resize-handle='s'] {
+	cursor: ns-resize;
+}
+.paper [data-resize-handle='e'],
+.paper [data-resize-handle='w'] {
+	cursor: ew-resize;
+}
+.paper [data-resize-handle='ne'],
+.paper [data-resize-handle='sw'] {
+	cursor: nesw-resize;
+}
+.paper [data-resize-handle='nw'],
+.paper [data-resize-handle='se'] {
+	cursor: nwse-resize;
+}
+.rotation-overlay [data-rotation-handle] {
+	stroke: transparent;
+	cursor: grab;
+}
+.rotation-overlay .rotation-glyph {
+	fill: none;
+	stroke: var(--_vv-handle, #7a7a7a);
+	stroke-width: 1.5px;
+	stroke-linecap: round;
+	stroke-linejoin: round;
+	pointer-events: none;
+}
+.rotation-overlay [data-rotation-handle]:hover + .rotation-glyph {
+	stroke: var(--_vv-accent);
+}
 .paper [data-resize-frame] {
 	fill: none;
-	stroke: var(--_vv-accent);
+	stroke: var(--_vv-handle, #7a7a7a);
 	stroke-width: 1px;
 	pointer-events: none;
+}
+/*
+ * A selection with no frame or endpoint handles (several shapes, a group, a glued connector) is
+ * marked on the shapes themselves; a framed shape keeps its own outline, as in Visio.
+ */
+.viewport:not([data-selection-frame]) .paper [data-selected='true'] > [data-geometry] {
+	stroke: var(--_vv-accent) !important;
+	stroke-width: 0.025 !important;
+}
+.viewport:not([data-selection-frame]) .paper [role='group'][data-selected='true'] [data-geometry] {
+	stroke: var(--_vv-accent) !important;
+	stroke-dasharray: 0.06 0.04;
+}
+/* Handles step aside while a shape's text is edited in place. */
+.viewport[data-text-editing] [data-resize-overlay],
+.viewport[data-text-editing] .rotation-overlay,
+.viewport[data-text-editing] [data-line-endpoint] {
+	display: none;
 }
 .paper [data-resize-frame-preview] {
 	stroke-dasharray: 5 3;
 }
 .paper .endpoint-preview,
-.paper .rotation-preview,
-.rotation-overlay .rotation-stem {
+.paper .rotation-preview {
 	stroke: var(--_vv-accent);
 	stroke-width: 1.5px;
 	stroke-dasharray: 5 3;
 	pointer-events: none;
+}
+/* Visio shows no line from the pin to the rotation handle. */
+.rotation-overlay .rotation-stem {
+	display: none;
 }
 
 .rotation-overlay {
 	position: absolute;
 	z-index: 1;
 	pointer-events: none;
+}
+/* View > Visual Aids > Connection Points: blue x markers (presentation only, never exported). */
+.paper [data-connection-points] path {
+	fill: none;
+	stroke: #1f6fd1;
+	stroke-width: 1.25px;
+	pointer-events: none;
+}
+.paper [data-connection-points] path[data-inherited='true'] {
+	stroke-opacity: 0.55;
+}
+.paper [data-connection-points] path[data-selected='true'] {
+	stroke: var(--_vv-accent);
+	stroke-width: 2.5px;
+}
+/* A connector end over a connection point glues to that point. */
+.paper .connect-point-target {
+	fill: none;
+	stroke: #2e9d43;
+	stroke-width: 2px;
+	pointer-events: none;
+}
+/* Connectors glued to dragged shapes, re-routed live until the move is committed. */
+.paper .connector-preview {
+	fill: none;
+	stroke: var(--_vv-accent);
+	stroke-width: 1.5px;
+	stroke-dasharray: 4 3;
+	pointer-events: none;
+}
+
+/* View > Visual Aids > AutoConnect: arrows outside a hovered shape and their Quick Shapes bar. */
+.auto-connect {
+	position: absolute;
+	z-index: 2;
+	width: 0;
+	height: 0;
+	pointer-events: none;
+}
+.viewport[data-text-editing] .auto-connect {
+	display: none;
+}
+.auto-connect-arrow {
+	position: absolute;
+	width: 20px;
+	height: 20px;
+	margin: -10px 0 0 -10px;
+	padding: 2px;
+	border: 0;
+	background: none;
+	cursor: pointer;
+	pointer-events: auto;
+}
+.auto-connect-arrow svg {
+	display: block;
+	width: 16px;
+	height: 16px;
+	fill: var(--_vv-accent-soft);
+	stroke: var(--_vv-accent);
+	stroke-width: 1;
+	stroke-linejoin: round;
+}
+.auto-connect-arrow:hover svg {
+	fill: var(--_vv-accent);
+}
+.auto-connect-bar {
+	position: absolute;
+	display: flex;
+	gap: 2px;
+	padding: 3px;
+	border: 1px solid var(--_vv-border);
+	border-radius: 3px;
+	background: var(--_vv-surface);
+	box-shadow: 0 2px 8px rgb(0 0 0 / 18%);
+	pointer-events: auto;
+}
+.auto-connect-bar[data-side='right'] {
+	transform: translate(9px, -50%);
+}
+.auto-connect-bar[data-side='left'] {
+	transform: translate(calc(-100% - 9px), -50%);
+}
+.auto-connect-bar[data-side='up'] {
+	transform: translate(-50%, calc(-100% - 9px));
+}
+.auto-connect-bar[data-side='down'] {
+	transform: translate(-50%, 9px);
+}
+.auto-connect-bar button {
+	width: 30px;
+	height: 30px;
+	padding: 3px;
+	border: 1px solid transparent;
+	border-radius: 2px;
+	background: none;
+	cursor: pointer;
+}
+.auto-connect-bar button:hover {
+	border-color: var(--_vv-accent);
+	background: var(--_vv-accent-soft);
+}
+.auto-connect-bar svg {
+	display: block;
+	width: 22px;
+	height: 22px;
+	fill: var(--_vv-surface);
+	stroke: var(--_vv-ink);
+	stroke-width: 1;
+	stroke-linejoin: round;
 }

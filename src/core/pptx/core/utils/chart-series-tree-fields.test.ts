@@ -85,4 +85,31 @@ describe('readSeriesTreeFields colour extraction', () => {
 		expect(fields.color).toBeUndefined();
 		expect(fields.lineNoFill).toBe(true);
 	});
+
+	it('reads a line series outline gradient (a:ln/a:gradFill) as lineGradientFill', () => {
+		const codec = {
+			extractGradientStops: () => [
+				{ color: '#C08FBF', position: 0 },
+				{ color: '#800F85', position: 100 },
+			],
+			extractGradientType: () => 'linear' as const,
+			extractGradientAngle: () => 0,
+			extractGradientFocalPoint: () => undefined,
+		};
+		const fields = readSeriesTreeFields(
+			{ 'c:spPr': { 'a:ln': { '@_w': '76200', 'a:gradFill': {} } } },
+			'line',
+			{ ...STUB_READER, colorStyleCodec: codec },
+		);
+		expect(fields.lineGradientFill).toStrictEqual({
+			type: 'linear',
+			angle: 0,
+			stops: [
+				{ color: '#C08FBF', position: 0 },
+				{ color: '#800F85', position: 100 },
+			],
+		});
+		expect(fields.gradientFill).toBeUndefined();
+		expect(fields.lineWidth).toBe(6);
+	});
 });

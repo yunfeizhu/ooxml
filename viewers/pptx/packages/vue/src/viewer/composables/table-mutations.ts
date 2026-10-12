@@ -1,4 +1,3 @@
-import type { PptxTableData, TablePptxElement } from 'pptx-viewer-core';
 import type { CellCoord } from 'ooxml-ui/pptx';
 import {
 	canMergeCells,
@@ -11,6 +10,7 @@ import {
 	removeTableElementColumn,
 	removeTableElementRow,
 } from 'ooxml-ui/pptx';
+import type { PptxTableData, TablePptxElement } from 'pptx-viewer-core';
 import { toRaw } from 'vue';
 
 /**

@@ -1,4 +1,10 @@
 <script setup lang="ts">
+import {
+	canCommitActionType,
+	ELEMENT_ACTION_TYPE_OPTIONS,
+	resolveActionType,
+	toSlideIndex,
+} from 'ooxml-ui/pptx';
 /**
  * ActionSettingsPanel: PowerPoint's Insert > Action dialog as an inspector
  * card, at parity with React's `inspector/ActionSettingsPanel.tsx`.
@@ -17,12 +23,6 @@ import type {
 	PptxElement,
 } from 'pptx-viewer-core';
 import { elementActionToPptxAction, pptxActionToElementAction } from 'pptx-viewer-core';
-import {
-	canCommitActionType,
-	ELEMENT_ACTION_TYPE_OPTIONS,
-	resolveActionType,
-	toSlideIndex,
-} from 'ooxml-ui/pptx';
 import { computed, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 

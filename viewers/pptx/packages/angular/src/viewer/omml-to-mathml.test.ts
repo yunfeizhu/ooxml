@@ -1,7 +1,6 @@
-import { describe, it, expect } from 'vitest';
-
 import type { OmmlNode } from 'ooxml-ui/pptx';
 import { convertOmmlToMathMl, ommlToMathml } from 'ooxml-ui/pptx';
+import { describe, it, expect } from 'vitest';
 
 const MATH_NS = 'xmlns="http://www.w3.org/1998/Math/MathML"';
 

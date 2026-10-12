@@ -1,4 +1,11 @@
 import type {
+	FreeformToolKind,
+	ResolvedCustomization,
+	RibbonGalleryContext,
+	RibbonTransitionDraft,
+	ViewerOptionsStore,
+} from 'ooxml-ui/pptx';
+import type {
 	PptxAnimationTimelineAnchor,
 	PptxElementAnimation,
 	PptxLayoutPreview,
@@ -7,13 +14,6 @@ import type {
 	PptxThemeColorScheme,
 	PptxThemeFontScheme,
 } from 'pptx-viewer-core';
-import type {
-	FreeformToolKind,
-	ResolvedCustomization,
-	RibbonGalleryContext,
-	RibbonTransitionDraft,
-	ViewerOptionsStore,
-} from 'ooxml-ui/pptx';
 
 import type { EditActions } from '../../editor/editor-edit-ops';
 import type { FindReplaceActions } from '../../editor/editor-find-replace-actions';

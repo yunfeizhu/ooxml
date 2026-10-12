@@ -1,4 +1,3 @@
-import type { PptxElement } from 'pptx-viewer-core';
 import type { GestureController, SnapLine } from 'ooxml-ui/pptx';
 import {
 	applyReroutedConnectors,
@@ -10,6 +9,7 @@ import {
 	rerouteConnectorsForMovedElements,
 	stepFontSizePt,
 } from 'ooxml-ui/pptx';
+import type { PptxElement } from 'pptx-viewer-core';
 
 import { createAdjustGestureController, withShapeAdjustments } from './editor-adjust-gesture';
 import type { AdjustGestureController } from './editor-adjust-gesture';

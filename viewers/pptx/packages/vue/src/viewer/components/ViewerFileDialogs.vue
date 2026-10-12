@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { ViewerAddinStatus, ViewerOptions, ViewerOptionsStore } from 'ooxml-ui/pptx';
 /**
  * ViewerFileDialogs: the File / Help menu surfaces (document properties,
  * version history and its compare view, print, keyboard-shortcut help,
@@ -17,7 +18,6 @@ import type {
 	PptxHeaderFooter,
 	PptxSlide,
 } from 'pptx-viewer-core';
-import type { ViewerAddinStatus, ViewerOptions, ViewerOptionsStore } from 'ooxml-ui/pptx';
 
 import type { LocaleCatalogEntry } from '../../i18n';
 import type { ThemeCatalogEntry } from '../../theme';

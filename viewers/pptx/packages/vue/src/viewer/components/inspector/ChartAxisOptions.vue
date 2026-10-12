@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import type { PptxChartAxisFormatting } from 'pptx-viewer-core';
 import {
 	DISPLAY_UNITS_OPTIONS,
 	EDITABLE_AXIS_ROWS,
 	TICK_LABEL_POSITION_OPTIONS,
 } from 'ooxml-ui/pptx';
+import type { PptxChartAxisFormatting } from 'pptx-viewer-core';
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 

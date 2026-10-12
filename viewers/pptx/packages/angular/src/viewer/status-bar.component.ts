@@ -20,8 +20,6 @@ import {
 } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { TranslateService } from '@ngx-translate/core';
-import { map, merge, startWith } from 'rxjs';
-
 import { isActionHidden, resolveStatusBarSave } from 'ooxml-ui/pptx';
 import type {
 	StatusBarControlId,
@@ -29,6 +27,8 @@ import type {
 	StatusBarViewState,
 	ToolbarActionId,
 } from 'ooxml-ui/pptx';
+import { map, merge, startWith } from 'rxjs';
+
 import type { AutosaveStatus } from './autosave.service';
 
 @Component({

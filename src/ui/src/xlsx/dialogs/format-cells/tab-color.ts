@@ -17,7 +17,7 @@ export function openTabColorDialog(
 		name: 'tab-color',
 		heading: 'Tab Color',
 		body: grid.element,
-		opened: () => grid.element.querySelector<HTMLButtonElement>('[aria-pressed="true"]')?.focus(),
+		opened: () => grid.focus(),
 		submit: () => {
 			const color = grid.value();
 			session.setTabColor(index, color);

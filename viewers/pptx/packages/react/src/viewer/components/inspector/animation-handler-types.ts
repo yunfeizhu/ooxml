@@ -1,10 +1,10 @@
+import type { AnimationTimelineRow, EffectSoundState } from 'ooxml-ui/pptx';
 import type {
 	PptxElementAnimation,
 	PptxAfterAnimationAction,
 	PptxAnimationDirection,
 	PptxAnimationTimelineAnchor,
 } from 'pptx-viewer-core';
-import type { AnimationTimelineRow, EffectSoundState } from 'ooxml-ui/pptx';
 import type React from 'react';
 
 // ---------------------------------------------------------------------------

@@ -1,0 +1,83 @@
+# yaml-language-server: $schema=https://coderabbit.ai/integrations/schema.v2.json
+#
+# CodeRabbit (https://coderabbit.ai) reviews pull requests here: free for public repositories, it
+# needs only its GitHub App installed. It reviews, it does not gate: CI (`ci-success`) stays the
+# required check, and its comments are suggestions to weigh, not rules.
+language: en-GB
+tone_instructions: 'Be direct and brief. Explain the concrete failure a finding causes. No praise.'
+
+reviews:
+  profile: chill
+  request_changes_workflow: false
+  high_level_summary: true
+  review_status: true
+  collapse_walkthrough: true
+  sequence_diagrams: false
+  poem: false
+  in_progress_fortune: false
+  auto_review:
+    enabled: true
+    drafts: false
+    base_branches: ['main']
+    # The release flow and Dependabot open these; CI and dependency review cover them.
+    ignore_title_keywords: ['chore(release)']
+    ignore_usernames: ['dependabot[bot]']
+  # Generated or vendored content: fixtures, snapshots, lockfiles, build output and changelogs.
+  path_filters:
+    - '!**/__fixtures__/**'
+    - '!**/fixtures/**'
+    - '!**/__snapshots__/**'
+    - '!**/*.snap'
+    - '!**/dist/**'
+    - '!bun.lock'
+    - '!**/CHANGELOG.md'
+    - '!**/*.generated.ts'
+    - '!docs/pptx-migration-provenance.json'
+  path_instructions:
+    - path: '**/*'
+      instructions: |
+        AGENTS.md is the source of truth for this repository; flag changes that break it. In
+        particular: no em-dash (U+2014) anywhere except content that renders it on purpose; extensionless
+        relative imports in bundled TypeScript; modules under about 300 lines; unsupported Office
+        features must be reported honestly, never claimed as supported or lossless.
+    - path: 'src/core/**'
+      instructions: |
+        ooxml-core: all Office format logic, DOM-free, strict TypeScript (exactOptionalPropertyTypes,
+        noUncheckedIndexedAccess) except the relaxed src/core/pptx. Core must never import ooxml-ui.
+        Check round-trip safety: unknown markup and untouched parts must be preserved. Parsing,
+        preservation, round-trip and editing changes need a regression test next to the code. Look
+        for an existing helper in the shared areas (xml, opc, drawingml, units, color, geometry,
+        chart, text) before accepting a new one.
+    - path: 'src/ui/src/**'
+      instructions: |
+        ooxml-ui: DOM-only. Shared primitives are Lit classes on OfficeElement with a real .css file
+        imported ?raw and var(--office-x) tokens; product editors are imperative custom elements.
+        Format logic here belongs in src/core instead. A new English UI string needs every locale.
+    - path: 'viewers/**'
+      instructions: |
+        Viewers own only framework bindings, demos and docs. Logic that is not framework wiring
+        belongs in src/core or the shared UI. A fix in one binding (react, vue, angular, svelte,
+        solid, vanilla) usually applies to all of them: ask whether the others were changed too.
+    - path: '.github/workflows/**'
+      instructions: |
+        Never check out or run PR code under pull_request_target or workflow_run. Pass inputs and
+        event data to scripts through env, never ${{ }} inside run. Grant write permissions per
+        job. Pin third-party actions to a commit SHA (GitHub's own may use a major tag).
+  tools:
+    # CI already runs these on every PR; repeating them would only duplicate comments.
+    actionlint:
+      enabled: false
+    zizmor:
+      enabled: false
+    oxc:
+      enabled: false
+    eslint:
+      enabled: false
+    biome:
+      enabled: false
+    # Too noisy on OOXML element names and non-English locale strings.
+    languagetool:
+      enabled: false
+
+chat:
+  auto_reply: true

@@ -12,10 +12,10 @@
  * @module angular-viewer/editor-context-menu-context
  */
 
-import type { TablePptxElement } from 'pptx-viewer-core';
-
 import type { ContextMenuTableContext } from 'ooxml-ui/pptx';
 import { hasMultipleSelectedTableCells } from 'ooxml-ui/pptx';
+import type { TablePptxElement } from 'pptx-viewer-core';
+
 import type { TableCellSelection } from './table-selection.service';
 
 /**

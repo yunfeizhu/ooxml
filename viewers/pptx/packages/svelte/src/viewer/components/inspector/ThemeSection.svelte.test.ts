@@ -1,7 +1,7 @@
-import type { PptxHandler, PptxTheme } from 'pptx-viewer-core';
-import { THEME_COLOR_SCHEME_KEYS, THEME_PRESETS } from 'pptx-viewer-core';
 import { PRESET_THEMES, THEME_COLOR_SLOT_LABEL_KEYS } from 'ooxml-ui/pptx';
 import { translationsEn } from 'ooxml-ui/pptx/i18n';
+import type { PptxHandler, PptxTheme } from 'pptx-viewer-core';
+import { THEME_COLOR_SCHEME_KEYS, THEME_PRESETS } from 'pptx-viewer-core';
 import { flushSync, mount, tick, unmount } from 'svelte';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 

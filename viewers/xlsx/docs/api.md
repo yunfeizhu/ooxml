@@ -26,15 +26,16 @@ await editor.load(bytes, 'Budget.xlsx');
 
 Properties only:
 
-| Property             | Type                                 | Notes                                                                           |
-| -------------------- | ------------------------------------ | ------------------------------------------------------------------------------- |
-| `themeColors`        | `Partial<Record<...>>`               | Token overrides applied as `--xve-*` custom properties ([theming](/theming)).   |
-| `hiddenActions`      | `string[]`                           | Ribbon controls to hide by stable id.                                           |
-| `workbook`           | `Workbook \| null`                   | Get the open workbook, or set one to replace it.                                |
-| `dirty`              | `boolean` (read only)                | Unsaved edits.                                                                  |
-| `activeSheet`        | `number`                             | Zero-based index of the visible sheet.                                          |
-| `collaboration`      | `XlsxCollaborationOptions \| null`   | Shares the open workbook in a room while set ([collaboration](/collaboration)). |
-| `collaborationState` | `XlsxCollaborationState` (read only) | Whether sharing, the connection status and who is in the room.                  |
+| Property             | Type                                 | Notes                                                                                  |
+| -------------------- | ------------------------------------ | -------------------------------------------------------------------------------------- |
+| `themeColors`        | `Partial<Record<...>>`               | Token overrides applied as `--xve-*` custom properties ([theming](/theming)).          |
+| `hiddenActions`      | `string[]`                           | Ribbon controls to hide by stable id.                                                  |
+| `ribbonAddIns`       | `RibbonAddInTab[]`                   | Tabs the host adds after the built-in ones ([bindings](/bindings#ribbon-add-in-tabs)). |
+| `workbook`           | `Workbook \| null`                   | Get the open workbook, or set one to replace it.                                       |
+| `dirty`              | `boolean` (read only)                | Unsaved edits.                                                                         |
+| `activeSheet`        | `number`                             | Zero-based index of the visible sheet.                                                 |
+| `collaboration`      | `XlsxCollaborationOptions \| null`   | Shares the open workbook in a room while set ([collaboration](/collaboration)).        |
+| `collaborationState` | `XlsxCollaborationState` (read only) | Whether sharing, the connection status and who is in the room.                         |
 
 ## Methods
 
@@ -71,6 +72,7 @@ All events are `CustomEvent`s that bubble and cross the shadow boundary (`compos
 | `selection-change`     | `{ sheet, ref, active }`                                                                   | `ref` is the selected range, `active` the active cell.                         |
 | `sheet-change`         | `{ index, name }`                                                                          |                                                                                |
 | `dirty-change`         | `{ dirty }`                                                                                |                                                                                |
+| `office-ribbon-add-in` | `{ tab, command }`                                                                         | A command of a host tab (`ribbonAddIns`) was chosen.                           |
 | `collaboration-change` | `{ active, roomId, status, synced, people }`                                               | Sharing started or stopped, the connection changed, or someone joined or left. |
 
 ```ts

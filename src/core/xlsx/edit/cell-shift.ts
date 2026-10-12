@@ -1,10 +1,12 @@
 import { type CellRange, MAX_COL, MAX_ROW, normalizeRange, rangesIntersect } from '../address';
 import type { Worksheet } from '../model';
 import { shiftFormulaInBand } from './band-formulas';
+import { assertInsertFits } from './insert-guard';
 import { type EditContext, isWholeColumns, isWholeRows, sheetAt } from './context';
 import type { AxisShift } from './range-math';
 import { cellRange } from './range-math';
 import { rewriteFormulas } from './shift-formulas';
+import { rebaseRulesForDeletion } from './shift-rule-anchors';
 import { type Band, shiftSheetContent } from './shift-sheet';
 import { deleteColumns, deleteRows, insertColumns, insertRows } from './structure';
 
@@ -23,6 +25,7 @@ function assertBandIntact(sheet: Worksheet, shift: AxisShift, band: Band): void 
 		throw new Error('Cannot shift cells: a table would be split.');
 }
 
+/** Runs one atomic cell-band edit after checking the ranges that must move together. */
 function shiftBand(
 	ctx: EditContext,
 	s: number,
@@ -43,11 +46,13 @@ function shiftBand(
 		? { lo: r.start.col, hi: r.end.col }
 		: { lo: r.start.row, hi: r.end.row };
 	assertBandIntact(sheet, shift, band);
+	assertInsertFits(sheet, shift, band);
 	ctx.run(
 		`${insert ? 'Insert' : 'Delete'} cells`,
 		'structure',
 		[{ kind: 'shift', sheet: s, shift, band }],
 		() => {
+			rebaseRulesForDeletion(sheet, shift, band);
 			rewriteFormulas(ctx.workbook, (formula, formulaSheet) =>
 				shiftFormulaInBand(formula, formulaSheet, sheet.name, shift, band),
 			);

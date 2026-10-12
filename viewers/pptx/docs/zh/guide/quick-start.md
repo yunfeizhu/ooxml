@@ -12,8 +12,9 @@ description: 通过四个完整示例学习创建演示文稿、解析和编辑�
 使用 `PptxHandler.create()` 创建演示文稿，通过链式幻灯片构建器添加内容，再调用 `save()` 保存为字节数据。
 
 ```ts
-import { PptxHandler } from 'pptx-viewer-core';
 import { writeFile } from 'node:fs/promises';
+
+import { PptxHandler } from 'pptx-viewer-core';
 
 const { handler, data, createSlide } = await PptxHandler.create({
 	title: 'My Presentation',
@@ -44,8 +45,9 @@ await writeFile('presentation.pptx', output);
 创建 `PptxHandler`，调用 `load()` 加载 `ArrayBuffer`，遍历并修改[数据模型](/zh/guide/data-model)，最后调用 `save()`。
 
 ```ts
-import { PptxHandler } from 'pptx-viewer-core';
 import { readFile, writeFile } from 'node:fs/promises';
+
+import { PptxHandler } from 'pptx-viewer-core';
 
 const handler = new PptxHandler();
 const buffer = await readFile('presentation.pptx');
@@ -80,8 +82,9 @@ await writeFile('output.pptx', output);
 `PptxMarkdownConverter` 将解析后的 `PptxData` 转换为 Markdown，也可以按需将媒体文件提取到指定目录。
 
 ```ts
-import { PptxHandler, PptxMarkdownConverter } from 'pptx-viewer-core';
 import { readFile } from 'node:fs/promises';
+
+import { PptxHandler, PptxMarkdownConverter } from 'pptx-viewer-core';
 
 const handler = new PptxHandler();
 const buffer = await readFile('presentation.pptx');
@@ -108,8 +111,8 @@ console.log(markdown);
 ![包含功能区、缩略图和属性面板的可编辑预览界面](/docs-shots/editor.jpg)
 
 ```tsx
-import { useState } from 'react';
 import { PowerPointViewer } from 'pptx-react-viewer/viewer';
+import { useState } from 'react';
 
 function App() {
 	const [content, setContent] = useState<Uint8Array>();

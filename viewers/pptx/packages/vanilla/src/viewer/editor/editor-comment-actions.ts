@@ -1,7 +1,3 @@
-/* oxlint-disable eslint/one-var -- pervasive pre-existing pattern in this file
-   (each action is a short sequence of independent `const`s); merging them
-   isn't a style choice here. */
-import type { PptxComment, PptxCommentMention, PptxSlide } from 'pptx-viewer-core';
 // The comment-array mutations themselves are pure and shared with every
 // other binding (including the nested-reply tree traversal for edit/delete/
 // resolve, which used to be reimplemented here); this module only wires them
@@ -13,6 +9,10 @@ import {
 	replyToCommentInList,
 	toggleCommentResolvedInList,
 } from 'ooxml-ui/pptx';
+/* oxlint-disable eslint/one-var -- pervasive pre-existing pattern in this file
+   (each action is a short sequence of independent `const`s); merging them
+   isn't a style choice here. */
+import type { PptxComment, PptxCommentMention, PptxSlide } from 'pptx-viewer-core';
 
 import type { Store, ViewerState } from '../state';
 import type { EditorOps } from './editor-operations';

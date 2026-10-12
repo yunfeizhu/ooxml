@@ -1,6 +1,3 @@
-/* oxlint-disable eslint/one-var -- pervasive pre-existing pattern in this file:
-   independent handler-local `const`s, not one statement */
-import type { ChartPptxElement, PptxChartData, PptxElement } from 'pptx-viewer-core';
 import {
 	advanceChartMarkDrag,
 	advanceChartValueDrag,
@@ -16,6 +13,9 @@ import {
 	withChartTitle,
 } from 'ooxml-ui/pptx';
 import type { ChartMarkDragState, ChartPartRef, ChartValueDragState } from 'ooxml-ui/pptx';
+/* oxlint-disable eslint/one-var -- pervasive pre-existing pattern in this file:
+   independent handler-local `const`s, not one statement */
+import type { ChartPptxElement, PptxChartData, PptxElement } from 'pptx-viewer-core';
 
 /**
  * chart-drag (Svelte): direct on-canvas chart editing, the Svelte port of Vue's

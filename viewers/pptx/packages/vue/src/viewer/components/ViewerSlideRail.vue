@@ -11,8 +11,8 @@
  * canvas to zero height; a phone navigates slides from the bottom bar instead.
  */
 import { Plus } from 'lucide-vue-next';
-import type { PptxSlide } from 'pptx-viewer-core';
 import { EDITOR_THUMBNAIL_WIDTH } from 'ooxml-ui/pptx';
+import type { PptxSlide } from 'pptx-viewer-core';
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 

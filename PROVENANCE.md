@@ -2272,3 +2272,16 @@ Source: ChristopherVR/ooxml at `fadc60d589474d0699404b1e1fb251257fb13219`,
 moved into `src/core/visio/ui/selection.ts`, alongside new immutable selection
 normalization helpers. Its rendering eligibility behavior is unchanged; the UI
 re-exports it so SVG rendering and selection use the same implementation.
+
+## Orthogonal connector router (shared with Visio)
+
+Source: ChristopherVR/ooxml at `f57ee8e64`, `src/ui/src/pptx/render/`:
+`connector-router.ts`, `connector-router-graph.ts`, `connector-router-astar.ts`,
+`connector-router-types.ts` and their three test files moved unchanged in behaviour
+to `src/core/geometry/` (exported from `ooxml-core/geometry`). Changes: bounds-checked
+indexing for the strict project, the two path-string helpers written with `map`, and
+the Angular `Point`/`Rect` aliases stayed in the UI. `src/ui/src/pptx/render/connector-router.ts`
+and `connector-router-types.ts` are now re-exports, so the PowerPoint bindings keep
+their import surface; the 71 moved tests and the bindings' own router tests pass
+unchanged. `src/core/visio/connector-route-avoid.ts` is the first non-PowerPoint
+caller: it scales page inches to the router's pixel-like units and back.

@@ -8,6 +8,8 @@ export const grid: Record<string, string> = {
 	'A sheet name cannot contain \\ / ? * [ ] or :': 'A sheet name cannot contain \\ / ? * [ ] or :',
 	'A sheet name cannot start or end with an apostrophe.':
 		'A sheet name cannot start or end with an apostrophe.',
+	'Cannot insert cells: non-empty cells would be pushed off the sheet.':
+		'Cannot insert cells: non-empty cells would be pushed off the sheet.',
 	Cancel: 'Cancel',
 	'Cell editor': 'Cell editor',
 	Chart: 'Chart',
@@ -74,6 +76,7 @@ export const grid: Record<string, string> = {
 	'That name is already taken.': 'That name is already taken.',
 	"The browser didn't allow access to the clipboard. Use Ctrl+V to paste.":
 		"The browser didn't allow access to the clipboard. Use Ctrl+V to paste.",
+	'The insert area extends beyond the sheet.': 'The insert area extends beyond the sheet.',
 	'The paste area extends beyond the sheet.': 'The paste area extends beyond the sheet.',
 	"This action won't work on multiple selections.":
 		"This action won't work on multiple selections.",

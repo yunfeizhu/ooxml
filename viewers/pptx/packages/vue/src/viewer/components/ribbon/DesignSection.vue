@@ -1,9 +1,5 @@
 <script setup lang="ts">
-import {
-	DESIGN_RIBBON_COMMANDS,
-	DESIGN_RIBBON_GROUPS,
-	designCommandState,
-} from 'ooxml-ui/pptx';
+import { DESIGN_RIBBON_COMMANDS, DESIGN_RIBBON_GROUPS, designCommandState } from 'ooxml-ui/pptx';
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 

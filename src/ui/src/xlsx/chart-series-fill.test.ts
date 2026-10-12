@@ -30,17 +30,22 @@ it('keeps the chosen series through fill edits and undo and guards stale color m
 	const color = pane.element.querySelector<HTMLButtonElement>('[aria-label="Color"]')!;
 	expect(series.value).toBe('1');
 	expect(series.selectedOptions[0]!.textContent).toBe('Cost');
+	// The shared colour grid in Excel's popover.
+	const red = () =>
+		ctx.root
+			.querySelector('.color-grid office-ui-color-grid')!
+			.shadowRoot!.querySelector<HTMLButtonElement>('[aria-label="Red"]')!;
 	color.click();
 	series.value = '0';
 	series.dispatchEvent(new Event('change'));
-	ctx.root.querySelector<HTMLButtonElement>('[role="menuitem"][aria-label="Red"]')!.click();
+	red().click();
 	const drawing = ctx.workbook()!.sheets[0]!.drawings[0]!;
 	if (drawing.kind !== 'chart') throw new Error('Expected chart');
 	expect(drawing.series.every((item) => !item.drawingColor)).toBe(true);
 	series.value = '1';
 	series.dispatchEvent(new Event('change'));
 	color.click();
-	ctx.root.querySelector<HTMLButtonElement>('[role="menuitem"][aria-label="Red"]')!.click();
+	red().click();
 	const transparency = pane.element.querySelector<HTMLInputElement>(
 		'input[type="number"][aria-label="Transparency"]',
 	)!;
@@ -54,7 +59,7 @@ it('keeps the chosen series through fill edits and undo and guards stale color m
 	}
 	expect(ctx.toasts).toHaveLength(4);
 	color.click();
-	ctx.root.querySelector<HTMLButtonElement>('[role="menuitem"][aria-label="Blue"]')!.click();
+	red().parentElement!.querySelector<HTMLButtonElement>('[aria-label="Blue"]')!.click();
 	expect(transparency.value).toBe('37');
 	fill.value = 'none';
 	fill.dispatchEvent(new Event('change'));

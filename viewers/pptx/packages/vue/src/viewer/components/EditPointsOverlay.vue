@@ -1,4 +1,12 @@
 <script setup lang="ts">
+import type { EditPointsCommandId, EditPointsElementPatch } from 'ooxml-ui/pptx';
+import {
+	attachOverlayKeyboard,
+	EDIT_POINTS_STYLE,
+	EDIT_POINTS_TARGET_ATTR,
+	EditPointsSession,
+	overlayPointerInput,
+} from 'ooxml-ui/pptx';
 /**
  * EditPointsOverlay: PowerPoint's Edit Points mode for one shape. Vue port of
  * React's `canvas/EditPointsOverlay.tsx`, DOM contract included.
@@ -9,14 +17,6 @@
  * stage's unscaled slide-pixel space, and forwards pointer events to it.
  */
 import type { PptxElement } from 'pptx-viewer-core';
-import type { EditPointsCommandId, EditPointsElementPatch } from 'ooxml-ui/pptx';
-import {
-	attachOverlayKeyboard,
-	EDIT_POINTS_STYLE,
-	EDIT_POINTS_TARGET_ATTR,
-	EditPointsSession,
-	overlayPointerInput,
-} from 'ooxml-ui/pptx';
 import { computed, onBeforeUnmount, ref, shallowRef, useTemplateRef, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 

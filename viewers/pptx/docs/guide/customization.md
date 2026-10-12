@@ -149,6 +149,53 @@ from the resolved customisation, scoped to that viewer
 layout and from the accessibility tree in all five bindings the same way.
 The attributes are also a stable hook for your own styling or tests.
 
+### Host ribbon tabs (`ribbonAddIns`)
+
+Customisation removes things; `ribbonAddIns` adds a tab of your own after
+Help, as an Office add-in does. It is a separate prop on every binding
+(`ribbonAddIns` in React, Svelte and the vanilla options, `:ribbon-add-ins` in
+Vue, `[ribbonAddIns]` in Angular; the vanilla instance also has
+`setRibbonAddIns(tabs)`), and takes the same plain descriptor the Word, Excel
+and Visio editors take:
+
+```tsx
+const tabs = [
+	{
+		id: 'reports',
+		label: 'Reports',
+		groups: [
+			{
+				label: 'Export',
+				commands: [
+					{ id: 'export', label: 'Export', icon: 'save', run: () => exportReport() },
+					{ id: 'options', label: 'Options', size: 'small' },
+				],
+			},
+		],
+	},
+];
+
+<PowerPointViewer content={bytes} ribbonAddIns={tabs} />;
+```
+
+A chosen command runs its `run` callback and then dispatches a bubbling
+`office-ribbon-add-in` DOM event (`detail: { tab, command }`) from inside the
+viewer, so one listener on the viewer's container hears every host command.
+There is no per-binding callback prop for it.
+
+- A tab cannot take the id of a built-in or contextual tab; such a tab is left
+  out. `label` is your own text and is not translated.
+- `size: 'small'` commands fill columns of three. The PowerPoint ribbon has no
+  drop-down for host commands, so a command with `items` is drawn as its items,
+  as small commands titled with the parent's label.
+- Passing an equal descriptor again, as a framework does on every render, keeps
+  the tab's controls and only replaces the callbacks. Removing the tab that is
+  showing returns the ribbon to Home.
+- Host tabs show in the desktop ribbon only; the phone toolbar and its menu
+  sheet do not list them.
+- `hiddenActions` and `ribbon.hiddenTabs` do not apply to host tabs: leave a
+  tab out of the list to hide it.
+
 ## The imperative API
 
 Every binding exposes these methods on its component handle (React `ref`, Vue
@@ -196,9 +243,9 @@ typing in a text box, or (for selection commands) with nothing selected.
 ::: code-group
 
 ```tsx [React]
-import { useMemo, useRef } from 'react';
 import { PowerPointViewer } from 'pptx-react-viewer';
 import type { PowerPointViewerHandle, ViewerCustomization } from 'pptx-react-viewer';
+import { useMemo, useRef } from 'react';
 
 export function Deck({ bytes }: { bytes: Uint8Array }) {
 	const viewer = useRef<PowerPointViewerHandle>(null);

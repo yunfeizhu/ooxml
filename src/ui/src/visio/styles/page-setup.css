@@ -1,0 +1,66 @@
+.page-setup-dialog .page-setup-tabs {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 2px;
+	margin: 0 0 12px;
+	border-bottom: 1px solid var(--_vv-border);
+}
+.page-setup-dialog [role='tab'] {
+	padding: 6px 10px;
+	color: inherit;
+	font: inherit;
+	background: transparent;
+	border: 1px solid transparent;
+	border-bottom: none;
+	border-radius: 3px 3px 0 0;
+	cursor: pointer;
+}
+.page-setup-dialog [role='tab'][aria-selected='true'] {
+	background: var(--_vv-surface);
+	border-color: var(--_vv-border);
+	font-weight: 600;
+}
+.page-setup-dialog [role='tabpanel'] {
+	display: grid;
+	gap: 10px;
+	min-width: min(420px, 80vw);
+}
+.page-setup-dialog [role='tabpanel'][hidden] {
+	display: none;
+}
+.page-setup-dialog label {
+	display: grid;
+	grid-template-columns: minmax(130px, 1fr) minmax(150px, 1.4fr);
+	align-items: center;
+	gap: 12px;
+}
+.page-setup-dialog input {
+	box-sizing: border-box;
+	width: 100%;
+	padding: 6px;
+	color: inherit;
+	background: var(--_vv-surface);
+	border: 1px solid var(--_vv-border);
+	border-radius: 3px;
+}
+.page-setup-dialog .page-setup-hint {
+	max-width: 440px;
+	margin: 0;
+	font-size: 12px;
+}
+.page-setup-dialog [role='alert'] {
+	color: var(--office-error, #b00020);
+}
+.paper .page-break {
+	fill: none;
+	stroke: #7a7a7a;
+	stroke-width: 1.25;
+	stroke-dasharray: 6 4;
+	vector-effect: non-scaling-stroke;
+}
+@media (max-width: 480px) {
+	.page-setup-dialog label {
+		grid-template-columns: 1fr;
+		gap: 5px;
+	}
+}

@@ -1,3 +1,4 @@
+import type { RibbonGalleryApplyResult, RibbonGalleryContext } from 'ooxml-ui/pptx';
 /**
  * ribbon-gallery-helpers.ts: the Angular glue between `pptx-viewer-shared`'s
  * ribbon galleries and this binding's state services.
@@ -12,7 +13,6 @@
  */
 import type { PptxElement, PptxHandler, PptxTheme } from 'pptx-viewer-core';
 
-import type { RibbonGalleryApplyResult, RibbonGalleryContext } from 'ooxml-ui/pptx';
 import type { EditorStateService } from './editor-state.service';
 import type { ViewerThemeGalleryService } from './viewer-theme-gallery.service';
 

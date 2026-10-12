@@ -9,8 +9,6 @@ import {
 	signal,
 	viewChild,
 } from '@angular/core';
-import type { MediaBookmark } from 'pptx-viewer-core';
-
 import {
 	formatMediaTime,
 	mediaTimelineGeometry,
@@ -19,6 +17,7 @@ import {
 	mediaTrimRangeForDrag,
 } from 'ooxml-ui/pptx';
 import type { MediaTrimHandle, MediaTrimRange } from 'ooxml-ui/pptx';
+import type { MediaBookmark } from 'pptx-viewer-core';
 
 @Component({
 	selector: 'pptx-media-trim-timeline',

@@ -52,7 +52,7 @@ describe('renderTableCellContent', () => {
 		const cell: PptxTableCell = { text: 'edited', paragraphs: [{ lineSpacingExactPt: 9 }] };
 		expect(markup(cell, 'edited')).toBe(
 			'<div><div style="display:block;line-height:12px">' +
-				'<span style="position:relative">edited</span></div></div>',
+				'<span style="position:relative;line-height:0">edited</span></div></div>',
 		);
 	});
 
@@ -63,10 +63,10 @@ describe('renderTableCellContent', () => {
 			paragraphs: [{ align: 'right', lineSpacingExactPt: 9 }, {}],
 			style: { align: 'right' },
 		};
-		// The first paragraph takes the cell's alignment.
+		// The first paragraph takes the cell's alignment; its exactly spaced runs get line-height 0.
 		expect(markup(cell, 'one\ntwo')).toBe(
 			'<div><div style="display:block;line-height:12px">' +
-				'<span style="position:relative">one</span></div>' +
+				'<span style="position:relative;line-height:0">one</span></div>' +
 				'<div style="display:block;text-align:start"><span style="position:relative">two</span></div></div>',
 		);
 	});

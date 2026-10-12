@@ -1,19 +1,24 @@
 name: Security
 
 # Alerts on risky changes before they merge and on a schedule afterwards. Findings appear on the
-# PR (dependency review) and in the repository's Security tab (CodeQL). Dependabot alerts and
-# security updates are repository settings, not a workflow.
+# PR (dependency review comments, CodeQL annotations on the diff) and in the repository's Security
+# tab. Dependabot alerts and security updates are repository settings, not a workflow.
 on:
   pull_request:
     paths:
       - 'bun.lock'
       - '**/package.json'
       - '.github/workflows/**'
+      - 'src/**'
+      - 'mcp/**'
+      - 'apps/**'
+      - 'viewers/**'
   push:
     branches: [main]
     paths:
       - 'src/**'
       - 'mcp/**'
+      - 'apps/**'
       - 'viewers/**'
       - '.github/workflows/security.yml'
   schedule:
@@ -38,22 +43,22 @@ jobs:
       contents: read
       pull-requests: write
     steps:
-      - uses: actions/checkout@v7
-      - uses: actions/dependency-review-action@v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: actions/dependency-review-action@a1d282b36b6f3519aa1f3fc636f609c47dddb294 # v5
         with:
           fail-on-severity: high
           comment-summary-in-pr: on-failure
 
+  # On a PR, new alerts in the changed code are annotated on the diff (not a required check).
   codeql:
     name: CodeQL
-    if: github.event_name != 'pull_request'
     runs-on: ubuntu-latest
     permissions:
       contents: read
       security-events: write
     steps:
-      - uses: actions/checkout@v7
-      - uses: github/codeql-action/init@v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: github/codeql-action/init@24c54180a607b1449ed407dd24f251e4e9147c8d # v4
         with:
           languages: javascript-typescript
           queries: security-extended
@@ -64,6 +69,6 @@ jobs:
               - '**/fixtures/**'
               - '**/dist/**'
               - 'node_modules/**'
-      - uses: github/codeql-action/analyze@v4
+      - uses: github/codeql-action/analyze@24c54180a607b1449ed407dd24f251e4e9147c8d # v4
         with:
           category: /language:javascript-typescript

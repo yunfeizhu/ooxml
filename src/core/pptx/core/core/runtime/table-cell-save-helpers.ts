@@ -1,5 +1,6 @@
-import type { PptxTableCellStyle, XmlObject } from '../../types';
+import type { PptxTableCellParagraph, PptxTableCellStyle, XmlObject } from '../../types';
 import { serializeColorChoiceWithRef } from '../../utils/color-xml-preservation';
+import { ensureXmlChildOrCreate, ensureXmlChildren } from '../../utils/xml-access';
 
 /**
  * Optional callback to resolve a preserved colour-choice XML node back to a
@@ -160,12 +161,51 @@ export function writeDiagonalBorders(
 	}
 }
 
-/** Write font properties into all runs across all paragraphs. */
+/**
+ * Write the size an empty paragraph is drawn at into its `a:endParaRPr`: the
+ * paragraph's own `endParaFontSize`, else, in a cell with no text at all, the
+ * cell's `fontSize`. Without it an empty cell reopens at the deck's default
+ * size and its row grows (#39). An empty line between text lines keeps its
+ * markup unless its size was given, so an unedited deck is not restyled.
+ */
+function writeEmptyParagraphSizes(
+	xmlCell: XmlObject,
+	style: PptxTableCellStyle,
+	paragraphs: readonly PptxTableCellParagraph[] | undefined,
+	ensureArray: (val: unknown) => XmlObject[],
+): void {
+	const txBody = xmlCell['a:txBody'];
+	if (!txBody || typeof txBody !== 'object') {
+		return;
+	}
+	const xmlParagraphs = ensureXmlChildren(txBody as XmlObject, 'a:p');
+	const empty = xmlParagraphs.map((paragraph) =>
+		['a:r', 'a:fld', 'a:br'].every((tag) => ensureArray(paragraph[tag]).length === 0),
+	);
+	const cellFallback = empty.every(Boolean) ? style.fontSize : undefined;
+	for (const [index, paragraph] of xmlParagraphs.entries()) {
+		const size = paragraphs?.[index]?.endParaFontSize ?? cellFallback;
+		if (!empty[index] || size === undefined) {
+			continue;
+		}
+		// CT_TextParagraph ends with `endParaRPr`, and an empty paragraph has
+		// at most `a:pPr` before it, so a created node is appended.
+		const endParaRPr = ensureXmlChildOrCreate(paragraph, 'a:endParaRPr', 'last');
+		endParaRPr['@_sz'] = String(Math.round(size * 100));
+	}
+}
+
+/**
+ * Write font properties into all runs across all paragraphs, and the size of
+ * each empty paragraph into its `a:endParaRPr`.
+ */
 export function writeCellTextFormatting(
 	xmlCell: XmlObject,
 	style: PptxTableCellStyle,
 	ensureArray: (val: unknown) => XmlObject[],
+	cellParagraphs?: readonly PptxTableCellParagraph[],
 ): void {
+	writeEmptyParagraphSizes(xmlCell, style, cellParagraphs, ensureArray);
 	if (
 		style.bold === undefined &&
 		style.italic === undefined &&

@@ -3,10 +3,7 @@ import JSZip from 'jszip';
 import { loadDocx } from './parse';
 import { computeListLabels, resolveParagraphNumbering } from './numbering-format';
 import type { Paragraph } from './model';
-import {
-	headingLabels,
-	headingNumberingFixture,
-} from './test-support/heading-numbering-fixture';
+import { headingLabels, headingNumberingFixture } from './test-support/heading-numbering-fixture';
 
 describe('heading-linked numbering', () => {
 	it('resolves levels from pStyle without flattening style numbering into paragraphs', async () => {

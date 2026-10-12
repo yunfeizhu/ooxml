@@ -1,12 +1,7 @@
 import { NgStyle } from '@angular/common';
 import { ChangeDetectionStrategy, Component, computed, effect, input, signal } from '@angular/core';
+import { applyColorChange, buildCacheKey, getCachedResult, setCachedResult } from 'ooxml-ui/pptx';
 
-import {
-	applyColorChange,
-	buildCacheKey,
-	getCachedResult,
-	setCachedResult,
-} from 'ooxml-ui/pptx';
 import type { ClrChangeParams } from './color-changed-image-helpers';
 
 /**

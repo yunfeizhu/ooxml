@@ -7,9 +7,6 @@ import {
 	input,
 } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import type { PptxElement } from 'pptx-viewer-core';
-import { hasTextProperties } from 'pptx-viewer-core';
-
 import {
 	elementBulletKind,
 	getInlineEditorSelectionResult,
@@ -22,6 +19,9 @@ import {
 	withHomeGalleries,
 } from 'ooxml-ui/pptx';
 import type { RibbonHomeRequestEvent } from 'ooxml-ui/pptx';
+import type { PptxElement } from 'pptx-viewer-core';
+import { hasTextProperties } from 'pptx-viewer-core';
+
 import { EditorStateService } from './editor-state.service';
 import { LoadContentService } from './load-content.service';
 /**

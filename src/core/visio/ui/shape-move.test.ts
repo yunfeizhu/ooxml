@@ -1,7 +1,12 @@
 import { expect, it } from 'vitest';
 import { demoDocument } from './demo-document';
 import { transform } from '../geometry';
-import { visioMoveCommands, visioMovePreviewTransform, visioPageDragDelta } from './shape-move';
+import {
+	visioMoveCommands,
+	visioMovePreviewTransform,
+	visioNudgeCommands,
+	visioPageDragDelta,
+} from './shape-move';
 
 function page() {
 	const page = structuredClone(demoDocument.pages[0]!);
@@ -40,7 +45,7 @@ it.each([0.5, 1, 2])('translates every pin by one physical delta at scale %s', (
 it('declines the entire selection when any member is unsupported, glued or ambiguous', () => {
 	for (const patch of [
 		{ kind: 'connector' },
-		{ masterId: '1' },
+		{ masterId: '1', layerIds: ['locked'] },
 		{ layerIds: ['1'] },
 		{ hidden: true },
 		{ children: [page().shapes[0]!] },
@@ -67,4 +72,18 @@ it('admits an unchanged eligible selection but rejects nonfinite or overflowing 
 	expect(
 		visioMovePreviewTransform(scene.shapes[0]!, { x: Number.MAX_VALUE, y: 0 }),
 	).toBeUndefined();
+});
+
+it('nudges the selection in the arrow direction with upward page y', () => {
+	const scene = page();
+	expect(visioNudgeCommands(scene, ['a'], 'ArrowUp', 0.0625)).toEqual([
+		{ type: 'move-shape', pageId: scene.id, shapeId: 'a', x: 3, y: 5.0625 },
+	]);
+	expect(visioNudgeCommands(scene, ['a', 'b'], 'ArrowLeft', 0.5)).toEqual([
+		{ type: 'move-shape', pageId: scene.id, shapeId: 'a', x: 2.5, y: 5 },
+		{ type: 'move-shape', pageId: scene.id, shapeId: 'b', x: 3.5, y: 5 },
+	]);
+	expect(visioNudgeCommands(scene, ['a'], 'Home', 1)).toBeNull();
+	expect(visioNudgeCommands(scene, ['a'], 'ArrowDown', 0)).toBeUndefined();
+	expect(visioNudgeCommands(scene, ['missing'], 'ArrowDown', 1)).toBeUndefined();
 });

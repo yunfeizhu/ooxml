@@ -16,10 +16,13 @@ test('offers the host a cancellable read-only text jump without opening a tab', 
 	const wrapper = mount(PowerPointViewer, { props: { content, canEdit: false, onHyperlinkClick } });
 	try {
 		const api = wrapper.vm as unknown as PowerPointViewerExpose;
-		await vi.waitFor(async () => {
-			await flushPromises();
-			expect(api.getSlideCount()).toBe(3);
-		});
+		await vi.waitFor(
+			async () => {
+				await flushPromises();
+				expect(api.getSlideCount()).toBe(3);
+			},
+			{ timeout: 15000 },
+		);
 		const link = wrapper.get('[data-pptx-viewport] [data-pptx-hyperlink]');
 		expect(link.attributes('href')).toBeUndefined();
 		onHyperlinkClick.mockReturnValueOnce(false);

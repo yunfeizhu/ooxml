@@ -1,4 +1,3 @@
-import type { PptxData, PptxSaveFormat, PptxSlide } from 'pptx-viewer-core';
 import type {
 	CanvasSize,
 	RasterizeElementResult,
@@ -13,6 +12,7 @@ import {
 	rasterResultToPngBlob,
 	shouldDiscardAutosaveOnSuccessfulSave,
 } from 'ooxml-ui/pptx';
+import type { PptxData, PptxSaveFormat, PptxSlide } from 'pptx-viewer-core';
 import { computed, ref } from 'vue';
 import type { ComputedRef, Ref } from 'vue';
 

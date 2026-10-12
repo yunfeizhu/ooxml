@@ -1,9 +1,9 @@
-import type { PptxElement } from 'pptx-viewer-core';
 import {
 	computeMarqueeHitIds,
 	isAdditiveSelectionPress,
 	mergeAdditiveSelection,
 } from 'ooxml-ui/pptx';
+import type { PptxElement } from 'pptx-viewer-core';
 import { ref } from 'vue';
 import type { Ref } from 'vue';
 

@@ -19,9 +19,9 @@ import {
 	CUSTOM_ELEMENTS_SCHEMA,
 } from '@angular/core';
 import { TranslatePipe } from '@ngx-translate/core';
+import { AFTER_ANIMATION_VALUES } from 'ooxml-ui/pptx';
 import type { PptxAfterAnimationAction } from 'pptx-viewer-core';
 
-import { AFTER_ANIMATION_VALUES } from 'ooxml-ui/pptx';
 import { isSelectControl } from './control-event-targets';
 
 @Component({

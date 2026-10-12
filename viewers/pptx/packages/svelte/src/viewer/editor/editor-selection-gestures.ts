@@ -1,4 +1,3 @@
-import type { PptxElement } from 'pptx-viewer-core';
 import {
 	applyResize,
 	computeMarqueeHitIds,
@@ -7,12 +6,8 @@ import {
 	resizeSelection,
 	selectionBounds,
 } from 'ooxml-ui/pptx';
-import type {
-	ElementBoxPatch,
-	InteractionBox,
-	MarqueeRect,
-	ResizeHandleId,
-} from 'ooxml-ui/pptx';
+import type { ElementBoxPatch, InteractionBox, MarqueeRect, ResizeHandleId } from 'ooxml-ui/pptx';
+import type { PptxElement } from 'pptx-viewer-core';
 
 export interface EditorMarqueeRect extends MarqueeRect {
 	additive: boolean;

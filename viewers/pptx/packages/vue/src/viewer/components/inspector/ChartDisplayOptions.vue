@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import type { PptxChartData, PptxChartStyle } from 'pptx-viewer-core';
 import {
 	chartDataLabelsTogglePatch,
 	chartGridlinesPatch,
 	chartGridlinesState,
 	LEGEND_POSITION_OPTIONS,
 } from 'ooxml-ui/pptx';
+import type { PptxChartData, PptxChartStyle } from 'pptx-viewer-core';
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 

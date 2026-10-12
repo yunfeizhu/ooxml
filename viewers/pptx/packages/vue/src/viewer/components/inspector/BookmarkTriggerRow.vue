@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import type { PptxElement, PptxElementAnimation } from 'pptx-viewer-core';
 import {
 	bookmarkTriggerPatch,
 	listMediaBookmarkOptions,
 	selectedBookmarkOptionValue,
 } from 'ooxml-ui/pptx';
+import type { PptxElement, PptxElementAnimation } from 'pptx-viewer-core';
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 

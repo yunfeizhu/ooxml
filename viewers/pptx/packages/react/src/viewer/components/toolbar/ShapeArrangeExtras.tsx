@@ -1,4 +1,3 @@
-import type { MergeShapeOperation, PptxElement, ShapeStyle } from 'pptx-viewer-core';
 import type { RibbonHomeIntent, ToolbarActionId } from 'ooxml-ui/pptx';
 import {
 	arrangeShapeHomeControls,
@@ -8,6 +7,7 @@ import {
 	parseCropValue,
 	strokeWidthOf,
 } from 'ooxml-ui/pptx';
+import type { MergeShapeOperation, PptxElement, ShapeStyle } from 'pptx-viewer-core';
 import React, { useCallback, useMemo } from 'react';
 
 import { useToolbarVisibility } from '../../hooks/useToolbarVisibility';

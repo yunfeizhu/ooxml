@@ -128,9 +128,10 @@ Because the adapter is just an interface, you can back it with an in-memory map,
 ## Runnable example
 
 ```ts
-import { PptxHandler, PptxMarkdownConverter } from 'pptx-viewer-core';
 import { readFile, writeFile, mkdir } from 'node:fs/promises';
 import { dirname } from 'node:path';
+
+import { PptxHandler, PptxMarkdownConverter } from 'pptx-viewer-core';
 
 const node = await readFile('deck.pptx');
 const buffer = node.buffer.slice(node.byteOffset, node.byteOffset + node.byteLength);

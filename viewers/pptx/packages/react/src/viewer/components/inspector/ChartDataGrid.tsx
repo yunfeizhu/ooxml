@@ -1,5 +1,5 @@
-import type { PptxChartSeries } from 'pptx-viewer-core';
 import { getDenseGridLayoutPlan, getDensePanelTouchTargetPx } from 'ooxml-ui/pptx';
+import type { PptxChartSeries } from 'pptx-viewer-core';
 import type { Ref } from 'react';
 import { useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';

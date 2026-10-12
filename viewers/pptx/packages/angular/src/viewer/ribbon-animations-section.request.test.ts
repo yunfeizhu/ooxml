@@ -8,9 +8,6 @@
  * with the same CustomEvent shape the shared element dispatches.
  */
 import { Injector, runInInjectionContext } from '@angular/core';
-import type { PptxElement, PptxSlide } from 'pptx-viewer-core';
-import { describe, expect, it, vi } from 'vitest';
-
 import {
 	DEFAULT_MOTION_PATH_PRESET_ID,
 	MOTION_PATH_FAMILIES,
@@ -18,6 +15,9 @@ import {
 	motionPathFor,
 	motionPathPresetById,
 } from 'ooxml-ui/pptx';
+import type { PptxElement, PptxSlide } from 'pptx-viewer-core';
+import { describe, expect, it, vi } from 'vitest';
+
 import { EditorStateService } from './editor-state.service';
 import { MOTION_PATH_COLUMNS } from './motion-path-columns';
 import { RibbonAnimationsSectionComponent } from './ribbon-animations-section.component';

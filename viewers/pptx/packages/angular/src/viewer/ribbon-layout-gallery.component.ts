@@ -1,10 +1,10 @@
 import { ChangeDetectionStrategy, Component, computed, input, output } from '@angular/core';
 import { TranslatePipe } from '@ngx-translate/core';
-import type { PptxLayoutOption, PptxLayoutPreview } from 'pptx-viewer-core';
-
 import { isCurrentLayout } from 'ooxml-ui/pptx/render/layout-gallery';
 import { buildLayoutPreviewGeometry } from 'ooxml-ui/pptx/render/layout-preview';
 import type { LayoutPreviewGeometry } from 'ooxml-ui/pptx/render/layout-preview';
+import type { PptxLayoutOption, PptxLayoutPreview } from 'pptx-viewer-core';
+
 import { ElementRendererComponent } from './element-renderer.component';
 
 /** Thumbnail box size, matching PowerPoint's gallery tiles. */

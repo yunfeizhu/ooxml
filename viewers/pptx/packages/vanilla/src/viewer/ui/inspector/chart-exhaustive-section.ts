@@ -1,3 +1,10 @@
+import {
+	CHART_AXIS_TYPE_LABEL_KEYS,
+	isSeriesUsingSecondaryAxis,
+	resolveSecondaryAxisId,
+	schemaLabel,
+	upsertDataPoint,
+} from 'ooxml-ui/pptx';
 import type {
 	PptxChartData,
 	PptxChartDataLabelPosition,
@@ -6,13 +13,6 @@ import type {
 	PptxChartMarkerSymbol,
 	PptxChartType,
 } from 'pptx-viewer-core';
-import {
-	CHART_AXIS_TYPE_LABEL_KEYS,
-	isSeriesUsingSecondaryAxis,
-	resolveSecondaryAxisId,
-	schemaLabel,
-	upsertDataPoint,
-} from 'ooxml-ui/pptx';
 
 import type { Translator } from '../../i18n';
 import { numbers, set, setOptions, value } from './chart-exhaustive-controls';

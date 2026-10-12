@@ -1,5 +1,6 @@
 import { attribute } from './sheet';
 import { fail } from './package-common';
+import { deferTextSize, textSizeFormula } from './edit-text-size-formula';
 import {
 	analyzeVisioFormula,
 	evaluateVisioFormula,
@@ -47,9 +48,16 @@ export function createVisioCellEvaluator(
 			fail('EDIT_FORMULA_ERROR', 'Affected ShapeSheet cell has an error cache.');
 		active.add(id);
 		let result: VisioFormulaValue;
-		if (item.formula) {
-			const analysis = analyzeVisioFormula(item.formula);
-			if (analysis.unsupportedFunctions.length)
+		const analysis = item.formula ? analyzeVisioFormula(item.formula) : undefined;
+		if (item.formula && item.node && analysis!.unsupportedFunctions.length) {
+			if (!textSizeFormula(item.formula))
+				fail('EDIT_UNSUPPORTED_FORMULA', 'Affected formula uses unsupported functions.');
+			// A size measured from the shape's text: the cached value stands in until the text is
+			// measured after the edit (edit-text-size.ts), which also refreshes what follows from it.
+			deferTextSize(item.node, item.shapeId);
+			result = visioFormulaCachedValue(attribute(item.node, 'V') ?? '', attribute(item.node, 'U'));
+		} else if (item.formula) {
+			if (analysis!.unsupportedFunctions.length)
 				fail('EDIT_UNSUPPORTED_FORMULA', 'Affected formula uses unsupported functions.');
 			result = evaluateVisioFormula(
 				item.formula,

@@ -29,13 +29,6 @@ import {
 	CUSTOM_ELEMENTS_SCHEMA,
 } from '@angular/core';
 import { TranslatePipe } from '@ngx-translate/core';
-import type { PptxSlide, PptxSlideTransition, PptxTransitionType } from 'pptx-viewer-core';
-import {
-	TRANSITION_PATTERN_OPTIONS,
-	TRANSITION_THRUBLK_TYPES,
-	TRANSITION_VALID_DIRECTIONS,
-} from 'pptx-viewer-core';
-
 import {
 	clampTransitionNumber,
 	mergeSlideTransition,
@@ -44,6 +37,13 @@ import {
 	TRANSITION_ORIENTATION_TYPES,
 	TRANSITION_SPEED_OPTIONS,
 } from 'ooxml-ui/pptx';
+import type { PptxSlide, PptxSlideTransition, PptxTransitionType } from 'pptx-viewer-core';
+import {
+	TRANSITION_PATTERN_OPTIONS,
+	TRANSITION_THRUBLK_TYPES,
+	TRANSITION_VALID_DIRECTIONS,
+} from 'pptx-viewer-core';
+
 import { EditorStateService } from './editor-state.service';
 import { INSPECTOR_CARD_STYLES } from './inspector-card-styles';
 import { SLIDE_TRANSITION_CARD_STYLES } from './slide-transition-card.styles';

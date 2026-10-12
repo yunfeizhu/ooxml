@@ -24,38 +24,37 @@ import {
 export type { TeamsClient, TeamsClientOptions, TeamsProps, TeamsState } from 'teams-viewer';
 
 /** `<Teams workspaceId="acme" userName="Ada" config={...} onOpenFile={...} />`: the full UI. */
-export const Teams = forwardRef<TeamsApp | null, TeamsProps & { className?: string }>(function Teams(
-	{ className, ...props },
-	ref,
-) {
-	const el = useRef<TeamsApp | null>(null);
-	const latest = useRef<TeamsProps>(props);
-	const binding = useRef<TeamsBinding | null>(null);
-	latest.current = props;
-	useImperativeHandle(ref, () => el.current as TeamsApp, []);
-	useLayoutEffect(() => {
-		defineTeamsApp();
-	}, []);
-	useEffect(() => {
-		if (!el.current) return;
-		const bound = bindTeams(el.current, () => latest.current);
-		binding.current = bound;
-		return () => {
-			bound.destroy();
-			binding.current = null;
-		};
-	}, []);
-	// Props are applied after every render; unchanged values are skipped inside the binding. The
-	// class goes through React itself (below), so it also reaches server-rendered markup.
-	useEffect(() => {
-		binding.current?.update(pickTeamsProps(props));
-	});
-	return createElement('teams-app', {
-		ref: el,
-		class: className,
-		style: { display: 'block', height: '100%' },
-	});
-});
+export const Teams = forwardRef<TeamsApp | null, TeamsProps & { className?: string }>(
+	function Teams({ className, ...props }, ref) {
+		const el = useRef<TeamsApp | null>(null);
+		const latest = useRef<TeamsProps>(props);
+		const binding = useRef<TeamsBinding | null>(null);
+		latest.current = props;
+		useImperativeHandle(ref, () => el.current as TeamsApp, []);
+		useLayoutEffect(() => {
+			defineTeamsApp();
+		}, []);
+		useEffect(() => {
+			if (!el.current) return;
+			const bound = bindTeams(el.current, () => latest.current);
+			binding.current = bound;
+			return () => {
+				bound.destroy();
+				binding.current = null;
+			};
+		}, []);
+		// Props are applied after every render; unchanged values are skipped inside the binding. The
+		// class goes through React itself (below), so it also reaches server-rendered markup.
+		useEffect(() => {
+			binding.current?.update(pickTeamsProps(props));
+		});
+		return createElement('teams-app', {
+			ref: el,
+			class: className,
+			style: { display: 'block', height: '100%' },
+		});
+	},
+);
 
 /**
  * The raw hook: a core client for `options`, recreated when the workspace, user or server change

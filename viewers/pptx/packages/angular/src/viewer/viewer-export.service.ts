@@ -16,7 +16,6 @@
 
 import { inject, Injectable, signal } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-
 import {
 	EXPORT_ASSEMBLING_PERCENT,
 	EXPORT_DONE_PERCENT,
@@ -25,6 +24,7 @@ import {
 	resolveExportCaptureDecision,
 	slideStatusLabel,
 } from 'ooxml-ui/pptx';
+
 import { slideFileName } from './export-helpers';
 import { ExportService } from './export.service';
 import { LoadContentService } from './load-content.service';

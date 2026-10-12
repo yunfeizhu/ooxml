@@ -1,10 +1,11 @@
 // Editing existing tables: options, rename, header/totals toggles, resize, convert to range.
-import { type CellRange, normalizeRange, rangesIntersect } from '../address';
+import { type CellRange, MAX_ROW, normalizeRange, rangesIntersect } from '../address';
 import { forEachCell, getCell } from '../cells';
 import { structuredToA1 } from '../formula/structured-to-a1';
 import { renameTableInFormula } from '../formula/table-refs';
 import type { Table, TableColumn, Workbook, Worksheet } from '../model';
 import { shiftFormulaInBand } from './band-formulas';
+import { assertInsertFits } from './insert-guard';
 import { writeValue } from './cell-values';
 import { type EditContext, displayText, sheetAt } from './context';
 import type { EditScope } from './history';
@@ -73,6 +74,7 @@ const byId = (sheet: Worksheet, id: number): Table => {
 function insertBandRow(workbook: Workbook, sheet: Worksheet, table: Table, row: number): void {
 	const shift = { axis: 'row' as const, at: row, count: 1 };
 	const band = { lo: table.range.start.col, hi: table.range.end.col };
+	assertInsertFits(sheet, shift, band);
 	rewriteFormulas(workbook, (f, fs) => shiftFormulaInBand(f, fs, sheet.name, shift, band));
 	shiftSheetContent(sheet, shift, band);
 }
@@ -103,6 +105,7 @@ function setHeaderRow(workbook: Workbook, sheet: Worksheet, id: number, on: bool
 	});
 }
 
+/** Adds or clears the totals row, refusing growth beyond the worksheet even when it is empty. */
 function setTotalsRow(workbook: Workbook, sheet: Worksheet, id: number, on: boolean): void {
 	let table = byId(sheet, id);
 	if (table.totalsRow === on) return;
@@ -113,6 +116,7 @@ function setTotalsRow(workbook: Workbook, sheet: Worksheet, id: number, on: bool
 		table.totalsRow = false;
 		return;
 	}
+	if (end.row === MAX_ROW) throw new RangeError('The insert area extends beyond the sheet.');
 	if (!rowIsEmpty(sheet, end.row + 1, start.col, end.col)) {
 		insertBandRow(workbook, sheet, table, end.row + 1);
 		table = byId(sheet, id);
@@ -214,7 +218,13 @@ export function updateTable(ctx: EditContext, s: number, ref: TableRef, patch: T
 			if (patch.columns) {
 				const width = table.range.end.col - table.range.start.col + 1;
 				if (patch.columns.length !== width) throw new Error('Give one column per table column.');
+				const before = table.columns;
 				table.columns = structuredClone(patch.columns);
+				// Replacing properties updates the existing columns, not their source identity.
+				for (const [index, column] of table.columns.entries()) {
+					const sourceId = before[index]?.sourceId;
+					if (column.sourceId === undefined && sourceId !== undefined) column.sourceId = sourceId;
+				}
 			}
 			if (patch.headerRow !== undefined) setHeaderRow(workbook, sheet, id, patch.headerRow);
 			if (patch.totalsRow !== undefined) setTotalsRow(workbook, sheet, id, patch.totalsRow);

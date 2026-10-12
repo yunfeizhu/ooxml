@@ -1,10 +1,10 @@
-import type { PptxSlide, PptxSlideTransition } from 'pptx-viewer-core';
 import {
 	hasShowSlideAfter,
 	nextShowSlideIndex,
 	previousShowSlideIndex,
 	resolveShowSlideIndexes,
 } from 'ooxml-ui/pptx';
+import type { PptxSlide, PptxSlideTransition } from 'pptx-viewer-core';
 import { describe, it, expect } from 'vitest';
 
 import { isClickAdvanceBlocked } from './useSlideNavigation';

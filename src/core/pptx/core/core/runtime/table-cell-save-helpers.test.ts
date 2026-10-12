@@ -281,3 +281,62 @@ describe('writeCellFill', () => {
 		});
 	});
 });
+
+describe('writeCellTextFormatting on empty paragraphs (#39)', () => {
+	const emptyCell = (): XmlObject => ({
+		'a:txBody': {
+			'a:bodyPr': {},
+			'a:p': { 'a:endParaRPr': { '@_lang': 'en-US', '@_dirty': '0' } },
+		},
+	});
+	const endParaRPr = (cell: XmlObject, index = 0): XmlObject | undefined =>
+		ensureArray(cell['a:txBody']?.['a:p'])[index]?.['a:endParaRPr'] as XmlObject | undefined;
+
+	it('writes the cell font size into the end properties of an empty cell', () => {
+		const cell = emptyCell();
+		writeCellTextFormatting(cell, { fontSize: 7 }, ensureArray);
+		expect(endParaRPr(cell)).toEqual({ '@_lang': 'en-US', '@_dirty': '0', '@_sz': '700' });
+	});
+
+	it('prefers the paragraph endParaFontSize over the cell size', () => {
+		const cell = emptyCell();
+		writeCellTextFormatting(cell, { fontSize: 7 }, ensureArray, [{ endParaFontSize: 9 }]);
+		expect(endParaRPr(cell)?.['@_sz']).toBe('900');
+	});
+
+	it('writes endParaFontSize even when the cell style has no text fields', () => {
+		const cell = emptyCell();
+		writeCellTextFormatting(cell, {}, ensureArray, [{ endParaFontSize: 7 }]);
+		expect(endParaRPr(cell)?.['@_sz']).toBe('700');
+	});
+
+	it('creates end properties after pPr on a bare empty paragraph', () => {
+		const cell: XmlObject = { 'a:txBody': { 'a:p': { 'a:pPr': { '@_algn': 'ctr' } } } };
+		writeCellTextFormatting(cell, { fontSize: 7 }, ensureArray);
+		const paragraph = ensureArray(cell['a:txBody']?.['a:p'])[0]!;
+		expect(Object.keys(paragraph)).toEqual(['a:pPr', 'a:endParaRPr']);
+		expect(endParaRPr(cell)?.['@_sz']).toBe('700');
+	});
+
+	it('heals a self-closing <a:p/>', () => {
+		const cell: XmlObject = { 'a:txBody': { 'a:p': '' } };
+		writeCellTextFormatting(cell, { fontSize: 7 }, ensureArray);
+		expect(endParaRPr(cell)?.['@_sz']).toBe('700');
+	});
+
+	it('leaves an empty line between text lines alone unless its size is given', () => {
+		const cell: XmlObject = {
+			'a:txBody': {
+				'a:p': [
+					{ 'a:r': { 'a:rPr': {}, 'a:t': 'Text' } },
+					{ 'a:endParaRPr': { '@_lang': 'en-US' } },
+				],
+			},
+		};
+		writeCellTextFormatting(cell, { fontSize: 7 }, ensureArray);
+		expect(endParaRPr(cell, 1)).toEqual({ '@_lang': 'en-US' });
+
+		writeCellTextFormatting(cell, { fontSize: 7 }, ensureArray, [{}, { endParaFontSize: 7 }]);
+		expect(endParaRPr(cell, 1)?.['@_sz']).toBe('700');
+	});
+});

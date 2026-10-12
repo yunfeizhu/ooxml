@@ -7,7 +7,17 @@
 // the same three contracts (see docs/server-contract.md) works just as well.
 import { createServer } from 'node:http';
 import { createHash, createHmac, randomBytes, timingSafeEqual } from 'node:crypto';
-import { mkdirSync, existsSync, readFileSync, writeFileSync, createReadStream, createWriteStream, statSync, renameSync, unlinkSync } from 'node:fs';
+import {
+	mkdirSync,
+	existsSync,
+	readFileSync,
+	writeFileSync,
+	createReadStream,
+	createWriteStream,
+	statSync,
+	renameSync,
+	unlinkSync,
+} from 'node:fs';
 import { join, resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { WebSocketServer } from 'ws';
@@ -36,7 +46,10 @@ const sameSecret = (a, b) => {
 export function createTeamsServer(options = {}) {
 	const {
 		token = process.env.TEAMS_TOKEN || '',
-		origins = (process.env.TEAMS_ORIGINS || '').split(',').map((s) => s.trim()).filter(Boolean),
+		origins = (process.env.TEAMS_ORIGINS || '')
+			.split(',')
+			.map((s) => s.trim())
+			.filter(Boolean),
 		dataDir = resolve(process.env.TEAMS_DATA || './data'),
 		maxFileBytes = 25 * 1024 * 1024,
 		maxSyncBytes = 32 * 1024 * 1024,
@@ -120,7 +133,10 @@ export function createTeamsServer(options = {}) {
 			}
 			const encoder = encoding.createEncoder();
 			encoding.writeVarUint(encoder, MESSAGE_AWARENESS);
-			encoding.writeVarUint8Array(encoder, awarenessProtocol.encodeAwarenessUpdate(awareness, changed));
+			encoding.writeVarUint8Array(
+				encoder,
+				awarenessProtocol.encodeAwarenessUpdate(awareness, changed),
+			);
 			const message = encoding.toUint8Array(encoder);
 			for (const conn of room.conns.keys()) send(conn, message);
 		});
@@ -159,13 +175,20 @@ export function createTeamsServer(options = {}) {
 					syncProtocol.readSyncMessage(decoder, encoder, room.doc, ws);
 					if (encoding.length(encoder) > 1) send(ws, encoding.toUint8Array(encoder));
 				} else if (type === MESSAGE_AWARENESS) {
-					awarenessProtocol.applyAwarenessUpdate(room.awareness, decoding.readVarUint8Array(decoder), ws);
+					awarenessProtocol.applyAwarenessUpdate(
+						room.awareness,
+						decoding.readVarUint8Array(decoder),
+						ws,
+					);
 				} else if (type === MESSAGE_QUERY_AWARENESS) {
 					const states = [...room.awareness.getStates().keys()];
 					if (states.length) {
 						const encoder = encoding.createEncoder();
 						encoding.writeVarUint(encoder, MESSAGE_AWARENESS);
-						encoding.writeVarUint8Array(encoder, awarenessProtocol.encodeAwarenessUpdate(room.awareness, states));
+						encoding.writeVarUint8Array(
+							encoder,
+							awarenessProtocol.encodeAwarenessUpdate(room.awareness, states),
+						);
 						send(ws, encoding.toUint8Array(encoder));
 					}
 				}
@@ -184,7 +207,10 @@ export function createTeamsServer(options = {}) {
 		if (states.length) {
 			const encoder = encoding.createEncoder();
 			encoding.writeVarUint(encoder, MESSAGE_AWARENESS);
-			encoding.writeVarUint8Array(encoder, awarenessProtocol.encodeAwarenessUpdate(room.awareness, states));
+			encoding.writeVarUint8Array(
+				encoder,
+				awarenessProtocol.encodeAwarenessUpdate(room.awareness, states),
+			);
 			send(ws, encoding.toUint8Array(encoder));
 		}
 	}
@@ -214,7 +240,8 @@ export function createTeamsServer(options = {}) {
 		});
 		ws.on('close', () => {
 			peers.delete(ws);
-			if (peerId) for (const other of peers) send(other, JSON.stringify({ type: 'bye', from: peerId }));
+			if (peerId)
+				for (const other of peers) send(other, JSON.stringify({ type: 'bye', from: peerId }));
 			if (peers.size === 0) signalRooms.delete(name);
 		});
 		ws.on('error', () => ws.close());
@@ -230,7 +257,10 @@ export function createTeamsServer(options = {}) {
 		res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
 		res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
 	};
-	const cleanName = (n) => decodeURIComponent(n).replace(/[^\w.\- ()]/gu, '_').slice(0, 120);
+	const cleanName = (n) =>
+		decodeURIComponent(n)
+			.replace(/[^\w.\- ()]/gu, '_')
+			.slice(0, 120);
 
 	const http = createServer((req, res) => {
 		cors(res, req);
@@ -238,7 +268,12 @@ export function createTeamsServer(options = {}) {
 		if (req.method === 'OPTIONS') return void res.writeHead(204).end();
 		if (url.pathname === '/health') {
 			return void res.writeHead(200, { 'Content-Type': 'application/json' }).end(
-				JSON.stringify({ ok: true, rooms: syncRooms.size, calls: signalRooms.size, auth: Boolean(token) }),
+				JSON.stringify({
+					ok: true,
+					rooms: syncRooms.size,
+					calls: signalRooms.size,
+					auth: Boolean(token),
+				}),
 			);
 		}
 		const link = /^\/files\/link\/([\w-]{1,64})\/([^/]{1,200})$/u.exec(url.pathname);
@@ -282,14 +317,18 @@ export function createTeamsServer(options = {}) {
 					rejected = true;
 					out.destroy();
 					req.destroy();
-					try { unlinkSync(tmp); } catch {}
+					try {
+						unlinkSync(tmp);
+					} catch {}
 				}
 			});
 			req.pipe(out);
 			out.on('finish', () => {
 				if (rejected) return;
 				renameSync(tmp, file);
-				res.writeHead(201, { 'Content-Type': 'application/json' }).end(JSON.stringify({ url: url.pathname, size }));
+				res
+					.writeHead(201, { 'Content-Type': 'application/json' })
+					.end(JSON.stringify({ url: url.pathname, size }));
 			});
 			out.on('error', () => !res.headersSent && res.writeHead(500).end());
 			return;
@@ -313,7 +352,9 @@ export function createTeamsServer(options = {}) {
 			return void socket.destroy();
 		}
 		const wss = m[1] === 'sync' ? syncWss : signalWss;
-		wss.handleUpgrade(req, socket, head, (ws) => (m[1] === 'sync' ? handleSync(ws, name) : handleSignal(ws, name)));
+		wss.handleUpgrade(req, socket, head, (ws) =>
+			m[1] === 'sync' ? handleSync(ws, name) : handleSignal(ws, name),
+		);
 	});
 
 	return {
@@ -342,9 +383,17 @@ export function createTeamsServer(options = {}) {
 export async function runTeamsServer() {
 	const server = createTeamsServer({ log: (m) => console.log(m) });
 	const addr = await server.listen();
-	const auth = process.env.TEAMS_TOKEN ? 'token required' : 'no token (set TEAMS_TOKEN for anything but localhost)';
+	const auth = process.env.TEAMS_TOKEN
+		? 'token required'
+		: 'no token (set TEAMS_TOKEN for anything but localhost)';
 	console.log(`teams server on http://${addr.address}:${addr.port}  [${auth}]`);
-	console.log('  ws://%s:%d/sync/<room>   ws://%s:%d/signal/<room>   /files/<id>/<name>', addr.address, addr.port, addr.address, addr.port);
+	console.log(
+		'  ws://%s:%d/sync/<room>   ws://%s:%d/signal/<room>   /files/<id>/<name>',
+		addr.address,
+		addr.port,
+		addr.address,
+		addr.port,
+	);
 	return server;
 }
 

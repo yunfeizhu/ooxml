@@ -1,3 +1,4 @@
+import { editErrorMessage, isEditCancellation, visioNudgeCommands } from 'ooxml-core/visio/ui';
 import type { ViewerController, ViewerState } from './controller';
 import { pointerShapeTarget } from './viewer-shape-target';
 interface Controls {
@@ -15,11 +16,59 @@ function selection(target: SVGGElement | undefined | null): ViewerState['selecte
 			}
 		: null;
 }
+/** Page inches an arrow key nudges the selection: the editor's 1/16-inch drawing snap. */
+export const NUDGE_STEP = 1 / 16;
+const editableTarget = (event: Event) =>
+	(event.target as Element | null)?.closest?.('input, textarea, select, [contenteditable]');
+
+/**
+ * Arrow keys nudge the selection, as in Visio: by {@link NUDGE_STEP}, or by one screen pixel with
+ * Shift. True when the key was a nudge (handled, even when refused or still busy).
+ */
+function nudge(
+	event: KeyboardEvent,
+	controller: ViewerController,
+	announce: (message: string) => void,
+): boolean {
+	const state = controller.state;
+	const page = state.document?.pages[state.pageIndex];
+	if (
+		!page ||
+		!state.selectedShapes.length ||
+		!state.edit.sourceAvailable ||
+		state.loading ||
+		event.ctrlKey ||
+		event.metaKey ||
+		event.altKey ||
+		editableTarget(event)
+	)
+		return false;
+	const step = event.shiftKey ? 1 / (96 * (state.zoom || 1)) : NUDGE_STEP;
+	const ids = state.selectedShapes.map((shape) => shape.id);
+	const edits = visioNudgeCommands(page, ids, event.key, step);
+	if (edits === null) return false;
+	event.preventDefault();
+	// Key repeat while the previous nudge is still saving is dropped, not queued.
+	if (state.edit.busy) return true;
+	if (!edits) {
+		announce('The selection cannot be nudged.');
+		return true;
+	}
+	if (edits.length)
+		controller.applySelectionEdits(edits).catch((error: unknown) => {
+			if (!isEditCancellation(error)) announce(editErrorMessage(error));
+		});
+	return true;
+}
+
 /** Own every DOM listener and abort them together when the surface is disposed. */
 export function wireViewerInputs(
 	controls: Controls,
 	controller: ViewerController,
 	fit: (mode: 'page' | 'width') => void,
+	announce: (message: string) => void = () => {},
+	/** Typing a character with one shape selected starts editing its text; true when it did. */
+	typeText: (character: string) => boolean = () => false,
 ): () => void {
 	const { viewport, zoomSlider } = controls;
 	const Abort = viewport.ownerDocument.defaultView?.AbortController ?? AbortController,
@@ -45,6 +94,23 @@ export function wireViewerInputs(
 	viewport.addEventListener(
 		'keydown',
 		(event) => {
+			if (nudge(event, controller, announce)) return;
+			if (
+				event.key.length === 1 &&
+				event.key !== ' ' &&
+				!event.ctrlKey &&
+				!event.metaKey &&
+				!event.altKey &&
+				!event.isComposing &&
+				!editableTarget(event) &&
+				controller.state.selectedShapes.length === 1 &&
+				controller.state.edit.sourceAvailable &&
+				typeText(event.key)
+			) {
+				event.preventDefault();
+				event.stopPropagation();
+				return;
+			}
 			const target = targetShape(event);
 			if (
 				target &&

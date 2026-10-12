@@ -1,3 +1,4 @@
+import { focusTargetChips, isTwoTableFocus, mergeTablesDirective } from 'ooxml-ui/pptx/ai';
 /**
  * The strip under the AI panel header showing the assistant's current focused
  * targets as chips (live from the canvas selection, pinned, or picked). It also
@@ -7,7 +8,6 @@
  * driven by the framework-free {@link AiFocusController}.
  */
 import type { PptxSlide } from 'pptx-viewer-core';
-import { focusTargetChips, isTwoTableFocus, mergeTablesDirective } from 'ooxml-ui/pptx/ai';
 
 import type { Translator } from '../i18n';
 import { createEl } from '../render';

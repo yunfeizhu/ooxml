@@ -2,11 +2,7 @@
    every sibling const in a function into one comma-list would hurt
    readability, not help it (see chart-view-model.ts for the same rationale). */
 import { clampOptionNumber } from 'ooxml-ui/pptx';
-import type {
-	ViewerOptionsControl,
-	ViewerOptionsSection,
-	ViewerOptionsStore,
-} from 'ooxml-ui/pptx';
+import type { ViewerOptionsControl, ViewerOptionsSection, ViewerOptionsStore } from 'ooxml-ui/pptx';
 
 import type { Translator } from '../../i18n';
 import { createEl } from '../../render';

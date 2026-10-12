@@ -1,5 +1,5 @@
-import type { MergeShapeOperation, PptxElement } from 'pptx-viewer-core';
 import { applyMergeShapesPlan, planMergeShapes } from 'ooxml-ui/pptx';
+import type { MergeShapeOperation, PptxElement } from 'pptx-viewer-core';
 
 import type { Store, ViewerState } from '../state';
 import { getActiveElements, replaceActiveElements } from './editor-active-elements';

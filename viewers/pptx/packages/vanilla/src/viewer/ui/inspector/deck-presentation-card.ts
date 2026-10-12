@@ -1,10 +1,10 @@
-import type { PptxPresentationPrintProperties } from 'pptx-viewer-core';
 import {
 	printPropertiesFrameSlides,
 	printPropertiesSlidesPerPage,
 	withFrameSlides,
 	withSlidesPerPage,
 } from 'ooxml-ui/pptx';
+import type { PptxPresentationPrintProperties } from 'pptx-viewer-core';
 
 import type { Translator } from '../../i18n';
 import { makeCheckboxField, makeSelectField } from './controls-extra';

@@ -19,6 +19,20 @@ on:
       - 'NOTICE'
   pull_request:
   workflow_dispatch:
+    inputs:
+      scope:
+        description: 'full: check everything. changed: only what the commits since the base reach.'
+        type: choice
+        options: [full, changed]
+        default: full
+      base:
+        description: 'Base commit for scope "changed", for example the upstream commit a fork branch started from.'
+        required: false
+        default: ''
+      on_base:
+        description: 'With scope "changed": run the same checks on the base commit instead, to see whether a failure is already there.'
+        type: boolean
+        default: false
   schedule:
     - cron: '17 3 * * *' # nightly full run: the safety net for `vitest --changed`
 
@@ -39,26 +53,32 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       plan: ${{ steps.plan.outputs.plan }}
+      # The commit the other jobs check out: empty (the event's own) unless a run on the base.
+      ref: ${{ steps.plan.outputs.ref }}
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           fetch-depth: 0
-      - uses: actions/setup-node@v7
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7
         with:
           node-version: ${{ env.NODE_VERSION }}
-      - uses: oven-sh/setup-bun@v2
+      - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
         with:
           bun-version: ${{ env.BUN_VERSION }}
-      - uses: actions/cache@v6
+      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6
         with:
           path: ~/.bun/install/cache
           key: bun-${{ runner.os }}-${{ hashFiles('bun.lock') }}
           restore-keys: bun-${{ runner.os }}-
       - run: bun install --frozen-lockfile
       - id: plan
-        run: |
-          base="${{ github.event.pull_request.base.sha || github.event.before }}"
-          node scripts/ci-plan.mjs --event "${{ github.event_name }}" --base "$base"
+        # Inputs reach the script through the environment, never pasted into it.
+        env:
+          EVENT: ${{ github.event_name }}
+          BASE: ${{ github.event.pull_request.base.sha || github.event.before || inputs.base }}
+          SCOPE: ${{ inputs.scope || 'full' }}
+          ON_BASE: ${{ inputs.on_base || false }}
+        run: node scripts/ci-plan.mjs --event "$EVENT" --base "$BASE" --scope "$SCOPE" --on-base "$ON_BASE"
 
   lint:
     needs: plan
@@ -66,16 +86,40 @@ jobs:
     if: fromJSON(needs.plan.outputs.plan).typecheck.strict || fromJSON(needs.plan.outputs.plan).typecheck.pptx || fromJSON(needs.plan.outputs.plan).typecheck.ui
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          ref: ${{ needs.plan.outputs.ref }}
       - uses: ./.github/actions/setup
-      - run: bun run lint
+      # `github` output turns each finding into an annotation on the changed line.
+      - run: bun run lint --format=github
+
+  # Repository style rules no formatter enforces (AGENTS.md, Style), on the lines the change adds.
+  style:
+    needs: plan
+    if: fromJSON(needs.plan.outputs.plan).base != ''
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          ref: ${{ needs.plan.outputs.ref }}
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+      - name: No em-dashes in added lines
+        env:
+          BASE: ${{ fromJSON(needs.plan.outputs.plan).base }}
+        run: node scripts/check-em-dashes.mjs "$BASE"
 
   typecheck-strict:
     needs: plan
     if: fromJSON(needs.plan.outputs.plan).typecheck.strict
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          ref: ${{ needs.plan.outputs.ref }}
       - uses: ./.github/actions/setup
       - run: bun run typecheck:strict
 
@@ -84,7 +128,9 @@ jobs:
     if: fromJSON(needs.plan.outputs.plan).typecheck.pptx
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          ref: ${{ needs.plan.outputs.ref }}
       - uses: ./.github/actions/setup
       - run: bun run typecheck:pptx
 
@@ -93,9 +139,11 @@ jobs:
     if: fromJSON(needs.plan.outputs.plan).typecheck.ui
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          ref: ${{ needs.plan.outputs.ref }}
       - uses: ./.github/actions/setup
-      - uses: actions/download-artifact@v8
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8
         with:
           name: core-dist
           path: src/core/dist
@@ -115,18 +163,25 @@ jobs:
       matrix:
         shard: ${{ fromJSON(needs.plan.outputs.plan).test.shards }}
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
+          ref: ${{ needs.plan.outputs.ref }}
           fetch-depth: 0
       - uses: ./.github/actions/setup
       - name: Run the affected tests
         env:
           PLAN: ${{ needs.plan.outputs.plan }}
+          SHARD: ${{ matrix.shard }}
+          TOTAL: ${{ strategy.job-total }}
         run: |
           mode=$(node -p "JSON.parse(process.env.PLAN).test.mode")
           base=$(node -p "JSON.parse(process.env.PLAN).base")
-          shard="--shard=${{ matrix.shard }}/${{ strategy.job-total }}"
-          if [ "$mode" = "changed" ] && [ -n "$base" ]; then
+          shard="--shard=$SHARD/$TOTAL"
+          if [ "$mode" = "related" ]; then
+            # A run on the base: the tests related to the branch's changed core sources.
+            related=$(node -p "JSON.parse(process.env.PLAN).test.related.join(' ')")
+            cd src/core && bunx vitest related --run $related $shard --passWithNoTests
+          elif [ "$mode" = "changed" ] && [ -n "$base" ]; then
             bun run test --changed="$base" $shard --passWithNoTests
           else
             bun run test $shard
@@ -138,16 +193,21 @@ jobs:
     if: fromJSON(needs.plan.outputs.plan).build
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          ref: ${{ needs.plan.outputs.ref }}
       - uses: ./.github/actions/setup
       - run: bun run build
       # The package and boundary checks only matter when the core or the UI changed; a viewer-only
       # change just needs the build output.
       - if: fromJSON(needs.plan.outputs.plan).checks.core
         run: bun run test:package
+      # The packed tarball's types resolve under NodeNext and bundlers (Are the Types Wrong).
+      - if: fromJSON(needs.plan.outputs.plan).checks.core
+        run: node scripts/check-package-types.mjs src/core
       - if: fromJSON(needs.plan.outputs.plan).checks.core
         run: node scripts/check-core-ui-boundary.mjs
-      - uses: actions/upload-artifact@v7
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
         with:
           name: core-dist
           path: src/core/dist
@@ -159,9 +219,11 @@ jobs:
     if: fromJSON(needs.plan.outputs.plan).ui
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          ref: ${{ needs.plan.outputs.ref }}
       - uses: ./.github/actions/setup
-      - uses: actions/download-artifact@v8
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8
         with:
           name: core-dist
           path: src/core/dist
@@ -170,11 +232,47 @@ jobs:
       - run: bun run --cwd src/ui build
       - if: fromJSON(needs.plan.outputs.plan).checks.ui
         run: bun run --cwd src/ui test:package
-      - uses: actions/upload-artifact@v7
+      - if: fromJSON(needs.plan.outputs.plan).checks.ui
+        run: node scripts/check-package-types.mjs src/ui --esm-only
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
         with:
           name: ui-dist
           path: src/ui/dist
           retention-days: 1
+
+  # The size of every published entry point. On a PR, bundle-size-comment.yml compares it with the
+  # newest measurement from main and comments; on main it is that baseline. Informational: it is
+  # not part of ci-success.
+  bundle-size:
+    needs: [plan, build, ui]
+    if: |
+      !cancelled() && needs.build.result == 'success' &&
+      (github.event_name == 'pull_request' || github.event_name == 'push')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          ref: ${{ needs.plan.outputs.ref }}
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8
+        with:
+          name: core-dist
+          path: src/core/dist
+      # The ui job is skipped when nothing reaches ooxml-ui; the comparison then leaves it out.
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8
+        if: needs.ui.result == 'success'
+        with:
+          name: ui-dist
+          path: src/ui/dist
+      - run: node scripts/bundle-size.mjs measure src/core src/ui > bundle-size.json
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
+        with:
+          name: bundle-size
+          path: bundle-size.json
+          retention-days: ${{ github.event_name == 'push' && 90 || 7 }}
 
   # Release machinery: planner, publish guards, commit and changelog checks, the launcher and CI planner.
   scripts:
@@ -182,7 +280,9 @@ jobs:
     if: fromJSON(needs.plan.outputs.plan).scripts
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          ref: ${{ needs.plan.outputs.ref }}
       - uses: ./.github/actions/setup
       - run: bun run test:scripts
       - run: bun run check:changelog
@@ -192,7 +292,9 @@ jobs:
     if: fromJSON(needs.plan.outputs.plan).mcp
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          ref: ${{ needs.plan.outputs.ref }}
       - uses: ./.github/actions/setup
       - run: bun run test:mcp
 
@@ -213,13 +315,15 @@ jobs:
       matrix:
         include: ${{ fromJSON(needs.plan.outputs.plan).viewers }}
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          ref: ${{ needs.plan.outputs.ref }}
       - uses: ./.github/actions/setup
-      - uses: actions/download-artifact@v8
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8
         with:
           name: core-dist
           path: src/core/dist
-      - uses: actions/download-artifact@v8
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8
         with:
           name: ui-dist
           path: src/ui/dist
@@ -235,7 +339,7 @@ jobs:
           done <<< "$VERIFY"
       - name: Preserve browser test evidence
         if: always()
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
         with:
           name: browser-test-results-${{ matrix.name }}
           path: ${{ matrix.dir }}/test-results/
@@ -256,13 +360,15 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          ref: ${{ needs.plan.outputs.ref }}
       - uses: ./.github/actions/setup
-      - uses: actions/download-artifact@v8
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8
         with:
           name: core-dist
           path: src/core/dist
-      - uses: actions/download-artifact@v8
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8
         with:
           name: ui-dist
           path: src/ui/dist
@@ -282,7 +388,7 @@ jobs:
       # Every package's dist, and the sources the Angular build generates, for the jobs below. Only
       # the generated files: re-extracting a tracked source would make it newer than the build, and
       # the e2e freshness guard (e2e/pptx/dist-freshness.ts) would then refuse to run.
-      - uses: actions/upload-artifact@v7
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
         with:
           name: pptx-dist
           path: |
@@ -305,17 +411,19 @@ jobs:
       matrix:
         leg: ${{ fromJSON(needs.plan.outputs.plan).pptx.tests }}
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          ref: ${{ needs.plan.outputs.ref }}
       - uses: ./.github/actions/setup
-      - uses: actions/download-artifact@v8
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8
         with:
           name: core-dist
           path: src/core/dist
-      - uses: actions/download-artifact@v8
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8
         with:
           name: ui-dist
           path: src/ui/dist
-      - uses: actions/download-artifact@v8
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8
         with:
           name: pptx-dist
           path: viewers/pptx/packages
@@ -349,17 +457,19 @@ jobs:
         project: ${{ fromJSON(needs.plan.outputs.plan).pptx.e2e.projects }}
         shard: ${{ fromJSON(needs.plan.outputs.plan).pptx.e2e.shards }}
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          ref: ${{ needs.plan.outputs.ref }}
       - uses: ./.github/actions/setup
-      - uses: actions/download-artifact@v8
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8
         with:
           name: core-dist
           path: src/core/dist
-      - uses: actions/download-artifact@v8
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8
         with:
           name: ui-dist
           path: src/ui/dist
-      - uses: actions/download-artifact@v8
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8
         with:
           name: pptx-dist
           path: viewers/pptx/packages
@@ -397,7 +507,7 @@ jobs:
           exit $status
       - name: Preserve the report
         if: failure()
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
         with:
           name: pptx-playwright-${{ matrix.project }}-${{ matrix.shard }}
           path: |
@@ -414,17 +524,19 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          ref: ${{ needs.plan.outputs.ref }}
       - uses: ./.github/actions/setup
-      - uses: actions/download-artifact@v8
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8
         with:
           name: core-dist
           path: src/core/dist
-      - uses: actions/download-artifact@v8
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8
         with:
           name: ui-dist
           path: src/ui/dist
-      - uses: actions/download-artifact@v8
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8
         with:
           name: pptx-dist
           path: viewers/pptx/packages
@@ -441,7 +553,7 @@ jobs:
         run: bun run e2e:packaged -- --workers=2 --reporter=list,html,github
       - name: Preserve the report
         if: failure()
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
         with:
           name: pptx-playwright-packaged
           path: |
@@ -465,27 +577,29 @@ jobs:
       matrix:
         include: ${{ fromJSON(needs.plan.outputs.plan).consumers }}
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
+          ref: ${{ needs.plan.outputs.ref }}
           path: ooxml
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
+          ref: ${{ needs.plan.outputs.ref }}
           repository: ${{ matrix.repo }}
           path: viewer
-      - uses: actions/setup-node@v7
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7
         with:
           node-version: ${{ env.NODE_VERSION }}
-      - uses: oven-sh/setup-bun@v2
+      - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
         with:
           bun-version: ${{ env.BUN_VERSION }}
       - run: bun install --frozen-lockfile
         working-directory: ooxml
-      - uses: actions/download-artifact@v8
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8
         with:
           name: core-dist
           path: ooxml/src/core/dist
         continue-on-error: true
-      - uses: actions/download-artifact@v8
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8
         with:
           name: ui-dist
           path: ooxml/src/ui/dist
@@ -512,6 +626,7 @@ jobs:
       [
         plan,
         lint,
+        style,
         typecheck-strict,
         typecheck-pptx,
         typecheck-ui,

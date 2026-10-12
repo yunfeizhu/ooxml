@@ -16,11 +16,7 @@
  * `yjs` / `y-webrtc` / `y-websocket` are optional peer dependencies, imported
  * lazily here so a host that never collaborates never loads them.
  */
-import type {
-	AwarenessLike,
-	CollaborationConfig,
-	CollaborationTransport,
-} from 'ooxml-ui/pptx';
+import type { AwarenessLike, CollaborationConfig, CollaborationTransport } from 'ooxml-ui/pptx';
 import { clearLocalAwareness, createDepartureChannel } from 'ooxml-ui/pptx';
 
 export type { AwarenessLike };

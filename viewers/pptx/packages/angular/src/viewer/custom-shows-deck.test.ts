@@ -16,11 +16,11 @@ import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 
 import { Injector, runInInjectionContext } from '@angular/core';
+import { resolveAuthoredCustomShowId, SLIDE_SIZE_PRESETS } from 'ooxml-ui/pptx';
+import type { DeckSaveOptions, DeckSaveSerializer } from 'ooxml-ui/pptx';
 import type { PptxCustomShow, PptxSlide } from 'pptx-viewer-core';
 import { describe, expect, it } from 'vitest';
 
-import { resolveAuthoredCustomShowId, SLIDE_SIZE_PRESETS } from 'ooxml-ui/pptx';
-import type { DeckSaveOptions, DeckSaveSerializer } from 'ooxml-ui/pptx';
 import {
 	activeCustomShowMembership,
 	customShowsFromDeck,

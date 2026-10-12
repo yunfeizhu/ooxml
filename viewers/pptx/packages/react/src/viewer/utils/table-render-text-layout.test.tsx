@@ -1,3 +1,4 @@
+import { translationsEn } from 'ooxml-ui/pptx/i18n';
 /**
  * Table cells use PowerPoint's single line spacing (1.2x the font size) and
  * default cell margins. Left to the page, a cell inherited its host's
@@ -5,7 +6,6 @@
  * one above it, and a fixed 4px inset fitted more text on a line than PowerPoint does.
  */
 import type { TablePptxElement, XmlObject } from 'pptx-viewer-core';
-import { translationsEn } from 'ooxml-ui/pptx/i18n';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it, vi } from 'vitest';
 

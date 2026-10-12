@@ -1,3 +1,4 @@
+import { toSlideIndex } from 'ooxml-ui/pptx';
 /**
  * ActionTargetFields: the extra input(s) an Action Settings trigger shows
  * once its type needs a target - a URL (`url`, `openFile`, `openPresentation`
@@ -7,7 +8,6 @@
  * Split out of `ActionSettingsPanel` purely for file size.
  */
 import type { ElementActionType } from 'pptx-viewer-core';
-import { toSlideIndex } from 'ooxml-ui/pptx';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 

@@ -3,6 +3,7 @@ import JSZip from 'jszip';
 import type { VisioViewerElement } from 'ooxml-ui/visio';
 import { createVsdxFixture } from './fixture.mjs';
 import { downloadCopy } from './ribbon';
+import { openDemo } from './demo-page';
 
 async function movementFixture(scale: number, protectedSecond = false): Promise<Buffer> {
 	const zip = await JSZip.loadAsync(await createVsdxFixture('Pointer anchor'));
@@ -101,7 +102,10 @@ for (const [index, framework] of [
 		const errors: string[] = [];
 		page.on('pageerror', (error) => errors.push(error.message));
 		await page.setViewportSize({ width: 1600, height: 1000 });
-		await page.goto(framework === 'vanilla' ? '/demo/?sample=1' : `/demo-${framework}/?sample=1`);
+		await openDemo(
+			page,
+			framework === 'vanilla' ? '/demo/?sample=1' : `/demo-${framework}/?sample=1`,
+		);
 		const viewer = page.locator('visio-viewer');
 		const load = async (protectedSecond = false) => {
 			await page.locator('#file').setInputFiles({
@@ -109,6 +113,7 @@ for (const [index, framework] of [
 				mimeType: 'application/vnd.ms-visio.drawing',
 				buffer: await movementFixture(scale, protectedSecond),
 			});
+			await expect(page.locator('#file-name')).toHaveText('pointer.vsdx');
 			await expect(viewer.locator('svg.paper')).toContainText('Pointer 3');
 			await expect
 				.poll(async () => (await inventory(viewer)).pins)
@@ -135,7 +140,7 @@ for (const [index, framework] of [
 		await expect(viewer.locator('[data-movement-preview]')).toHaveCount(2);
 		expect((await inventory(viewer)).pins).toEqual(before.pins);
 		expect(await sourceBytes(viewer)).toEqual(beforeSource);
-		await expect(viewer.locator('[command="undo"] button')).toBeDisabled();
+		await expect(viewer.locator('.qat [data-command="undo"]')).toBeDisabled();
 		await page.mouse.up();
 		// Browser client coordinates and CTM use finite floating point precision.
 		await expect
@@ -149,11 +154,11 @@ for (const [index, framework] of [
 		const movedSource = await sourceBytes(viewer);
 		await selected(viewer, ['1', '2']);
 		expect((await inventory(viewer)).geometry).toEqual(before.geometry);
-		await viewer.locator('[command="undo"] button').click();
+		await viewer.locator('.qat [data-command="undo"]').click();
 		await expect.poll(async () => (await inventory(viewer)).pins).toEqual(before.pins);
 		expect(await sourceBytes(viewer)).toEqual(beforeSource);
 		await selected(viewer, ['1', '2']);
-		await viewer.locator('[command="redo"] button').click();
+		await viewer.locator('.qat [data-command="redo"]').click();
 		await expect.poll(async () => (await inventory(viewer)).pins).toEqual(moved);
 		expect(await sourceBytes(viewer)).toEqual(movedSource);
 		await selected(viewer, ['1', '2']);
@@ -222,7 +227,7 @@ for (const [index, framework] of [
 		await page.mouse.up();
 		await expect.poll(async () => (await inventory(viewer)).busy).toBe(false);
 		expect((await inventory(viewer)).pins).toEqual(before.pins);
-		await expect(viewer.locator('[command="undo"] button')).toBeDisabled();
+		await expect(viewer.locator('.qat [data-command="undo"]')).toBeDisabled();
 		await expect
 			.poll(() =>
 				viewer.evaluate(

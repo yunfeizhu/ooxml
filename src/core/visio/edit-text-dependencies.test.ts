@@ -11,8 +11,8 @@ const contents = (extra = '') =>
 describe('plain text dependency preservation', () => {
 	it.each([
 		'TheText',
-		'TEXTWIDTH(TheText)',
-		'TEXTHEIGHT(TheText,Width)',
+		// TEXTWIDTH and TEXTHEIGHT of the shape's own text are followed: edit-text-size.test.ts.
+		'TEXTWIDTH(Sheet.2!TheText)',
 		'SHAPETEXT(Sheet.1!TheText)',
 		'INDIRECT("TheText")',
 		'UNKNOWN(1)',

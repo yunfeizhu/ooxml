@@ -1,6 +1,6 @@
 import { mount } from '@vue/test-utils';
-import type { PptxElement, ShapeStyle } from 'pptx-viewer-core';
 import { STROKE_DASH_OPTIONS } from 'ooxml-ui/pptx';
+import type { PptxElement, ShapeStyle } from 'pptx-viewer-core';
 import { describe, expect, it } from 'vitest';
 import { ref } from 'vue';
 

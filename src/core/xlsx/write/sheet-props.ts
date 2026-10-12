@@ -179,8 +179,8 @@ export function protectionXml(sheet: Worksheet): string {
 	values['sheet'] = protection.sheet || undefined;
 	const allow = new Set(protection.allow ?? []);
 	if (protection.sheet) {
-		values['objects'] = allow.has('objects') ? false : true;
-		values['scenarios'] = allow.has('scenarios') ? false : true;
+		values['objects'] = !allow.has('objects');
+		values['scenarios'] = !allow.has('scenarios');
 	}
 	for (const name of allow) values[name] = false;
 	return el('sheetProtection', values);

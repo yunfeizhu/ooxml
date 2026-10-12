@@ -14,6 +14,7 @@ describe('measureNormAutofitStepHeightPx', () => {
 		el.style.width = '100px';
 		el.setAttribute('contenteditable', 'true');
 		document.body.appendChild(el);
+		const childCount = document.body.children.length;
 		try {
 			Object.defineProperty(el, 'scrollHeight', { value: 40, configurable: true });
 			const height = measureNormAutofitStepHeightPx(
@@ -23,9 +24,9 @@ describe('measureNormAutofitStepHeightPx', () => {
 				{ fontScale: 0.92, lnSpcReduction: 0 },
 			);
 			expect(height).toBeTypeOf('number');
-			// The live node is untouched: still in the document, still one child.
+			// The live node is untouched: still in the document, and no clone is left behind.
 			expect(document.body.contains(el)).toBeTruthy();
-			expect(document.body.children).toHaveLength(1);
+			expect(document.body.children).toHaveLength(childCount);
 			expect(el.style.fontSize).toBe('20px');
 		} finally {
 			document.body.removeChild(el);

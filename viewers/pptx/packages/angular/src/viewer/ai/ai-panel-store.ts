@@ -17,8 +17,6 @@
  * bridge all read the same store.
  */
 import { computed, DestroyRef, inject, Injectable, signal } from '@angular/core';
-import type { PptxElement, PptxSlide } from 'pptx-viewer-core';
-
 import { computeFocusTargets, createAiChangeAnimator } from 'ooxml-ui/pptx/ai';
 import type {
 	AiCanvasHighlight,
@@ -28,6 +26,7 @@ import type {
 	PptxAiFocusedTarget,
 	ToolCanvasTarget,
 } from 'ooxml-ui/pptx/ai';
+import type { PptxElement, PptxSlide } from 'pptx-viewer-core';
 
 /** Live selection accessors the store reads to derive the follow-selection focus. */
 export interface AiPanelSelectionAccessors {

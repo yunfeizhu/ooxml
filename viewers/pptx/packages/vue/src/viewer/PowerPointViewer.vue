@@ -103,6 +103,7 @@ import { FieldContextKey } from './composables/field-context';
 import { MergeCropKey } from './composables/merge-crop-context';
 import { RecentColorsKey } from './composables/recent-colors-context';
 import { Rendering3DFlagsKey } from './composables/rendering-3d-flags';
+import { RibbonAddInsKey } from './composables/ribbon-add-ins';
 import { TableThemeKey } from './composables/table-theme';
 import { ThemeColorMapKey } from './composables/theme-color-map-context';
 import { useAccessibility } from './composables/useAccessibility';
@@ -224,6 +225,8 @@ const themeStyle = useThemeStyle(prefs.effectiveTheme);
 // inject, avoiding threading `accountAuth` through the large RibbonProps
 // contract just to reach one deeply-nested panel (mirrors the Rendering3DFlagsKey pattern).
 provide(AccountAuthKey, props.accountAuth);
+// The host's ribbon tabs reach the ribbon the same way, as a getter so it follows the prop.
+provide(RibbonAddInsKey, () => props.ribbonAddIns);
 
 // -- Load + parse content ----------------------------------------------
 const source = useContentSource({

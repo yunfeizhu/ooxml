@@ -24,8 +24,6 @@ import {
 	OnDestroy,
 } from '@angular/core';
 import { TranslatePipe } from '@ngx-translate/core';
-import type { PptxElement } from 'pptx-viewer-core';
-
 import {
 	beginCropDrag,
 	buildCropOverlay,
@@ -37,6 +35,8 @@ import {
 	toElementAxes,
 } from 'ooxml-ui/pptx';
 import type { CropDragStart, CropHandleId } from 'ooxml-ui/pptx';
+import type { PptxElement } from 'pptx-viewer-core';
+
 import { PictureCropService } from './picture-crop.service';
 
 /** A live crop gesture: a handle drag, or a pan (`handle === null`). */

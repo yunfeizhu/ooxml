@@ -1,9 +1,9 @@
+import { classifyMediaType } from 'ooxml-ui/pptx';
 /**
  * insert-file-handlers: Factory functions for image and media file-picking
  * handlers used by useInsertElements.
  */
 import type { PptxElement, PptxSlide, ImagePptxElement, MediaPptxElement } from 'pptx-viewer-core';
-import { classifyMediaType } from 'ooxml-ui/pptx';
 
 import type { CanvasSize } from '../types';
 import { generateElementId } from '../utils/generate-id';

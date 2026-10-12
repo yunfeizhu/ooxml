@@ -1,4 +1,3 @@
-import type { PptxElement, PptxSlide } from 'pptx-viewer-core';
 import type {
 	AuthoredSlideRange,
 	PresentationPointerTool,
@@ -6,6 +5,7 @@ import type {
 	ShowOrderCustomShow,
 } from 'ooxml-ui/pptx';
 import { PRESENTER_CONSOLE_CLASSES, presenterTimerProgress } from 'ooxml-ui/pptx';
+import type { PptxElement, PptxSlide } from 'pptx-viewer-core';
 /**
  * PresenterView: Split-screen presenter layout with current slide,
  * next slide preview, speaker notes, timer, and navigation controls.

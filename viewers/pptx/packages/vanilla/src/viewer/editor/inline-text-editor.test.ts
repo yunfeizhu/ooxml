@@ -1,4 +1,11 @@
 import JSZip from 'jszip';
+import {
+	createCollaborationLivePatcher,
+	createSnapshotTextPositions,
+	findElementYMap,
+	reconcileSlidesInYDoc,
+} from 'ooxml-ui/pptx';
+import type { YjsFactories } from 'ooxml-ui/pptx';
 // @vitest-environment jsdom
 /**
  * Regression: opening the inline editor must place the caret at the END of the
@@ -8,13 +15,6 @@ import JSZip from 'jszip';
  */
 import type { PptxElement } from 'pptx-viewer-core';
 import { createTextElement, PptxHandler } from 'pptx-viewer-core';
-import {
-	createCollaborationLivePatcher,
-	createSnapshotTextPositions,
-	findElementYMap,
-	reconcileSlidesInYDoc,
-} from 'ooxml-ui/pptx';
-import type { YjsFactories } from 'ooxml-ui/pptx';
 import { describe, expect, it, vi } from 'vitest';
 import * as Y from 'yjs';
 

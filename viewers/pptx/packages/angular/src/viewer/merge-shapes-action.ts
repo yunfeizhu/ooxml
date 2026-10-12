@@ -1,3 +1,5 @@
+import { applyMergeShapesPlan, canMergeShapes, planMergeShapes } from 'ooxml-ui/pptx';
+import type { MergeShapeOperation } from 'ooxml-ui/pptx';
 /**
  * merge-shapes-action.ts: the Angular binding's Merge Shapes handler, shared by
  * the Home > Arrange ribbon dropdown and the canvas context menu.
@@ -11,9 +13,6 @@
  * @module angular-viewer/merge-shapes-action
  */
 import type { PptxElement, PptxSlide } from 'pptx-viewer-core';
-
-import { applyMergeShapesPlan, canMergeShapes, planMergeShapes } from 'ooxml-ui/pptx';
-import type { MergeShapeOperation } from 'ooxml-ui/pptx';
 
 /** The subset of {@link EditorStateService} a merge needs. */
 export interface MergeShapesEditor {

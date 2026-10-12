@@ -38,8 +38,17 @@ import { defineSelect } from './form/select';
 import { defineStatusBar } from './chrome/status-bar';
 import { defineStatusItem } from './chrome/status-item';
 import { defineTabStrip } from './chrome/tab-strip';
+import { defineTaskPane } from './chrome/task-pane';
 import { defineTitleBar } from './chrome/title-bar';
 import { defineZoomSlider } from './form/zoom-slider';
+import { defineSymbolPicker } from './form/symbol-picker';
+import { defineColorGrid } from './form/color-grid';
+export type {
+	OfficeColorChange,
+	OfficeColorChangeEvent,
+	OfficeUiColorCustom,
+} from './form/color-custom';
+import { defineColorCustom } from './form/color-custom';
 
 export {
 	defineAccount,
@@ -76,10 +85,21 @@ export {
 	defineStatusItem,
 	defineSwitch,
 	defineTabStrip,
+	defineTaskPane,
 	defineTitleBar,
 	defineToolbar,
 	defineZoomSlider,
+	defineSymbolPicker,
+	defineColorGrid,
+	defineColorCustom,
 };
+export { OFFICE_SYMBOLS, parseOfficeSymbolCode } from './form/symbol-picker';
+export type {
+	OfficeColorPick,
+	OfficeColorPickEvent,
+	OfficeColorSource,
+	OfficeUiColorGrid,
+} from './form/color-grid';
 export type { OfficeCommandEvent } from './ribbon/button';
 export type { OfficeDialogCloseEvent, OfficeDialogCloseReason } from './dialog/dialog';
 export type { OfficeSelectOption } from './form/select';
@@ -133,6 +153,8 @@ export { assignKeyTips, runKeyTips } from './ribbon/keytip-run';
 export type { KeyTipTarget } from './ribbon/keytip-run';
 export { createRibbonOverflow } from './ribbon/overflow';
 export type { RibbonOverflow, RibbonOverflowOptions } from './ribbon/overflow';
+export { attachRibbonGroupOverflow, fitRibbonGroups } from './ribbon/group-overflow';
+export type { RibbonGroupOverflow, RibbonGroupOverflowOptions } from './ribbon/group-overflow';
 export type { OfficeRibbonSelectEvent } from './ribbon/ribbon-tabs';
 export type { OfficeRibbonActionsMode, OfficeRibbonModeEvent } from './ribbon/ribbon-actions';
 export type { OfficeRibbonCommandView, OfficeRibbonGroupView } from './ribbon/ribbon-section';
@@ -212,6 +234,7 @@ export const CONTROL_DEFINERS = [
 	defineStatusItem,
 	defineZoomSlider,
 	defineTabStrip,
+	defineTaskPane,
 	defineOptionsDialog,
 	defineAccount,
 	defineRibbon,
@@ -231,6 +254,9 @@ export const CONTROL_DEFINERS = [
 	defineRibbonSection,
 	defineGallery,
 	defineCommentsPane,
+	defineSymbolPicker,
+	defineColorGrid,
+	defineColorCustom,
 ] as const;
 
 /** Idempotent, SSR-safe (no-op without a DOM). */

@@ -1,4 +1,3 @@
-import type { PptxTableData, TablePptxElement } from 'pptx-viewer-core';
 import type { TableDataGridCell, TableDataGridModel } from 'ooxml-ui/pptx';
 import {
 	appendTableElementColumn,
@@ -10,6 +9,7 @@ import {
 	removeTableElementRow,
 	setTableElementCellText,
 } from 'ooxml-ui/pptx';
+import type { PptxTableData, TablePptxElement } from 'pptx-viewer-core';
 
 import type { Translator } from '../../i18n';
 import { createEl } from '../../render';

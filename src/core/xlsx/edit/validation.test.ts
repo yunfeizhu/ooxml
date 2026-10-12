@@ -3,11 +3,7 @@ import { parseAddress, parseRange } from '../address';
 import type { DataValidation } from '../model';
 import { createWorkbook } from '../workbook';
 import { createEditSession } from './session';
-import {
-	DEFAULT_VALIDATION_MESSAGE,
-	listValidationOptions,
-	validateCellInput,
-} from './validation';
+import { DEFAULT_VALIDATION_MESSAGE, listValidationOptions, validateCellInput } from './validation';
 
 const A = (ref: string) => {
 	const a = parseAddress(ref);

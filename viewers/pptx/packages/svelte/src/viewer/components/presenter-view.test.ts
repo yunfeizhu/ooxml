@@ -1,3 +1,12 @@
+import type { AuthoredSlideRange } from 'ooxml-ui/pptx';
+import {
+	createInitialPresentationSnapshot,
+	NOTES_FONT_SIZE_DEFAULT,
+	NOTES_FONT_SIZE_MIN,
+	NOTES_FONT_SIZE_STEP,
+	PRESENTER_CONSOLE_ORDER,
+	PRESENTER_TIMER_SEGMENT_MS,
+} from 'ooxml-ui/pptx';
 /**
  * Presenter console regressions, all four of them shared-rule violations this
  * binding shipped before the console was rebuilt on `presenter-chrome`:
@@ -17,15 +26,6 @@
  * `slides[current + 1]` fails rather than quietly previewing a hidden slide.
  */
 import type { PptxSlide } from 'pptx-viewer-core';
-import type { AuthoredSlideRange } from 'ooxml-ui/pptx';
-import {
-	createInitialPresentationSnapshot,
-	NOTES_FONT_SIZE_DEFAULT,
-	NOTES_FONT_SIZE_MIN,
-	NOTES_FONT_SIZE_STEP,
-	PRESENTER_CONSOLE_ORDER,
-	PRESENTER_TIMER_SEGMENT_MS,
-} from 'ooxml-ui/pptx';
 import { flushSync, mount, unmount } from 'svelte';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 

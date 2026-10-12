@@ -3,6 +3,7 @@ import JSZip from 'jszip';
 import type { VisioViewerElement } from 'ooxml-ui/visio';
 import { createVsdxFixture } from './fixture.mjs';
 import { downloadCopy } from './ribbon';
+import { openDemo } from './demo-page';
 
 interface TestClipboard {
 	text: string;
@@ -111,13 +112,17 @@ for (const framework of ['vanilla', 'react', 'vue', 'angular', 'svelte', 'solid'
 		page.on('pageerror', (error) => errors.push(error.message));
 		await installTransport(page);
 		await page.setViewportSize({ width: 1600, height: 1000 });
-		await page.goto(framework === 'vanilla' ? '/demo/?sample=1' : `/demo-${framework}/?sample=1`);
+		await openDemo(
+			page,
+			framework === 'vanilla' ? '/demo/?sample=1' : `/demo-${framework}/?sample=1`,
+		);
 		const viewer = page.locator('visio-viewer');
 		await page.locator('#file').setInputFiles({
 			name: 'clipboard.vsdx',
 			mimeType: 'application/vnd.ms-visio.drawing',
 			buffer: await fixture(),
 		});
+		await expect(page.locator('#file-name')).toHaveText('clipboard.vsdx');
 		await expect(viewer.locator('svg.paper')).toContainText('Clipboard second');
 		await viewer.getByRole('tab', { name: 'Home', exact: true }).click();
 		await viewer.evaluate((node) =>
@@ -154,10 +159,10 @@ for (const framework of ['vanilla', 'react', 'vue', 'angular', 'svelte', 'solid'
 			{ id: '3', x: 4.33, y: 6.67, text: 'Clipboard source' },
 			{ id: '4', x: 2.33, y: 1.67, text: 'Clipboard second' },
 		]);
-		await viewer.locator('[command="undo"] button').click();
+		await viewer.locator('.qat [data-command="undo"]').click();
 		await expect(viewer.locator('svg.paper [data-shape-id]')).toHaveCount(2);
 		await selection(viewer, []);
-		await viewer.locator('[command="redo"] button').click();
+		await viewer.locator('.qat [data-command="redo"]').click();
 		await selection(viewer, ['4', '3']);
 		const saved = await bytes(viewer);
 		// Unrelated clipboard contents and denied reads cannot resurrect the last copied shapes.
@@ -232,7 +237,7 @@ for (const framework of ['vanilla', 'react', 'vue', 'angular', 'svelte', 'solid'
 		await viewer.locator('[command="ctx-cut"]').click();
 		await expect(viewer.locator('svg.paper [data-shape-id]')).toHaveCount(2);
 		await selection(viewer, []);
-		await viewer.locator('[command="undo"] button').click();
+		await viewer.locator('.qat [data-command="undo"]').click();
 		await expect(viewer.locator('svg.paper [data-shape-id]')).toHaveCount(4);
 		await selection(viewer, ['4', '3']);
 		expect(await bytes(viewer)).toEqual(saved);

@@ -1,5 +1,5 @@
-import type { ZoomPptxElement } from 'pptx-viewer-core';
 import { translationsEn } from 'ooxml-ui/pptx/i18n';
+import type { ZoomPptxElement } from 'pptx-viewer-core';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it, vi } from 'vitest';
 

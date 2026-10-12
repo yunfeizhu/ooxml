@@ -1,8 +1,4 @@
-import {
-	buildSaveSlides,
-	GALLERY_THEME_PRESETS,
-	partitionTemplateElements,
-} from 'ooxml-ui/pptx';
+import { buildSaveSlides, GALLERY_THEME_PRESETS, partitionTemplateElements } from 'ooxml-ui/pptx';
 
 import type { EditorController } from './editor';
 import type { LoadingController } from './loading-controller';

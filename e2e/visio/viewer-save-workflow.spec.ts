@@ -1,7 +1,8 @@
 import { test, expect, type Page } from '@playwright/test';
-import { downloadCopy, taskPane } from './ribbon';
+import { downloadCopy, history, taskPane } from './ribbon';
 import JSZip from 'jszip';
 import { createVsdxFixture } from './fixture.mjs';
+import { openDemo } from './demo-page';
 
 async function savedBytes(page: Page): Promise<Buffer> {
 	const command = await downloadCopy(page.locator('visio-viewer'));
@@ -20,68 +21,53 @@ async function open(page: Page, bytes: Buffer, name: string) {
 	await expect(page.locator('#file-name')).toHaveText(name);
 }
 
-test('geometry preserves an unapplied text draft and downloads/reloads actual edits with unknown parts', async ({
+/** The Size & Position window's field for one value, opened for the selected shape. */
+async function sizeField(page: Page, name: string) {
+	const viewer = page.locator('visio-viewer');
+	const pane = viewer.getByRole('region', { name: 'Size & Position', exact: true });
+	if (!(await pane.isVisible())) await taskPane(viewer, 'Size & Position');
+	return pane.getByRole('spinbutton', { name, exact: true });
+}
+
+test('a text draft survives moving the shape, and saved copies keep the edits and unknown parts', async ({
 	page,
 }) => {
 	const zip = await JSZip.loadAsync(await createVsdxFixture('Original text'));
 	const preserved = Buffer.from([1, 9, 0, 255, 42]);
 	zip.file('unknown/preserved.bin', preserved);
 	const original = await zip.generateAsync({ type: 'nodebuffer' });
-	await page.goto('/demo/?sample=1');
+	await openDemo(page);
 	await open(page, original, 'roundtrip.vsdx');
-	await page.locator('visio-viewer [data-shape-id="1"]').click();
-	await page.locator('visio-viewer .edit-controls summary').click();
-	const text = page.getByLabel('Selected shape text', { exact: true });
-	await text.fill('Unapplied text draft');
-	await page.getByLabel('Pin X (inches)').fill('5');
-	await page.getByLabel('Pin Y (inches)').fill('6');
-	await page.getByRole('button', { name: 'Move selected', exact: true }).click();
-	await expect(page.getByLabel('Pin X (inches)')).toHaveValue('');
-	await expect(text).toHaveValue('Unapplied text draft');
-	await expect(page.locator('visio-viewer svg text')).toContainText('Original text');
-	await page
-		.locator('visio-viewer .edit-controls')
-		.getByRole('button', { name: 'Undo', exact: true })
-		.click();
-	await expect(page.locator('#edit-label')).toHaveText('ORIGINAL');
-	await expect(text).toHaveValue('Unapplied text draft');
-	await page
-		.locator('visio-viewer .edit-controls')
-		.getByRole('button', { name: 'Redo', exact: true })
-		.click();
+	const viewer = page.locator('visio-viewer');
+	// Start typing on the shape, then move it from Size & Position before saving the text.
+	await viewer.locator('svg.paper [data-shape-id="1"]').dblclick();
+	const editor = viewer.locator('#edit-text');
+	await expect(editor).toBeFocused();
+	await editor.fill('Unapplied text draft');
+	const x = await sizeField(page, 'X (in)');
+	await x.fill('5');
+	await x.press('Enter');
 	await expect(page.locator('#edit-label')).toHaveText('EDITED COPY');
-	await expect(text).toHaveValue('Unapplied text draft');
-	await page.getByLabel('Width (inches)', { exact: true }).fill('4');
-	await page.getByRole('button', { name: 'Apply text', exact: true }).click();
-	await expect(page.getByLabel('Width (inches)', { exact: true })).toHaveValue('4');
-	await expect(page.locator('visio-viewer [data-shape-id="1"] text')).toContainText(
-		'Unapplied text draft',
-	);
-	await page.getByLabel('New rectangle ID').fill('42');
-	await page.getByLabel('Rectangle text (optional)').fill('<literal rectangle>');
-	await page.getByLabel('Pin X (inches)').fill('2');
-	await page.getByLabel('Pin Y (inches)').fill('3');
-	await page.getByLabel('Width (inches)', { exact: true }).fill('1');
-	await page.getByLabel('Height (inches)', { exact: true }).fill('2');
-	await page.getByRole('button', { name: 'Create rectangle', exact: true }).click();
-	await expect(page.locator('visio-viewer [data-shape-id="42"]')).toHaveCount(1);
+	await expect(editor).toHaveValue('Unapplied text draft');
+	await history(viewer, 'Undo').click();
+	await expect(page.locator('#edit-label')).toHaveText('ORIGINAL');
+	await expect(editor).toHaveValue('Unapplied text draft');
+	await history(viewer, 'Redo').click();
+	await expect(page.locator('#edit-label')).toHaveText('EDITED COPY');
+	await expect(editor).toHaveValue('Unapplied text draft');
+	// Esc keeps the typed text.
+	await editor.press('Escape');
+	await expect(editor).toHaveCount(0);
+	await expect(viewer.locator('[data-shape-id="1"] text')).toContainText('Unapplied text draft');
 	const copy = await savedBytes(page),
 		reopened = await JSZip.loadAsync(copy);
 	expect(await reopened.file('unknown/preserved.bin')!.async('nodebuffer')).toEqual(preserved);
-	const xml = await reopened.file('visio/pages/page1.xml')!.async('string');
-	expect(xml).toMatch(/N="PinX" V="5"/);
-	expect(xml).toMatch(/N="PinY" V="6"/);
+	expect(await reopened.file('visio/pages/page1.xml')!.async('string')).toMatch(/N="PinX" V="5"/);
 	await open(page, copy, 'reopened-geometry.vsdx');
-	await expect(page.locator('visio-viewer [data-shape-id="42"]')).toHaveCount(1);
-	await expect(page.locator('visio-viewer [data-shape-id="42"] text')).toContainText(
-		'<literal rectangle>',
-	);
-	await expect(page.locator('visio-viewer [data-shape-id="1"] text')).toContainText(
-		'Unapplied text draft',
-	);
+	await expect(viewer.locator('[data-shape-id="1"] text')).toContainText('Unapplied text draft');
 });
 
-test('protected geometry refusal keeps draft, history and byte-exact original copy', async ({
+test('a refused move keeps the text draft, the history and a byte-exact original copy', async ({
 	page,
 }) => {
 	const zip = await JSZip.loadAsync(await createVsdxFixture('Protected shape'));
@@ -94,49 +80,25 @@ test('protected geometry refusal keeps draft, history and byte-exact original co
 		),
 	);
 	const original = await zip.generateAsync({ type: 'nodebuffer' });
-	await page.goto('/demo/?sample=1');
+	await openDemo(page);
 	await open(page, original, 'protected.vsdx');
-	await page.locator('visio-viewer [data-shape-id="1"]').click();
-	await page.locator('visio-viewer .edit-controls summary').click();
-	const before = await page.locator('visio-viewer [data-shape-id="1"]').getAttribute('transform');
-	await page.getByLabel('Selected shape text', { exact: true }).fill('Keep unapplied text');
-	await page.getByLabel('Pin X (inches)').fill('5');
-	await page.getByLabel('Pin Y (inches)').fill('6');
-	await page.getByRole('button', { name: 'Move selected', exact: true }).click();
-	await expect(page.locator('visio-viewer [data-geometry-error]')).toContainText(
-		'EDIT_PROTECTED_CELL',
-	);
-	await expect(page.getByLabel('Pin X (inches)')).toHaveValue('5');
-	await expect(page.getByLabel('Selected shape text', { exact: true })).toHaveValue(
-		'Keep unapplied text',
-	);
+	const viewer = page.locator('visio-viewer');
+	const shape = viewer.locator('svg.paper [data-shape-id="1"]');
+	const before = await shape.getAttribute('transform');
+	await shape.dblclick();
+	const editor = viewer.locator('#edit-text');
+	await expect(editor).toBeFocused();
+	await editor.fill('Keep unapplied text');
+	const x = await sizeField(page, 'X (in)');
+	await x.fill('5');
+	await x.press('Enter');
+	// The lock is reported in plain words, with no internal error code.
+	const refusal = viewer.locator('[data-size-error]');
+	await expect(refusal).toBeVisible();
+	await expect(refusal).not.toContainText(/EDIT_|LIMIT_/);
+	await expect(editor).toHaveValue('Keep unapplied text');
 	await expect(page.locator('#edit-label')).toHaveText('ORIGINAL');
-	await expect(
-		page.locator('visio-viewer .edit-controls').getByRole('button', { name: 'Undo', exact: true }),
-	).toBeDisabled();
-	await expect(page.locator('visio-viewer [data-shape-id="1"]')).toHaveAttribute(
-		'transform',
-		before!,
-	);
+	await expect(history(viewer, 'Undo')).toBeDisabled();
+	await expect(shape).toHaveAttribute('transform', before!);
 	expect(await savedBytes(page)).toEqual(original);
-	await page.getByRole('button', { name: 'Cancel', exact: true }).click();
-	await expect(page.getByLabel('Pin X (inches)')).toHaveValue('');
-	await expect(page.getByLabel('Selected shape text', { exact: true })).toHaveValue(
-		'Protected shape',
-	);
-});
-
-test('mobile geometry-only drafts can be cancelled without editing the document', async ({
-	page,
-}) => {
-	await page.setViewportSize({ width: 390, height: 844 });
-	await page.goto('/demo/?sample=1');
-	await open(page, await createVsdxFixture(), 'mobile-draft.vsdx');
-	await taskPane(page.locator('visio-viewer'), 'Inspector');
-	await page.locator('visio-viewer .edit-controls summary').click();
-	await page.getByLabel('Pin X (inches)').fill('4');
-	await expect(page.getByRole('button', { name: 'Cancel', exact: true })).toBeEnabled();
-	await page.getByRole('button', { name: 'Cancel', exact: true }).click();
-	await expect(page.getByLabel('Pin X (inches)')).toHaveValue('');
-	await expect(page.locator('#edit-label')).toHaveText('ORIGINAL');
 });

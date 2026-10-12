@@ -1,8 +1,8 @@
 import JSZip from 'jszip';
-import { createImageElement, PptxHandler } from 'pptx-viewer-core';
-import type { PptxElement } from 'pptx-viewer-core';
 import { createViewerOptionsStore, reconcileSlidesInYDoc } from 'ooxml-ui/pptx';
 import type { CollaborationConfig, ExternalCollaborationSession } from 'ooxml-ui/pptx';
+import { createImageElement, PptxHandler } from 'pptx-viewer-core';
+import type { PptxElement } from 'pptx-viewer-core';
 // @vitest-environment happy-dom
 /**
  * Live sanity check for `useViewerBuildingBlocks`: renders a component that
@@ -206,7 +206,7 @@ describe('useViewerBuildingBlocks', () => {
 			return React.createElement('div');
 		}
 		await act(async () => root.render(React.createElement(InitialSession)));
-		expect(editableRenders[0]).toBe(false);
+		expect(editableRenders[0]).toBeFalsy();
 	});
 
 	it('keeps a blank collaborative shell gated by live readiness and host permission', async () => {

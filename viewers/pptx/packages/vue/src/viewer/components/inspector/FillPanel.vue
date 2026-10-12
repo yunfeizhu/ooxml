@@ -1,7 +1,7 @@
 <script setup lang="ts">
+import type { ThemeColorPickerCommit } from 'ooxml-ui/pptx';
 import type { PptxElement, ShapeStyle } from 'pptx-viewer-core';
 import { hasShapeProperties } from 'pptx-viewer-core';
-import type { ThemeColorPickerCommit } from 'ooxml-ui/pptx';
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 

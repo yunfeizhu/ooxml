@@ -8,6 +8,7 @@ import type {
 	VisioText,
 } from '../index';
 import { ForeignVectorBudget } from './foreign-vector-budget';
+const RUN_EXTRAS = ['letterSpacing', 'position', 'textCase', 'language'] as const;
 
 /** Copy only named scalar fields, never arbitrary host properties or their getters. */
 function fields<T, K extends keyof T>(source: T, keys: readonly K[]): Pick<T, K> {
@@ -158,6 +159,12 @@ export function copySnapshotScene(model: VisioDocument): VisioDocument {
 			...(source.shadow
 				? { shadow: fields(source.shadow, ['color', 'opacity', 'offsetX', 'offsetY', 'blur']) }
 				: {}),
+			...(source.glow ? { glow: fields(source.glow, ['color', 'opacity', 'size']) } : {}),
+			...(source.softEdges === undefined ? {} : { softEdges: source.softEdges }),
+			...(source.rounding === undefined ? {} : { rounding: source.rounding }),
+			...(source.reflection
+				? { reflection: fields(source.reflection, ['opacity', 'size', 'distance', 'blur']) }
+				: {}),
 			...(source.fillPattern
 				? {
 						fillPattern: {
@@ -206,11 +213,19 @@ export function copySnapshotScene(model: VisioDocument): VisioDocument {
 			'verticalAlign',
 			'width',
 			'height',
+			...RUN_EXTRAS,
 		]),
 		transform: matrix(source.transform),
 		margins: fields(source.margins, ['left', 'right', 'top', 'bottom']),
+		...(source.fields === undefined
+			? {}
+			: {
+					fields: list(source.fields, 'text fields', 10_000, (field) =>
+						fields(field, ['start', 'end', 'cached', 'formula']),
+					),
+				}),
 		runs: list(source.runs, 'text runs', 100_000, (run) => ({
-			...fields(run, ['text', 'fontFamily', 'fontSize', 'color', 'opacity']),
+			...fields(run, ['text', 'fontFamily', 'fontSize', 'color', 'opacity', ...RUN_EXTRAS]),
 			bold: !!run.bold,
 			italic: !!run.italic,
 			underline: !!run.underline,
@@ -268,6 +283,17 @@ export function copySnapshotScene(model: VisioDocument): VisioDocument {
 				'drawingSizeType',
 				'drawingResizeType',
 			]),
+			...(page.theme
+				? {
+						theme: {
+							...fields(page.theme, ['name', 'builtIn', 'variant', 'light', 'dark']),
+							accents: list(page.theme.accents, 'theme colours', 64, (color) => color),
+							variants: list(page.theme.variants, 'theme variants', 16, (colors) =>
+								list(colors, 'theme colours', 64, (color) => color),
+							),
+						},
+					}
+				: {}),
 			shapes: shapes(page.shapes),
 			connectors: [],
 		})),

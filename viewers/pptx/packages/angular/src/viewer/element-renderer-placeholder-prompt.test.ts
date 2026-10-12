@@ -16,10 +16,10 @@
 import { dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
+import { placeholderPromptDescriptor } from 'ooxml-ui/pptx';
 import type { PptxElement } from 'pptx-viewer-core';
 import { describe, expect, it } from 'vitest';
 
-import { placeholderPromptDescriptor } from 'ooxml-ui/pptx';
 import { componentSource as readComponentSource } from './component-source.test-support';
 
 // The placeholder-prompt branch lives in the text/shape branch, split out to

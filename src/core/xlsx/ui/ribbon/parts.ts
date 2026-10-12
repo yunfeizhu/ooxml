@@ -46,9 +46,7 @@ export type RibbonControl =
 			command: string;
 			items: (ctx: EditorContext) => { id: string; label: string; preview?: string }[];
 			/** Sectioned dropdown rendered through the shared Office gallery. */
-			sections?: (
-				ctx: EditorContext,
-			) => {
+			sections?: (ctx: EditorContext) => {
 				title?: string;
 				columns: number;
 				tileWidth: number;

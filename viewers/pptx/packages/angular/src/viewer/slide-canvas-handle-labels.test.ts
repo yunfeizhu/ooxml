@@ -10,9 +10,9 @@ import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 
 import { ElementRef, Injector, runInInjectionContext } from '@angular/core';
+import { attachRotateHandlePlacement } from 'ooxml-ui/pptx';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { attachRotateHandlePlacement } from 'ooxml-ui/pptx';
 import { RotateHandlePlacementDirective } from './rotate-handle-placement.directive';
 import { selectionControlArtwork } from './selection-control-artwork';
 

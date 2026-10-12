@@ -1,8 +1,4 @@
-import {
-	createRotationDrag,
-	elementIdSelector,
-	getResizeHandleHitAreaStyle,
-} from 'ooxml-ui/pptx';
+import { createRotationDrag, elementIdSelector, getResizeHandleHitAreaStyle } from 'ooxml-ui/pptx';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 

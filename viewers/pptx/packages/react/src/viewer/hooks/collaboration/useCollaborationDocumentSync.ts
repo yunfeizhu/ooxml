@@ -1,6 +1,6 @@
-import type { PptxElement, PptxSlide } from 'pptx-viewer-core';
 import type { CollabLoadOrigin, CollaborationLivePatcher, DeckSaveState } from 'ooxml-ui/pptx';
 import { buildDeckSaveOptions, readSlidesFromYDoc } from 'ooxml-ui/pptx';
+import type { PptxElement, PptxSlide } from 'pptx-viewer-core';
 import { useCallback, useEffect, useRef } from 'react';
 
 import type { CollaborationContextValue } from './types';

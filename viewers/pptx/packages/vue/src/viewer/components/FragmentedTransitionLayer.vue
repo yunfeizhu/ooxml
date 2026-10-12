@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import type { PptxSlide } from 'pptx-viewer-core';
 import type { FragmentedLayer, TransitionFragment } from 'ooxml-ui/pptx';
+import type { PptxSlide } from 'pptx-viewer-core';
 import type { CSSProperties } from 'vue';
 
 import type { CanvasSize } from '../types';

@@ -237,5 +237,11 @@ export type {
 } from 'ooxml-ui/visio';
 
 export type { ViewerEditState, VsdxExportResult } from 'ooxml-ui/visio';
+export type {
+	OfficeRibbonAddInEvent,
+	RibbonAddInCommand,
+	RibbonAddInGroup,
+	RibbonAddInTab,
+} from 'ooxml-ui/visio';
 
 export type { VisioEdit, VisioGeometryEdit, CreateVsdxOptions } from 'ooxml-core/visio';

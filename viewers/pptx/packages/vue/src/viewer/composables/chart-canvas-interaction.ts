@@ -1,6 +1,3 @@
-/* oxlint-disable eslint/one-var -- pervasive pre-existing pattern in this file:
-   independent handler-local `const`s, not one statement */
-import type { ChartPptxElement, PptxChartData, PptxElement } from 'pptx-viewer-core';
 import {
 	canDrillDown,
 	findChartPartTarget,
@@ -9,6 +6,9 @@ import {
 	withChartTitle,
 } from 'ooxml-ui/pptx';
 import type { ChartPartRef, ChartViewModel } from 'ooxml-ui/pptx';
+/* oxlint-disable eslint/one-var -- pervasive pre-existing pattern in this file:
+   independent handler-local `const`s, not one statement */
+import type { ChartPptxElement, PptxChartData, PptxElement } from 'pptx-viewer-core';
 import type { ComputedRef, Ref } from 'vue';
 import { computed, onMounted, onUnmounted, onUpdated, ref, shallowRef, watch } from 'vue';
 

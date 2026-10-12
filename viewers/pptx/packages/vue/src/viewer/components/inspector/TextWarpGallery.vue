@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import type { PptxTextWarpPreset, TextStyle } from 'pptx-viewer-core';
 import { TEXT_WARP_PRESETS, warpPreviewPath } from 'ooxml-ui/pptx';
+import type { PptxTextWarpPreset, TextStyle } from 'pptx-viewer-core';
 import { computed, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 

@@ -1,8 +1,8 @@
+import { buildHandoutsHtml, computeColorFilter, computeSlideIndices } from 'ooxml-ui/pptx';
 /* oxlint-disable eslint/one-var -- pervasive pre-existing pattern in this file
    (many independent short-lived `const`s per test case); merging them isn't a
    style choice here. */
 import type { PptxHandoutMaster, PptxSlide } from 'pptx-viewer-core';
-import { buildHandoutsHtml, computeColorFilter, computeSlideIndices } from 'ooxml-ui/pptx';
 import { describe, it, expect, vi, expectTypeOf } from 'vitest';
 
 import { escapeHtml } from '../utils/dom-helpers';

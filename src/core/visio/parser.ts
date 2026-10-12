@@ -4,15 +4,21 @@ import { prepareImages } from './prepare-images';
 import type { VisioImageOptions } from './media';
 import { createLayerBudget, indexLayers, pageLayers } from './layers';
 import { loadVisioThemes } from './theme';
+import { visioPageTheme } from './page-theme';
 import type { Resources } from './style';
 import { elements } from '../xml/index';
 import type { VisioDocument, VisioPage } from './model';
 import { diagnosticCollector } from './diagnostics';
+import { readVisioAnnotations, readVisioComments, type VisioComment } from './comments';
 import { metadata, metadataAttributes } from './metadata';
 import { createMetadataBudget, type VisioMetadataOptions } from './shape-metadata';
+import { readDataRecordsets, type VisioDataRecordset } from './data-recordsets';
 import { VisioPackage, VisioPackageError, type VisioPackageLimits } from './package';
 import { normalizeShapes, type ShapeContext } from './shapes';
 import { normalizeVisioPageGeometry, visioPageGeometryScale } from './page-scale';
+import { readVisioPageSetup } from './page-setup';
+import { readVisioPageLayout } from './page-layout';
+import { readVisioSnapGlue } from './snap-glue';
 import { styleSheet, type StyleRecord } from './style-inheritance';
 import {
 	attribute,
@@ -26,6 +32,10 @@ import {
 	type RawShape,
 	type Report,
 } from './sheet';
+import { listVisioMasters, type MasterRecord } from './master-list';
+import { readVisioStencilWindows } from './stencil-windows';
+import { readVisioFieldProperties } from './text-field-context';
+import { visioWallClock } from './text-fields';
 
 export interface ParseVsdxOptions {
 	/** Trusted converter package injection. Only supply inside a disposable, externally timed worker. */
@@ -138,6 +148,7 @@ export async function parseVsdx(
 	const rootStyle = styles.get('0');
 	if (rootStyle?.attributes.get('NameU') === 'No Style') resources.rootSheet = rootStyle.sheet;
 	const masters = new Map<string, RawShape[]>();
+	const masterRecords: MasterRecord[] = [];
 	const mastersPart = await related(pkg, documentPart, 'masters', false);
 	if (mastersPart) {
 		for (const master of children(await visioXml(pkg, mastersPart, 'Masters'), 'Master')) {
@@ -155,6 +166,7 @@ export async function parseVsdx(
 				options.metafileConverter,
 			);
 			masters.set(id, masterShapes);
+			masterRecords.push({ id, node: master, shapes: masterShapes });
 		}
 	}
 	let geometryCount = 0,
@@ -216,11 +228,20 @@ export async function parseVsdx(
 				throw new VisioPackageError('TEXT_LIMIT', 'Text character limit exceeded.');
 		},
 	};
+	const documentMasters = listVisioMasters(masterRecords, context, {
+		metadataBudget: createMetadataBudget(options.metadata),
+		layerBudget: createLayerBudget(),
+	});
 	const pagesPart = await related(pkg, documentPart, 'pages');
 	if (!pagesPart) throw new VisioPackageError('INVALID_DOCUMENT', 'Missing Visio pages part.');
 	const pages: VisioPage[] = [],
 		pageIds = new Set<string>();
-	for (const page of children(await visioXml(pkg, pagesPart, 'Pages'), 'Page')) {
+	const comments: VisioComment[] = [];
+	const pageNodes = children(await visioXml(pkg, pagesPart, 'Pages'), 'Page');
+	const foreground = pageNodes.filter((page) => !yes(attribute(page, 'Background')));
+	const fieldProperties = await readVisioFieldProperties(pkg);
+	const now = visioWallClock(new Date());
+	for (const page of pageNodes) {
 		const id = metadata(attribute(page, 'ID') ?? '', 256, 'Page ID');
 		if (!id || pageIds.has(id))
 			throw new VisioPackageError('INVALID_PAGE_ID', 'Page IDs must be present and unique.');
@@ -246,6 +267,16 @@ export async function parseVsdx(
 					pageCells.set(name, cell);
 		}
 		resources.pageCells = new Map([...pageCells, ...sheet.cells]);
+		const theme = visioPageTheme(resources.themes, resources.pageCells);
+		comments.push(...readVisioAnnotations(sheet, id));
+		const pageNumber = foreground.indexOf(page) + 1;
+		resources.fieldContext = {
+			pageName: attribute(page, 'Name') ?? attribute(page, 'NameU') ?? `Page ${id}`,
+			...(pageNumber ? { pageNumber } : {}),
+			pageCount: foreground.length,
+			properties: fieldProperties,
+			now,
+		};
 		const layers = pageLayers(sheet, resources, localReport);
 		context.layers = indexLayers(layers);
 		const drawingToPageScale = visioPageGeometryScale(sheet.cells, localReport);
@@ -296,6 +327,8 @@ export async function parseVsdx(
 			const value = number(sheet.cells, name, Number.NaN, localReport);
 			if (Number.isSafeInteger(value) && value >= 0 && value <= 255) pageModes[key] = value;
 		}
+		const pageSetup = readVisioPageSetup(sheet.cells);
+		const layout = readVisioPageLayout(sheet.cells);
 		for (const connection of connectors)
 			if (!seen.has(connection.fromShapeId) || !seen.has(connection.toShapeId))
 				localReport('dangling-connection', 'A connection references a missing shape.');
@@ -303,6 +336,8 @@ export async function parseVsdx(
 			id,
 			...pageModes,
 			...(drawingToPageScale === 1 ? {} : { drawingToPageScale }),
+			...(pageSetup ? { pageSetup } : {}),
+			...(layout ? { layout } : {}),
 			name: metadata(
 				attribute(page, 'Name') ?? attribute(page, 'NameU') ?? `Page ${id}`,
 				4096,
@@ -315,20 +350,44 @@ export async function parseVsdx(
 			shapes,
 			connectors,
 			layers,
+			...(theme ? { theme } : {}),
 		});
 	}
 	checkTime();
 	validateBackgrounds(pages, report);
+	try {
+		comments.push(...(await readVisioComments(pkg, documentPart, report)));
+	} catch (error) {
+		if (!(error instanceof VisioPackageError) || error.code === 'LIMIT_RUNTIME') throw error;
+		report('invalid-comments', 'The comments part could not be read; comments are not shown.');
+	}
+	let dataRecordsets: VisioDataRecordset[] = [];
+	try {
+		dataRecordsets = await readDataRecordsets(pkg, documentPart, checkTime);
+	} catch (error) {
+		if (error instanceof VisioPackageError && error.code === 'LIMIT_RUNTIME') throw error;
+		report(
+			'unsupported-data-recordsets',
+			`Saved external data could not be read and is preserved unchanged: ${error instanceof Error ? error.message : String(error)}`,
+		);
+	}
+	const stencils = await readVisioStencilWindows(pkg, documentPart);
 	report(
 		'cached-values-only',
 		'ShapeSheet formulas, automatic connector routing, and external data are not evaluated; saved cached values and supported theme records are used.',
 		{ severity: 'info' },
 	);
+	const snapGlue = readVisioSnapGlue(documentRoot);
 	return {
 		format: 'vsdx',
+		...(snapGlue ? { snapGlue } : {}),
 		pages,
+		...(documentMasters.length ? { masters: documentMasters } : {}),
+		...(stencils.length ? { stencils } : {}),
 		diagnostics: diagnosticState.finish(),
+		...(dataRecordsets.length ? { dataRecordsets } : {}),
 		fontFamilies: [...new Set(resources.fonts.values())],
+		...(comments.length ? { comments } : {}),
 	};
 }
 

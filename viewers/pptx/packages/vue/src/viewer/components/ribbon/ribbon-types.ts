@@ -1,3 +1,11 @@
+import type {
+	AnimationApplyGroup,
+	ChangeCaseMode,
+	InsertChartKind,
+	RibbonContextualTabId,
+	SlideTemplateId,
+	ToolbarActionId,
+} from 'ooxml-ui/pptx';
 /**
  * Ribbon UI types: the Vue counterpart of React's `types-ui.ts` / `types-core.ts`
  * subset that the Office-style ribbon needs, plus the aggregate `RibbonProps`
@@ -19,14 +27,6 @@ import type {
 	ShapeStyle,
 	TextStyle,
 } from 'pptx-viewer-core';
-import type {
-	AnimationApplyGroup,
-	ChangeCaseMode,
-	InsertChartKind,
-	RibbonContextualTabId,
-	SlideTemplateId,
-	ToolbarActionId,
-} from 'ooxml-ui/pptx';
 
 /** Viewer interaction mode. Mirrors React `ViewerMode`. */
 export type ViewerMode = 'preview' | 'edit' | 'present' | 'master';

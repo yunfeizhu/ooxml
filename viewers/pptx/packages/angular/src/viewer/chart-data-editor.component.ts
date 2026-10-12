@@ -42,10 +42,10 @@ import {
 	output,
 } from '@angular/core';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
-import type { ChartPptxElement, PptxChartSeries } from 'pptx-viewer-core';
-
 import { seriesColorClearState } from 'ooxml-ui/pptx';
 import type { InspectorActionState } from 'ooxml-ui/pptx';
+import type { ChartPptxElement, PptxChartSeries } from 'pptx-viewer-core';
+
 import { AdvancedChartEditorComponent } from './advanced-chart-editor.component';
 import {
 	addCategory,

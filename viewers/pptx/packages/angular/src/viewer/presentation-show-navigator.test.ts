@@ -1,7 +1,7 @@
+import type { AuthoredSlideRange } from 'ooxml-ui/pptx';
 import type { PptxSlide } from 'pptx-viewer-core';
 import { describe, expect, it } from 'vitest';
 
-import type { AuthoredSlideRange } from 'ooxml-ui/pptx';
 import type { AnimationPlaybackService } from './animation-playback.service';
 import type { PresentationAnnotationsService } from './presentation-annotations.service';
 import { PresentationShowNavigator } from './presentation-show-navigator';

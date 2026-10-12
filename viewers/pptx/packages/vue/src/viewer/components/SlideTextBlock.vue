@@ -80,6 +80,7 @@ function paraStyle(para: RenderParagraph): CSSProperties {
 				class="pptx-vue-bullet-image"
 				:src="para.bulletPicture.src"
 				:alt="para.bulletPicture.accessibleLabel"
+				draggable="false"
 				:style="{
 					width: `${para.bulletPicture.sizePx}px`,
 					height: `${para.bulletPicture.sizePx}px`,

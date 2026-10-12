@@ -1,7 +1,0 @@
-node_modules/
-dist/
-site-dist/
-playwright-report/
-test-results/
-package-lock.json
-packages/bindings/package-lock.json

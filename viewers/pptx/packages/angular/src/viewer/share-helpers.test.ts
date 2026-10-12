@@ -4,9 +4,9 @@
  * plus the React share-link builder, against the pure helpers, no TestBed.
  */
 
+import type { CollaborationConfig } from 'ooxml-ui/pptx';
 import { describe, expect, it } from 'vitest';
 
-import type { CollaborationConfig } from 'ooxml-ui/pptx';
 import {
 	buildCollaborationConfig,
 	buildShareUrl,

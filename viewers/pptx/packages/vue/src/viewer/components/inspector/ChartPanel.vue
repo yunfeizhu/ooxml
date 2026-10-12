@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import type { ChartPptxElement, PptxChartData, PptxChartType, PptxElement } from 'pptx-viewer-core';
 import type { ChartTypeSelectValue } from 'ooxml-ui/pptx';
 import {
 	collapseChartTitleRunsForEdit,
@@ -8,6 +7,7 @@ import {
 	CHART_TYPE_OPTIONS,
 	resolveDisplayedChartType,
 } from 'ooxml-ui/pptx';
+import type { ChartPptxElement, PptxChartData, PptxChartType, PptxElement } from 'pptx-viewer-core';
 import { computed, inject } from 'vue';
 import { useI18n } from 'vue-i18n';
 

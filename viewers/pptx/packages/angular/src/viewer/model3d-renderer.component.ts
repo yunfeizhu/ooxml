@@ -12,13 +12,13 @@ import {
 	viewChild,
 } from '@angular/core';
 import { TranslatePipe } from '@ngx-translate/core';
-import type { PptxElement } from 'pptx-viewer-core';
-
 // Type-only import of the shared scene controller; the implementation (which
 // pulls the optional `three` peer) is loaded lazily via dynamic import so it
 // never lands in the main bundle.
 import { elementHitTargetStyle, shouldRenderHitTarget } from 'ooxml-ui/pptx';
 import type { Model3DHandle, mountModel3D as MountModel3D } from 'ooxml-ui/pptx';
+import type { PptxElement } from 'pptx-viewer-core';
+
 import type { StyleMap } from './element-style';
 import {
 	buildModel3DContainerStyle,

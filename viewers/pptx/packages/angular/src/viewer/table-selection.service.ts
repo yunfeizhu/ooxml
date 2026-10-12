@@ -16,10 +16,9 @@
  */
 
 import { computed, Injectable, signal } from '@angular/core';
-import type { PptxTableData } from 'pptx-viewer-core';
-
 import type { CellCoord } from 'ooxml-ui/pptx';
 import { computeSelectionRect, rectToCells } from 'ooxml-ui/pptx';
+import type { PptxTableData } from 'pptx-viewer-core';
 
 /** A selected table cell (and optional Shift+Click range) on one table element. */
 export interface TableCellSelection {

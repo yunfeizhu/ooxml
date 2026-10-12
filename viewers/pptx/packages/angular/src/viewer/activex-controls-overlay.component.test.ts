@@ -9,10 +9,10 @@
  */
 import { Injector, runInInjectionContext, signal } from '@angular/core';
 import type { InputSignal } from '@angular/core';
+import type { CanvasSize } from 'ooxml-ui/pptx';
 import type { PptxActiveXControl } from 'pptx-viewer-core';
 import { describe, expect, it } from 'vitest';
 
-import type { CanvasSize } from 'ooxml-ui/pptx';
 import { ActiveXControlsOverlayComponent } from './activex-controls-overlay.component';
 
 function createOverlay(

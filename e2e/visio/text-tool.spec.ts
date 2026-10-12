@@ -3,6 +3,7 @@ import JSZip from 'jszip';
 import type { VisioViewerElement } from 'ooxml-ui/visio';
 import { createVsdxFixture } from './fixture.mjs';
 import { downloadCopy } from './ribbon';
+import { openDemo } from './demo-page';
 
 async function fixture(scale: number) {
 	const zip = await JSZip.loadAsync(await createVsdxFixture('Text tool source'));
@@ -85,7 +86,10 @@ for (const [index, framework] of [
 		const errors: string[] = [];
 		page.on('pageerror', (error) => errors.push(error.message));
 		await page.setViewportSize({ width: 1600, height: 1000 });
-		await page.goto(framework === 'vanilla' ? '/demo/?sample=1' : `/demo-${framework}/?sample=1`);
+		await openDemo(
+			page,
+			framework === 'vanilla' ? '/demo/?sample=1' : `/demo-${framework}/?sample=1`,
+		);
 		const viewer = page.locator('visio-viewer'),
 			scale = [0.5, 1, 2][index % 3]!;
 		await page.locator('#file').setInputFiles({
@@ -93,6 +97,7 @@ for (const [index, framework] of [
 			mimeType: 'application/vnd.ms-visio.drawing',
 			buffer: await fixture(scale),
 		});
+		await expect(page.locator('#file-name')).toHaveText('text-tool.vsdx');
 		await idle(viewer);
 		const original = await inventory(viewer);
 		expect(original.shapes).toEqual([]);
@@ -129,10 +134,10 @@ for (const [index, framework] of [
 		expect(created.selected).toEqual(['1']);
 		expect(created.shapes[0]).toMatchObject({ text, width: 2, height: 1.5, fill: 'none', line: 0 });
 		await viewer.getByRole('tab', { name: 'Home', exact: true }).click();
-		await viewer.locator('[command="undo"] button').click();
+		await viewer.locator('.qat [data-command="undo"]').click();
 		expect((await inventory(viewer)).bytes).toEqual(original.bytes);
 		expect((await inventory(viewer)).selected).toEqual([]);
-		await viewer.locator('[command="redo"] button').click();
+		await viewer.locator('.qat [data-command="redo"]').click();
 		expect((await inventory(viewer)).bytes).toEqual(created.bytes);
 		expect((await inventory(viewer)).selected).toEqual(['1']);
 		await drag(page, viewer, 4);
@@ -156,6 +161,7 @@ for (const [index, framework] of [
 			mimeType: 'application/vnd.ms-visio.drawing',
 			buffer: Buffer.concat(chunks),
 		});
+		await expect(page.locator('#file-name')).toHaveText('reopened-text.vsdx');
 		await idle(viewer);
 		expect((await inventory(viewer)).shapes).toEqual(created.shapes);
 		await viewer.locator('.viewport').focus();
@@ -180,14 +186,14 @@ for (const [index, framework] of [
 		const ellipse = await inventory(viewer);
 		expect(ellipse.shapes).toHaveLength(2);
 		expect(ellipse.selected).toEqual(['2']);
-		await viewer.locator('[command="undo"] button').click();
+		await viewer.locator('.qat [data-command="undo"]').click();
 		expect((await inventory(viewer)).bytes).toEqual(created.bytes);
 		expect((await inventory(viewer)).selected).toEqual(['1']);
 		await viewer.getByRole('tab', { name: 'Insert', exact: true }).click();
 		await viewer.locator('[command="blank-page"] button').click();
 		expect((await inventory(viewer)).pages).toBe(2);
 		await viewer.getByRole('tab', { name: 'Home', exact: true }).click();
-		await viewer.locator('[command="undo"] button').click();
+		await viewer.locator('.qat [data-command="undo"]').click();
 		expect((await inventory(viewer)).pages).toBe(1);
 		expect((await inventory(viewer)).bytes).toEqual(created.bytes);
 		expect(errors).toEqual([]);

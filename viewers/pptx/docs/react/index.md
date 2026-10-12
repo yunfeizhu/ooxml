@@ -60,7 +60,6 @@ The package exposes two entry points (from `package.json` `exports`):
 ```tsx
 // Root entry - viewer, theme utilities, renderToCanvas
 import { PowerPointViewer } from 'pptx-react-viewer';
-
 // Viewer sub-entry - same component PLUS the opt-in hooks/components surface
 import { PowerPointViewer } from 'pptx-react-viewer/viewer';
 ```

@@ -1,6 +1,6 @@
-import type { PptxCompatibilityWarning } from 'pptx-viewer-core';
 import type { CompatibilityWarningToast } from 'ooxml-ui/pptx';
 import { compatibilityWarningToasts } from 'ooxml-ui/pptx';
+import type { PptxCompatibilityWarning } from 'pptx-viewer-core';
 import { computed, ref } from 'vue';
 import type { ComputedRef, Ref } from 'vue';
 

@@ -1,3 +1,4 @@
+import { canCommitActionType, ELEMENT_ACTION_TYPE_OPTIONS, resolveActionType } from 'ooxml-ui/pptx';
 /**
  * ActionSettingsPanel: PowerPoint's Insert > Action dialog as an inspector card.
  *
@@ -11,11 +12,6 @@
  */
 import type { PptxElement, PptxSlide, ElementAction, ElementActionType } from 'pptx-viewer-core';
 import { pptxActionToElementAction, elementActionToPptxAction } from 'pptx-viewer-core';
-import {
-	canCommitActionType,
-	ELEMENT_ACTION_TYPE_OPTIONS,
-	resolveActionType,
-} from 'ooxml-ui/pptx';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { getDuotoneSvgFilter } from 'ooxml-ui/pptx';
 /**
  * DuotoneFilterDefs: injects the hidden SVG `<filter>` definition that backs a
  * shape-level effect-DAG duotone (`a:effectDag` duotone) effect.
@@ -14,7 +15,6 @@
  */
 import type { PptxElement } from 'pptx-viewer-core';
 import { hasShapeProperties } from 'pptx-viewer-core';
-import { getDuotoneSvgFilter } from 'ooxml-ui/pptx';
 import { computed } from 'vue';
 
 const props = defineProps<{

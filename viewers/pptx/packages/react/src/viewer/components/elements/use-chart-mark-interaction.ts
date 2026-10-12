@@ -1,3 +1,13 @@
+import {
+	advanceChartMarkDrag,
+	advanceChartValueDrag,
+	beginChartMarkDrag,
+	beginChartValueDrag,
+	buildChartMarkDragGeometry,
+	findChartPartTarget,
+	resolveChartKind,
+} from 'ooxml-ui/pptx';
+import type { ChartMarkDragState, ChartValueDragState, ChartViewModel } from 'ooxml-ui/pptx';
 /**
  * The 2D SVG chart mark click/drag state machine used by `ChartElementView`:
  * click a bar/dot/slice to select it (synced with the chart inspector via
@@ -13,16 +23,6 @@
  * @module use-chart-mark-interaction
  */
 import type { ChartPptxElement, PptxChartData, PptxElement } from 'pptx-viewer-core';
-import {
-	advanceChartMarkDrag,
-	advanceChartValueDrag,
-	beginChartMarkDrag,
-	beginChartValueDrag,
-	buildChartMarkDragGeometry,
-	findChartPartTarget,
-	resolveChartKind,
-} from 'ooxml-ui/pptx';
-import type { ChartMarkDragState, ChartValueDragState, ChartViewModel } from 'ooxml-ui/pptx';
 import type { Dispatch, RefObject, SetStateAction } from 'react';
 import React, { useEffect, useRef, useState } from 'react';
 

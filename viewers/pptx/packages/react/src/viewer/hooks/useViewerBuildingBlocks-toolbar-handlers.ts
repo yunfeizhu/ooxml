@@ -1,3 +1,5 @@
+import { applyMotionPathPreset } from 'ooxml-ui/pptx';
+import type { AnimationApplyGroup } from 'ooxml-ui/pptx';
 import type {
 	PptxAnimationPreset,
 	PptxElement,
@@ -5,8 +7,6 @@ import type {
 	PptxSlide,
 	PptxSlideTransition,
 } from 'pptx-viewer-core';
-import { applyMotionPathPreset } from 'ooxml-ui/pptx';
-import type { AnimationApplyGroup } from 'ooxml-ui/pptx';
 
 import type { EditorHistoryResult } from './useEditorHistory';
 import type { ElementOperations } from './useElementOperations';

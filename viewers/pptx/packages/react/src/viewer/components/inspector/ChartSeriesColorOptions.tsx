@@ -1,5 +1,5 @@
-import type { PptxChartData } from 'pptx-viewer-core';
 import { isSeriesUsingSecondaryAxis, seriesColorClearState } from 'ooxml-ui/pptx';
+import type { PptxChartData } from 'pptx-viewer-core';
 import { useTranslation } from 'react-i18next';
 import { LuX } from 'react-icons/lu';
 

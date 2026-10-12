@@ -1,21 +1,3 @@
-/* oxlint-disable eslint/one-var -- pervasive pre-existing pattern in this file
-   (many independent short-lived `const`s per handler/method); merging them
-   isn't a style choice here. */
-import {
-	buildThemeColorMap,
-	duplicateSlide,
-	setSmartArtNodeStyle,
-	updateSmartArtNodeText,
-} from 'pptx-viewer-core';
-import type {
-	ParsedTableStyleMap,
-	PptxElement,
-	PptxEmbeddedFont,
-	PptxHandler,
-	PptxSaveFormat,
-	PptxSlide,
-	PptxTheme,
-} from 'pptx-viewer-core';
 import {
 	commitElementUpdateBatch,
 	buildDeckSaveOptions,
@@ -77,6 +59,7 @@ import type {
 	PresentationSnapshot,
 	Rendering3DFlags,
 	ResolvedCustomization,
+	RibbonAddInTab,
 	RunProgramNotice,
 	ThemeCatalogEntry,
 	ViewerMode,
@@ -84,6 +67,24 @@ import type {
 	ViewerTheme,
 } from 'ooxml-ui/pptx';
 import type { LocaleCatalogEntry } from 'ooxml-ui/pptx/i18n';
+/* oxlint-disable eslint/one-var -- pervasive pre-existing pattern in this file
+   (many independent short-lived `const`s per handler/method); merging them
+   isn't a style choice here. */
+import {
+	buildThemeColorMap,
+	duplicateSlide,
+	setSmartArtNodeStyle,
+	updateSmartArtNodeText,
+} from 'pptx-viewer-core';
+import type {
+	ParsedTableStyleMap,
+	PptxElement,
+	PptxEmbeddedFont,
+	PptxHandler,
+	PptxSaveFormat,
+	PptxSlide,
+	PptxTheme,
+} from 'pptx-viewer-core';
 
 import type { AiChatMount, AiFocusController } from './ai';
 import { createAiFocusController, createVanillaAiBridge, mountAiChat } from './ai';
@@ -217,6 +218,8 @@ export class PptxViewer extends ViewerCustomizationHost implements PptxViewerIns
 	private rulers: RulerController | null = null;
 	/** File > Options store + option-driven behavior (undo depth, ribbon, etc.). */
 	private optionsController!: ViewerOptionsController;
+	/** The host's ribbon tabs (`ribbonAddIns` option, `setRibbonAddIns`). */
+	private ribbonAddIns: readonly RibbonAddInTab[];
 	/** The host `customization` option + the imperative API's live edits. */
 	protected readonly customization: ViewerCustomizationLifecycle;
 
@@ -226,6 +229,7 @@ export class PptxViewer extends ViewerCustomizationHost implements PptxViewerIns
 		this.doc = container.ownerDocument;
 		this.options = options;
 		this.customization = createViewerCustomizationLifecycle(options);
+		this.ribbonAddIns = options.ribbonAddIns ?? [];
 		this.requestedEditable = options.editable ?? false;
 		const storedPrefs = readStoredViewerPrefs();
 		this.availableThemes = options.availableThemes ?? THEME_CATALOG;
@@ -397,6 +401,7 @@ export class PptxViewer extends ViewerCustomizationHost implements PptxViewerIns
 			this.doc.head.appendChild(this.userFontsStyle);
 		}
 		this.lifecycle = mountChrome(buildMountChromeDeps(this));
+		this.lifecycle.chrome.ribbon?.setRibbonAddIns(this.ribbonAddIns);
 		this.editor = createEditorController({
 			doc: this.doc,
 			store: this.store,
@@ -2084,6 +2089,12 @@ export class PptxViewer extends ViewerCustomizationHost implements PptxViewerIns
 		return this.customization.getChromeOptions();
 	}
 
+	/** Replace the host's ribbon tabs (the `ribbonAddIns` option); an empty list removes them. */
+	setRibbonAddIns(tabs: readonly RibbonAddInTab[]): void {
+		this.ribbonAddIns = tabs ?? [];
+		this.lifecycle?.chrome.ribbon?.setRibbonAddIns(this.ribbonAddIns);
+	}
+
 	/** The live resolved UI customisation (every render site reads this). */
 	getResolvedCustomization(): ResolvedCustomization {
 		return this.customization.getResolved();
@@ -2102,6 +2113,7 @@ export class PptxViewer extends ViewerCustomizationHost implements PptxViewerIns
 	private remountChrome(): void {
 		unmountChrome(this.lifecycle, () => this.editor?.detachChrome());
 		this.lifecycle = mountChrome(buildMountChromeDeps(this));
+		this.lifecycle.chrome.ribbon?.setRibbonAddIns(this.ribbonAddIns);
 		// Re-apply option-driven chrome behavior (ribbon visibility, ScreenTips,
 		// quick access) against the freshly mounted chrome.
 		this.optionsController.applyAll();

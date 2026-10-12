@@ -35,8 +35,8 @@ npm install react react-dom framer-motion lucide-react react-icons jspdf jszip f
 ## Quick start
 
 ```tsx
-import { useState } from 'react';
 import { PowerPointViewer } from '@christophervr/pptx-viewer';
+import { useState } from 'react';
 // Not using Tailwind? Import the bundled stylesheet once at your app entry
 // (styles ship under the real package name):
 import 'pptx-react-viewer/styles';
@@ -65,8 +65,8 @@ The component fills its parent, so give the parent a height. That's the whole se
 To read the edited presentation back out as bytes, pass a `ref` and call `getContent()`:
 
 ```tsx
-import { useRef } from 'react';
 import { PowerPointViewer, type PowerPointViewerHandle } from '@christophervr/pptx-viewer';
+import { useRef } from 'react';
 
 const viewerRef = useRef<PowerPointViewerHandle>(null);
 

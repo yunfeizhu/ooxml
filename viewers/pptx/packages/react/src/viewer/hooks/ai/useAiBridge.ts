@@ -1,3 +1,13 @@
+import type {
+	PptxAiBridge,
+	PptxAiDataUpdater,
+	PptxAiDeckMeta,
+	PptxAiElementUpdate,
+	PptxAiFocusedTarget,
+	PptxAiNotifyLevel,
+	PptxAiSlidesUpdater,
+} from 'ooxml-ui/pptx/ai';
+import { applyElementUpdate, computeFocusTargets, deckDataFieldChanged } from 'ooxml-ui/pptx/ai';
 /**
  * useAiBridge: builds a stable {@link PptxAiBridge} that lets the
  * framework-agnostic AI core (`pptx-viewer-shared/ai`) read the open deck,
@@ -22,20 +32,6 @@ import type {
 	PptxTheme,
 	PptxViewProperties,
 } from 'pptx-viewer-core';
-import type {
-	PptxAiBridge,
-	PptxAiDataUpdater,
-	PptxAiDeckMeta,
-	PptxAiElementUpdate,
-	PptxAiFocusedTarget,
-	PptxAiNotifyLevel,
-	PptxAiSlidesUpdater,
-} from 'ooxml-ui/pptx/ai';
-import {
-	applyElementUpdate,
-	computeFocusTargets,
-	deckDataFieldChanged,
-} from 'ooxml-ui/pptx/ai';
 import type { RefObject } from 'react';
 import { useMemo, useRef } from 'react';
 

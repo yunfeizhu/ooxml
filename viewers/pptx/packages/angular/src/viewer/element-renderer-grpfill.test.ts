@@ -1,6 +1,7 @@
 import { dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
+import { getGroupChildParentFill, resolveGroupChildFill } from 'ooxml-ui/pptx';
 /**
  * `a:grpFill` inheritance through NESTED groups, for the Angular renderer.
  *
@@ -19,7 +20,6 @@ import { fileURLToPath } from 'node:url';
 import type { PptxElement, ShapeStyle } from 'pptx-viewer-core';
 import { describe, expect, it } from 'vitest';
 
-import { getGroupChildParentFill, resolveGroupChildFill } from 'ooxml-ui/pptx';
 import { componentSource as readComponentSource } from './component-source.test-support';
 
 const componentSource = readComponentSource(

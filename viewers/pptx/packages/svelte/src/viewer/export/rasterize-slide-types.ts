@@ -1,10 +1,10 @@
-import type { PptxSlide } from 'pptx-viewer-core';
 import type {
 	CanvasSize,
 	FieldSubstitutionContext,
 	RasterizeElementResult,
 	RasterizeElementTilesResult,
 } from 'ooxml-ui/pptx';
+import type { PptxSlide } from 'pptx-viewer-core';
 
 import type { Translator } from '../../i18n/translator';
 

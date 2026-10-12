@@ -1,10 +1,6 @@
-import type { PptxSlide, ShapePptxElement } from 'pptx-viewer-core';
-import type {
-	EditPointsCommandId,
-	EditPointsElementPatch,
-	FreeformToolKind,
-} from 'ooxml-ui/pptx';
+import type { EditPointsCommandId, EditPointsElementPatch, FreeformToolKind } from 'ooxml-ui/pptx';
 import { canEditElementPoints } from 'ooxml-ui/pptx';
+import type { PptxSlide, ShapePptxElement } from 'pptx-viewer-core';
 import type React from 'react';
 import { useEffect } from 'react';
 

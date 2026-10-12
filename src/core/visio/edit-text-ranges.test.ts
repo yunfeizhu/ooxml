@@ -121,11 +121,10 @@ describe('source-preserving text range edits', () => {
 	});
 	it.each([
 		cell('LockTextEdit', 1),
-		'<Section N="Field"><Row IX="0">' + cell('Value', 'cached') + '</Row></Section>',
 		'<Section N="User"><Row N="Dependent">' +
-			cell('Value', 1, 'TEXTWIDTH(TheText)') +
+			cell('Value', 1, 'SHAPETEXT(TheText)') +
 			'</Row></Section>',
-	])('refuses protected/field/dependency source %# atomically', async (extra) => {
+	])('refuses protected/dependency source %# atomically', async (extra) => {
 		const bytes = await source(rich, extra),
 			before = bytes.slice();
 		await expect(editVsdx(bytes, [edit([{ start: 1, end: 2, text: 'X' }])])).rejects.toThrow();

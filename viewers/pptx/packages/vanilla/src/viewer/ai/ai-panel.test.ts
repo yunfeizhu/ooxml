@@ -1,4 +1,3 @@
-import type { PptxSlide } from 'pptx-viewer-core';
 import type {
 	PptxAiBridge,
 	PptxAiConfig,
@@ -6,6 +5,7 @@ import type {
 	VanillaChatSnapshot,
 } from 'ooxml-ui/pptx/ai';
 import { createAiChangeAnimator, ProposalStore } from 'ooxml-ui/pptx/ai';
+import type { PptxSlide } from 'pptx-viewer-core';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { createTranslator } from '../i18n';

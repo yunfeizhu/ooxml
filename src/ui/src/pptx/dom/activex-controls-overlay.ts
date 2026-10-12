@@ -37,6 +37,7 @@ export function buildActiveXControlsOverlay(
 			const img = createEl(doc, 'img', 'pptxv-activex-overlay-image', style);
 			img.src = view.imageUrl;
 			img.alt = view.label;
+			img.setAttribute('draggable', 'false');
 			img.title = `ActiveX control: ${view.label}`;
 			overlay.appendChild(img);
 			return;

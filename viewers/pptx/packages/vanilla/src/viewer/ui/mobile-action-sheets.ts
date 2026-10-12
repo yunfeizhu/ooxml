@@ -1,4 +1,3 @@
-import type { PptxComment, PptxSlide } from 'pptx-viewer-core';
 import type {
 	MobileBarId,
 	MobileBarRequestEvent,
@@ -13,6 +12,7 @@ import {
 	slideTitle,
 	toggleSheet,
 } from 'ooxml-ui/pptx';
+import type { PptxComment, PptxSlide } from 'pptx-viewer-core';
 
 import type { Translator } from '../i18n';
 import { createEl } from '../render';

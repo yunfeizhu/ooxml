@@ -1,4 +1,12 @@
 {
+	// Release-written changelogs and captured test artefacts are not hand-formatted.
+	"ignorePatterns": [
+		"**/CHANGELOG.md",
+		"**/__fixtures__/**",
+		"**/__snapshots__/**",
+		"**/excel-*.json",
+		"**/evidence.json"
+	],
 	"singleQuote": true,
 	"useTabs": true,
 	"printWidth": 100,

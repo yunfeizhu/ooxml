@@ -1,4 +1,3 @@
-import type { PptxSlide } from 'pptx-viewer-core';
 import {
 	applySorterAction,
 	sorterMenuContext,
@@ -8,6 +7,7 @@ import {
 	sorterGridColumns,
 	slideSorterPasteIndexes,
 } from 'ooxml-ui/pptx';
+import type { PptxSlide } from 'pptx-viewer-core';
 import { useCallback, useMemo, useRef, useState } from 'react';
 import type React from 'react';
 

@@ -15,7 +15,6 @@ import {
 	CUSTOM_ELEMENTS_SCHEMA,
 } from '@angular/core';
 import { TranslatePipe } from '@ngx-translate/core';
-
 import { SHORTCUT_REFERENCE_ITEMS, TOOLBAR_TABS } from 'ooxml-ui/pptx';
 import type { ToolbarTabId, ViewerOptions } from 'ooxml-ui/pptx';
 

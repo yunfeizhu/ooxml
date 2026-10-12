@@ -1,4 +1,3 @@
-import type { PptxElement, PptxSlide } from 'pptx-viewer-core';
 import {
 	HIDDEN_SLIDE_LABEL_KEY,
 	EDITOR_THUMBNAIL_WIDTH,
@@ -6,6 +5,7 @@ import {
 	HIDDEN_SLIDE_SLASH_GRADIENT,
 	hiddenSlideCue,
 } from 'ooxml-ui/pptx';
+import type { PptxElement, PptxSlide } from 'pptx-viewer-core';
 import React, { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { LuEyeOff, LuMessageSquare } from 'react-icons/lu';

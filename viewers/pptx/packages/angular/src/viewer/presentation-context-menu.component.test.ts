@@ -10,9 +10,9 @@
 import { dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
+import { getPresentationContextMenuSections } from 'ooxml-ui/pptx';
 import { describe, expect, it } from 'vitest';
 
-import { getPresentationContextMenuSections } from 'ooxml-ui/pptx';
 import { componentSource } from './component-source.test-support';
 
 const here = dirname(fileURLToPath(import.meta.url));

@@ -1,3 +1,4 @@
+// @vitest-environment jsdom
 import { afterEach, expect, it, vi } from 'vitest';
 import JSZip from 'jszip';
 import { setupFormattingViewer as setup } from './__fixtures__/formatting-viewer';

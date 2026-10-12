@@ -1,6 +1,6 @@
-import type { PptxSection, PptxSlide } from 'pptx-viewer-core';
 import { groupSlidesBySection, sectionAddAfterSlideIndex } from 'ooxml-ui/pptx';
 import type { SectionContextMenuCommandId } from 'ooxml-ui/pptx';
+import type { PptxSection, PptxSlide } from 'pptx-viewer-core';
 
 import type { Translator } from '../i18n';
 import { createEl } from '../render';

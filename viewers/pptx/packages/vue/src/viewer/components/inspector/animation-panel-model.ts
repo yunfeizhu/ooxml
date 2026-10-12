@@ -1,3 +1,5 @@
+import { animationEffectLabel } from 'ooxml-ui/pptx';
+import type { AnimationLabelTranslate } from 'ooxml-ui/pptx';
 /* oxlint-disable eslint/one-var -- each exported helper below declares its own
    independent locals; merging unrelated declarations across the many
    functions here would hurt readability, not help it. */
@@ -8,8 +10,6 @@ import type {
 	PptxElementAnimation,
 } from 'pptx-viewer-core';
 import { ooxmlToPresetName } from 'pptx-viewer-core';
-import { animationEffectLabel } from 'ooxml-ui/pptx';
-import type { AnimationLabelTranslate } from 'ooxml-ui/pptx';
 
 export type AnimationCategory = 'entrance' | 'emphasis' | 'exit';
 

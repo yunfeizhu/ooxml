@@ -1,11 +1,11 @@
-import type { PptxElement, PptxElementWithText, TextSegment, TextStyle } from 'pptx-viewer-core';
-import { hasTextProperties, getSubstituteFontFamily } from 'pptx-viewer-core';
 import type { EnvelopeGlyphPlacement, EnvelopeSegmentInput } from 'ooxml-ui/pptx';
 import {
 	buildGlyphEnvelopeBlock,
 	groupIntoParagraphs as sharedGroupIntoParagraphs,
 	hasGlyphEnvelope,
 } from 'ooxml-ui/pptx';
+import type { PptxElement, PptxElementWithText, TextSegment, TextStyle } from 'pptx-viewer-core';
+import { hasTextProperties, getSubstituteFontFamily } from 'pptx-viewer-core';
 /**
  * SVG textPath-based text warp (WordArt) React component.
  *

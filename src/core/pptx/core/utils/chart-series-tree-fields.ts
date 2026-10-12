@@ -44,6 +44,7 @@ export type SeriesTreeFields = Pick<
 	PptxChartSeries,
 	| 'color'
 	| 'gradientFill'
+	| 'lineGradientFill'
 	| 'trendlines'
 	| 'errBars'
 	| 'dataPoints'
@@ -101,9 +102,14 @@ export function readSeriesTreeFields(
 		Number.isFinite(lineWidthEmu) && lineWidthEmu > 0 ? lineWidthEmu / EMU_PER_POINT : undefined;
 	const dash = xml.getChildByLocalName(line, 'prstDash')?.['@_val'];
 	const uniqueId = parseChartUniqueId(seriesNode, reader.localName);
+	const lineGradientFill =
+		codec && isLineDrawnChartType(containerChartType)
+			? parseChartGradientFill(line, xml, codec)
+			: undefined;
 	return {
 		color,
 		...(codec ? seriesGradientFill(spPr, xml, codec) : {}),
+		...(lineGradientFill ? { lineGradientFill } : {}),
 		...(trendlines.length > 0 ? { trendlines } : {}),
 		...(errBars.length > 0 ? { errBars } : {}),
 		...(dataPoints.length > 0 ? { dataPoints } : {}),

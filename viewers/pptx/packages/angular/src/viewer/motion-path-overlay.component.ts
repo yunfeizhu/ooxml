@@ -31,8 +31,6 @@ import {
 	viewChild,
 } from '@angular/core';
 import { TranslatePipe } from '@ngx-translate/core';
-import type { PptxElement, PptxElementAnimation } from 'pptx-viewer-core';
-
 import {
 	isEditableMotionPath,
 	motionPathEndPixel,
@@ -41,6 +39,7 @@ import {
 	setMotionPathEnd,
 } from 'ooxml-ui/pptx';
 import type { CanvasSize, MotionPathFrame } from 'ooxml-ui/pptx';
+import type { PptxElement, PptxElementAnimation } from 'pptx-viewer-core';
 
 /** Live drag state: which pointer owns the handle and where it last was. */
 interface EndHandleDrag {

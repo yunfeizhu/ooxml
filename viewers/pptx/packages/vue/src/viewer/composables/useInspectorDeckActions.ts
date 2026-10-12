@@ -1,3 +1,5 @@
+import type { SlideSizeEmu, SlideSizeRescaleMode } from 'ooxml-ui/pptx';
+import { scaleSlidesForSizeChange } from 'ooxml-ui/pptx';
 import type {
 	PptxAppProperties,
 	PptxCoreProperties,
@@ -7,8 +9,6 @@ import type {
 	PptxSlideMaster,
 	PptxTagCollection,
 } from 'pptx-viewer-core';
-import type { SlideSizeEmu, SlideSizeRescaleMode } from 'ooxml-ui/pptx';
-import { scaleSlidesForSizeChange } from 'ooxml-ui/pptx';
 import { ref } from 'vue';
 import type { Ref, ShallowRef } from 'vue';
 

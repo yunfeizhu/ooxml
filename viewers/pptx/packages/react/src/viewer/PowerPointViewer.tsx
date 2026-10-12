@@ -22,6 +22,7 @@ import type {
 	CollabLoadOrigin,
 	CollaborationLivePatcher,
 	DeckSaveState,
+	RibbonAddInTab,
 	ViewerAddinStatus,
 	ViewerSettings,
 } from 'ooxml-ui/pptx';
@@ -103,6 +104,7 @@ import { RunProgramNotices } from './components/RunProgramNotices';
 import { SettingsDialog } from './components/SettingsDialog';
 import { ShapeFormatContext } from './components/shape-format-context';
 import { AccountAuthContext } from './components/toolbar/account-auth-context';
+import { RibbonAddInsContext } from './components/toolbar/ribbon-add-ins';
 import { ViewerCustomizationContext } from './components/viewer-customization-context';
 import { ViewerDialogGroup } from './components/ViewerDialogGroup';
 import { ViewerMainContent } from './components/ViewerMainContent';
@@ -147,6 +149,9 @@ export { getAnimationInitialStyle } from './utils/animation';
 /* ------------------------------------------------------------------ */
 /*  Component                                                         */
 /* ------------------------------------------------------------------ */
+
+/** Stable empty list, so a viewer without host tabs never re-renders its ribbon for them. */
+const NO_RIBBON_ADD_INS: readonly RibbonAddInTab[] = [];
 
 /**
  * Root React component for the PowerPoint viewer/editor.
@@ -196,6 +201,7 @@ export const PowerPointViewer = forwardRef<PowerPointViewerHandle, PowerPointVie
 			areaChart3D = false,
 			pieChart3D = false,
 			hiddenActions: legacyHiddenActions,
+			ribbonAddIns,
 			ai,
 			customization,
 			initialSlide,
@@ -1602,60 +1608,62 @@ export const PowerPointViewer = forwardRef<PowerPointViewerHandle, PowerPointVie
 			// the user changed in the Options dialog.
 			<ViewerOptionsProvider options={viewerOptions} store={optionsStore}>
 				<ViewerCustomizationContext.Provider value={customizationResolved}>
-					<AccountAuthContext.Provider value={accountAuth}>
-						<Rendering3DFlagsContext.Provider value={effective3D}>
-							<ViewerThemeProvider theme={effectiveTheme}>
-								<CollaborationProvider
-									config={collaboration}
-									canvasWidth={canvasSize.width}
-									canvasHeight={canvasSize.height}
-								>
-									<CollaborationDocumentSync
-										slides={slides}
-										templateElementsBySlideId={templateElementsBySlideId}
-										setSlides={state.setSlides}
-										content={content}
-										loadVersion={loadVersion}
-										loadOrigin={loadOrigin}
-										livePatcher={state.livePatcher}
-										onReadOnlyChange={setCollaborationReadOnly}
-										deckSaveState={{
-											headerFooter: state.headerFooter,
-											presentationProperties: state.presentationProperties,
-											viewProperties: state.viewProperties,
-											customShows: state.customShows,
-											sections: state.sections,
-											coreProperties: state.coreProperties,
-											appProperties: state.appProperties,
-											customProperties: state.customProperties,
-											tagCollections: state.tagCollections,
-											slideMasters: state.slideMasters,
-											notesMaster: state.notesMaster,
-											handoutMaster: state.handoutMaster,
-											slideSize: resolveSlideSizeSelection({
-												current: state.slideSizeEmu,
-												canvas: canvasSize,
-											}).size,
-											tableStyleMap: state.tableStyleMap,
-											tableStylesDefaultId: state.tableStylesDefaultId,
-											tableStylesToDelete: state.tableStylesToDelete,
-											embedFonts: dialogs.embedFontsEnabled,
-										}}
-									/>
-									<CollaborationFollowLayer
-										activeSlideIndex={activeSlideIndex}
-										setActiveSlideIndex={state.setActiveSlideIndex}
-										slideCount={slides.length}
-									/>
-									<ShapeFormatContext.Provider value={shapeFormat}>
-										<RibbonGalleryCommandsContext.Provider value={ribbonGalleries}>
-											{viewerContent}
-										</RibbonGalleryCommandsContext.Provider>
-									</ShapeFormatContext.Provider>
-								</CollaborationProvider>
-							</ViewerThemeProvider>
-						</Rendering3DFlagsContext.Provider>
-					</AccountAuthContext.Provider>
+					<RibbonAddInsContext.Provider value={ribbonAddIns ?? NO_RIBBON_ADD_INS}>
+						<AccountAuthContext.Provider value={accountAuth}>
+							<Rendering3DFlagsContext.Provider value={effective3D}>
+								<ViewerThemeProvider theme={effectiveTheme}>
+									<CollaborationProvider
+										config={collaboration}
+										canvasWidth={canvasSize.width}
+										canvasHeight={canvasSize.height}
+									>
+										<CollaborationDocumentSync
+											slides={slides}
+											templateElementsBySlideId={templateElementsBySlideId}
+											setSlides={state.setSlides}
+											content={content}
+											loadVersion={loadVersion}
+											loadOrigin={loadOrigin}
+											livePatcher={state.livePatcher}
+											onReadOnlyChange={setCollaborationReadOnly}
+											deckSaveState={{
+												headerFooter: state.headerFooter,
+												presentationProperties: state.presentationProperties,
+												viewProperties: state.viewProperties,
+												customShows: state.customShows,
+												sections: state.sections,
+												coreProperties: state.coreProperties,
+												appProperties: state.appProperties,
+												customProperties: state.customProperties,
+												tagCollections: state.tagCollections,
+												slideMasters: state.slideMasters,
+												notesMaster: state.notesMaster,
+												handoutMaster: state.handoutMaster,
+												slideSize: resolveSlideSizeSelection({
+													current: state.slideSizeEmu,
+													canvas: canvasSize,
+												}).size,
+												tableStyleMap: state.tableStyleMap,
+												tableStylesDefaultId: state.tableStylesDefaultId,
+												tableStylesToDelete: state.tableStylesToDelete,
+												embedFonts: dialogs.embedFontsEnabled,
+											}}
+										/>
+										<CollaborationFollowLayer
+											activeSlideIndex={activeSlideIndex}
+											setActiveSlideIndex={state.setActiveSlideIndex}
+											slideCount={slides.length}
+										/>
+										<ShapeFormatContext.Provider value={shapeFormat}>
+											<RibbonGalleryCommandsContext.Provider value={ribbonGalleries}>
+												{viewerContent}
+											</RibbonGalleryCommandsContext.Provider>
+										</ShapeFormatContext.Provider>
+									</CollaborationProvider>
+								</ViewerThemeProvider>
+							</Rendering3DFlagsContext.Provider>
+						</AccountAuthContext.Provider>
+					</RibbonAddInsContext.Provider>
 				</ViewerCustomizationContext.Provider>
 			</ViewerOptionsProvider>
 		);

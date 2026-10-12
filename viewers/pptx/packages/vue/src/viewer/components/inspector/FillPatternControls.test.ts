@@ -1,7 +1,7 @@
 // oxlint-disable react-hooks/rules-of-hooks
 import { mount } from '@vue/test-utils';
-import type { PptxElement, ShapeStyle } from 'pptx-viewer-core';
 import { PATTERN_PRESET_OPTIONS } from 'ooxml-ui/pptx';
+import type { PptxElement, ShapeStyle } from 'pptx-viewer-core';
 import { describe, expect, it } from 'vitest';
 
 import FillPatternControls from './FillPatternControls.vue';

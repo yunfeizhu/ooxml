@@ -1,9 +1,5 @@
+import type { MasterViewCrudAction, MasterViewCrudActionId, MasterViewTarget } from 'ooxml-ui/pptx';
 import type { PptxHandler } from 'pptx-viewer-core';
-import type {
-	MasterViewCrudAction,
-	MasterViewCrudActionId,
-	MasterViewTarget,
-} from 'ooxml-ui/pptx';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { createTranslator } from '../i18n';

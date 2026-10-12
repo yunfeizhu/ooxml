@@ -13,14 +13,14 @@
  */
 import { computed, linkedSignal } from '@angular/core';
 import type { Signal, WritableSignal } from '@angular/core';
-import type { PptxElement } from 'pptx-viewer-core';
-
 import {
 	resolveActiveRibbonTab,
 	RIBBON_CONTEXTUAL_TABS,
 	visibleContextualTabs,
 } from 'ooxml-ui/pptx';
 import type { ResolvedCustomization, RibbonContextualTabId } from 'ooxml-ui/pptx';
+import type { PptxElement } from 'pptx-viewer-core';
+
 import type { RibbonTab } from './ribbon-types';
 
 export interface RibbonTabState {

@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import type { PptxChartData, PptxChartType, PptxElement } from 'pptx-viewer-core';
 import type { ChartViewModel, ElementAnimationState } from 'ooxml-ui/pptx';
 import {
 	chartPlaceholderLabel,
@@ -7,6 +6,7 @@ import {
 	resolveChartKind,
 	resolveRevealedChartData,
 } from 'ooxml-ui/pptx';
+import type { PptxChartData, PptxChartType, PptxElement } from 'pptx-viewer-core';
 import type { CSSProperties } from 'vue';
 import { computed, ref } from 'vue';
 import { useI18n } from 'vue-i18n';

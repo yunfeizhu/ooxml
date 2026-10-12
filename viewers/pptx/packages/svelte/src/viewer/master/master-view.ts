@@ -1,5 +1,5 @@
-import type { PptxSlide, PptxSlideLayout, PptxSlideMaster } from 'pptx-viewer-core';
 import { masterViewPseudoSlide } from 'ooxml-ui/pptx';
+import type { PptxSlide, PptxSlideLayout, PptxSlideMaster } from 'pptx-viewer-core';
 
 /**
  * Turn a parsed master (optionally overlaid with one of its layouts) into the

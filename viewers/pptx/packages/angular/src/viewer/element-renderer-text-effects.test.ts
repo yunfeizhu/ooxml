@@ -1,3 +1,4 @@
+import { buildRunEffectStyle, buildTextBody3DSceneStyle } from 'ooxml-ui/pptx';
 /**
  * Unit tests for the per-run text-effect wiring in `ElementRendererComponent`.
  *
@@ -12,7 +13,6 @@
 import type { TextStyle } from 'pptx-viewer-core';
 import { describe, expect, it } from 'vitest';
 
-import { buildRunEffectStyle, buildTextBody3DSceneStyle } from 'ooxml-ui/pptx';
 import type { StyleMap } from './element-style';
 
 describe('elementRenderer per-run text effects (shared builder wiring)', () => {

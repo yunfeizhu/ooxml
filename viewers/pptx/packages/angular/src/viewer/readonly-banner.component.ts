@@ -28,12 +28,12 @@ import {
 	output,
 } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-
 import type {
 	ReadOnlyBannerRequestEvent,
 	ReadOnlyBannerViewState,
 	ReadOnlyRecommendationKind,
 } from 'ooxml-ui/pptx';
+
 import type { ModifyPasswordErrorReason } from './load-notices.service';
 import { translationsSignal } from './translations-signal';
 

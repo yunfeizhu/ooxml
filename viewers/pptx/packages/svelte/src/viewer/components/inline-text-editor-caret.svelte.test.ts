@@ -1,10 +1,3 @@
-/**
- * Regression: mounting the inline editor must place the caret at the END of
- * the seeded text (typing appends), the contract shared by all five bindings
- * via the shared `placeCaretAtEnd`. Focus alone leaves the caret at the start,
- * which is the parity bug this pins.
- */
-import type { PptxElement, PptxSlide } from 'pptx-viewer-core';
 import type { InlineListController, YjsFactories } from 'ooxml-ui/pptx';
 import {
 	createCollaborationLivePatcher,
@@ -12,6 +5,13 @@ import {
 	findElementYMap,
 	reconcileSlidesInYDoc,
 } from 'ooxml-ui/pptx';
+/**
+ * Regression: mounting the inline editor must place the caret at the END of
+ * the seeded text (typing appends), the contract shared by all five bindings
+ * via the shared `placeCaretAtEnd`. Focus alone leaves the caret at the start,
+ * which is the parity bug this pins.
+ */
+import type { PptxElement, PptxSlide } from 'pptx-viewer-core';
 import { flushSync, mount, unmount, untrack } from 'svelte';
 import { describe, expect, it, vi } from 'vitest';
 import * as Y from 'yjs';

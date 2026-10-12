@@ -1,5 +1,5 @@
-import type { PptxElement, PptxElementAnimation, PptxSlide } from 'pptx-viewer-core';
 import { EFFECT_SOUND_CATALOGUE } from 'ooxml-ui/pptx';
+import type { PptxElement, PptxElementAnimation, PptxSlide } from 'pptx-viewer-core';
 import { flushSync, mount, unmount } from 'svelte';
 import { afterEach, describe, expect, it } from 'vitest';
 

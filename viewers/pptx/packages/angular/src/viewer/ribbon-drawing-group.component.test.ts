@@ -19,10 +19,10 @@
    across intervening statements within one) isn't a style choice, it would
    scramble the sequencing the test is asserting on. */
 import { Injector, runInInjectionContext } from '@angular/core';
+import { SHAPE_PRESET_DEFS, shapeFillChange, shapeOutlineChange } from 'ooxml-ui/pptx';
 import type { PptxElement, PptxSlide } from 'pptx-viewer-core';
 import { describe, expect, it } from 'vitest';
 
-import { SHAPE_PRESET_DEFS, shapeFillChange, shapeOutlineChange } from 'ooxml-ui/pptx';
 import { componentSource } from './component-source.test-support';
 import { newPresetShapeElement } from './editor-insert';
 import { EditorStateService } from './editor-state.service';

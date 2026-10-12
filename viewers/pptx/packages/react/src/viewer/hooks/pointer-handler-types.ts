@@ -1,8 +1,8 @@
+import type { CollaborationLivePatcher } from 'ooxml-ui/pptx';
 /**
  * Shared types for the usePointerHandlers hook and its extracted helpers.
  */
 import type { PptxElement, PptxSlide } from 'pptx-viewer-core';
-import type { CollaborationLivePatcher } from 'ooxml-ui/pptx';
 
 import type {
 	CanvasSize,

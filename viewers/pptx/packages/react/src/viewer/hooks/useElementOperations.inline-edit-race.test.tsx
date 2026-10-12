@@ -1,3 +1,5 @@
+import { buildParagraphs, elementBulletKind, remapTextToSegments } from 'ooxml-ui/pptx';
+import type { InlineTextEditSnapshot } from 'ooxml-ui/pptx';
 // @vitest-environment happy-dom
 /**
  * Mid-edit toolbar style race.
@@ -18,8 +20,6 @@
  * LIVE `inlineEditingText`, not the stale model segments.
  */
 import type { PptxElement, PptxSlide, TextSegment } from 'pptx-viewer-core';
-import { buildParagraphs, elementBulletKind, remapTextToSegments } from 'ooxml-ui/pptx';
-import type { InlineTextEditSnapshot } from 'ooxml-ui/pptx';
 import React, { act } from 'react';
 import { createRoot } from 'react-dom/client';
 import type { Root } from 'react-dom/client';
@@ -47,6 +47,7 @@ let container: HTMLDivElement;
 let root: Root;
 
 beforeEach(() => {
+	window.getSelection()?.removeAllRanges();
 	container = document.createElement('div');
 	document.body.appendChild(container);
 	root = createRoot(container);

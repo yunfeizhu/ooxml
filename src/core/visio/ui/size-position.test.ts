@@ -85,8 +85,12 @@ it('declines invalid input and unsupported candidates without mutating scene dat
 	).toBeUndefined();
 	expect(visioSizePositionState(page, 'missing')).toBeUndefined();
 	expect(page).toEqual(before);
+	// A stencil shape is sized and placed like a drawn one, unless its layer is locked or unknown.
 	shape.masterId = '1';
+	expect(visioSizePositionState(page, shape.id)).toMatchObject({ shapeId: shape.id });
+	shape.layerIds = ['locked'];
 	expect(visioSizePositionState(page, shape.id)).toBeUndefined();
+	delete shape.layerIds;
 	delete shape.masterId;
 	page.drawingToPageScale = 0;
 	expect(visioSizePositionState(page, shape.id)).toBeUndefined();

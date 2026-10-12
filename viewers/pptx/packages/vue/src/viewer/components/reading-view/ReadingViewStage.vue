@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { READING_VIEW_STAGE_ATTR } from 'ooxml-ui/pptx';
 /**
  * The slide surface inside Reading View.
  *
@@ -13,7 +14,6 @@
  * is reading the slide.
  */
 import type { PptxSlide } from 'pptx-viewer-core';
-import { READING_VIEW_STAGE_ATTR } from 'ooxml-ui/pptx';
 import type { CSSProperties } from 'vue';
 import { computed } from 'vue';
 

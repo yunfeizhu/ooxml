@@ -40,9 +40,9 @@ import {
 	LucideSparkles,
 } from '@lucide/angular';
 import { TranslatePipe } from '@ngx-translate/core';
-
 import { isActionHidden } from 'ooxml-ui/pptx';
 import type { ToolbarActionId } from 'ooxml-ui/pptx';
+
 import { toolbarVisibility } from './toolbar-visibility';
 import { ViewerCustomizationService } from './viewer-customization.service';
 
@@ -95,7 +95,7 @@ export function visibleOverflowItems(
 		TranslatePipe,
 		LucidePanelLeft,
 		LucidePanelRight,
-			LucidePlay,
+		LucidePlay,
 		LucideChevronDown,
 		LucidePlus,
 		LucideEllipsis,

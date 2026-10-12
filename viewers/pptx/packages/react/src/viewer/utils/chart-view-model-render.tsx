@@ -254,6 +254,7 @@ export function renderChartViewModel(
 							<linearGradient
 								key={`${elementId}-def-${i}`}
 								id={def.id}
+								gradientUnits={def.gradientUnits}
 								x1={def.x1}
 								y1={def.y1}
 								x2={def.x2}

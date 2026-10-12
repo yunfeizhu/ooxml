@@ -1,3 +1,4 @@
+import { translationsEn } from 'ooxml-ui/pptx/i18n';
 /**
  * Programmatic tables must be banded in React too.
  *
@@ -15,7 +16,6 @@
  * a particular helper was called.
  */
 import type { TablePptxElement } from 'pptx-viewer-core';
-import { translationsEn } from 'ooxml-ui/pptx/i18n';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it, vi } from 'vitest';
 

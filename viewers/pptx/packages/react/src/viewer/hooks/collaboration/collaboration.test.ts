@@ -1,3 +1,12 @@
+import type { YDocLike, YjsFactories } from 'ooxml-ui/pptx';
+import {
+	LOCAL_SYNC_ORIGIN,
+	observeYDocSlides,
+	reconcileSlidesInYDoc,
+	readSlidesFromYDoc,
+	sanitizeColor,
+	validateRoomId,
+} from 'ooxml-ui/pptx';
 /**
  * Tests for the real-time collaboration infrastructure.
  *
@@ -10,15 +19,6 @@
  * @module collaboration.test
  */
 import type { PptxSlide, PptxElement } from 'pptx-viewer-core';
-import type { YDocLike, YjsFactories } from 'ooxml-ui/pptx';
-import {
-	LOCAL_SYNC_ORIGIN,
-	observeYDocSlides,
-	reconcileSlidesInYDoc,
-	readSlidesFromYDoc,
-	sanitizeColor,
-	validateRoomId,
-} from 'ooxml-ui/pptx';
 import { describe, it, expect, vi, expectTypeOf } from 'vitest';
 import * as Y from 'yjs';
 

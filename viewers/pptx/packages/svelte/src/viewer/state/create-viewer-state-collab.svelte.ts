@@ -1,4 +1,3 @@
-import type { PptxSlide } from 'pptx-viewer-core';
 import type { AutosaveDisabledReason, CollaborationShellState } from 'ooxml-ui/pptx';
 import {
 	buildDeckSaveOptions,
@@ -6,6 +5,7 @@ import {
 	resolveAutosaveIntervalMs,
 	resolveCollaborationShellState,
 } from 'ooxml-ui/pptx';
+import type { PptxSlide } from 'pptx-viewer-core';
 
 import { CollaborationController, CollaborationDialogsState } from '../collab';
 import { useCollaborationPresenceEffects } from '../collab/collaboration-presence-effects.svelte';

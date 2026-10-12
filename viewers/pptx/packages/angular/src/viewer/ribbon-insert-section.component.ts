@@ -26,8 +26,6 @@ import {
 	viewChild,
 } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import type { PptxElement } from 'pptx-viewer-core';
-
 import { classifyMediaType, DEFAULT_INSERT_CHART_KIND } from 'ooxml-ui/pptx';
 import type {
 	FreeformToolKind,
@@ -35,6 +33,8 @@ import type {
 	RibbonInsertRequestEvent,
 	ShapePresetType,
 } from 'ooxml-ui/pptx';
+import type { PptxElement } from 'pptx-viewer-core';
+
 import {
 	newChartElement,
 	newPresetShapeElement,

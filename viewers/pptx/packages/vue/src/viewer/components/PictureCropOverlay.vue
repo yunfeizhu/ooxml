@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { buildCropOverlay, CROP_HANDLE_ARIA_KEY } from 'ooxml-ui/pptx';
+import type { CropElementUpdate } from 'ooxml-ui/pptx';
 /**
  * PictureCropOverlay: the on-canvas crop mode chrome for one picture.
  *
@@ -9,8 +11,6 @@
  * `buildCropOverlay` descriptor; the pointer wiring is `useCropOverlayDrag`.
  */
 import type { PptxElement } from 'pptx-viewer-core';
-import { buildCropOverlay, CROP_HANDLE_ARIA_KEY } from 'ooxml-ui/pptx';
-import type { CropElementUpdate } from 'ooxml-ui/pptx';
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 

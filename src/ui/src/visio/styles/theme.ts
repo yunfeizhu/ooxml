@@ -18,6 +18,12 @@ export const visioThemeAliases = `:host {
   --_vv-focus:var(--vv-focus,var(--office-ring,var(--_vv-accent)));
   --_vv-danger:var(--vv-danger,var(--office-danger,#b42318));
   --_vv-shadow:var(--vv-shadow,var(--office-shadow,0 2px 8px rgb(0 0 0 / 14%)));
+  --_vv-status-bg:var(--vv-status-background,var(--_vv-surface));
+  --_vv-status-ink:var(--vv-status-ink,var(--_vv-ink));
+}
+:host([status-bar='colorful']) {
+  --_vv-status-bg:var(--vv-status-background,var(--_vv-accent));
+  --_vv-status-ink:var(--vv-status-ink,var(--_vv-accent-ink));
 }
 `;
 

@@ -30,12 +30,8 @@ import {
 	output,
 } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
+import type { MobileBarIntent, MobileBarRequestEvent, MobileBarViewState } from 'ooxml-ui/pptx';
 
-import type {
-	MobileBarIntent,
-	MobileBarRequestEvent,
-	MobileBarViewState,
-} from 'ooxml-ui/pptx';
 import { translationsSignal } from './translations-signal';
 
 /** Which mobile sheet/panel is currently active (highlights its button). */

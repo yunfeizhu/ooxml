@@ -17,14 +17,14 @@
  */
 import { ChangeDetectionStrategy, Component, computed, input, output } from '@angular/core';
 import { TranslatePipe } from '@ngx-translate/core';
-import type { PptxElement, PptxSlide } from 'pptx-viewer-core';
-
 import {
 	PRESENTER_CONSOLE_CLASSES,
 	PRESENTER_LAYOUT_METRICS,
 	visibleTemplateElements as filterVisibleTemplateElements,
 } from 'ooxml-ui/pptx';
 import type { CanvasSize } from 'ooxml-ui/pptx';
+import type { PptxElement, PptxSlide } from 'pptx-viewer-core';
+
 import { SlideCanvasComponent } from './slide-canvas.component';
 
 /** One navigator tile: the slide to draw plus its position in the deck. */

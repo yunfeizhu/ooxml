@@ -32,6 +32,10 @@ export const VisioViewer = defineComponent({
 		pageIndex: { type: Number, default: undefined },
 		zoom: { type: Number, default: undefined },
 		showToolbar: { type: Boolean, default: undefined },
+		ribbonAddIns: {
+			type: Array as unknown as PropType<ViewerProperties['ribbonAddIns']>,
+			default: undefined,
+		},
 		events: Object as PropType<ViewerCallbacks>,
 	} satisfies Record<keyof ViewerProperties | 'events', unknown>,
 	emits: [...eventKeys],
@@ -89,4 +93,7 @@ export type {
 	CreateVsdxOptions,
 	ViewerEditState,
 	VsdxExportResult,
+	RibbonAddInCommand,
+	RibbonAddInGroup,
+	RibbonAddInTab,
 } from './common';

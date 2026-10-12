@@ -1,3 +1,4 @@
+import { translationsEn } from 'ooxml-ui/pptx/i18n';
 // @vitest-environment happy-dom
 /**
  * The phone console obeys the DESKTOP console's navigation rules.
@@ -15,7 +16,6 @@
  * divergence survived a whole parity pass.
  */
 import type { PptxSlide } from 'pptx-viewer-core';
-import { translationsEn } from 'ooxml-ui/pptx/i18n';
 import React, { act } from 'react';
 import { createRoot } from 'react-dom/client';
 import type { Root } from 'react-dom/client';

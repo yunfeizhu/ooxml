@@ -1,6 +1,5 @@
 import { ChangeDetectionStrategy, Component, CUSTOM_ELEMENTS_SCHEMA, output } from '@angular/core';
 import { TranslatePipe } from '@ngx-translate/core';
-
 import { RECORD_COMMAND_GROUPS } from 'ooxml-ui/pptx';
 
 @Component({

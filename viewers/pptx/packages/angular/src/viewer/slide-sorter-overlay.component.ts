@@ -9,8 +9,6 @@ import {
 	signal,
 } from '@angular/core';
 import { TranslatePipe } from '@ngx-translate/core';
-import type { PptxSlide } from 'pptx-viewer-core';
-
 import {
 	buildSlideSorterContextMenuEntries,
 	HIDDEN_SLIDE_LABEL_KEY,
@@ -34,6 +32,8 @@ import type {
 	SlideSorterContextMenuCommandId,
 	SlideSorterContextMenuEntry,
 } from 'ooxml-ui/pptx';
+import type { PptxSlide } from 'pptx-viewer-core';
+
 import { SlideCanvasComponent } from './slide-canvas.component';
 import { thumbnailHeight, thumbnailZoom } from './slide-sorter-overlay-helpers';
 

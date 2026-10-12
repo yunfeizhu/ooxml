@@ -1,5 +1,5 @@
-import type { PptxElement } from 'pptx-viewer-core';
 import { takePendingCaretPoint } from 'ooxml-ui/pptx';
+import type { PptxElement } from 'pptx-viewer-core';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 
 import type { EditorControllerDeps } from './editor-controller-deps';

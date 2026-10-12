@@ -9,7 +9,6 @@
  * one place in the Angular binding that touches that driver directly.
  */
 import { jsPDF } from 'jspdf';
-
 import {
 	canvasToJpegData,
 	isExportIgnoredElement,
@@ -26,6 +25,7 @@ import type {
 	RasterSourceRect,
 	RasterizeElementTilesResult,
 } from 'ooxml-ui/pptx';
+
 import { renderToCanvas } from '../lib/canvas-export';
 import { pdfPageSize } from './export-helpers';
 

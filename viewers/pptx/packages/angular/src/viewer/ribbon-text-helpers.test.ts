@@ -1,8 +1,4 @@
 import { Injector, runInInjectionContext, signal } from '@angular/core';
-import { hasTextProperties } from 'pptx-viewer-core';
-import type { PptxElement, PptxSlide, TextSegment } from 'pptx-viewer-core';
-import { describe, expect, it, vi } from 'vitest';
-
 import {
 	elementBulletKind,
 	buildParagraphs,
@@ -11,6 +7,10 @@ import {
 	attachInlineListController,
 } from 'ooxml-ui/pptx';
 import { remapTextToSegments } from 'ooxml-ui/pptx/render/remap-text';
+import { hasTextProperties } from 'pptx-viewer-core';
+import type { PptxElement, PptxSlide, TextSegment } from 'pptx-viewer-core';
+import { describe, expect, it, vi } from 'vitest';
+
 import { componentSource } from './component-source.test-support';
 import { EditorStateService } from './editor-state.service';
 import { RibbonParagraphControlsComponent } from './ribbon-paragraph-controls.component';

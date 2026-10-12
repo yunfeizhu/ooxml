@@ -1,12 +1,21 @@
 /**
  * Visio's rulers: inch scales along the top and left of the drawing window with 0 at the page's
  * left and bottom edges (vertical values grow upward, as in Visio). Drawn by the shared
- * `office-ui-ruler`; this module only lays them out and says where zero is. Viewer-only
- * presentation: nothing is read from or written to the document beyond the rendered page box.
+ * `office-ui-ruler`; this module only lays them out and says where zero is. The page's Ruler &
+ * Grid settings move zero (`RulerLook.originX`/`originY`, page inches from the lower-left corner)
+ * and thin the subdivisions.
  */
+export interface RulerLook {
+	originX: number;
+	originY: number;
+	/** Share of the subdivisions shown, 1 for Fine. */
+	densityX: number;
+	densityY: number;
+}
+const PLAIN: RulerLook = { originX: 0, originY: 0, densityX: 1, densityY: 1 };
 export interface Rulers {
 	element: HTMLElement;
-	render(visible: boolean, zoom: number): void;
+	render(visible: boolean, zoom: number, look?: RulerLook): void;
 	wire(): () => void;
 }
 
@@ -28,6 +37,7 @@ export function createRulers(viewport: HTMLElement): Rulers {
 	area.append(corner, top, left, viewport);
 	let visible = false;
 	let zoom = 1;
+	let look = PLAIN;
 	let frame = 0;
 	const place = () => {
 		frame = 0;
@@ -39,8 +49,10 @@ export function createRulers(viewport: HTMLElement): Rulers {
 		const scale = String(96 * zoom);
 		top.setAttribute('scale', scale);
 		left.setAttribute('scale', scale);
-		top.setAttribute('origin', String(page.left - base.left));
-		left.setAttribute('origin', String(page.bottom - base.top));
+		top.setAttribute('origin', String(page.left - base.left + look.originX * 96 * zoom));
+		left.setAttribute('origin', String(page.bottom - base.top - look.originY * 96 * zoom));
+		top.setAttribute('density', String(look.densityX));
+		left.setAttribute('density', String(look.densityY));
 	};
 	const schedule = () => {
 		if (!visible || frame) return;
@@ -49,9 +61,10 @@ export function createRulers(viewport: HTMLElement): Rulers {
 	};
 	return {
 		element: area,
-		render(nextVisible, nextZoom) {
+		render(nextVisible, nextZoom, nextLook = PLAIN) {
 			visible = nextVisible;
 			zoom = nextZoom;
+			look = nextLook;
 			area.dataset.ruler = String(visible);
 			schedule();
 		},

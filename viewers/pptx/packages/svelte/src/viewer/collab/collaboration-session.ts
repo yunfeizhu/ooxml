@@ -14,10 +14,7 @@ import type {
 	YDocLike,
 	YjsFactories,
 } from 'ooxml-ui/pptx';
-import {
-	borrowExternalCollaborationAwareness,
-	createSnapshotTextPositions,
-} from 'ooxml-ui/pptx';
+import { borrowExternalCollaborationAwareness, createSnapshotTextPositions } from 'ooxml-ui/pptx';
 
 import type { CollabProviderHandle } from './collaboration-provider';
 import { createCollabProvider } from './collaboration-provider';

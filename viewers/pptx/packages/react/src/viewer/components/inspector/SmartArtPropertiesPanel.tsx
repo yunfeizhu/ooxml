@@ -1,3 +1,5 @@
+import { rebuildDrawingShapesIfCleared } from 'ooxml-ui/pptx';
+import type { BoundingBox } from 'ooxml-ui/pptx';
 /* oxlint-disable eslint/one-var -- this component declares many independent
    locals across its render body; merging unrelated declarations would hurt
    readability, not help it. */
@@ -14,8 +16,6 @@ import {
 	setSmartArtNodeStyle,
 	updateSmartArtNodeText,
 } from 'pptx-viewer-core';
-import { rebuildDrawingShapesIfCleared } from 'ooxml-ui/pptx';
-import type { BoundingBox } from 'ooxml-ui/pptx';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 

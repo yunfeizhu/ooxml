@@ -108,6 +108,7 @@ describe('measureAutoFitContentHeightPx', () => {
 		el.style.overflow = 'hidden';
 		el.setAttribute('contenteditable', 'true');
 		document.body.appendChild(el);
+		const childCount = document.body.children.length;
 		try {
 			// jsdom does not compute real layout, but scrollHeight is settable on
 			// the underlying element and cloneNode carries inline styles/content,
@@ -118,7 +119,7 @@ describe('measureAutoFitContentHeightPx', () => {
 			expect(height).toBeTypeOf('number');
 			// The clone is appended/removed from the document, not the live node.
 			expect(document.body.contains(el)).toBeTruthy();
-			expect(document.body.children).toHaveLength(1);
+			expect(document.body.children).toHaveLength(childCount);
 		} finally {
 			document.body.removeChild(el);
 		}

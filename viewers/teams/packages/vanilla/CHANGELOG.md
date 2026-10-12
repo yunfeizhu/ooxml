@@ -7,6 +7,12 @@ A release listed with no entries carried no Conventional Commit in this package'
 scope: scripts/release-plan.mjs releases whenever any published file changes, not only on
 conventional commits.
 
+## [0.1.8](https://github.com/ChristopherVR/ooxml/releases/tag/openteams-vanilla-viewer@0.1.8) - 2026-10-11
+
+### Styling
+
+- Fix the oxfmt and oxlint warnings in the viewers ([db0314f](https://github.com/ChristopherVR/ooxml/commit/db0314f319e3d0508960872260792215477d9ca5))
+
 ## [0.1.7](https://github.com/ChristopherVR/ooxml/releases/tag/openteams-vanilla-viewer@0.1.7) - 2026-10-08
 
 ### Documentation

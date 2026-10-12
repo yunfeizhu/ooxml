@@ -13,7 +13,6 @@
  */
 import { DestroyRef, inject, signal } from '@angular/core';
 import type { Signal } from '@angular/core';
-
 import type { ViewerStore, ViewerStoreEquality } from 'ooxml-ui/pptx';
 
 export interface ViewerStoreSignal<T> {

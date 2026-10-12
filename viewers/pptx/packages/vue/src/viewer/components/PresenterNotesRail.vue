@@ -12,7 +12,6 @@
  * which is how four near-duplicate namespaces came to describe one console.
  */
 import { ChevronLeft, ChevronRight, Minus, Plus, X } from 'lucide-vue-next';
-import type { PptxSlide } from 'pptx-viewer-core';
 import type { AuthoredSlideRange } from 'ooxml-ui/pptx';
 import {
 	nextPresentedSlide,
@@ -21,6 +20,7 @@ import {
 	presenterNextDisabled,
 	presenterPrevDisabled,
 } from 'ooxml-ui/pptx';
+import type { PptxSlide } from 'pptx-viewer-core';
 import { computed, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 

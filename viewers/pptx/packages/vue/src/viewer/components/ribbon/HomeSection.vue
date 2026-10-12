@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { SlideTemplateId } from 'ooxml-ui/pptx';
 /**
  * HomeSection: the Vue 3 port of React's
  * `toolbar/HomeSection.tsx`. Renders the Home ribbon tab's Clipboard, Slides and
@@ -9,7 +10,6 @@
  * the copied/cut feedback flashes use a `ref` + `setTimeout`.
  */
 import type { PptxElement, PptxLayoutPreview } from 'pptx-viewer-core';
-import type { SlideTemplateId } from 'ooxml-ui/pptx';
 import { computed } from 'vue';
 
 import ClipboardGroup from './ClipboardGroup.vue';

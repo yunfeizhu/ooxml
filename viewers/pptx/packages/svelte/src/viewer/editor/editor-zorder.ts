@@ -1,4 +1,3 @@
-import type { PptxElement, PptxSlide } from 'pptx-viewer-core';
 import {
 	bringForward,
 	bringToFront,
@@ -6,6 +5,7 @@ import {
 	sendBackward,
 	sendToBack,
 } from 'ooxml-ui/pptx';
+import type { PptxElement, PptxSlide } from 'pptx-viewer-core';
 
 /**
  * Z-order (paint-order) reordering for the Svelte editor.

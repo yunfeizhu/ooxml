@@ -1,6 +1,6 @@
-import type { PptxSlide } from 'pptx-viewer-core';
 import { compareSlides, createViewerOptionsStore, THEME_CATALOG } from 'ooxml-ui/pptx';
 import { LOCALE_CATALOG } from 'ooxml-ui/pptx/i18n';
+import type { PptxSlide } from 'pptx-viewer-core';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { createTranslator } from '../i18n';

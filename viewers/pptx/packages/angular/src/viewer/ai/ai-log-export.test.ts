@@ -1,6 +1,6 @@
+import type { PptxAiChatStore, PptxAiStoredChat, PptxAiUIMessage } from 'ooxml-ui/pptx/ai';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-import type { PptxAiChatStore, PptxAiStoredChat, PptxAiUIMessage } from 'ooxml-ui/pptx/ai';
 import {
 	buildChatLogExport,
 	buildChatLogMarkdown,

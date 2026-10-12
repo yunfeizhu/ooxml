@@ -15,8 +15,8 @@
 
 import { computed, Injectable } from '@angular/core';
 import type { Signal } from '@angular/core';
-
 import { createViewerZoomStore, viewerZoomPercent } from 'ooxml-ui/pptx';
+
 import { viewerStoreSignal } from './viewer-store-signal';
 
 @Injectable()

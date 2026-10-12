@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Lock, LockOpen } from 'lucide-vue-next';
-import type { PptxElement } from 'pptx-viewer-core';
 import { elementLockTogglePatch, isElementLocked } from 'ooxml-ui/pptx';
+import type { PptxElement } from 'pptx-viewer-core';
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 

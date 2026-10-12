@@ -1,7 +1,7 @@
+import { buildParagraphs } from 'ooxml-ui/pptx';
 /* oxlint-disable eslint/one-var -- many independent `it()` blocks, each with
    its own short arrange/act/assert consts. */
 import type { PptxElement, PptxSlide } from 'pptx-viewer-core';
-import { buildParagraphs } from 'ooxml-ui/pptx';
 import { describe, expect, it, vi } from 'vitest';
 
 import { createTranslator } from '../i18n';

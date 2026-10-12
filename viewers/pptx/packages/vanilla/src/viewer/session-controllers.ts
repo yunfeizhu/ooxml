@@ -1,4 +1,3 @@
-import type { PptxHandler, PptxHandlerSaveOptions } from 'pptx-viewer-core';
 import type {
 	AutosaveActivation,
 	CollabLoadOrigin,
@@ -7,6 +6,7 @@ import type {
 	ToolbarActionId,
 } from 'ooxml-ui/pptx';
 import { publishLiveInlineText, resolveAutosaveFileKey } from 'ooxml-ui/pptx';
+import type { PptxHandler, PptxHandlerSaveOptions } from 'pptx-viewer-core';
 
 import type { AutosaveStatus } from './autosave';
 import { createAutosaveSession } from './autosave';

@@ -1,9 +1,5 @@
 import { checkFileAbort, withFileAbort, type FileOperationOptions } from './file-transfer';
-import {
-	storeAttachment,
-	storageFileName as fileName,
-	validateStorageFile,
-} from './stored-file';
+import { storeAttachment, storageFileName as fileName, validateStorageFile } from './stored-file';
 import { MAX_ATTACHMENTS, type Attachment } from './model';
 import type { TeamsClient, UploadableFile } from './store';
 

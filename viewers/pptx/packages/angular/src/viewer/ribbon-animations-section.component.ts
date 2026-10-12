@@ -15,6 +15,8 @@ import {
 	output,
 } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
+import { applyMotionPathPreset, playAnimationRibbonPreview } from 'ooxml-ui/pptx';
+import type { AnimationGroup, RibbonAnimationsRequestEvent } from 'ooxml-ui/pptx';
 import type {
 	PptxAnimationPreset,
 	PptxElement,
@@ -22,8 +24,6 @@ import type {
 	PptxSlide,
 } from 'pptx-viewer-core';
 
-import { applyMotionPathPreset, playAnimationRibbonPreview } from 'ooxml-ui/pptx';
-import type { AnimationGroup, RibbonAnimationsRequestEvent } from 'ooxml-ui/pptx';
 import {
 	removeAnimation,
 	setAnimationEmphasis,

@@ -78,6 +78,7 @@ export async function pointerViewer(protectedSecond = false, source = true, resi
 		},
 		controller,
 		vi.fn(),
+		(message) => feedback.push(message),
 	);
 	const group = (id = '1') => svg.querySelector<SVGGElement>(`[data-shape-id="${id}"]`)!;
 	const select = (ids = ['1']) =>

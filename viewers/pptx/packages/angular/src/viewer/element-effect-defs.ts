@@ -1,13 +1,3 @@
-/**
- * Renderer-injected shape-effect definitions that need a companion DOM node
- * (a soft-edge `<filter>` def, a DAG fill-overlay tint layer), plus the helper
- * that strips dangling `url(#…)` filter references.
- *
- * Kept out of `element-style.ts` so that module stays focused on producing the
- * base `[ngStyle]` maps. Mirrors the Vue/Svelte `ShapeEffectOverlay` split.
- */
-import type { PptxElement } from 'pptx-viewer-core';
-
 import {
 	buildStrokeOutline,
 	buildSubpathFillOverlay,
@@ -23,6 +13,16 @@ import type {
 	SubpathFillOverlay,
 	SvgFilterDefinition,
 } from 'ooxml-ui/pptx';
+/**
+ * Renderer-injected shape-effect definitions that need a companion DOM node
+ * (a soft-edge `<filter>` def, a DAG fill-overlay tint layer), plus the helper
+ * that strips dangling `url(#…)` filter references.
+ *
+ * Kept out of `element-style.ts` so that module stays focused on producing the
+ * base `[ngStyle]` maps. Mirrors the Vue/Svelte `ShapeEffectOverlay` split.
+ */
+import type { PptxElement } from 'pptx-viewer-core';
+
 import type { DuotoneFilterDef } from './duotone-filter';
 
 /** Injectable soft-edge `<filter>` descriptor (id + feather radius in px). */

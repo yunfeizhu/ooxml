@@ -1,9 +1,6 @@
 import { dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import type { MediaCaptionTrack, MediaPptxElement, PptxElement } from 'pptx-viewer-core';
-import { afterEach, describe, expect, it } from 'vitest';
-
 import {
 	MEDIA_FALLBACK_ICONS,
 	hasPersistentAudio,
@@ -12,6 +9,9 @@ import {
 	mediaFallbackLabelKey,
 	stopAllPersistentAudio,
 } from 'ooxml-ui/pptx';
+import type { MediaCaptionTrack, MediaPptxElement, PptxElement } from 'pptx-viewer-core';
+import { afterEach, describe, expect, it } from 'vitest';
+
 import { componentSource } from './component-source.test-support';
 import {
 	asMediaElement,

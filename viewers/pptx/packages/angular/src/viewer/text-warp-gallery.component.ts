@@ -1,8 +1,7 @@
 import { ChangeDetectionStrategy, Component, computed, input, output } from '@angular/core';
+import { TEXT_WARP_PRESETS, warpPreviewPath } from 'ooxml-ui/pptx';
 import type { PptxElement, PptxTextWarpPreset, TextStyle } from 'pptx-viewer-core';
 import { hasTextProperties } from 'pptx-viewer-core';
-
-import { TEXT_WARP_PRESETS, warpPreviewPath } from 'ooxml-ui/pptx';
 
 export function textWarpPatch(
 	element: PptxElement,

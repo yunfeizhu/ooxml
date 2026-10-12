@@ -1,5 +1,5 @@
-import type { PptxElement, PptxHandler, PptxSlide } from 'pptx-viewer-core';
 import type { RunProgramNotice } from 'ooxml-ui/pptx';
+import type { PptxElement, PptxHandler, PptxSlide } from 'pptx-viewer-core';
 /**
  * usePresentationSetup: Wires up `usePresentationAnnotations` and
  * `usePresentationMode` together with the annotation-aware mode-switching

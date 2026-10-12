@@ -1,3 +1,4 @@
+import { RULER_THICKNESS } from 'ooxml-ui/pptx';
 /**
  * Ruler-controller tests: the strips must repaint off STORE changes, not only
  * off stage renders. Toggling View > Rulers, changing the selection and zooming
@@ -5,7 +6,6 @@
  * render path would silently stop tracking them.
  */
 import type { PptxElement, PptxSlide } from 'pptx-viewer-core';
-import { RULER_THICKNESS } from 'ooxml-ui/pptx';
 import { describe, expect, it, vi } from 'vitest';
 
 import { createRulerController } from './ruler-controller';

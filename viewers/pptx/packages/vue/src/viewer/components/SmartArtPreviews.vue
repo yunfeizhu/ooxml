@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import type { PptxElement, SmartArtLayout } from 'pptx-viewer-core';
 import {
 	buildSmartArtPreviewElement,
 	SMARTART_PREVIEW_ELEMENT_HEIGHT,
 	SMARTART_PREVIEW_ELEMENT_WIDTH,
 } from 'ooxml-ui/pptx';
+import type { PptxElement, SmartArtLayout } from 'pptx-viewer-core';
 import { computed } from 'vue';
 
 import SmartArtRenderer from './SmartArtRenderer.vue';

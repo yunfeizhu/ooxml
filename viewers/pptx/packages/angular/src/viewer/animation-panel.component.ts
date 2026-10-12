@@ -28,9 +28,9 @@
 
 import { ChangeDetectionStrategy, Component, computed, inject, input, output } from '@angular/core';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
+import { animationEffectLabelKey, TRIGGER_OPTIONS } from 'ooxml-ui/pptx';
 import type { PptxAnimationTrigger, PptxElementAnimation } from 'pptx-viewer-core';
 
-import { animationEffectLabelKey, TRIGGER_OPTIONS } from 'ooxml-ui/pptx';
 import type { AnimationClickGroup } from './animation-playback-helpers';
 
 /** A single rendered playback step (one click group). */

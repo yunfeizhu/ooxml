@@ -1,3 +1,10 @@
+import {
+	commitElementUpdateBatch,
+	clampZoomScale,
+	prepareElementForInsertion,
+	slideSpaceElement,
+} from 'ooxml-ui/pptx';
+import type { ViewerCustomizationApi, ViewerMode } from 'ooxml-ui/pptx';
 /**
  * useViewerApi: assemble the imperative handle the SFC hands to
  * `defineExpose`.
@@ -9,13 +16,6 @@
  * Building it here also makes the contract diffable against the other bindings.
  */
 import type { PptxElement, PptxSlide } from 'pptx-viewer-core';
-import {
-	commitElementUpdateBatch,
-	clampZoomScale,
-	prepareElementForInsertion,
-	slideSpaceElement,
-} from 'ooxml-ui/pptx';
-import type { ViewerCustomizationApi, ViewerMode } from 'ooxml-ui/pptx';
 import type { ComputedRef, Ref, ShallowRef } from 'vue';
 
 import type { PowerPointViewerExpose } from '../types';

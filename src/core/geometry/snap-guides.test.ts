@@ -1,12 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import {
-	computeSnap,
-	computeSnapToShape,
-	snapBox,
-	snapToGridStep,
-	snapValue,
-} from './snap-guides';
+import { computeSnap, computeSnapToShape, snapBox, snapToGridStep, snapValue } from './snap-guides';
 import type { SnapBox, SnapGuide, SnapResult } from './snap-guides';
 
 // ---------------------------------------------------------------------------

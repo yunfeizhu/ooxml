@@ -1,3 +1,4 @@
+// @vitest-environment jsdom
 import { afterEach, describe, expect, it } from 'vitest';
 import type { VisioEdit } from 'ooxml-core/visio';
 import { ViewerController } from './controller';
@@ -209,6 +210,47 @@ describe('Visio ribbon commands', () => {
 		expect(readOnly.commands.tool).toBe('pointer');
 		expect(readOnly.command('connector').disabled).toBe(true);
 	});
+	it('arms the Connection Point tool, toggles point markers and restyles connectors', async () => {
+		const model = structuredClone(demoDocument);
+		const page = model.pages[0]!;
+		Object.assign(page.shapes[0]!, { id: '9', kind: 'connector', connectorRoute: 'straight' });
+		const ui = await setup(true, false, model);
+		expect(ui.command('connection-point').disabled).toBe(false);
+		expect(ui.command('connection-point').hasAttribute('data-unsupported')).toBe(false);
+		ui.press('connection-point');
+		expect(ui.commands.tool).toBe('connection-point');
+		expect(ui.viewport.dataset.tool).toBe('connection-point');
+		ui.key({ key: '1', ctrlKey: true });
+		ui.key({ key: '!', code: 'Digit1', ctrlKey: true, shiftKey: true });
+		expect(ui.commands.tool).toBe('connection-point');
+		expect(ui.check('connection-points').checked).toBe(true);
+		expect(ui.check('connection-points').hasAttribute('disabled')).toBe(false);
+		ui.commands.run({ type: 'connection-points' });
+		expect(ui.check('connection-points').checked).toBe(false);
+		// Design > Connectors restyles the selected connector; the menu shows its route.
+		ui.controller.selectShape({ id: page.shapes[0]!.id, name: 'c', pageId: page.id });
+		expect(ui.command('connectors-straight').getAttribute('checked')).toBe('true');
+		ui.commands.run({ type: 'connector-route', route: 'curved', scope: 'selection' });
+		await ui.settle();
+		expect(ui.edits.at(-1)).toEqual([
+			{
+				type: 'set-connector-route',
+				pageId: page.id,
+				shapeId: page.shapes[0]!.id,
+				route: 'curved',
+			},
+		]);
+		// Insert > Connector sets the route of new connectors and arms the Connector tool.
+		ui.commands.run({ type: 'connector-route', route: 'straight', scope: 'tool' });
+		expect(ui.commands.tool).toBe('connector');
+		expect(ui.command('insert-connector-straight').getAttribute('checked')).toBe('true');
+		expect(ui.command('insert-connector-right-angle').getAttribute('checked')).toBe('false');
+		const readOnly = await setup(false);
+		expect(readOnly.command('connection-point').disabled).toBe(true);
+		expect(readOnly.command('connectors-curved').disabled).toBe(true);
+		ui.dispose();
+		readOnly.dispose();
+	});
 	it('turns shared button activation into typed ribbon actions', async () => {
 		const { root, press } = await setup();
 		const actions: unknown[] = [];
@@ -217,11 +259,11 @@ describe('Visio ribbon commands', () => {
 		root.addEventListener('office-command', (event) => raw.push((event as CustomEvent).detail));
 		press('rectangle');
 		press('page-width');
-		press('inspector');
+		press('shapes');
 		expect(actions).toEqual([
 			{ type: 'tool', tool: 'rectangle' },
 			{ type: 'zoom', mode: 'width' },
-			{ type: 'pane', pane: 'inspector' },
+			{ type: 'pane', pane: 'shapes' },
 		]);
 		expect(raw).toEqual([]);
 	});
@@ -241,10 +283,9 @@ describe('Visio ribbon commands', () => {
 	it('routes shared office-command buttons to pane, zoom and tool commands', async () => {
 		const { calls, command, press, check, viewport, controller } = await setup();
 		press('shapes');
-		press('layer-properties');
 		press('zoom-fit');
 		press('page-width');
-		expect(calls).toEqual(['pane:shapes', 'reveal:layers:false', 'fit:page', 'fit:width']);
+		expect(calls).toEqual(['pane:shapes', 'fit:page', 'fit:width']);
 		press('rectangle');
 		expect(command('rectangle').hasAttribute('data-active')).toBe(true);
 		expect(command('rectangle-item').getAttribute('checked')).toBe('true');
@@ -260,14 +301,14 @@ describe('Visio ribbon commands', () => {
 	});
 
 	it('deletes the selection with Delete, then undoes and redoes with Visio shortcuts', async () => {
-		const { controller, command, edits, key, settle, calls } = await setup();
-		expect(command('undo').disabled).toBe(true);
+		const { controller, edits, key, settle, calls } = await setup();
+		expect(controller.state.edit.canUndo).toBe(false);
 		controller.selectShape({ id: 's1', name: 'Start', pageId: '1' });
 		key({ key: 'Delete' });
 		await settle();
 		expect(edits).toEqual([[{ type: 'delete-shape', pageId: '1', shapeId: 's1' }]]);
 		expect(calls).toContain('Deleted Start.');
-		expect(command('undo').disabled).toBe(false);
+		expect(controller.state.edit.canUndo).toBe(true);
 		key({ key: 'z', ctrlKey: true });
 		await settle();
 		expect(controller.state.edit.canRedo).toBe(true);
@@ -305,7 +346,7 @@ describe('Visio ribbon commands', () => {
 	it('keeps drawing and deletion unavailable for model-only documents', async () => {
 		const { controller, command, key, edits, settle } = await setup(false);
 		expect(command('rectangle').disabled).toBe(true);
-		expect(command('rectangle').title).toMatch(/model-only/i);
+		expect(command('rectangle').title).toMatch(/open a .vsdx file/i);
 		key({ key: '8', ctrlKey: true });
 		expect(command('pointer').getAttribute('pressed')).toBe('true');
 		controller.selectShape({ id: 's1', name: 'Start', pageId: '1' });
@@ -349,10 +390,12 @@ describe('Visio context menus', () => {
 		expect(viewer.controller.state.selectedShape?.id).toBe('s1');
 		const cut = menu.querySelector<HTMLElement & { disabled: boolean }>('[command="ctx-cut"]')!;
 		expect(cut.disabled).toBe(true);
-		expect(cut.getAttribute('title')).toMatch(/Model-only documents are read only/);
+		expect(cut.getAttribute('title')).toMatch(/Open a .vsdx file/);
 		menu.querySelector('[command="ctx-edit-text"]')!.shadowRoot!.querySelector('button')!.click();
 		expect(menu.open).toBe(false);
-		expect(root.querySelector<HTMLDetailsElement>('.edit-controls')!.open).toBe(true);
+		// Edit Text edits in place; this model-only drawing has no source to edit.
+		expect(root.querySelector('#edit-text')).toBeNull();
+		expect(root.querySelector('[data-status]')!.textContent).toBe('This drawing cannot be edited.');
 		root
 			.querySelector('.viewport')!
 			.dispatchEvent(new MouseEvent('contextmenu', { bubbles: true, clientX: 5, clientY: 5 }));

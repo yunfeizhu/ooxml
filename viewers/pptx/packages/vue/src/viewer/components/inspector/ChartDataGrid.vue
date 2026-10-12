@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Plus, Trash2 } from 'lucide-vue-next';
-import type { PptxChartSeries } from 'pptx-viewer-core';
 import { getDenseGridLayoutPlan, getDensePanelTouchTargetPx } from 'ooxml-ui/pptx';
+import type { PptxChartSeries } from 'pptx-viewer-core';
 import { computed, nextTick, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 

@@ -1,9 +1,9 @@
 import { dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
+import { presenterNextDisabled, presenterPrevDisabled } from 'ooxml-ui/pptx';
 import { describe, expect, it } from 'vitest';
 
-import { presenterNextDisabled, presenterPrevDisabled } from 'ooxml-ui/pptx';
 import { componentSource } from './component-source.test-support';
 
 /**

@@ -1,3 +1,7 @@
+import {
+	getInitialStyleForEffect as sharedGetInitialStyleForEffect,
+	getAnimationInitialStyle as sharedGetAnimationInitialStyle,
+} from 'ooxml-ui/pptx';
 /**
  * Thin adapter shim: the initial-style resolution now lives in
  * `pptx-viewer-shared` (`render/animation-effects`). Shared returns a neutral
@@ -5,10 +9,6 @@
  * result as `React.CSSProperties` so React consumers/tests are unchanged.
  */
 import type { PptxAnimationPreset, PptxNativeAnimation } from 'pptx-viewer-core';
-import {
-	getInitialStyleForEffect as sharedGetInitialStyleForEffect,
-	getAnimationInitialStyle as sharedGetAnimationInitialStyle,
-} from 'ooxml-ui/pptx';
 import type React from 'react';
 
 import type { EffectName } from './animation-types';

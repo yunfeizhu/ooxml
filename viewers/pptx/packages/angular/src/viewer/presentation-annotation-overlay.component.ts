@@ -26,8 +26,8 @@ import {
 	input,
 	viewChild,
 } from '@angular/core';
-
 import type { CanvasSize } from 'ooxml-ui/pptx';
+
 import { buildPathD, cursorForTool } from './presentation-annotations-helpers';
 import { PresentationAnnotationsService } from './presentation-annotations.service';
 

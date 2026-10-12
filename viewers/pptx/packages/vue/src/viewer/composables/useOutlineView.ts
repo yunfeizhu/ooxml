@@ -1,3 +1,5 @@
+import { applyOutlineEdit, buildOutline, mapOutlineKey, OUTLINE_ROW_ATTR } from 'ooxml-ui/pptx';
+import type { OutlineEdit, OutlineRow } from 'ooxml-ui/pptx';
 /**
  * Outline-view state and keyboard, kept out of the SFC.
  *
@@ -14,13 +16,6 @@
  * and burying that in here would hide it from the component that owns it.
  */
 import type { PptxSlide } from 'pptx-viewer-core';
-import {
-	applyOutlineEdit,
-	buildOutline,
-	mapOutlineKey,
-	OUTLINE_ROW_ATTR,
-} from 'ooxml-ui/pptx';
-import type { OutlineEdit, OutlineRow } from 'ooxml-ui/pptx';
 import { computed, nextTick, ref } from 'vue';
 import type { ComputedRef, Ref } from 'vue';
 

@@ -1,11 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import type { DocumentModel, Paragraph } from './model';
 import type { NumberingCatalog } from './numbering-model';
-import {
-	computeListLabels,
-	formatListNumber,
-	resolveParagraphNumbering,
-} from './numbering-format';
+import { computeListLabels, formatListNumber, resolveParagraphNumbering } from './numbering-format';
 import { cardinalWords, letterLabel, ordinalWords, romanNumeral } from './numbering-text';
 import { at, must } from './test-support/access';
 

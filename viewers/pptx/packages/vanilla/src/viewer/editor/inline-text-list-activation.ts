@@ -1,4 +1,3 @@
-import type { PptxElement } from 'pptx-viewer-core';
 import {
 	createInlineListSeed,
 	initializeInlineListDom,
@@ -8,6 +7,7 @@ import {
 	restoreInlineListBodySelection,
 } from 'ooxml-ui/pptx';
 import type { InlineListSeed } from 'ooxml-ui/pptx';
+import type { PptxElement } from 'pptx-viewer-core';
 
 /** One explicit plain-to-list command boundary, never an input-event rewrite. */
 export function activateInlineTextList(

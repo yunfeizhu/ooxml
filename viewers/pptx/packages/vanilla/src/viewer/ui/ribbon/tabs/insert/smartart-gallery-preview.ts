@@ -1,6 +1,6 @@
-import type { PptxSlide, SmartArtLayout } from 'pptx-viewer-core';
 import { buildSmartArtPreviewElement } from 'ooxml-ui/pptx';
 import type { CanvasSize } from 'ooxml-ui/pptx';
+import type { PptxSlide, SmartArtLayout } from 'pptx-viewer-core';
 
 import type { Translator } from '../../../../i18n';
 import type { ElementRenderContext } from '../../../../render';

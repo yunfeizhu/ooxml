@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import type { AccessibilityIssue, AccessibilityIssueType } from 'pptx-viewer-core';
 import { groupIssuesBySeverity, issueTrackKey, issueTypeLabel } from 'ooxml-ui/pptx';
+import type { AccessibilityIssue, AccessibilityIssueType } from 'pptx-viewer-core';
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 

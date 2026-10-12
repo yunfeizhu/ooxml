@@ -1,4 +1,5 @@
 import { mount } from '@vue/test-utils';
+import type { CellTextRun } from 'ooxml-ui/pptx';
 import type {
 	ParsedTableStyleEntry,
 	ParsedTableStyleMap,
@@ -7,7 +8,6 @@ import type {
 	PptxTableData,
 	PptxThemeColorScheme,
 } from 'pptx-viewer-core';
-import type { CellTextRun } from 'ooxml-ui/pptx';
 import { describe, expect, it, vi } from 'vitest';
 import { ref } from 'vue';
 

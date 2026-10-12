@@ -1,3 +1,4 @@
+import { resolveAutoAdvanceDelayMs } from 'ooxml-ui/pptx';
 /**
  * PowerPoint's "Advance slide: After <n>" timing (`p:transition/@advTm`) for a
  * running slide show.
@@ -13,7 +14,6 @@
  * binding advances a deck at exactly the moment every other binding does.
  */
 import type { PptxPresentationProperties, PptxSlide } from 'pptx-viewer-core';
-import { resolveAutoAdvanceDelayMs } from 'ooxml-ui/pptx';
 
 /** The slice of viewer state the scheduler reads. */
 export interface AutoAdvanceState {

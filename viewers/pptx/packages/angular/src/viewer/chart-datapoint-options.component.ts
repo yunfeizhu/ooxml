@@ -22,6 +22,7 @@ import {
 	CUSTOM_ELEMENTS_SCHEMA,
 } from '@angular/core';
 import { TranslatePipe } from '@ngx-translate/core';
+import { EXPLOSION_SUPPORTED_TYPES } from 'ooxml-ui/pptx';
 import type {
 	ChartPptxElement,
 	PptxChartDataPoint,
@@ -29,7 +30,6 @@ import type {
 	PptxChartType,
 } from 'pptx-viewer-core';
 
-import { EXPLOSION_SUPPORTED_TYPES } from 'ooxml-ui/pptx';
 import { setDataPointExplosion, setDataPointFill } from './chart-data-helpers';
 import { CHART_EDITOR_STYLES } from './chart-editor-styles';
 import { numFromEvent, selectValue, stringFromEvent } from './chart-event-helpers';

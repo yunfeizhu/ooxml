@@ -236,9 +236,9 @@ if (deck) {
 ### 示例：页面重载时恢复 {#example-recovery-on-page-reload}
 
 ```tsx
-import { useEffect, useState } from 'react';
-import { getAutosaveSnapshot } from 'pptx-viewer-shared';
 import { PowerPointViewer } from 'pptx-react-viewer';
+import { getAutosaveSnapshot } from 'pptx-viewer-shared';
+import { useEffect, useState } from 'react';
 
 const STORAGE_KEY = 'my-app-last-file';
 

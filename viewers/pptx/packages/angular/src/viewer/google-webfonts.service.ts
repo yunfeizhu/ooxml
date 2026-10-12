@@ -19,8 +19,6 @@
  */
 
 import { DestroyRef, Injectable, inject } from '@angular/core';
-import type { PptxEmbeddedFont, PptxSlide } from 'pptx-viewer-core';
-
 import {
 	collectReferencedFontFamilies,
 	fetchGoogleWebfontOutlineBytes,
@@ -28,6 +26,8 @@ import {
 	selectGoogleWebfontFamilies,
 	syncGoogleWebfontStylesheet,
 } from 'ooxml-ui/pptx';
+import type { PptxEmbeddedFont, PptxSlide } from 'pptx-viewer-core';
+
 import { glyphOutlineFontCache, glyphOutlineFontsTick } from './glyph-outline-cache';
 
 /** DOM id of the managed `<link>` element (binding-specific, like the style ids). */

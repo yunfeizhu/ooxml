@@ -5,14 +5,7 @@ import { orderChildren } from './element-order';
 import { isStTabJc, isStTabTlc } from './generated/wml-simple-types';
 import { enumValue } from './parse-diagnostics';
 import { parseSignedTwips } from './simple-types';
-import {
-	children,
-	getW,
-	makeW,
-	WORD_NS,
-	type XmlDocument,
-	type XmlElement,
-} from './xml';
+import { children, getW, makeW, WORD_NS, type XmlDocument, type XmlElement } from './xml';
 
 export function parseTabStops(tabs: XmlElement | undefined): TabStop[] {
 	const stops: TabStop[] = [];

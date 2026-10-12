@@ -1,3 +1,10 @@
+import {
+	OUTLINE_LEVEL_ATTR,
+	OUTLINE_ROW_ATTR,
+	OUTLINE_VIEW_ATTR,
+	registerPptxWebControls,
+} from 'ooxml-ui/pptx';
+import { translationsEn } from 'ooxml-ui/pptx/i18n';
 // @vitest-environment happy-dom
 /**
  * Outline view, React binding.
@@ -10,13 +17,6 @@
  * a past parity wave, never the shared maths.
  */
 import type { PptxElement, PptxSlide } from 'pptx-viewer-core';
-import {
-	OUTLINE_LEVEL_ATTR,
-	OUTLINE_ROW_ATTR,
-	OUTLINE_VIEW_ATTR,
-	registerPptxWebControls,
-} from 'ooxml-ui/pptx';
-import { translationsEn } from 'ooxml-ui/pptx/i18n';
 import React, { act } from 'react';
 import { createRoot } from 'react-dom/client';
 import type { Root } from 'react-dom/client';

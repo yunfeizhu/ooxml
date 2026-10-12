@@ -6,15 +6,7 @@ import { EMU_PER_PIXEL } from './drawing';
 import { buildWatermarkRun } from './watermark';
 import { buildTextBoxDrawing, patchTextBox } from './write-text-box';
 import type { RelationshipAllocator } from './relationship-allocator';
-import {
-	isElement,
-	makeNS,
-	makeW,
-	named,
-	REL_NS,
-	type XmlDocument,
-	type XmlElement,
-} from './xml';
+import { isElement, makeNS, makeW, named, REL_NS, type XmlDocument, type XmlElement } from './xml';
 
 const A_NS = 'http://schemas.openxmlformats.org/drawingml/2006/main';
 const WP_NS = 'http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing';

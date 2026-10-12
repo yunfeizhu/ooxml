@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import type { OlePptxElement, PptxElement } from 'pptx-viewer-core';
 import {
 	formatBytes,
 	getOleAriaLabel,
@@ -15,6 +14,7 @@ import {
 	resolveOleType,
 } from 'ooxml-ui/pptx';
 import type { OleIconShape, ResolvedOleType } from 'ooxml-ui/pptx';
+import type { OlePptxElement, PptxElement } from 'pptx-viewer-core';
 import type { CSSProperties } from 'vue';
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';

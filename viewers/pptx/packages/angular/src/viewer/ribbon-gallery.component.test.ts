@@ -8,11 +8,11 @@
 import { TestBed } from '@angular/core/testing';
 import { BrowserTestingModule, platformBrowserTesting } from '@angular/platform-browser/testing';
 import { provideTranslateService, TranslateService } from '@ngx-translate/core';
+import { buildRibbonGallery, inlineGalleryItems } from 'ooxml-ui/pptx';
 import type { PptxSlide, ShapePptxElement } from 'pptx-viewer-core';
 import { afterEach, beforeAll, describe, expect, it } from 'vitest';
 
 import { translationsEn } from '../../../../../../src/ui/src/pptx/i18n/translations-en';
-import { buildRibbonGallery, inlineGalleryItems } from 'ooxml-ui/pptx';
 import { resolveViewerComponentResources } from './component-resources.test-support';
 import { EditorStateService } from './editor-state.service';
 import { dispatchGalleryResult } from './ribbon-gallery-helpers';

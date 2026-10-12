@@ -92,6 +92,19 @@ describe('chartSvgView gradient defs (COM: charts-com.pptx slide 23)', () => {
 							],
 						},
 						{
+							kind: 'linearGradient',
+							id: 'g-line',
+							gradientUnits: 'userSpaceOnUse',
+							x1: 10,
+							y1: 40,
+							x2: 90,
+							y2: 40,
+							stops: [
+								{ offset: 0, color: '#c08fbf' },
+								{ offset: 1, color: '#800f85' },
+							],
+						},
+						{
 							kind: 'radialGradient',
 							id: 'g-rad',
 							cx: 0.5,
@@ -121,6 +134,10 @@ describe('chartSvgView gradient defs (COM: charts-com.pptx slide 23)', () => {
 			'none',
 		);
 		expect(target.querySelector('linearGradient#g-lin')?.getAttribute('y2')).toBe('1');
+		expect(target.querySelector('linearGradient#g-lin')?.hasAttribute('gradientUnits')).toBeFalsy();
+		expect(target.querySelector('linearGradient#g-line')?.getAttribute('gradientUnits')).toBe(
+			'userSpaceOnUse',
+		);
 		expect(target.querySelectorAll('radialGradient#g-rad stop')).toHaveLength(2);
 	});
 });

@@ -1,11 +1,11 @@
+import { getAcknowledgedAutosaveRecoveryTimestamp } from 'ooxml-ui/pptx';
+import type { AutosaveRecoveryOffer } from 'ooxml-ui/pptx';
 /**
  * autosave-session.test.ts: the host prop is a CEILING, the title-bar switch is
  * a PREFERENCE inside it, and a crash-recovery snapshot is offered to the user
  * rather than only to a callback the embedder may never have wired.
  */
 import type { PptxHandler } from 'pptx-viewer-core';
-import { getAcknowledgedAutosaveRecoveryTimestamp } from 'ooxml-ui/pptx';
-import type { AutosaveRecoveryOffer } from 'ooxml-ui/pptx';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { createTranslator } from '../i18n';

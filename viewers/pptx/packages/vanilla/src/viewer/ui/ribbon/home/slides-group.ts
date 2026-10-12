@@ -1,6 +1,6 @@
-import type { PptxLayoutPreview } from 'pptx-viewer-core';
 import { slidesHomeControls } from 'ooxml-ui/pptx';
 import type { LayoutPreviewGeometry, SlideTemplateId } from 'ooxml-ui/pptx';
+import type { PptxLayoutPreview } from 'pptx-viewer-core';
 
 import type { Translator } from '../../../i18n';
 import type { LayoutOption } from '../ribbon-types';

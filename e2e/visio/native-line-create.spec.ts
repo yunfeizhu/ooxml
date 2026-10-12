@@ -3,6 +3,7 @@ import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { editVsdx, parseVsdx } from 'ooxml-core/visio';
 import { nativeSvgLineEndpoints } from './native-line-svg';
+import { openDemo } from './demo-page';
 
 const directories = [
 	'VISIO_NATIVE_LINE_CREATION_DIR',
@@ -57,7 +58,10 @@ for (const variable of directories) {
 					shapeId: shape.id,
 				})),
 			);
-			await page.goto(framework === 'vanilla' ? '/demo/?sample=1' : `/demo-${framework}/?sample=1`);
+			await openDemo(
+				page,
+				framework === 'vanilla' ? '/demo/?sample=1' : `/demo-${framework}/?sample=1`,
+			);
 			await page.locator('#file').setInputFiles({
 				name: 'blank-line.vsdx',
 				mimeType: 'application/vnd.ms-visio.drawing',

@@ -1,3 +1,4 @@
+import type { CanvasSize } from 'ooxml-ui/pptx';
 // oxlint-disable react-hooks/rules-of-hooks
 import type {
 	ParsedTableStyleMap,
@@ -11,7 +12,6 @@ import type {
 	PptxTheme,
 	PptxViewProperties,
 } from 'pptx-viewer-core';
-import type { CanvasSize } from 'ooxml-ui/pptx';
 import { describe, expect, it, vi } from 'vitest';
 import { ref, shallowRef } from 'vue';
 

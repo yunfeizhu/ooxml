@@ -1,4 +1,3 @@
-import type { PptxSlide } from 'pptx-viewer-core';
 import type { RasterizeElementResult, RasterizeElementTilesResult } from 'ooxml-ui/pptx';
 import {
 	downloadDataUrl,
@@ -7,6 +6,7 @@ import {
 	rasterResultToPngDataUrl,
 	resolveExportBaseName,
 } from 'ooxml-ui/pptx';
+import type { PptxSlide } from 'pptx-viewer-core';
 import { ref } from 'vue';
 import type { Ref } from 'vue';
 

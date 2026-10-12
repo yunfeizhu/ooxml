@@ -1,3 +1,10 @@
+import {
+	canGoNext,
+	canGoPrevious,
+	formatSlideCounter,
+	READING_VIEW_ATTR,
+	READING_VIEW_COUNTER_ATTR,
+} from 'ooxml-ui/pptx';
 /**
  * PowerPoint's Reading View.
  *
@@ -12,13 +19,6 @@
  * matching both PowerPoint's behaviour and the existing SlideSorterOverlay.
  */
 import type { PptxElement, PptxSlide } from 'pptx-viewer-core';
-import {
-	canGoNext,
-	canGoPrevious,
-	formatSlideCounter,
-	READING_VIEW_ATTR,
-	READING_VIEW_COUNTER_ATTR,
-} from 'ooxml-ui/pptx';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { LuChevronLeft, LuChevronRight, LuX } from 'react-icons/lu';

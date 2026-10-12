@@ -28,6 +28,7 @@ import {
 	CUSTOM_ELEMENTS_SCHEMA,
 } from '@angular/core';
 import { TranslatePipe } from '@ngx-translate/core';
+import { MARKER_SUPPORTED_TYPES, MARKER_SYMBOL_OPTIONS } from 'ooxml-ui/pptx';
 import type {
 	ChartPptxElement,
 	PptxChartMarker,
@@ -36,7 +37,6 @@ import type {
 	PptxChartType,
 } from 'pptx-viewer-core';
 
-import { MARKER_SUPPORTED_TYPES, MARKER_SYMBOL_OPTIONS } from 'ooxml-ui/pptx';
 import { setDataPointMarker } from './chart-data-helpers';
 import { CHART_EDITOR_STYLES } from './chart-editor-styles';
 import { boolFromEvent, numFromEvent, selectValue, stringFromEvent } from './chart-event-helpers';

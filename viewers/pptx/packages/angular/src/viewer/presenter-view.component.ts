@@ -10,8 +10,6 @@ import {
 	signal,
 } from '@angular/core';
 import { TranslatePipe } from '@ngx-translate/core';
-import type { PptxElement, PptxSlide } from 'pptx-viewer-core';
-
 import {
 	presenterNextDisabled,
 	presenterPaneAdvancesOnClick,
@@ -19,6 +17,8 @@ import {
 	visibleTemplateElements as filterVisibleTemplateElements,
 } from 'ooxml-ui/pptx';
 import type { AuthoredSlideRange, CanvasSize, ShowOrderCustomShow } from 'ooxml-ui/pptx';
+import type { PptxElement, PptxSlide } from 'pptx-viewer-core';
+
 import type { StyleMap } from './element-style';
 import { PresenterControlsComponent } from './presenter-controls.component';
 import {

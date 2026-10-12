@@ -1,12 +1,17 @@
+export { buildProcessPanel, buildReviewPanel } from './ribbon-review';
 import { check, command, commandRow, group, menu, stack, type CommandSpec } from './ribbon-parts';
+import { backgroundsGroup, pageSetupGroup } from './ribbon-page-setup';
+import { themesGallery, variantOptions, variantsGallery } from './ribbon-themes';
+import { diagramPartGallery } from './ribbon-diagram-parts';
+import type { VisioDataCommand } from './ribbon-action';
+import { layoutGroup, reLayoutGallery } from './ribbon-layout';
 
-const PAGES = 'Needs core page insertion.';
 const OBJECTS = 'Embedded OLE objects are not supported; only pictures can be inserted.';
-const PARTS = 'Needs core container, callout and connector edits.';
-const DESIGN = 'Needs core page setup and theme edits.';
-const DATA = 'Needs core data linking and data graphics.';
-const PROCESS = 'Needs core diagram validation.';
-const REVIEW = 'Needs core comments and proofing.';
+
+const GRAPHICS =
+	'Data graphics are placed at their default position; this option is not built yet.';
+const LINKING =
+	'Rows are linked by dragging them from the External Data window; the linking wizard is not built yet.';
 
 const unsupported = (
 	id: string,
@@ -15,11 +20,40 @@ const unsupported = (
 	reason: string,
 	size?: CommandSpec['size'],
 ) => ({ id, label, icon, unsupported: reason, ...(size ? { size } : {}) }) satisfies CommandSpec;
-const dropdown = (doc: Document, spec: CommandSpec & { reason: string }) =>
+
+/**
+ * Connector styles. Design > Connectors restyles the selected connectors (and sets the style of
+ * new ones); Insert > Connector picks the style and arms the Connector tool.
+ */
+const connectorMenu = (doc: Document, id: string, label: string, scope: 'selection' | 'tool') =>
 	menu(doc, {
-		...spec,
-		unsupported: spec.reason,
-		items: [{ id: `${spec.id}-more`, label: `${spec.label} options`, unsupported: spec.reason }],
+		id,
+		label,
+		icon: 'connector',
+		items: [
+			...(
+				[
+					['right-angle', 'Right-Angle'],
+					['straight', 'Straight'],
+					['curved', 'Curved'],
+				] as const
+			).map(([route, name]) => ({
+				id: `${id}-${route}`,
+				label: scope === 'tool' ? `${name} Connector` : name,
+				action: { type: 'connector-route' as const, route, scope },
+				checked: route === 'right-angle',
+			})),
+			...(scope === 'selection'
+				? [
+						{
+							id: 'line-jumps',
+							label: 'Show Line Jumps',
+							action: { type: 'page-setup' as const, command: { op: 'line-jumps' as const } },
+							checked: true,
+						},
+					]
+				: []),
+		],
 	});
 
 /** Visio's Insert tab: Pages, Illustrations, Diagram Parts, Links and Text. */
@@ -29,7 +63,7 @@ export function buildInsertPanel(doc: Document, panel: HTMLElement): void {
 			group(doc, 'Pages', [
 				command(doc, {
 					id: 'blank-page',
-					label: 'Blank Page',
+					label: 'New Page',
 					icon: 'visioPagesPane',
 					action: { type: 'page-insert' },
 				}),
@@ -41,15 +75,6 @@ export function buildInsertPanel(doc: Document, panel: HTMLElement): void {
 					icon: 'visioPicture',
 					action: { type: 'insert', item: 'picture' },
 				}),
-				command(
-					doc,
-					unsupported(
-						'online-pictures',
-						'Online Pictures',
-						'search',
-						'Documents stay local; nothing is fetched.',
-					),
-				),
 				command(
 					doc,
 					unsupported('chart', 'Chart', 'visioChart', 'Embedded Excel charts are not supported.'),
@@ -65,14 +90,9 @@ export function buildInsertPanel(doc: Document, panel: HTMLElement): void {
 				),
 			]),
 			group(doc, 'Diagram Parts', [
-				dropdown(doc, { id: 'container', label: 'Container', icon: 'rectangle', reason: PARTS }),
-				dropdown(doc, { id: 'callout', label: 'Callout', icon: 'message', reason: PARTS }),
-				dropdown(doc, {
-					id: 'insert-connector',
-					label: 'Connector',
-					icon: 'connector',
-					reason: PARTS,
-				}),
+				diagramPartGallery(doc, 'container'),
+				diagramPartGallery(doc, 'callout'),
+				connectorMenu(doc, 'insert-connector', 'Connector', 'tool'),
 			]),
 			group(doc, 'Links', [
 				command(doc, {
@@ -98,23 +118,20 @@ export function buildInsertPanel(doc: Document, panel: HTMLElement): void {
 						size: 'small',
 						action: { type: 'insert', item: 'screen-tip' },
 					}),
-					command(
-						doc,
-						unsupported(
-							'field',
-							'Field',
-							'textBox',
-							'Text fields need a Field section and <fld> text runs with evaluated formulas, which the text editor does not support.',
-							'small',
-						),
-					),
+					command(doc, {
+						id: 'field',
+						label: 'Field',
+						icon: 'textBox',
+						size: 'small',
+						action: { type: 'text-feature', feature: 'field' },
+					}),
 					command(doc, unsupported('object', 'Object', 'visioPicture', OBJECTS, 'small')),
 				]),
-				dropdown(doc, {
+				command(doc, {
 					id: 'symbol',
 					label: 'Symbol',
 					icon: 'visioSymbol',
-					reason: 'Needs core text edits.',
+					action: { type: 'text-feature', feature: 'symbol' },
 				}),
 			]),
 		]),
@@ -125,80 +142,82 @@ export function buildInsertPanel(doc: Document, panel: HTMLElement): void {
 export function buildDesignPanel(doc: Document, panel: HTMLElement): void {
 	panel.append(
 		commandRow(doc, 'Design commands', [
-			group(
-				doc,
-				'Page Setup',
-				[
-					dropdown(doc, {
-						id: 'orientation',
-						label: 'Orientation',
-						icon: 'visioPagesPane',
-						reason: DESIGN,
-					}),
-					dropdown(doc, { id: 'size', label: 'Size', icon: 'pageWidth', reason: DESIGN }),
-					command(doc, unsupported('auto-size', 'Auto Size', 'fitPage', DESIGN)),
-				],
-				{ launcher: DESIGN },
-			),
-			group(doc, 'Themes', [
-				dropdown(doc, { id: 'themes', label: 'Themes', icon: 'quickStyles', reason: DESIGN }),
+			pageSetupGroup(doc),
+			group(doc, 'Themes', [themesGallery(doc)]),
+			group(doc, 'Variants', [variantsGallery(doc), variantOptions(doc)]),
+			backgroundsGroup(doc),
+			layoutGroup(doc, [
+				reLayoutGallery(doc),
+				connectorMenu(doc, 'connectors', 'Connectors', 'selection'),
 			]),
-			group(doc, 'Variants', [
-				dropdown(doc, { id: 'variants', label: 'Variants', icon: 'effects', reason: DESIGN }),
-			]),
-			group(doc, 'Backgrounds', [
-				dropdown(doc, { id: 'backgrounds', label: 'Backgrounds', icon: 'fill', reason: DESIGN }),
-				dropdown(doc, {
-					id: 'borders-titles',
-					label: 'Borders & Titles',
-					icon: 'rectangle',
-					reason: DESIGN,
-				}),
-			]),
-			group(
-				doc,
-				'Layout',
-				[
-					dropdown(doc, {
-						id: 're-layout',
-						label: 'Re-Layout Page',
-						icon: 'position',
-						reason: 'Needs core automatic layout.',
-					}),
-					dropdown(doc, {
-						id: 'connectors',
-						label: 'Connectors',
-						icon: 'connector',
-						reason: PARTS,
-					}),
-				],
-				{ launcher: 'Needs core automatic layout.' },
-			),
 		]),
 	);
 }
 
 /** Visio's Data tab. Shape Data Window maps to the viewer's shape inspector. */
 export function buildDataPanel(doc: Document, panel: HTMLElement): void {
+	const data = (command: VisioDataCommand) => ({ type: 'data', command }) as const;
 	panel.append(
 		commandRow(doc, 'Data commands', [
 			group(doc, 'External Data', [
-				command(doc, unsupported('quick-import', 'Quick Import', 'visioData', DATA)),
-				command(doc, unsupported('custom-import', 'Custom Import', 'visioData', DATA)),
-				dropdown(doc, { id: 'refresh-all', label: 'Refresh All', icon: 'reset', reason: DATA }),
+				command(doc, {
+					id: 'quick-import',
+					label: 'Quick Import',
+					icon: 'visioData',
+					action: data('quick-import'),
+				}),
+				command(doc, {
+					id: 'custom-import',
+					label: 'Custom Import',
+					icon: 'visioData',
+					action: data('custom-import'),
+				}),
+				command(doc, {
+					id: 'refresh-all',
+					label: 'Refresh All',
+					icon: 'reset',
+					action: data('refresh'),
+				}),
 			]),
-			group(doc, 'Display Data', [
-				dropdown(doc, {
+			group(doc, 'Data Graphics', [
+				menu(doc, {
 					id: 'data-graphics',
 					label: 'Data Graphics',
 					icon: 'visioChart',
-					reason: DATA,
+					items: [
+						{ id: 'graphic-text', label: 'Text Callout...', action: data('graphic-text') },
+						{ id: 'graphic-bar', label: 'Data Bar...', action: data('graphic-bar') },
+						{ id: 'graphic-icon', label: 'Icon Set...', action: data('graphic-icon') },
+						{ id: 'graphic-color', label: 'Color by Value...', action: data('graphic-color') },
+						{
+							id: 'graphic-remove',
+							label: 'Remove Data Graphics',
+							action: data('graphic-remove'),
+						},
+					],
 				}),
-				dropdown(doc, {
+				stack(doc, [
+					command(doc, unsupported('graphic-position', 'Position', 'position', GRAPHICS, 'small')),
+					command(
+						doc,
+						unsupported('graphic-configure', 'Configure', 'settings', GRAPHICS, 'small'),
+					),
+					command(doc, unsupported('graphic-auto-space', 'Auto Space', 'grid', GRAPHICS, 'small')),
+				]),
+			]),
+			group(doc, 'Display Data', [
+				menu(doc, {
 					id: 'insert-legend',
 					label: 'Insert Legend',
 					icon: 'bullets',
-					reason: DATA,
+					items: [
+						{ id: 'legend-vertical', label: 'Vertical', action: data('legend') },
+						{
+							id: 'legend-horizontal',
+							label: 'Horizontal',
+							action: data('legend-horizontal'),
+						},
+					],
 				}),
 			]),
 			group(doc, 'Show/Hide', [
@@ -211,74 +230,39 @@ export function buildDataPanel(doc: Document, panel: HTMLElement): void {
 					check(doc, {
 						id: 'external-data-window',
 						label: 'External Data Window',
-						unsupported: DATA,
+						action: data('external-data-window'),
+					}),
+					check(doc, {
+						id: 'data-graphic-fields',
+						label: 'Data Graphic Fields',
+						unsupported:
+							'Data graphics are chosen in the Data Graphics menu; there is no fields pane.',
 					}),
 				]),
 			]),
-		]),
-	);
-}
-
-/** Visio's Process tab. */
-export function buildProcessPanel(doc: Document, panel: HTMLElement): void {
-	panel.append(
-		commandRow(doc, 'Process commands', [
-			group(doc, 'Subprocess', [
-				command(doc, unsupported('create-new', 'Create New', 'visioPagesPane', PAGES)),
-				command(doc, unsupported('create-from-selection', 'Create from Selection', 'group', PAGES)),
-				command(doc, unsupported('link-existing', 'Link to Existing', 'visioLink', PAGES)),
-			]),
-			group(doc, 'Diagram Validation', [
-				dropdown(doc, {
-					id: 'check-diagram',
-					label: 'Check Diagram',
-					icon: 'check',
-					reason: PROCESS,
-				}),
-				stack(doc, [
-					command(
-						doc,
-						unsupported('ignore-issue', 'Ignore This Issue', 'eyeOff', PROCESS, 'small'),
-					),
-					check(doc, { id: 'issues-window', label: 'Issues Window', unsupported: PROCESS }),
-				]),
-			]),
-		]),
-	);
-}
-
-/** Visio's Review tab: Proofing, Language, Comments and Reports. */
-export function buildReviewPanel(doc: Document, panel: HTMLElement): void {
-	panel.append(
-		commandRow(doc, 'Review commands', [
-			group(doc, 'Proofing', [
-				command(doc, unsupported('spelling', 'Spelling', 'check', REVIEW)),
-				command(doc, unsupported('thesaurus', 'Thesaurus', 'search', REVIEW)),
-			]),
-			group(doc, 'Language', [
-				dropdown(doc, { id: 'language', label: 'Language', icon: 'message', reason: REVIEW }),
-			]),
-			group(doc, 'Comments', [
-				command(doc, unsupported('new-comment', 'New Comment', 'message', REVIEW)),
-				command(doc, unsupported('comments-pane', 'Comments Pane', 'visioInspectorPane', REVIEW)),
-			]),
-			group(doc, 'Reports', [
+			group(doc, 'Advanced Data Linking', [
+				command(doc, unsupported('link-data', 'Link Data', 'visioLink', LINKING)),
 				command(
 					doc,
-					unsupported('shape-reports', 'Shape Reports', 'visioData', 'Needs report generation.'),
+					unsupported('advanced-data-graphics', 'Advanced Data Graphics', 'visioChart', GRAPHICS),
 				),
 			]),
 		]),
 	);
 }
 
-/** Visio's Help tab. Help content, support and training are not bundled in this viewer. */
+/** Visio's Help tab. Help and Show Training open the viewer guide; support is not connected. */
 export function buildHelpPanel(doc: Document, panel: HTMLElement): void {
-	const OFFLINE = 'Help content is not bundled; see the viewer guide.';
 	panel.append(
 		commandRow(doc, 'Help commands', [
 			group(doc, 'Help', [
-				command(doc, unsupported('help', 'Help', 'help', OFFLINE)),
+				command(doc, {
+					id: 'help',
+					label: 'Help',
+					icon: 'help',
+					action: { type: 'help', topic: 'help' },
+					keys: ['F1', 'F1'],
+				}),
 				command(
 					doc,
 					unsupported(
@@ -297,7 +281,12 @@ export function buildHelpPanel(doc: Document, panel: HTMLElement): void {
 						'Feedback is not collected by this viewer.',
 					),
 				),
-				command(doc, unsupported('show-training', 'Show Training', 'visioPresentation', OFFLINE)),
+				command(doc, {
+					id: 'show-training',
+					label: 'Show Training',
+					icon: 'visioPresentation',
+					action: { type: 'help', topic: 'training' },
+				}),
 			]),
 		]),
 	);

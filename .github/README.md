@@ -6,6 +6,8 @@
 One XML model, one library, ready-made editors for every major framework, and no server in the middle.
 
 [![CI](https://github.com/ChristopherVR/ooxml/actions/workflows/ci.yml/badge.svg)](https://github.com/ChristopherVR/ooxml/actions/workflows/ci.yml)
+[![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/ChristopherVR/ooxml/badge)](https://scorecard.dev/viewer/?uri=github.com/ChristopherVR/ooxml)
+[![OpenSSF Baseline](https://www.bestpractices.dev/projects/15347/baseline)](https://www.bestpractices.dev/projects/15347)
 [![npm](https://img.shields.io/npm/v/ooxml-core?label=ooxml-core)](https://www.npmjs.com/package/ooxml-core)
 [![license](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](../LICENSE)
 [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.1-4baaaa.svg)](../CODE_OF_CONDUCT.md)

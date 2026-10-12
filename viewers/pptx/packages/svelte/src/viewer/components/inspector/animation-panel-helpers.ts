@@ -1,8 +1,3 @@
-/* oxlint-disable eslint/one-var -- each exported helper below declares its own
-   independent locals; merging unrelated declarations across the many
-   functions here would hurt readability, not help it. */
-import type { PptxElement, PptxElementAnimation } from 'pptx-viewer-core';
-import { hasTextProperties } from 'pptx-viewer-core';
 import {
 	animationEffectLabel,
 	buildAnimationTimelineBars,
@@ -10,6 +5,11 @@ import {
 	updateSlide,
 } from 'ooxml-ui/pptx';
 import type { AnimationLabelTranslate } from 'ooxml-ui/pptx';
+/* oxlint-disable eslint/one-var -- each exported helper below declares its own
+   independent locals; merging unrelated declarations across the many
+   functions here would hurt readability, not help it. */
+import type { PptxElement, PptxElementAnimation } from 'pptx-viewer-core';
+import { hasTextProperties } from 'pptx-viewer-core';
 
 import type { EditorState } from '../../editor/editor-state.svelte';
 

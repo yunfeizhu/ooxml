@@ -1,3 +1,4 @@
+import { mruColorsPatch, pushRecentColor, seedRecentColors } from 'ooxml-ui/pptx';
 /**
  * useRecentColors: the deck's "Recent colours" (`p:clrMru`) row, seeded from
  * the loaded deck and folded forward as the user picks colours.
@@ -10,7 +11,6 @@
  * shape edit should not also un-remember the colour it used.
  */
 import type { PptxPresentationProperties } from 'pptx-viewer-core';
-import { mruColorsPatch, pushRecentColor, seedRecentColors } from 'ooxml-ui/pptx';
 import { ref, watch } from 'vue';
 import type { Ref } from 'vue';
 

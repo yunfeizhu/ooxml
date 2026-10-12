@@ -1,5 +1,5 @@
-import type { PptxElement, PptxSlide } from 'pptx-viewer-core';
 import { filterInteractableIds, isTemplateElementId } from 'ooxml-ui/pptx';
+import type { PptxElement, PptxSlide } from 'pptx-viewer-core';
 import type { Ref } from 'vue';
 
 import { useConnectorReroute } from './connector-reroute-store';

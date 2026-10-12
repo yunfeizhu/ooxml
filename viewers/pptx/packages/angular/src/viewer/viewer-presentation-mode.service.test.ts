@@ -12,10 +12,10 @@
  * authored `p:showPr/p:sldRg` range the host hands it through `bind()`.
  */
 import { Injector, runInInjectionContext } from '@angular/core';
+import type { AuthoredSlideRange } from 'ooxml-ui/pptx';
 import type { PptxSlide } from 'pptx-viewer-core';
 import { describe, expect, it } from 'vitest';
 
-import type { AuthoredSlideRange } from 'ooxml-ui/pptx';
 import { LoadContentService } from './load-content.service';
 import { PresenterWindowService } from './presenter-window.service';
 import { ViewerCustomShowsService } from './viewer-custom-shows.service';

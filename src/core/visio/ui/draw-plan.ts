@@ -1,6 +1,6 @@
-import type { VisioConnectorGlue, VisioGeometryEdit } from '../edit-commands';
+import type { VisioConnectorGlue, VisioConnectorRoute, VisioGeometryEdit } from '../edit-commands';
 import type { VisioPage } from '../model';
-import type { VisioBasicShape } from '../basic-shapes';
+import type { VisioOutlineShape } from '../stencil-shapes';
 import { visioNextShapeId } from './shape-id';
 import { visioPageEditToDrawing } from './page-edit';
 
@@ -66,7 +66,7 @@ export function visioBoxCreationCommand(
 	size: { width: number; height: number },
 	text?: string,
 	/** A Basic Shapes outline for a rectangle-kind box (see `VISIO_BASIC_SHAPES`). */
-	shape?: VisioBasicShape,
+	shape?: VisioOutlineShape,
 ): VisioGeometryEdit {
 	if (
 		!['rectangle', 'ellipse', 'text'].includes(kind) ||
@@ -130,16 +130,24 @@ export function visioConnectorCreationCommand(
 	begin: VisioDrawingPoint,
 	end: VisioDrawingPoint,
 	glue: VisioConnectorGlue,
+	route?: VisioConnectorRoute,
 ): Extract<VisioGeometryEdit, { type: 'create-line' }> {
 	const line = visioLineCreationCommand(page, begin, end) as Extract<
 		VisioGeometryEdit,
 		{ type: 'create-line' }
 	>;
+	const sameShape = glue.end !== undefined && glue.end === glue.begin;
 	const connect: VisioConnectorGlue = {
 		...(glue.begin === undefined ? {} : { begin: glue.begin }),
-		...(glue.end === undefined || glue.end === glue.begin ? {} : { end: glue.end }),
+		...(glue.begin === undefined || glue.beginPoint === undefined
+			? {}
+			: { beginPoint: glue.beginPoint }),
+		...(glue.end === undefined || sameShape ? {} : { end: glue.end }),
+		...(glue.end === undefined || sameShape || glue.endPoint === undefined
+			? {}
+			: { endPoint: glue.endPoint }),
 	};
-	return { ...line, connect };
+	return { ...line, connect, ...(route ? { route } : {}) };
 }
 
 /** Fixed-bounds creation. Native click-only sizing and automatic text growth are not inferred. */

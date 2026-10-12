@@ -9,14 +9,14 @@
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
 
-import type { ChartPptxElement, PptxChartData } from 'pptx-viewer-core';
-import { describe, expect, it } from 'vitest';
-
 import {
 	CHART_TYPE_OPTIONS,
 	collapseChartTitleRunsForEdit,
 	resolveDisplayedChartType,
 } from 'ooxml-ui/pptx';
+import type { ChartPptxElement, PptxChartData } from 'pptx-viewer-core';
+import { describe, expect, it } from 'vitest';
+
 import { applyChartTypeSelectorPatch } from './chart-type-selector.component';
 
 function chart(overrides: Partial<ChartPptxElement['chartData']> = {}): ChartPptxElement {

@@ -1,3 +1,4 @@
+import type { SlideSizeEmu, SlideSizeRescaleMode } from 'ooxml-ui/pptx';
 /**
  * ViewerInspector: Wrapper that wires InspectorPane props.
  *
@@ -23,7 +24,6 @@ import type {
 	TextStyle,
 	ParsedTableStyleMap,
 } from 'pptx-viewer-core';
-import type { SlideSizeEmu, SlideSizeRescaleMode } from 'ooxml-ui/pptx';
 import { useTranslation } from 'react-i18next';
 
 import type { UseCommentsResult } from '../hooks/useComments-helpers';

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { TRANSITION_MORPH_OPTIONS, TRANSITION_ORIENTATION_TYPES } from 'ooxml-ui/pptx';
 /**
  * SlideTransitionSection: slide transition editing (type / duration / direction
  * / orientation / spokes / advance-on-click), extracted from the old untabbed
@@ -12,7 +13,6 @@ import {
 	TRANSITION_THRUBLK_TYPES,
 	TRANSITION_VALID_DIRECTIONS,
 } from 'pptx-viewer-core';
-import { TRANSITION_MORPH_OPTIONS, TRANSITION_ORIENTATION_TYPES } from 'ooxml-ui/pptx';
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 

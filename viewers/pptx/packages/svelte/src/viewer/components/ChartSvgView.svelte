@@ -5,7 +5,8 @@
 	 * Pure presentational markup, no state of its own; all maths already
 	 * happened in `buildChartView` / `buildChartViewModel`.
 	 */
-	import { resolveChartSvgDef, type ChartViewModel } from 'ooxml-ui/pptx';
+	import { resolveChartSvgDef } from 'ooxml-ui/pptx';
+import type { ChartViewModel } from 'ooxml-ui/pptx';
 
 	import type { ChartLegendItem } from '../render';
 	import { partAttrs } from '../render';
@@ -28,7 +29,14 @@
 		<defs>
 			{#each vm.defs.map(resolveChartSvgDef) as def (def.id)}
 				{#if def.kind === 'linearGradient'}
-					<linearGradient id={def.id} x1={def.x1} y1={def.y1} x2={def.x2} y2={def.y2}>
+					<linearGradient
+						id={def.id}
+						gradientUnits={def.gradientUnits}
+						x1={def.x1}
+						y1={def.y1}
+						x2={def.x2}
+						y2={def.y2}
+					>
 						{#each def.stops as stop, si (si)}
 							<stop offset={stop.offset} stop-color={stop.color} stop-opacity={stop.opacity} />
 						{/each}

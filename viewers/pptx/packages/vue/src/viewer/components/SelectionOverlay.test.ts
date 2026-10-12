@@ -1,6 +1,6 @@
 import { mount } from '@vue/test-utils';
-import type { PptxElement } from 'pptx-viewer-core';
 import { attachRotateHandlePlacement } from 'ooxml-ui/pptx';
+import type { PptxElement } from 'pptx-viewer-core';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import SelectionOverlay from './SelectionOverlay.vue';

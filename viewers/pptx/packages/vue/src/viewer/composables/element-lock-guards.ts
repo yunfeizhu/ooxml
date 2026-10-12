@@ -1,3 +1,5 @@
+import { resolveElementInteractivity } from 'ooxml-ui/pptx';
+import type { ElementInteractivity } from 'ooxml-ui/pptx';
 /**
  * element-lock-guards.ts: mapping shared `a:spLocks` decisions onto the Vue
  * canvas gestures.
@@ -16,8 +18,6 @@
  * @module composables/element-lock-guards
  */
 import type { PptxElement } from 'pptx-viewer-core';
-import { resolveElementInteractivity } from 'ooxml-ui/pptx';
-import type { ElementInteractivity } from 'ooxml-ui/pptx';
 import { computed } from 'vue';
 
 /** The geometry a transform gesture reports, minus the element id. */

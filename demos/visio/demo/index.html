@@ -40,29 +40,18 @@
 			</div>
 		</section>
 		<a class="skip" href="#viewer">Skip to diagram</a>
-		<header class="topbar" aria-label="Document workspace">
-			<a class="brand" href="../" aria-label="Visio Viewer home"
-				><span class="brand-mark" aria-hidden="true">V</span
-				><span class="brand-name">visio-viewer</span></a
-			>
-			<div class="document-title">
-				<span id="file-name">Sample workflow</span
-				><span class="title-divider" aria-hidden="true">·</span
-				><small id="file-state">Original sample scene</small>
-			</div>
-			<input id="file" type="file" accept=".vsdx,.vsd" hidden />
-			<div class="workspace-links">
-				<a href="../docs/index.html">Guide</a
-				><button
-					id="theme-toggle"
-					type="button"
-					aria-label="Switch to light theme"
-					title="Switch to light theme"
-				>
-					◐
-				</button>
-			</div>
-		</header>
+		<!-- The editor draws its own title bar. These values are the demo's state, read by the
+		     browser tests; nothing here is shown. -->
+		<div id="demo-state" hidden>
+			<span id="file-name">Sample workflow</span>
+			<span id="file-state">Original sample scene</span>
+			<span id="diagram-label">Release workflow</span>
+			<span id="edit-label">MODEL PREVIEW</span>
+			<span id="note-count">0</span>
+			<p id="selection">Select a shape on the canvas to inspect it.</p>
+			<ul id="notes"></ul>
+		</div>
+		<input id="file" type="file" accept=".vsdx,.vsd" hidden />
 		<main class="stage" aria-label="Viewer workspace">
 			<div id="viewer" tabindex="-1"></div>
 			<div id="drop-overlay" hidden>Drop a .vsdx or .vsd file to open it</div>
@@ -71,27 +60,6 @@
 			<p id="error" role="alert" hidden></p>
 			<p id="export-status" role="status"></p>
 		</div>
-		<footer class="workspace-footer">
-			<details class="document-report">
-				<summary>Document report <span id="note-count">0</span></summary>
-				<div class="report-body">
-					<div class="report-heading">
-						<h1 id="diagram-label">Release workflow</h1>
-						<span class="pill" id="edit-label">MODEL PREVIEW</span>
-					</div>
-					<h2>Selected shape</h2>
-					<p id="selection">Select a shape on the canvas to inspect it.</p>
-					<h2>Compatibility notes</h2>
-					<ul id="notes"></ul>
-					<p>
-						Text editing is experimental. Formulas are not recalculated. Native Visio compatibility
-						is not verified. Keep the original and review downloaded copies in Visio.
-					</p>
-					<a href="../docs/parity.html">Full capability ledger →</a>
-				</div>
-			</details>
-			<span class="privacy-note">Files stay in your browser · Preview</span>
-		</footer>
 		<script type="module" src="./main.ts"></script>
 	</body>
 </html>

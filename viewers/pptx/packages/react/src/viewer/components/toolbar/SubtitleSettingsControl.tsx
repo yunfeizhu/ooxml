@@ -4,10 +4,7 @@ import {
 	subtitleSettingsLabels,
 	updateSubtitleSettings,
 } from 'ooxml-ui/pptx';
-import type {
-	PptxUiSubtitleSettingsElement,
-	SubtitleSettingsChangeEvent,
-} from 'ooxml-ui/pptx';
+import type { PptxUiSubtitleSettingsElement, SubtitleSettingsChangeEvent } from 'ooxml-ui/pptx';
 import React, { useContext, useEffect, useRef, useSyncExternalStore } from 'react';
 import { useTranslation } from 'react-i18next';
 

@@ -1,12 +1,3 @@
-/* oxlint-disable eslint/one-var -- pervasive pre-existing pattern in this file
-   (many independent short-lived `const`s deriving one inspector field each);
-   merging them isn't a style choice here. */
-import type { PptxElement, PptxThemeColorRef } from 'pptx-viewer-core';
-import {
-	hasShapeProperties,
-	isImageLikeElement,
-	pptxActionToElementAction,
-} from 'pptx-viewer-core';
 import {
 	autoFitModeOf,
 	canInteractWithElement,
@@ -24,6 +15,15 @@ import {
 	textWrapOf,
 } from 'ooxml-ui/pptx';
 import type { InlineTextSelection } from 'ooxml-ui/pptx';
+/* oxlint-disable eslint/one-var -- pervasive pre-existing pattern in this file
+   (many independent short-lived `const`s deriving one inspector field each);
+   merging them isn't a style choice here. */
+import type { PptxElement, PptxThemeColorRef } from 'pptx-viewer-core';
+import {
+	hasShapeProperties,
+	isImageLikeElement,
+	pptxActionToElementAction,
+} from 'pptx-viewer-core';
 
 import type { ChartPartSelection } from '../render';
 import type { InspectorState } from '../ui';

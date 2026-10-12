@@ -1,10 +1,13 @@
-import type { VisioEdit, VisioTextFormatEdit } from 'ooxml-core/visio';
+import type { VisioEdit, VisioTextFormatEdit, VisioThemeColorRef } from 'ooxml-core/visio';
 import {
 	visioChangeCaseCommand,
 	visioChangeCaseShape,
 	visioFormattingShape,
-	visioStyleFormattingShape,
+	visioFormatTargetShape,
 	visioFontFamilies,
+	visioTextBlockEdit,
+	visioTextBlockFrame,
+	visioTextBlockShape,
 	visioOrderingShape,
 	visioTextFormattingState,
 	visioTextIndentCommand,
@@ -13,9 +16,9 @@ import {
 import type { ViewerController, ViewerState } from './controller';
 import type { VisioFormattingAction } from './ribbon-action';
 import type { RibbonCommand } from './ribbon-parts';
-import { fontColorOptions } from './ribbon-style-options';
 import { renderPaintMenus } from './viewer-paint-menu';
-import { renderShapeStyleControls } from './viewer-shape-styles';
+import { pageAccentColor, renderShapeStyleControls } from './viewer-shape-styles';
+import { VISIO_GLOW_TRANSPARENCY } from 'ooxml-core/visio';
 
 type Combo = RibbonCommand & {
 	value: string;
@@ -29,6 +32,8 @@ const vertical = ['top', 'middle', 'bottom'] as const;
 /** Selection-aware ribbon presentation; all writes go through the controller's edit worker. */
 export class ViewerFormatting {
 	#fontColor = '#000000';
+	/** The Theme Colors swatch the split button's colour came from, if any. */
+	#fontColorTheme: VisioThemeColorRef | undefined;
 	constructor(
 		private readonly root: ShadowRoot,
 		private readonly controller: ViewerController,
@@ -37,6 +42,14 @@ export class ViewerFormatting {
 
 	run(action: VisioFormattingAction): void {
 		const state = this.controller.state;
+		if (action.type === 'glow-preset') {
+			const page = state.document?.pages[state.pageIndex];
+			const color = pageAccentColor(page, action.accent);
+			return this.run({
+				type: 'shape-format',
+				patch: { glow: { size: action.size, color, transparency: VISIO_GLOW_TRANSPARENCY } },
+			});
+		}
 		if (!state.edit.sourceAvailable || state.loading || state.edit.busy) return;
 		const sourceGeneration = this.controller.sourceGeneration;
 		const page = state.document?.pages[state.pageIndex];
@@ -60,17 +73,35 @@ export class ViewerFormatting {
 			);
 			return;
 		}
+		if (action.type === 'text-rotate') {
+			const blocks = selections.map(({ id }) => visioTextBlockShape(page, id));
+			if (blocks.some((shape) => !shape)) return;
+			// As Visio: TxtAngle gains 90 degrees and the block keeps its size and pin.
+			const edits = blocks.map((shape) => {
+				const frame = visioTextBlockFrame(shape!);
+				const turns = Math.round(frame.angle / (Math.PI / 2)) + 1;
+				return visioTextBlockEdit(page, shape!, {
+					...frame,
+					angle: (((((turns + 2) % 4) + 4) % 4) - 2) * (Math.PI / 2),
+				});
+			});
+			this.edit(() => this.controller.applyEdits(edits), 'Rotated the text.');
+			return;
+		}
 		const candidates = selections.map(({ id }) =>
 			action.type === 'shape-order'
 				? visioOrderingShape(page, id)
 				: action.type === 'shape-format'
-					? visioStyleFormattingShape(page, id)
+					? visioFormatTargetShape(page, id)
 					: visioFormattingShape(page, id),
 		);
 		if (candidates.some((shape) => !shape)) return;
 		const shapes = candidates.filter((shape) => !!shape);
 		const aggregate = visioTextFormattingState(shapes);
-		if (action.type === 'font-color' && action.value) this.#fontColor = action.value;
+		if (action.type === 'font-color' && action.value) {
+			this.#fontColor = action.value;
+			this.#fontColorTheme = action.theme;
+		}
 		const commands: VisioEdit[] = shapes.map((shape) => {
 			const target = { pageId: page.id, shapeId: shape.id };
 			if (action.type === 'shape-order')
@@ -95,6 +126,7 @@ export class ViewerFormatting {
 					break;
 				case 'font-color':
 					patch.fontColor = this.#fontColor;
+					if (this.#fontColorTheme) patch.fontColorTheme = this.#fontColorTheme;
 					break;
 				case 'font-family':
 					patch.fontFamily = action.value;
@@ -135,7 +167,7 @@ export class ViewerFormatting {
 		const candidates =
 			page && currentPage ? selections.map((item) => visioFormattingShape(page, item.id)) : [];
 		const styleCandidates =
-			page && currentPage ? selections.map((item) => visioStyleFormattingShape(page, item.id)) : [];
+			page && currentPage ? selections.map((item) => visioFormatTargetShape(page, item.id)) : [];
 		const shapes = candidates.filter((shape) => !!shape);
 		const styleShapes = styleCandidates.filter((shape) => !!shape);
 		const shape = shapes.length === selections.length ? shapes.at(-1) : undefined;
@@ -153,12 +185,12 @@ export class ViewerFormatting {
 		const reason =
 			baseReason ||
 			(!shape
-				? 'Text formatting requires a local shape without a master, group, or layer membership.'
+				? 'Text formatting needs a shape or a stencil group: not a group drawn on the page, a picture, a stencil connector, a drawn shape on a layer or a shape on a locked layer.'
 				: '');
 		const styleReason =
 			baseReason ||
 			(!styleShape
-				? 'Formatting requires a local shape without a master, group, foreign image, or layer membership.'
+				? 'Formatting needs a shape or a stencil group: not a group drawn on the page, a picture, a stencil connector, a drawn shape on a layer or a shape on a locked layer.'
 				: '');
 		const set = (element: RibbonCommand | null, disabled: string, pressed?: boolean) => {
 			if (!element) return;
@@ -175,6 +207,13 @@ export class ViewerFormatting {
 			set(button(`align-${value}`), reason, !!shape && aggregate.horizontalAlign === value);
 		set(button('justify'), reason, !!shape && aggregate.horizontalAlign === 'justify');
 		set(button('bullets'), reason, !!shape && aggregate.bullets);
+		set(
+			button('rotate-text'),
+			baseReason ||
+				(!page || !currentPage || selections.some((item) => !visioTextBlockShape(page, item.id))
+					? 'Rotate Text requires top-level two-dimensional shapes.'
+					: ''),
+		);
 		const indentReason =
 			reason ||
 			(!page || !shapes.every((item) => visioTextIndentCommand(page, item.id, 'increase'))
@@ -194,12 +233,6 @@ export class ViewerFormatting {
 		set(this.root.querySelector<RibbonCommand>('[data-menu="change-case"]'), caseReason);
 		for (const mode of ['sentence', 'lower', 'upper', 'capitalize', 'toggle'])
 			set(button(`case-${mode}`), caseReason);
-		for (const item of fontColorOptions()) {
-			const el = button(item.id);
-			set(el, reason);
-			if (el && item.action?.type === 'font-color')
-				el.setAttribute('checked', String(!!shape && aggregate.fontColor === item.action.value));
-		}
 		for (const value of vertical)
 			set(button(`align-${value}`), reason, !!shape && aggregate.verticalAlign === value);
 		for (const [id, direction] of [
@@ -246,7 +279,7 @@ export class ViewerFormatting {
 			size.value = current === undefined ? '' : String(current);
 		}
 		renderPaintMenus(this.root, styleShape ? styleShapes : [], styleReason, set);
-		renderShapeStyleControls(this.root, styleShape ? styleShapes : [], styleReason, set);
+		renderShapeStyleControls(this.root, styleShape ? styleShapes : [], styleReason, set, page);
 		const ordering =
 			page && selection && currentPage ? visioOrderingShape(page, selection.id) : undefined;
 		const orderReason =
@@ -255,7 +288,7 @@ export class ViewerFormatting {
 				: selections.length > 1
 					? 'Select one shape to change its drawing order.'
 					: !ordering
-						? 'Ordering requires a local shape without a master, group, or layer.'
+						? 'Ordering takes a stencil shape off locked layers, or a drawn shape that is not a group, a picture or on a layer.'
 						: '';
 		const index = ordering && page ? page.shapes.indexOf(ordering) : -1;
 		for (const id of ['bring-to-front', 'bring-forward', 'ctx-bring-to-front', 'ctx-bring-forward'])

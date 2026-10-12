@@ -23,6 +23,8 @@ export function visioPageInsertCommand(
  * Host calls to editVsdx/applyEdits keep their existing drawing-inch contract.
  */
 export function visioPageEditToDrawing(page: VisioPage, edit: VisioEdit): VisioEdit {
+	// Document-wide edits (Snap & Glue) carry no page coordinates.
+	if (!('pageId' in edit)) return edit;
 	const ratio = page.drawingToPageScale ?? 1;
 	if (!Number.isFinite(ratio) || ratio <= 0 || page.id !== edit.pageId)
 		throw new Error('Invalid page scale or edit page.');

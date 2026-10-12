@@ -1,6 +1,6 @@
-import type { PptxElement } from 'pptx-viewer-core';
 import type { ResolvedCustomization, RibbonContextualTabId } from 'ooxml-ui/pptx';
 import { resolveActiveRibbonTab, visibleContextualTabs } from 'ooxml-ui/pptx';
+import type { PptxElement } from 'pptx-viewer-core';
 import { useEffect, useState } from 'react';
 
 export interface ContextualRibbonTab {

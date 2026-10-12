@@ -1,7 +1,7 @@
 import { NgStyle } from '@angular/common';
 import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
-
 import type { Extrusion3DData, Extrusion3dCss } from 'ooxml-ui/pptx';
+
 import type { StyleMap } from './element-style';
 
 /**

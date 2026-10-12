@@ -1,6 +1,6 @@
+import { DIRECTION_VALUES } from 'ooxml-ui/pptx';
 // @vitest-environment happy-dom
 import type { PptxElement, PptxElementAnimation, PptxSlide } from 'pptx-viewer-core';
-import { DIRECTION_VALUES } from 'ooxml-ui/pptx';
 import React, { act } from 'react';
 import { createRoot } from 'react-dom/client';
 import type { Root } from 'react-dom/client';

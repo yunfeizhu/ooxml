@@ -1,7 +1,7 @@
-import type { PptxElement } from 'pptx-viewer-core';
-import { isImageLikeElement } from 'pptx-viewer-core';
 import { getImageColorWashStyle, getImageSvgFilters } from 'ooxml-ui/pptx';
 import { translationsEn } from 'ooxml-ui/pptx/i18n';
+import type { PptxElement } from 'pptx-viewer-core';
+import { isImageLikeElement } from 'pptx-viewer-core';
 import React from 'react';
 
 import { getDuotoneColors, getImageEffectsFilter, isImageTiled } from '../../utils';

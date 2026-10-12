@@ -1,3 +1,14 @@
+import {
+	canInteractWithElement,
+	drillSelectionForClick,
+	drillSelectionForDoubleClick,
+	findElementPath,
+	isEnterableGroup,
+	memberChainAtPoint,
+	parentSelection,
+	resolveTopLevelElementId,
+	setPendingCaretPoint,
+} from 'ooxml-ui/pptx';
 /**
  * useCanvasPointer: everything a pointer landing on the editable slide canvas
  * can mean.
@@ -13,17 +24,6 @@
  */
 import { hasTextProperties } from 'pptx-viewer-core';
 import type { PptxElement } from 'pptx-viewer-core';
-import {
-	canInteractWithElement,
-	drillSelectionForClick,
-	drillSelectionForDoubleClick,
-	findElementPath,
-	isEnterableGroup,
-	memberChainAtPoint,
-	parentSelection,
-	resolveTopLevelElementId,
-	setPendingCaretPoint,
-} from 'ooxml-ui/pptx';
 import type { Ref } from 'vue';
 
 import { isElementIdInteractive } from './template-editing';

@@ -1,5 +1,5 @@
-import type { PptxElement } from 'pptx-viewer-core';
 import { getNonVisualDescriptionFields } from 'ooxml-ui/pptx';
+import type { PptxElement } from 'pptx-viewer-core';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 

@@ -9,9 +9,9 @@ import {
 	viewChild,
 } from '@angular/core';
 import { TranslatePipe } from '@ngx-translate/core';
+import { formatMediaTime } from 'ooxml-ui/pptx';
 import type { MediaPptxElement, PptxElement } from 'pptx-viewer-core';
 
-import { formatMediaTime } from 'ooxml-ui/pptx';
 import { resolveMediaSrc } from './media-renderer-helpers';
 import { MediaTrimTimelineComponent } from './media-trim-timeline.component';
 

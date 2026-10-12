@@ -1,3 +1,5 @@
+import { mergeTableElements } from 'ooxml-ui/pptx/ai';
+import { translationsEn } from 'ooxml-ui/pptx/i18n';
 /**
  * Regression guard for the AI `merge_tables` render path.
  *
@@ -10,8 +12,6 @@
  * `rawXml`, making `tableData` the single source of truth for the merged table.
  */
 import type { TablePptxElement, XmlObject } from 'pptx-viewer-core';
-import { mergeTableElements } from 'ooxml-ui/pptx/ai';
-import { translationsEn } from 'ooxml-ui/pptx/i18n';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it, vi } from 'vitest';
 

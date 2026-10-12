@@ -12,8 +12,8 @@
 
 import { ChangeDetectionStrategy, Component, effect, input, output, signal } from '@angular/core';
 import { TranslatePipe } from '@ngx-translate/core';
-
 import { formatVersionTimestamp, formatRelativeTime } from 'ooxml-ui/pptx';
+
 import { deleteVersion, formatFileSize, getVersions } from './version-history-helpers';
 import type { RecoveryVersion } from './version-history-helpers';
 

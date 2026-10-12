@@ -1,3 +1,4 @@
+import { cropResetPatch, cropResetState } from 'ooxml-ui/pptx';
 /**
  * ImageCropSection: the four crop sliders (plus a reset) for a picture, shown
  * inside the live image-properties card.
@@ -11,7 +12,6 @@
  */
 import type { PptxElement } from 'pptx-viewer-core';
 import { isImageLikeElement } from 'pptx-viewer-core';
-import { cropResetPatch, cropResetState } from 'ooxml-ui/pptx';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 

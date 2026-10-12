@@ -1,5 +1,5 @@
-import type { PptxHandler, PptxSlide } from 'pptx-viewer-core';
 import type { InkPoint } from 'ooxml-ui/pptx';
+import type { PptxHandler, PptxSlide } from 'pptx-viewer-core';
 import { describe, expect, it } from 'vitest';
 
 import { EditorState } from './editor-state.svelte';

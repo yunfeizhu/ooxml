@@ -1,5 +1,3 @@
-import { hasShapeProperties } from 'pptx-viewer-core';
-import type { PptxElement, PptxSlide, ShapeStyle } from 'pptx-viewer-core';
 import {
 	masterViewElements as resolveMasterViewElements,
 	replaceMasterViewElements,
@@ -7,6 +5,8 @@ import {
 	updateMasterViewElement,
 } from 'ooxml-ui/pptx';
 import type { MasterViewWrite } from 'ooxml-ui/pptx';
+import { hasShapeProperties } from 'pptx-viewer-core';
+import type { PptxElement, PptxSlide, ShapeStyle } from 'pptx-viewer-core';
 /**
  * useElementOperations: Element update callbacks for PowerPointViewer.
  *

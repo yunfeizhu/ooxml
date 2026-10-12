@@ -4,10 +4,12 @@ import { fileURLToPath } from 'node:url';
 // Tests run against the sibling ooxml checkout's source when there is one, like the demos (no build
 // needed). Without it (CI, the sync-ooxml workflow) or with TEAMS_USE_DIST=1 they run against the
 // published ooxml-core and ooxml-ui installed in node_modules.
-const ooxml = fileURLToPath(
-	new URL(process.env.OOXML_DIR ?? '../../', import.meta.url),
-).replaceAll(String.fromCharCode(92), '/');
-const useSource = process.env.TEAMS_USE_DIST !== '1' && existsSync(`${ooxml}src/core/teams/index.ts`);
+const ooxml = fileURLToPath(new URL(process.env.OOXML_DIR ?? '../../', import.meta.url)).replaceAll(
+	String.fromCharCode(92),
+	'/',
+);
+const useSource =
+	process.env.TEAMS_USE_DIST !== '1' && existsSync(`${ooxml}src/core/teams/index.ts`);
 
 export default {
 	resolve: {

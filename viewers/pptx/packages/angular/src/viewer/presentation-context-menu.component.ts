@@ -25,7 +25,6 @@ import {
 	input,
 	output,
 } from '@angular/core';
-
 import type {
 	ContextMenuRequestEvent,
 	ContextMenuViewState,
@@ -37,6 +36,7 @@ import {
 	getPresentationContextMenuSections,
 	presentationViewItems,
 } from 'ooxml-ui/pptx';
+
 import type { MenuTranslate } from './context-menu-translate';
 import { injectMenuTranslate } from './context-menu-translate';
 

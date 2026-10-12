@@ -1,5 +1,5 @@
-import type { PptxElement } from 'pptx-viewer-core';
 import type { ResolvedCustomization } from 'ooxml-ui/pptx';
+import type { PptxElement } from 'pptx-viewer-core';
 import type { ComputedRef, Ref } from 'vue';
 
 import type { ContextMenuItem } from '../components/ContextMenu.vue';

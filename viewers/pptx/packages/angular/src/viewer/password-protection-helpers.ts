@@ -10,7 +10,6 @@
  */
 
 import type { TranslateService } from '@ngx-translate/core';
-
 // Password strength scoring is shared, so every binding grades a password the
 // same way.
 import { getPasswordStrength } from 'ooxml-ui/pptx';

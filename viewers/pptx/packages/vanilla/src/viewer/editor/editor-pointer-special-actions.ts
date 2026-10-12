@@ -1,6 +1,6 @@
-import type { PptxTableData } from 'pptx-viewer-core';
 import type { SnapSibling } from 'ooxml-ui/pptx';
 import { computeSelectionRect, rectToCells } from 'ooxml-ui/pptx';
+import type { PptxTableData } from 'pptx-viewer-core';
 
 import type { Store, ViewerState } from '../state';
 import { findActiveElement, getActiveElements } from './editor-active-elements';

@@ -2,6 +2,7 @@ import type {
 	AccountAuthConfig,
 	PowerPointViewerAPI,
 	ThemeCatalogEntry,
+	RibbonAddInTab,
 	ToolbarActionId,
 	ViewerCustomization,
 	ViewerCustomizationApi,
@@ -565,6 +566,25 @@ export interface PowerPointViewerProps extends ViewportFitOptions {
 	 * ```
 	 */
 	hiddenActions?: ToolbarActionId[];
+
+	/**
+	 * Ribbon tabs the host adds after Help, as an Office add-in does. Each
+	 * command runs its `run` callback and dispatches a bubbling
+	 * `office-ribbon-add-in` DOM event (`{ tab, command }`) from the viewer. A
+	 * tab cannot take the id of a built-in tab, and a drop-down (`items`) is
+	 * drawn as its items. The desktop ribbon shows them; the phone toolbar does not.
+	 *
+	 * @example
+	 * ```tsx
+	 * <PowerPointViewer
+	 *   content={bytes}
+	 *   ribbonAddIns={[{ id: 'reports', label: 'Reports', groups: [
+	 *     { label: 'Export', commands: [{ id: 'export', label: 'Export', run: exportReport }] },
+	 *   ] }]}
+	 * />
+	 * ```
+	 */
+	ribbonAddIns?: readonly RibbonAddInTab[];
 
 	/**
 	 * Opt in to the built-in AI assistant. When provided, a Sparkles toggle

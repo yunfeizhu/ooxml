@@ -9,11 +9,16 @@
 	import {
 		collectUsedFonts,
 		createBackstagePresentation,
+		findRibbonAddIn,
 		isActionHidden,
+		RIBBON_CONTEXTUAL_TABS,
+		resolveActiveRibbonAddIn,
 		resolveActiveRibbonTab,
 		visibleContextualTabs,
+		visibleRibbonAddIns,
 	} from 'ooxml-ui/pptx';
 	import type { RibbonContextualTabId } from 'ooxml-ui/pptx';
+	import { useRibbonAddIns } from '../../state/ribbon-add-ins';
 	import { useViewerCustomization } from '../../state/viewer-customization.svelte';
 	import FileTab from './file/FileTab.svelte';
 	import DocumentPropertiesDialog from './file/DocumentPropertiesDialog.svelte';
@@ -25,21 +30,35 @@
 	import RibbonPrimaryRow from './RibbonPrimaryRow.svelte';
 	import RibbonTabBar from './RibbonTabBar.svelte';
 	import RibbonTabContent from './RibbonTabContent.svelte';
-	import { DEFAULT_RIBBON_TAB } from './ribbon-tabs';
+	import { DEFAULT_RIBBON_TAB, RIBBON_TABS } from './ribbon-tabs';
 	import type { RibbonTabId } from './ribbon-tabs';
 	import type { RibbonProps } from './ribbon-types';
 
 	const props: RibbonProps = $props();
 	const t = useTranslator();
 
-	let activeTab = $state<RibbonTabId | RibbonContextualTabId>(DEFAULT_RIBBON_TAB);
+	// A host's add-in tab (`ribbonAddIns`) is any other id.
+	let activeTab = $state<RibbonTabId | RibbonContextualTabId | string>(DEFAULT_RIBBON_TAB);
 	const custom = useViewerCustomization();
 	// Contextual tabs follow the selection; a vanished one falls back to Home
 	// (shared `resolveActiveRibbonTab`). Selecting never auto-switches to one.
 	const contextualTabs = $derived(
 		visibleContextualTabs(props.editor.selectedElement ?? null, custom.resolved),
 	);
-	const shownTab = $derived(resolveActiveRibbonTab(activeTab, contextualTabs, DEFAULT_RIBBON_TAB));
+	// The host's tabs sit after the fixed ones; removing the one that is showing falls back too.
+	const readAddIns = useRibbonAddIns();
+	const addInTabs = $derived(visibleRibbonAddIns(readAddIns()));
+	const isBuiltInTab = (id: string): boolean =>
+		RIBBON_TABS.some((tab) => tab.id === id) || RIBBON_CONTEXTUAL_TABS.some((tab) => tab.id === id);
+	const shownTab = $derived(
+		resolveActiveRibbonAddIn(
+			resolveActiveRibbonTab(activeTab, contextualTabs, DEFAULT_RIBBON_TAB),
+			addInTabs,
+			isBuiltInTab,
+			DEFAULT_RIBBON_TAB,
+		),
+	);
+	const shownAddIn = $derived(isBuiltInTab(shownTab) ? undefined : findRibbonAddIn(shownTab, addInTabs));
 	$effect(() => {
 		if (shownTab !== activeTab) {
 			activeTab = shownTab;
@@ -128,6 +147,7 @@
 		active={shownTab}
 		onselect={selectTab}
 		{contextualTabs}
+		{addInTabs}
 		onrecord={props.onrehearse}
 		onshare={props.onshare}
 		collabActive={props.collabActive}
@@ -165,7 +185,7 @@
 			hiddenActions={props.hiddenActions}
 		/>
 	{/if}
-	<RibbonTabContent ribbon={props} tab={shownTab} onselecttab={selectTab} onslidesize={openSlideSize} />
+	<RibbonTabContent ribbon={props} tab={shownTab} addIn={shownAddIn} onselecttab={selectTab} onslidesize={openSlideSize} />
 </div>
 
 {#if fontsOpen}

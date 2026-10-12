@@ -14,10 +14,10 @@
  */
 import { ChangeDetectionStrategy, Component, computed, inject, input, output } from '@angular/core';
 import { TranslatePipe } from '@ngx-translate/core';
-import type { PptxTableCellStyle, PptxTableData, TablePptxElement } from 'pptx-viewer-core';
-
 import { withCellStyle } from 'ooxml-ui/pptx';
 import type { ThemeColorPickerCommit } from 'ooxml-ui/pptx';
+import type { PptxTableCellStyle, PptxTableData, TablePptxElement } from 'pptx-viewer-core';
+
 import { RecentColorsService } from './recent-colors.service';
 import { TableCellAdvancedFillComponent } from './table-cell-advanced-fill.component';
 import { TableCellColorFieldComponent } from './table-cell-color-field.component';

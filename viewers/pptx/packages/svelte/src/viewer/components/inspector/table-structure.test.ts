@@ -1,10 +1,10 @@
-import type { PptxTableData, TablePptxElement } from 'pptx-viewer-core';
 import {
 	insertTableElementColumn,
 	insertTableElementRow,
 	removeTableElementColumn,
 	removeTableElementRow,
 } from 'ooxml-ui/pptx';
+import type { PptxTableData, TablePptxElement } from 'pptx-viewer-core';
 import { describe, expect, it } from 'vitest';
 
 // Regression: TableSection.svelte used to import its own local, non-merge-aware

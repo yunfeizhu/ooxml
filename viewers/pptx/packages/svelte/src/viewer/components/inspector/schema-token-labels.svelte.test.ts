@@ -1,4 +1,3 @@
-import type { PptxElement, PptxTableData } from 'pptx-viewer-core';
 import {
 	ARROWHEAD_LABEL_KEYS,
 	BEVEL_PRESETS,
@@ -9,6 +8,7 @@ import {
 	TEXT_WARP_PRESETS,
 } from 'ooxml-ui/pptx';
 import { translationsEn } from 'ooxml-ui/pptx/i18n';
+import type { PptxElement, PptxTableData } from 'pptx-viewer-core';
 import { flushSync, mount, unmount } from 'svelte';
 import { afterEach, describe, expect, it } from 'vitest';
 

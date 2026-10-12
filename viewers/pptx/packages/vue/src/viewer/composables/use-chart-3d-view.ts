@@ -1,15 +1,3 @@
-/**
- * useChart3DView: Vue glue between a chart element's `<pptx-three-view>` and
- * this binding's chart-part selection / value-commit path. Everything that
- * decides WHICH element gets a 3D spec, and what a click/drag on it means,
- * lives in `pptx-viewer-shared` (`resolveChartThreeViewSpec`,
- * `applyChart3DSelect`, `applyChart3DDrag`); this composable only adapts it to
- * the injected `ChartCanvasEditContext`, the SAME context the 2D mark
- * interaction (`chart-canvas-interaction.ts`) uses, so the chart inspector
- * and undo history react identically to a 2D or a 3D mark. Mirrors React's
- * `use-chart-3d-view.ts`.
- */
-import type { PptxElement } from 'pptx-viewer-core';
 import {
 	applyChart3DDrag,
 	applyChart3DSelect,
@@ -22,6 +10,18 @@ import type {
 	ThreeViewDragDetail,
 	ThreeViewSpec,
 } from 'ooxml-ui/pptx';
+/**
+ * useChart3DView: Vue glue between a chart element's `<pptx-three-view>` and
+ * this binding's chart-part selection / value-commit path. Everything that
+ * decides WHICH element gets a 3D spec, and what a click/drag on it means,
+ * lives in `pptx-viewer-shared` (`resolveChartThreeViewSpec`,
+ * `applyChart3DSelect`, `applyChart3DDrag`); this composable only adapts it to
+ * the injected `ChartCanvasEditContext`, the SAME context the 2D mark
+ * interaction (`chart-canvas-interaction.ts`) uses, so the chart inspector
+ * and undo history react identically to a 2D or a 3D mark. Mirrors React's
+ * `use-chart-3d-view.ts`.
+ */
+import type { PptxElement } from 'pptx-viewer-core';
 import { computed, ref } from 'vue';
 import type { ComputedRef } from 'vue';
 

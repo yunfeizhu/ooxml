@@ -1,5 +1,5 @@
-import type { PptxElement } from 'pptx-viewer-core';
 import { parentSelection, selectionBounds, slideSpaceElement } from 'ooxml-ui/pptx';
+import type { PptxElement } from 'pptx-viewer-core';
 
 import type { OverlayBox } from './selection-overlay';
 

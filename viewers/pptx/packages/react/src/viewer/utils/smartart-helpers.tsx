@@ -1,8 +1,5 @@
+import { resolvePalette as sharedResolvePalette, SMARTART_DEFAULT_PALETTE } from 'ooxml-ui/pptx';
 import type { PptxElement, PptxSmartArtData, SmartArtStyle } from 'pptx-viewer-core';
-import {
-	resolvePalette as sharedResolvePalette,
-	SMARTART_DEFAULT_PALETTE,
-} from 'ooxml-ui/pptx';
 
 /**
  * Thin element-level adapters over the shared SmartArt palette/style helpers.

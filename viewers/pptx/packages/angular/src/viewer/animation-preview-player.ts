@@ -1,3 +1,5 @@
+import { buildAnimationRibbonPreview } from 'ooxml-ui/pptx';
+import type { AnimationPreviewDescriptor } from 'ooxml-ui/pptx';
 /**
  * animation-preview-player.ts: the DOM half of the animation preview.
  *
@@ -7,9 +9,6 @@
  * business.
  */
 import type { PptxElementAnimation } from 'pptx-viewer-core';
-
-import { buildAnimationRibbonPreview } from 'ooxml-ui/pptx';
-import type { AnimationPreviewDescriptor } from 'ooxml-ui/pptx';
 
 interface ActiveAnimationPreview {
 	element: HTMLElement;

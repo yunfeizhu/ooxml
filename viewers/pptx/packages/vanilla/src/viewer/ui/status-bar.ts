@@ -1,9 +1,5 @@
 import { isActionHidden, registerPptxWebControls, resolveStatusBarSave } from 'ooxml-ui/pptx';
-import type {
-	StatusBarRequestEvent,
-	StatusBarViewState,
-	ToolbarActionId,
-} from 'ooxml-ui/pptx';
+import type { StatusBarRequestEvent, StatusBarViewState, ToolbarActionId } from 'ooxml-ui/pptx';
 
 import type { Translator } from '../i18n';
 import type { RibbonNavState } from './ribbon/ribbon-types';

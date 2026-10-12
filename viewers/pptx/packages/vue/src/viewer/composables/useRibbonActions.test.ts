@@ -1,6 +1,4 @@
 import { mount } from '@vue/test-utils';
-import { hasTextProperties } from 'pptx-viewer-core';
-import type { PptxElement, PptxSlide, TextSegment } from 'pptx-viewer-core';
 import {
 	elementBulletKind,
 	remapTextToSegments,
@@ -10,6 +8,8 @@ import {
 	attachInlineListController,
 } from 'ooxml-ui/pptx';
 import type { InlineListController, InlineTextEditSnapshot } from 'ooxml-ui/pptx';
+import { hasTextProperties } from 'pptx-viewer-core';
+import type { PptxElement, PptxSlide, TextSegment } from 'pptx-viewer-core';
 import { describe, expect, it, vi } from 'vitest';
 import { computed, ref } from 'vue';
 

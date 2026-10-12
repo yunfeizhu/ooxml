@@ -24,8 +24,6 @@ import {
 	signal,
 	viewChild,
 } from '@angular/core';
-import type { PptxChartData, PptxElement } from 'pptx-viewer-core';
-
 import {
 	advanceChartMarkDrag,
 	advanceChartValueDrag,
@@ -48,6 +46,8 @@ import type {
 	ElementAnimationState,
 	ThreeViewDragDetail,
 } from 'ooxml-ui/pptx';
+import type { PptxChartData, PptxElement } from 'pptx-viewer-core';
+
 import {
 	chartCanEditParts,
 	chartDragCommitData,

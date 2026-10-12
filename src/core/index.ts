@@ -6,6 +6,7 @@ export * as color from './color/index';
 export * as chart from './chart/index';
 export * as text from './text/index';
 export * as i18n from './i18n/index';
+export * as ribbon from './ribbon/index';
 export * as drawingml from './drawingml/index';
 export * as diagram from './diagram/index';
 export * as digest from './digest/index';

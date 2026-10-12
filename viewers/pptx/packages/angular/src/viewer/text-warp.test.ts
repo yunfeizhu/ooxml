@@ -1,3 +1,4 @@
+import { hasGlyphEnvelope } from 'ooxml-ui/pptx';
 /**
  * Unit tests for the Angular text-warp descriptor resolver.
  *
@@ -8,7 +9,6 @@ import { Font, Glyph, Path } from 'opentype.js';
 import type { PptxElement, PptxEmbeddedFont, TextSegment } from 'pptx-viewer-core';
 import { describe, expect, it } from 'vitest';
 
-import { hasGlyphEnvelope } from 'ooxml-ui/pptx';
 import { glyphOutlineFontCache } from './glyph-outline-cache';
 import {
 	ALL_CLASSIFIED_PRESETS,

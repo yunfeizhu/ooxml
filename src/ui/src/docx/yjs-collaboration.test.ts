@@ -1,3 +1,4 @@
+// @vitest-environment jsdom
 import { readFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { loadDocx, listRevisions } from 'ooxml-core/docx';

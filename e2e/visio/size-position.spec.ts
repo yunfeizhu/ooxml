@@ -4,6 +4,7 @@ import { expect, test } from '@playwright/test';
 import { createVsdx, editVsdx, parseVsdx } from 'ooxml-core/visio';
 import type { VisioViewerElement } from 'ooxml-ui/visio';
 import { downloadCopy, taskPane } from './ribbon';
+import { openDemo } from './demo-page';
 
 async function fixture(scale: number): Promise<Uint8Array> {
 	const zip = await JSZip.loadAsync(await createVsdx());
@@ -47,13 +48,17 @@ for (const [index, framework] of [
 		const errors: string[] = [];
 		page.on('pageerror', (error) => errors.push(error.message));
 		await page.setViewportSize({ width: 1600, height: 1000 });
-		await page.goto(framework === 'vanilla' ? '/demo/?sample=1' : `/demo-${framework}/?sample=1`);
+		await openDemo(
+			page,
+			framework === 'vanilla' ? '/demo/?sample=1' : `/demo-${framework}/?sample=1`,
+		);
 		const viewer = page.locator('visio-viewer');
 		await page.locator('#file').setInputFiles({
 			name: 'Numeric.vsdx',
 			mimeType: 'application/vnd.ms-visio.drawing',
 			buffer: Buffer.from(bytes),
 		});
+		await expect(page.locator('#file-name')).toHaveText('Numeric.vsdx');
 		await expect(viewer.locator('svg.paper')).toContainText('Numeric shape');
 		await viewer.locator('svg.paper [data-shape-id="1"]').first().click();
 		await taskPane(viewer, 'Size & Position');

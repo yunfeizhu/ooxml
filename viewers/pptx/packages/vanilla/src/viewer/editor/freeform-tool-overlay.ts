@@ -1,6 +1,6 @@
-import type { ShapePptxElement } from 'pptx-viewer-core';
 import type { FreeformToolKind } from 'ooxml-ui/pptx';
 import { attachOverlayKeyboard, clientToSlidePoint, FreeformToolSession } from 'ooxml-ui/pptx';
+import type { ShapePptxElement } from 'pptx-viewer-core';
 
 import type { Translator } from '../i18n';
 import { createSvgEl, setSvgAttrs } from '../render';

@@ -1,6 +1,24 @@
 import { XMLParser } from 'fast-xml-parser';
 import JSZip from 'jszip';
 import type {
+	DeckSaveIntent,
+	DeckSavePurpose,
+	PendingInlineTextEdit,
+	SlideSizeEmu,
+} from 'ooxml-ui/pptx';
+import {
+	createPresentationLoadResources,
+	applyImagePathPatches,
+	buildDeckSaveOptions,
+	overlayInlineTextSnapshot,
+	overlayMasterViewInlineSnapshot,
+	resolveSlideSizeSelection,
+	resolveTableCellImageUrls,
+	resolveTableStyleImageUrls,
+	resolveTextFillBlipUrls,
+	saveDeckWithPassword,
+} from 'ooxml-ui/pptx';
+import type {
 	MediaPptxElement,
 	ParsedSignature,
 	ParsedTableStyleMap,
@@ -34,24 +52,6 @@ import {
 	decodeXmlEntities,
 	parseSignatureXml,
 } from 'pptx-viewer-core';
-import type {
-	DeckSaveIntent,
-	DeckSavePurpose,
-	PendingInlineTextEdit,
-	SlideSizeEmu,
-} from 'ooxml-ui/pptx';
-import {
-	createPresentationLoadResources,
-	applyImagePathPatches,
-	buildDeckSaveOptions,
-	overlayInlineTextSnapshot,
-	overlayMasterViewInlineSnapshot,
-	resolveSlideSizeSelection,
-	resolveTableCellImageUrls,
-	resolveTableStyleImageUrls,
-	resolveTextFillBlipUrls,
-	saveDeckWithPassword,
-} from 'ooxml-ui/pptx';
 import { onScopeDispose, ref, shallowRef, toValue, watch } from 'vue';
 import type { MaybeRefOrGetter, Ref, ShallowRef } from 'vue';
 

@@ -1,10 +1,10 @@
-import type { PptxElement } from 'pptx-viewer-core';
 import { createInlineListModelObserver } from 'ooxml-ui/pptx';
 import type {
 	CollaborationInlineEditor,
 	InlineListController,
 	InlineTextEditSnapshot,
 } from 'ooxml-ui/pptx';
+import type { PptxElement } from 'pptx-viewer-core';
 import { toRaw, watch } from 'vue';
 
 /** Viewer-local controller and model-history boundary, shared by normal and master editors. */

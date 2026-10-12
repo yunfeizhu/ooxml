@@ -1,3 +1,11 @@
+import {
+	deleteMasterViewElements,
+	masterViewBackgroundColor,
+	masterViewPseudoSlide,
+	setMasterViewBackgroundColor,
+	updateMasterViewElement,
+} from 'ooxml-ui/pptx';
+import type { MasterViewDocument } from 'ooxml-ui/pptx';
 /**
  * master-view-canvas.test.ts: the routing rule behind View > Slide Master.
  *
@@ -14,15 +22,6 @@
  */
 import type { PptxElement, PptxSlideMaster } from 'pptx-viewer-core';
 import { describe, expect, it } from 'vitest';
-
-import {
-	deleteMasterViewElements,
-	masterViewBackgroundColor,
-	masterViewPseudoSlide,
-	setMasterViewBackgroundColor,
-	updateMasterViewElement,
-} from 'ooxml-ui/pptx';
-import type { MasterViewDocument } from 'ooxml-ui/pptx';
 
 const MASTER_PATH = 'ppt/slideMasters/slideMaster1.xml';
 const LAYOUT_PATH = 'ppt/slideLayouts/slideLayout1.xml';

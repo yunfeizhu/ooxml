@@ -5,10 +5,10 @@
  * these are trivially unit-testable and reusable outside the component.
  */
 
-import type { PptxElement } from 'pptx-viewer-core';
-
 import { canInteractWithElement } from 'ooxml-ui/pptx';
 import { resolveTopLevelElementId } from 'ooxml-ui/pptx/render/element-hit-test';
+import type { PptxElement } from 'pptx-viewer-core';
+
 import { handleAnchor, handleCursor, RESIZE_HANDLES } from './drag-resize';
 import type { Box, ResizeHandle } from './drag-resize';
 import { isElementInteractive } from './template-mode';

@@ -11,3 +11,4 @@ export * from './tab-leader';
 export * from './decimal-tab';
 export * from './wrap-styled-runs';
 export * from './change-case';
+export * from './font-metrics/advance-width';

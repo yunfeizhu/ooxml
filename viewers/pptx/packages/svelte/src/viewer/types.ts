@@ -6,6 +6,7 @@ import type {
 	CollaborationTransport,
 	PowerPointViewerAPI,
 	ThemeCatalogEntry,
+	RibbonAddInTab,
 	ToolbarActionId,
 	ViewerCustomization,
 	ViewerCustomizationApi,
@@ -135,6 +136,14 @@ export interface PowerPointViewerProps extends ViewportFitOptions {
 	 * hidden, matching the pre-existing always-visible behaviour.
 	 */
 	hiddenActions?: ToolbarActionId[];
+	/**
+	 * Ribbon tabs the host adds after Help, as an Office add-in does. Each
+	 * command runs its `run` callback and dispatches a bubbling
+	 * `office-ribbon-add-in` DOM event (`{ tab, command }`) from the viewer. A
+	 * tab cannot take the id of a built-in tab, and a drop-down (`items`) is
+	 * drawn as its items. The desktop ribbon shows them; the phone chrome does not.
+	 */
+	ribbonAddIns?: readonly RibbonAddInTab[];
 	/**
 	 * Framework-neutral UI customisation. See docs/guide/customization.md.
 	 *

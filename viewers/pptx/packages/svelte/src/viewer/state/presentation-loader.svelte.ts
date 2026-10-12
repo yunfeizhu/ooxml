@@ -1,3 +1,9 @@
+import type { CanvasSize, CollabLoadOrigin, SlideSizeEmu } from 'ooxml-ui/pptx';
+import {
+	DEFAULT_CANVAS_HEIGHT,
+	DEFAULT_CANVAS_WIDTH,
+	createPresentationLoadResources,
+} from 'ooxml-ui/pptx';
 import type {
 	ParsedTableStyleMap,
 	PptxAppProperties,
@@ -24,12 +30,6 @@ import type {
 	PptxViewProperties,
 } from 'pptx-viewer-core';
 import { EncryptedFileError, PptxHandler } from 'pptx-viewer-core';
-import type { CanvasSize, CollabLoadOrigin, SlideSizeEmu } from 'ooxml-ui/pptx';
-import {
-	DEFAULT_CANVAS_HEIGHT,
-	DEFAULT_CANVAS_WIDTH,
-	createPresentationLoadResources,
-} from 'ooxml-ui/pptx';
 
 import { glyphOutlineFontCache } from './glyph-outline-cache.svelte';
 import {

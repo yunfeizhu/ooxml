@@ -1,4 +1,10 @@
 <script setup lang="ts">
+import type { TableStyleEditorFieldEdit, TableStyleEditorPartId } from 'ooxml-ui/pptx';
+import {
+	applyTableStyleFieldEdit,
+	describeTableStyleEditor,
+	TABLE_STYLE_EDITOR_PARTS,
+} from 'ooxml-ui/pptx';
 import type { ParsedTableStyleMap } from 'pptx-viewer-core';
 import {
 	addTableStyleToMap,
@@ -6,12 +12,6 @@ import {
 	deleteTableStyleFromMap,
 	normalizeTableStyleGuid,
 } from 'pptx-viewer-core';
-import type { TableStyleEditorFieldEdit, TableStyleEditorPartId } from 'ooxml-ui/pptx';
-import {
-	applyTableStyleFieldEdit,
-	describeTableStyleEditor,
-	TABLE_STYLE_EDITOR_PARTS,
-} from 'ooxml-ui/pptx';
 import { computed, ref, toRaw } from 'vue';
 import { useI18n } from 'vue-i18n';
 

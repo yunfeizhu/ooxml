@@ -9,12 +9,12 @@
  * reader ended on so the editor can land there.
  */
 import { mount } from '@vue/test-utils';
-import type { PptxSlide } from 'pptx-viewer-core';
 import {
 	READING_VIEW_ATTR,
 	READING_VIEW_COUNTER_ATTR,
 	READING_VIEW_STAGE_ATTR,
 } from 'ooxml-ui/pptx';
+import type { PptxSlide } from 'pptx-viewer-core';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { nextTick } from 'vue';
 

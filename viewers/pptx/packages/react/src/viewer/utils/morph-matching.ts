@@ -6,8 +6,4 @@
  *
  * @module utils/morph-matching
  */
-export {
-	getElementMorphName,
-	matchMorphElements,
-	matchMorphElementsFull,
-} from 'ooxml-ui/pptx';
+export { getElementMorphName, matchMorphElements, matchMorphElementsFull } from 'ooxml-ui/pptx';

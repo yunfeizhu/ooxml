@@ -28,8 +28,6 @@ import {
 	signal,
 } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import type { PptxElement } from 'pptx-viewer-core';
-
 import { applyRibbonGalleryItem, buildRibbonGallery, galleryHasItems } from 'ooxml-ui/pptx';
 import type {
 	RibbonGalleryDescriptor,
@@ -38,6 +36,8 @@ import type {
 	RibbonGalleryPickEvent,
 	PptxUiRibbonGalleryElement,
 } from 'ooxml-ui/pptx';
+import type { PptxElement } from 'pptx-viewer-core';
+
 import { EditorStateService } from './editor-state.service';
 import { LoadContentService } from './load-content.service';
 import { dispatchGalleryResult, galleryContextFor } from './ribbon-gallery-helpers';
@@ -158,23 +158,23 @@ export class RibbonGalleryComponent {
 		this.translateService ? (this.translateService.instant(key, params) as string) : key;
 
 	protected pickId(event: Event): void {
-		const id = (event as RibbonGalleryPickEvent).detail.itemId;
-		const item = this.descriptor()
-			.sections.flatMap((section) => section.items)
-			.find((entry) => entry.id === id);
-		if (item) {
-			this.pick(item);
-		}
+		// By id, not through `descriptor()`: the element may show items this memoized copy lacks
+		// (the named layouts that finish loading after it was built).
+		this.applyId((event as RibbonGalleryPickEvent).detail.itemId);
 	}
 
 	/** Apply `item` to the selection (or theme) and close the popup. */
 	pick(item: RibbonGalleryItem): void {
+		this.applyId(item.id);
+	}
+
+	private applyId(itemId: string): void {
 		this.hostEl.querySelector<PptxUiRibbonGalleryElement>('pptx-ui-ribbon-gallery')?.close();
 		if (this.isDisabled()) {
 			return;
 		}
 		const ctx = galleryContextFor(this.element, this.loader);
-		dispatchGalleryResult(applyRibbonGalleryItem(this.gallery, item.id, ctx), {
+		dispatchGalleryResult(applyRibbonGalleryItem(this.gallery, itemId, ctx), {
 			editor: this.editor,
 			slideIndex: this.slideIndex,
 			themes: this.themes,

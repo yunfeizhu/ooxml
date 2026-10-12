@@ -1,5 +1,5 @@
 import type { PptxElementAnimation } from 'pptx-viewer-core';
-import { afterEach, describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 
 import { previewVueAnimation, stopVueAnimationPreview } from './animation-preview-player';
 
@@ -11,10 +11,20 @@ function mountElement(elementId: string): HTMLElement {
 	return element;
 }
 
+/**
+ * Styles already in the head before the test (another module's keyframes, left by an earlier file
+ * on a shared worker): the player's own are the ones that were not.
+ */
+let baseline = new Set<Element>();
+
+beforeEach(() => {
+	baseline = new Set(document.head.querySelectorAll('style'));
+});
+
 /** Every `@keyframes` block the player has injected into the document head. */
 function injectedKeyframes(): string {
 	return [...document.head.querySelectorAll('style')]
-		.filter((style) => style.textContent?.includes('@keyframes'))
+		.filter((style) => !baseline.has(style) && style.textContent?.includes('@keyframes'))
 		.map((style) => style.textContent)
 		.join('\n');
 }

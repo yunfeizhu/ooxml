@@ -1,4 +1,3 @@
-import type { PptxSection, PptxSlide } from 'pptx-viewer-core';
 import {
 	addSection as addSectionTransform,
 	deleteSection as deleteSectionTransform,
@@ -7,6 +6,7 @@ import {
 	moveSlidesToSection as moveSlidesToSectionTransform,
 	renameSection as renameSectionTransform,
 } from 'ooxml-ui/pptx';
+import type { PptxSection, PptxSlide } from 'pptx-viewer-core';
 /**
  * useSectionOperations: CRUD operations for slide sections.
  */

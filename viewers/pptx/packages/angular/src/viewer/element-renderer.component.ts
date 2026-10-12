@@ -2,8 +2,6 @@ import { NgStyle } from '@angular/common';
 import { ChangeDetectionStrategy, Component, computed, inject, input, output } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { TranslateService } from '@ngx-translate/core';
-import type { PptxElement, PptxTableData, ShapeStyle } from 'pptx-viewer-core';
-
 import {
 	buildTextStyleOverrideCss,
 	getGroupChildParentFill,
@@ -11,6 +9,8 @@ import {
 	inlineElementPointerEvents,
 } from 'ooxml-ui/pptx';
 import type { ElementAnimationState, FieldSubstitutionContext } from 'ooxml-ui/pptx';
+import type { PptxElement, PptxTableData, ShapeStyle } from 'pptx-viewer-core';
+
 import { AnimationPlaybackService } from './animation-playback.service';
 import { resolveBevelLightingFilter } from './bevel-lighting-filter';
 import type { BevelLightingFilterDef } from './bevel-lighting-filter';

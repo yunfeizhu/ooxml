@@ -1,3 +1,4 @@
+// @vitest-fresh-modules: expects untranslated keys, so i18n must not be initialized by an earlier file.
 // @vitest-environment happy-dom
 /**
  * #397: the section-header menu renders the shared command list (Rename,

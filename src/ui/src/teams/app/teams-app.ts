@@ -673,21 +673,22 @@ export class TeamsApp extends LitElement {
 										s.searchResults.length === 0
 											? html`<li class="none">No results</li>`
 											: s.searchResults.map(
-													(h) => html`<li>
-														<button
-															type="button"
-															@click=${() => {
-																if (this.selectChannel(h.channelId)) {
-																	this.teams.client?.search('');
-																	void this.openThread(h.message.id);
-																}
-															}}
-														>
-															<strong>${h.message.authorName}</strong>
-															<span class="in">in # ${h.channelName}</span>
-															<span class="snippet">${h.message.text.slice(0, 100)}</span>
-														</button>
-													</li>`,
+													(h) =>
+														html`<li>
+															<button
+																type="button"
+																@click=${() => {
+																	if (this.selectChannel(h.channelId)) {
+																		this.teams.client?.search('');
+																		void this.openThread(h.message.id);
+																	}
+																}}
+															>
+																<strong>${h.message.authorName}</strong>
+																<span class="in">in # ${h.channelName}</span>
+																<span class="snippet">${h.message.text.slice(0, 100)}</span>
+															</button>
+														</li>`,
 												)
 									}
 								</ul>`
@@ -726,16 +727,17 @@ export class TeamsApp extends LitElement {
 				<h2>Calls</h2>
 				<ul class="plain">
 					${s.channels.map(
-						(c) => html`<li>
-							<span># ${c.name}</span>
-							<button
-								type="button"
-								class=${c.live ? 'join live' : 'join'}
-								@click=${() => this.startMeeting(c.id)}
-							>
-								${c.live ? 'Join' : 'Meet now'}
-							</button>
-						</li>`,
+						(c) =>
+							html`<li>
+								<span># ${c.name}</span>
+								<button
+									type="button"
+									class=${c.live ? 'join live' : 'join'}
+									@click=${() => this.startMeeting(c.id)}
+								>
+									${c.live ? 'Join' : 'Meet now'}
+								</button>
+							</li>`,
 					)}
 				</ul>
 				${live.length === 0 ? html`<p class="hint">Nobody is in a call right now.</p>` : nothing}
@@ -815,14 +817,15 @@ export class TeamsApp extends LitElement {
 							<h1><span class="hash">#</span> ${channel?.name ?? 'No channel yet'}</h1>
 							<nav class="tabs" role="tablist">
 								${(['posts', 'files'] as const).map(
-									(t) => html`<button
-										type="button"
-										role="tab"
-										aria-selected=${String(this.tab === t)}
-										@click=${() => this.selectTab(t)}
-									>
-										${t === 'posts' ? 'Posts' : 'Shared'}
-									</button>`,
+									(t) =>
+										html`<button
+											type="button"
+											role="tab"
+											aria-selected=${String(this.tab === t)}
+											@click=${() => this.selectTab(t)}
+										>
+											${t === 'posts' ? 'Posts' : 'Shared'}
+										</button>`,
 								)}
 								${s.tabs.map((t) => html`<button type="button" role="tab" aria-selected=${String(this.tab === t.id)} @click=${() => this.selectTab(t.id)}>${t.name}</button>`)}
 							</nav>
@@ -1129,15 +1132,16 @@ export class TeamsApp extends LitElement {
 										<h2>People (${call.participants.length})</h2>
 										<ul class="plain">
 											${call.participants.map(
-												(p) => html`<li>
-													<office-ui-avatar
-														size="sm"
-														name=${p.name}
-														seed=${p.id}
-													></office-ui-avatar>
-													<span>${p.name}${p.self ? ' (you)' : ''}</span>
-													${p.state.hand ? html`<span title="Hand raised">✋</span>` : nothing}
-												</li>`,
+												(p) =>
+													html`<li>
+														<office-ui-avatar
+															size="sm"
+															name=${p.name}
+															seed=${p.id}
+														></office-ui-avatar>
+														<span>${p.name}${p.self ? ' (you)' : ''}</span>
+														${p.state.hand ? html`<span title="Hand raised">✋</span>` : nothing}
+													</li>`,
 											)}
 										</ul>
 									</aside>`

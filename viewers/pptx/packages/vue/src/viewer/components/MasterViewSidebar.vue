@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { MasterViewCrudAction, MasterViewCrudActionId } from 'ooxml-ui/pptx';
 /**
  * MasterViewSidebar - the master-view navigation sidebar.
  *
@@ -23,7 +24,6 @@ import type {
 	PptxHandoutMaster,
 	MasterViewTab,
 } from 'pptx-viewer-core';
-import type { MasterViewCrudAction, MasterViewCrudActionId } from 'ooxml-ui/pptx';
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 

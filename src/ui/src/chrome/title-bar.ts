@@ -33,7 +33,8 @@ type SearchField = HTMLElement & { value: string };
  * `<office-ui-title-bar>`: Office's title bar above the ribbon (app mark, AutoSave, Quick
  * Access Toolbar, file name and status, centred command search, `actions`, `collaboration` and
  * `account` slots). Controlled: set `state` (`OfficeTitleBarState`, every string translated); the bar
- * owns no effects. `placement="belowRibbon"` renders only the Quick Access row and hides
+ * owns no effects. The `centered` attribute puts the file name in the middle of the bar.
+ * `placement="belowRibbon"` renders only the Quick Access row and hides
  * itself (`data-empty`) while that row is empty. Events (bubbling, composed; static names let a
  * product subclass keep its published ones): `office-autosave-toggle`, `office-command`
  * `{ command }` from a Quick Access button and `office-command-search` `{ query, command? }`.
@@ -153,16 +154,17 @@ export class OfficeUiTitleBar extends OfficeElement {
 			${repeat(
 				items,
 				(item) => item.id,
-				(item) => html`<button
-					type="button"
-					data-command=${item.id}
-					aria-label=${item.label}
-					title=${ifDefined(item.title)}
-					tabindex=${item === current ? 0 : -1}
-					?disabled=${item.disabled === true}
-					@click=${() => this.activate(item.id)}
-					>${glyph(item.icon, 'icon')}${qa?.showLabels === true ? html`<small>${item.label}</small>` : ''}</button
-				>`,
+				(item) =>
+					html`<button
+						type="button"
+						data-command=${item.id}
+						aria-label=${item.label}
+						title=${ifDefined(item.title)}
+						tabindex=${item === current ? 0 : -1}
+						?disabled=${item.disabled === true}
+						@click=${() => this.activate(item.id)}
+						>${glyph(item.icon, 'icon')}${qa?.showLabels === true ? html`<small>${item.label}</small>` : ''}</button
+					>`,
 			)}
 		</div>`;
 	}
@@ -236,16 +238,17 @@ export class OfficeUiTitleBar extends OfficeElement {
 				${
 					this.found.length > 0
 						? html`<div class="heading">${search.heading}</div> ${this.found.map(
-									(entry, index) => html`<button
-										type="button"
-										role="option"
-										tabindex="-1"
-										aria-selected=${String(index === this.active)}
-										@mousedown=${(event: Event) => pick(event, () => this.commit(entry))}
-										@mouseenter=${() => (this.active = index)}
-										><span>${entry.label}</span
-										><span class="cat">${entry.category ?? ''}</span></button
-									>`,
+									(entry, index) =>
+										html`<button
+											type="button"
+											role="option"
+											tabindex="-1"
+											aria-selected=${String(index === this.active)}
+											@mousedown=${(event: Event) => pick(event, () => this.commit(entry))}
+											@mouseenter=${() => (this.active = index)}
+											><span>${entry.label}</span
+											><span class="cat">${entry.category ?? ''}</span></button
+										>`,
 								)}`
 						: html`<div class="empty">${search.empty}</div>`
 				}

@@ -1,5 +1,5 @@
-import type { ParsedTableStyleMap } from 'pptx-viewer-core';
 import { applyTableStyleDelete, applyTableStyleMapChange } from 'ooxml-ui/pptx';
+import type { ParsedTableStyleMap } from 'pptx-viewer-core';
 import type { ShallowRef } from 'vue';
 
 /**

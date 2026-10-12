@@ -1,6 +1,6 @@
-import type { PptxSlide } from 'pptx-viewer-core';
 import { buildSlideTemplateContent } from 'ooxml-ui/pptx';
 import type { SlideTemplateId } from 'ooxml-ui/pptx';
+import type { PptxSlide } from 'pptx-viewer-core';
 
 import type { Translator } from '../../../i18n';
 import type { ElementRendererRegistry } from '../../../render';

@@ -1,6 +1,6 @@
+import type { PresentationActionRunner } from 'ooxml-ui/pptx';
 // @vitest-environment jsdom
 import type { PptxElement, PptxSlide } from 'pptx-viewer-core';
-import type { PresentationActionRunner } from 'ooxml-ui/pptx';
 import type { Mock } from 'vitest';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 

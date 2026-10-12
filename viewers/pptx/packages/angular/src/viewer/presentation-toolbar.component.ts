@@ -38,13 +38,13 @@ import {
 	signal,
 } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-
 import { isInBottomTriggerZone, PRESENT_TOOLBAR_CLASSES } from 'ooxml-ui/pptx';
 import type {
 	PresentToolbarIntent,
 	PresentToolbarRequestEvent,
 	PresentToolbarViewState,
 } from 'ooxml-ui/pptx';
+
 import { PresentationAnnotationsService } from './presentation-annotations.service';
 import { PresentToolbarAutoHide, runBlackboardToggle } from './presentation-toolbar-view';
 import { PresenterWindowService } from './presenter-window.service';

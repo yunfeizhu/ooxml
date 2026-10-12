@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import type { PptxElement, TextSegment, TextStyle } from 'pptx-viewer-core';
 import {
 	EQUATION_TEMPLATES,
 	compileEquationTemplateMathMl,
 	compileLatexEquation,
 	convertOmmlToLatex,
 } from 'ooxml-ui/pptx';
+import type { PptxElement, TextSegment, TextStyle } from 'pptx-viewer-core';
 import { computed, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 

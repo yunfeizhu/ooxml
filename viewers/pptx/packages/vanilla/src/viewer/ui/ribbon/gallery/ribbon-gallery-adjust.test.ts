@@ -1,6 +1,6 @@
-import type { PptxElement, PptxImageEffects, PptxSlide } from 'pptx-viewer-core';
 import type { RibbonGalleryContext, RibbonGalleryPlacement } from 'ooxml-ui/pptx';
 import { CONTEXTUAL_TAB_GROUPS } from 'ooxml-ui/pptx';
+import type { PptxElement, PptxImageEffects, PptxSlide } from 'pptx-viewer-core';
 import { describe, expect, it, vi } from 'vitest';
 
 import { createGalleryActions } from '../../../editor/editor-gallery-actions';

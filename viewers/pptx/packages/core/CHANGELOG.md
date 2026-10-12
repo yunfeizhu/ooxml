@@ -7,6 +7,20 @@ A release listed with no entries carried no Conventional Commit in this package'
 scope: scripts/release-plan.mjs releases whenever any published file changes, not only on
 conventional commits.
 
+## [4.13.5](https://github.com/ChristopherVR/ooxml/releases/tag/pptx-viewer-core@4.13.5) - 2026-10-11
+
+### Styling
+
+- **pptx:** Format the pptx viewer with its own oxfmt configuration ([7ca9f51](https://github.com/ChristopherVR/ooxml/commit/7ca9f51be7d0926e28cc5913792cfc1c966c0d35))
+
+### Dependencies
+
+- **deps:** Bump the production-minor-and-patch group with 5 updates ([#42](https://github.com/ChristopherVR/ooxml/issues/42)) ([fda493e](https://github.com/ChristopherVR/ooxml/commit/fda493e2697908c477ce845019d9c2fe8b591ab2))
+
+### Chores
+
+- **deps-dev:** Bump the development-minor-and-patch group across 1 directory with 6 updates ([#43](https://github.com/ChristopherVR/ooxml/issues/43)) ([e3a4861](https://github.com/ChristopherVR/ooxml/commit/e3a4861279b8d2bbf3b869617329eddb953b7838))
+
 ## [4.13.4](https://github.com/ChristopherVR/ooxml/releases/tag/pptx-viewer-core@4.13.4) - 2026-10-08
 
 ### Documentation

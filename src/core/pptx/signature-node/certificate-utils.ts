@@ -46,6 +46,58 @@ export function certificateInfoFromBase64(
 	}
 }
 
+let cachedSystemRoots: crypto.X509Certificate[] | undefined;
+
+/** The parseable certificates among `pems`; a malformed one is skipped, never trusted. */
+function parseCertificates(pems: readonly string[]): crypto.X509Certificate[] {
+	const parsed: crypto.X509Certificate[] = [];
+	for (const pem of pems) {
+		try {
+			parsed.push(new crypto.X509Certificate(pem));
+		} catch {
+			// not a certificate: it cannot anchor trust
+		}
+	}
+	return parsed;
+}
+
+function systemRoots(): crypto.X509Certificate[] {
+	cachedSystemRoots ??= parseCertificates(tls.rootCertificates);
+	return cachedSystemRoots;
+}
+
+function isWithinValidity(certificate: crypto.X509Certificate, now: number): boolean {
+	return now >= Date.parse(certificate.validFrom) && now <= Date.parse(certificate.validTo);
+}
+
+/** `issuer` issued `certificate`: the names chain and OpenSSL verifies the signature. */
+function isSignedBy(certificate: crypto.X509Certificate, issuer: crypto.X509Certificate): boolean {
+	return certificate.checkIssued(issuer) && certificate.verify(issuer.publicKey);
+}
+
+/**
+ * A leaf-first chain is trusted when every certificate is within its validity period, each is
+ * signed by the next (which must be a CA), and the last is a trusted root or signed by one.
+ * Signatures are verified by OpenSSL through `node:crypto`.
+ */
+function chainIsTrusted(
+	chain: readonly crypto.X509Certificate[],
+	roots: readonly crypto.X509Certificate[],
+	now: number,
+): boolean {
+	const top = chain[chain.length - 1];
+	if (!top || !chain.every((certificate) => isWithinValidity(certificate, now))) return false;
+	for (let index = 0; index < chain.length - 1; index++) {
+		const issuer = chain[index + 1]!;
+		if (!issuer.ca || !isSignedBy(chain[index]!, issuer)) return false;
+	}
+	return roots.some(
+		(root) =>
+			isWithinValidity(root, now) &&
+			(root.fingerprint256 === top.fingerprint256 || (root.ca && isSignedBy(top, root))),
+	);
+}
+
 /**
  * Validate a certificate chain against system trust roots and optional additional roots.
  */
@@ -60,13 +112,11 @@ export function validateCertificateChain(
 		return { status: 'not-checked' };
 	}
 	try {
-		const chain = certBase64List.map((value) => {
-			const der = forge.util.decode64(value);
-			return forge.pki.certificateFromAsn1(forge.asn1.fromDer(der));
-		});
-		const rootPem = [...tls.rootCertificates, ...additionalRootsPem];
-		const caStore = forge.pki.createCaStore(rootPem);
-		const verified = forge.pki.verifyCertificateChain(caStore, chain);
+		const chain = certBase64List.map(
+			(value) => new crypto.X509Certificate(Buffer.from(value, 'base64')),
+		);
+		const roots = [...systemRoots(), ...parseCertificates(additionalRootsPem)];
+		const verified = chainIsTrusted(chain, roots, Date.now());
 		return verified
 			? { status: 'trusted' }
 			: {

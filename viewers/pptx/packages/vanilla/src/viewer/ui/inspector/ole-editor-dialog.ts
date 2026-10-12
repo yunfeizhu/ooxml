@@ -1,3 +1,4 @@
+import { buildOleContentUpdatePatch, buildOleEditDialogDescriptor } from 'ooxml-ui/pptx';
 import type { OleNestedDeckSlideDetail, OlePptxElement, OleSheetGrid } from 'pptx-viewer-core';
 import {
 	applyOleDocumentParagraphEdit,
@@ -8,7 +9,6 @@ import {
 	getOleSheetGrid,
 	replaceOleFile,
 } from 'pptx-viewer-core';
-import { buildOleContentUpdatePatch, buildOleEditDialogDescriptor } from 'ooxml-ui/pptx';
 
 import type { Translator } from '../../i18n';
 import { createEl } from '../../render';

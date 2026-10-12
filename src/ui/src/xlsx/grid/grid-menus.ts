@@ -1,12 +1,7 @@
 // Opens the cell / row header / column header context menus from right click, Shift+F10 or the
 // ContextMenu key, with the state the item builders need.
 import { MAX_COL, MAX_ROW, rangeContains, validationAt } from 'ooxml-core/xlsx';
-import {
-	cellMenu,
-	columnHeaderMenu,
-	openContextMenu,
-	rowHeaderMenu,
-} from '../context-menu/index';
+import { cellMenu, columnHeaderMenu, openContextMenu, rowHeaderMenu } from '../context-menu/index';
 import type { GridView } from './grid-view';
 
 export type MenuKind = 'cell' | 'row' | 'col';

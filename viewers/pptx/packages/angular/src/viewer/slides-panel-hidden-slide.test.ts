@@ -1,6 +1,7 @@
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
 
+import { HIDDEN_SLIDE_SLASH_GRADIENT, hiddenSlideCue } from 'ooxml-ui/pptx';
 /**
  * The hidden-slide cue in the Angular slides panel and slide sorter.
  *
@@ -15,8 +16,6 @@ import path from 'node:path';
  * literally the attributes the browser ends up with.
  */
 import { describe, expect, it } from 'vitest';
-
-import { HIDDEN_SLIDE_SLASH_GRADIENT, hiddenSlideCue } from 'ooxml-ui/pptx';
 
 const PANEL_TEMPLATE = readFileSync(
 	path.join(import.meta.dirname, 'slides-panel.component.html'),

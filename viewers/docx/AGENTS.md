@@ -126,15 +126,15 @@ into the core.
 
 ### Where does my change go?
 
-| The change is about...                                                              | Make it in                                      |
-| ----------------------------------------------------------------------------------- | ----------------------------------------------- |
-| Parsing, the document model, editing commands, saving or round-trip loss            | `src/core/docx/` in `ooxml`, with a round-trip test  |
-| Pagination, line breaking, page layout, `.doc` loading, collaboration sync          | `ooxml` (`docx/layout`, `docx/load`, `collab`)  |
-| A control shared by Word and PowerPoint (SmartArt drawing, shared ribbon controls)  | `ooxml-ui` in `ooxml` (`src/ui`)           |
-| `.doc` / `.xls` / `.ppt` binary codecs, CFB containers                              | `ole2`                                          |
-| Ribbon, dialogs, panels, keyboard, how the editor shows the model, styling, locales | `src/ui/src/docx` in the ooxml repository  |
-| Framework wiring (props, events, lifecycle)                                         | `packages/bindings` here (all adapters at once) |
-| Demos, docs site, browser tests, packaging and release scripts                      | here                                            |
+| The change is about...                                                              | Make it in                                          |
+| ----------------------------------------------------------------------------------- | --------------------------------------------------- |
+| Parsing, the document model, editing commands, saving or round-trip loss            | `src/core/docx/` in `ooxml`, with a round-trip test |
+| Pagination, line breaking, page layout, `.doc` loading, collaboration sync          | `ooxml` (`docx/layout`, `docx/load`, `collab`)      |
+| A control shared by Word and PowerPoint (SmartArt drawing, shared ribbon controls)  | `ooxml-ui` in `ooxml` (`src/ui`)                    |
+| `.doc` / `.xls` / `.ppt` binary codecs, CFB containers                              | `ole2`                                              |
+| Ribbon, dialogs, panels, keyboard, how the editor shows the model, styling, locales | `src/ui/src/docx` in the ooxml repository           |
+| Framework wiring (props, events, lifecycle)                                         | `packages/bindings` here (all adapters at once)     |
+| Demos, docs site, browser tests, packaging and release scripts                      | here                                                |
 
 ### GitHub Pages
 
@@ -198,7 +198,7 @@ pushing; do not push untested code to `main`.
 > The working tree is sometimes shared by parallel agent sessions, and another
 > session may switch the checkout underneath you. Before committing, run
 > `git branch --show-current` and `git status`. `git fetch && git rebase
-origin/main` before pushing (the release workflow pushes to `main` too). To
+> origin/main` before pushing (the release workflow pushes to `main` too). To
 > land work without moving a shared checkout, push `HEAD:main` (or use an
 > isolated `git worktree`) rather than `git checkout main`.
 

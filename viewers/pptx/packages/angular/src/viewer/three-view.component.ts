@@ -10,7 +10,6 @@ import {
 	output,
 	viewChild,
 } from '@angular/core';
-
 import { defineThreeViewElement, THREE_VIEW_EVENTS } from 'ooxml-ui/pptx';
 import type {
 	ChartPartRef,

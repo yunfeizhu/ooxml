@@ -1,3 +1,4 @@
+import type { ElementAnimationState, ThreeViewSpec } from 'ooxml-ui/pptx';
 // @vitest-environment happy-dom
 /**
  * Unit tests for `SmartArtElement`/`SmartArt3DView`'s `<pptx-three-view>`
@@ -11,7 +12,6 @@
  * builder's own geometry rules (covered at the shared layer).
  */
 import type { PptxElement, PptxSmartArtData } from 'pptx-viewer-core';
-import type { ElementAnimationState, ThreeViewSpec } from 'ooxml-ui/pptx';
 import React, { act } from 'react';
 import { createRoot } from 'react-dom/client';
 import type { Root } from 'react-dom/client';
@@ -147,7 +147,7 @@ describe('smartArtElement - inline node-text-edit overlay', () => {
 		const layer = copy?.closest('.absolute.inset-0:not(.opacity-0)');
 		// A flow sibling lands below the scene, so its node groups never sit under the pointer.
 		expect(layer).not.toBeNull();
-		expect(layer?.parentElement?.contains(container.querySelector('pptx-three-view'))).toBe(true);
+		expect(layer?.parentElement?.contains(container.querySelector('pptx-three-view'))).toBeTruthy();
 	});
 
 	it('renders no edit overlay on a read-only mount', () => {

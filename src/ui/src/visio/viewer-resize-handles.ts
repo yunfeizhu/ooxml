@@ -170,15 +170,24 @@ export class ViewerResizeHandles {
 		event.stopImmediatePropagation();
 	}
 	#cancel(): void {
+		this.#release()();
+	}
+	/**
+	 * Ends the gesture and returns the removal of its previews, which a finished drag keeps until its
+	 * source edit settles (removing them first showed the old geometry for as long as the edit took).
+	 */
+	#release(): () => void {
 		const drag = this.#drag;
 		this.#drag = undefined;
-		if (drag) {
+		if (!drag) return () => {};
+		if (this.viewport.hasPointerCapture?.(drag.pointer))
+			this.viewport.releasePointerCapture(drag.pointer);
+		// Detached, so the renders while the edit runs do not remove the preview early.
+		if (this.#frame === drag.frame) this.#frame = undefined;
+		return () => {
 			drag.showOverlays?.();
 			drag.frame.dispose();
-			if (this.#frame === drag.frame) this.#frame = undefined;
-			if (this.viewport.hasPointerCapture?.(drag.pointer))
-				this.viewport.releasePointerCapture(drag.pointer);
-		}
+		};
 	}
 	async #finish(event: PointerEvent): Promise<void> {
 		const drag = this.#drag;
@@ -190,8 +199,9 @@ export class ViewerResizeHandles {
 			visioResizeDrag(drag.page, drag.shapeId, drag.handle, drag.start, point);
 		event.preventDefault();
 		event.stopImmediatePropagation();
-		this.#cancel();
+		const settle = this.#release();
 		if (!resized || !this.#current(drag)) {
+			settle();
 			this.render(this.controller.state);
 			return;
 		}
@@ -200,6 +210,7 @@ export class ViewerResizeHandles {
 			Math.abs(resized.frame.width - original.width) < 1e-10 &&
 			Math.abs(resized.frame.height - original.height) < 1e-10
 		) {
+			settle();
 			this.render(this.controller.state);
 			return;
 		}
@@ -210,6 +221,8 @@ export class ViewerResizeHandles {
 		} catch (error) {
 			if (request === this.#request && !isEditCancellation(error))
 				this.options.announce(editErrorMessage(error));
+		} finally {
+			settle();
 		}
 	}
 }

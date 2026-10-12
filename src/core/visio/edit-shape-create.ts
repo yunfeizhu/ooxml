@@ -5,7 +5,8 @@ import type { VisioGeometryEdit } from './edit-commands';
 import { appendEllipseGeometry } from './edit-ellipse-geometry';
 import { assertShapeLocks } from './edit-style-admission';
 import { encodeVisioPlainText } from './plain-text';
-import { visioBasicShapeOutline, type VisioBasicOutline } from './basic-shapes';
+import type { VisioBasicOutline } from './basic-shapes';
+import { visioOutlineShape } from './stencil-shapes';
 
 export function createShape(root: Element, shapeId: string): Element {
 	const doc = root.ownerDocument!;
@@ -78,7 +79,7 @@ export function createRectangle(
 	}
 	const doc = root.ownerDocument!;
 	const node = (name: string) => doc.createElementNS(root.namespaceURI, name);
-	const outline = visioBasicShapeOutline(
+	const outline = visioOutlineShape(
 		edit.type === 'create-rectangle' ? (edit.shape ?? 'rectangle') : 'rectangle',
 	);
 	if (outline.rounding)
@@ -90,14 +91,20 @@ export function createRectangle(
 	return shape;
 }
 
-/** Detached Geometry sections (IX 0, 1, ...) of closed relative polylines in the shape's box. */
+/** Detached Geometry sections (IX 0, 1, ...) of closed relative polylines in the shape's box,
+ * followed by the outline's open interior lines as unfilled sections. */
 export function outlineGeometrySections(shape: Element, outline: VisioBasicOutline): Element[] {
 	const node = (name: string) => shape.ownerDocument!.createElementNS(shape.namespaceURI, name);
-	return outline.paths.map((points, sectionIndex) => {
+	const runs = [
+		...outline.paths.map((points) => ({ points: [...points, points[0]!], open: false })),
+		...(outline.lines ?? []).map((points) => ({ points, open: true })),
+	];
+	return runs.map(({ points, open }, sectionIndex) => {
 		const section = node('Section');
 		section.setAttribute('N', 'Geometry');
 		section.setAttribute('IX', String(sectionIndex));
-		for (const [index, [x, y]] of [...points, points[0]!].entries()) {
+		if (open) setCell(section, 'NoFill', 1);
+		for (const [index, [x, y]] of points.entries()) {
 			const row = node('Row');
 			row.setAttribute('IX', String(index + 1));
 			row.setAttribute('T', index ? 'RelLineTo' : 'RelMoveTo');

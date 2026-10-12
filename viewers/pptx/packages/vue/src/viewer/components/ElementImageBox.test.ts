@@ -312,3 +312,26 @@ describe('element image box', () => {
 		});
 	});
 });
+
+describe('element image box native drag (issue #44)', () => {
+	it('marks the picture img as not draggable', () => {
+		// Regression: a press on a picture started the browser's own image drag,
+		// which cancels the pointer stream, so the move gesture died a few pixels
+		// in and a drag ghost followed the cursor instead.
+		const element: ImagePptxElement = {
+			type: 'image',
+			id: 'image-drag',
+			x: 0,
+			y: 0,
+			width: 100,
+			height: 100,
+			imageData: 'data:image/png;base64,AA==',
+		};
+
+		const wrapper = mount(ElementImageBox, {
+			props: { element, mediaDataUrls: new Map(), zIndex: 0, interactive: true },
+		});
+
+		expect(wrapper.get('img').attributes('draggable')).toBe('false');
+	});
+});

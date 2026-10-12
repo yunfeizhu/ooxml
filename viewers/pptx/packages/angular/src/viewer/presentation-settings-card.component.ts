@@ -16,14 +16,14 @@ import {
 	input,
 } from '@angular/core';
 import { TranslatePipe } from '@ngx-translate/core';
-import type { PptxPresentationProperties } from 'pptx-viewer-core';
-
 import {
 	printPropertiesFrameSlides,
 	printPropertiesSlidesPerPage,
 	withFrameSlides,
 	withSlidesPerPage,
 } from 'ooxml-ui/pptx/render/presentation-print-settings';
+import type { PptxPresentationProperties } from 'pptx-viewer-core';
+
 import { EditorStateService } from './editor-state.service';
 import { INSPECTOR_CARD_STYLES } from './inspector-card-styles';
 import { LoadContentService } from './load-content.service';

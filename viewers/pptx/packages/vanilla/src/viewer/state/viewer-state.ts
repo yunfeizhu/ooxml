@@ -1,4 +1,20 @@
 import type {
+	CanvasSize,
+	CompatibilityWarningToast,
+	CropSession,
+	ElementClipboardPayload,
+	FreeformToolKind,
+	InlineTextSelection,
+	Guide,
+	ModifyPasswordCheckResult,
+	ReadOnlyRecommendation,
+	RemoteCursor,
+	RunProgramNotice,
+	SanitizedPresence,
+	SlideSizeEmu,
+} from 'ooxml-ui/pptx';
+import { DEFAULT_CANVAS_HEIGHT, DEFAULT_CANVAS_WIDTH, DEFAULT_STROKE_COLOR } from 'ooxml-ui/pptx';
+import type {
 	MasterViewTab,
 	ParsedTableStyleMap,
 	PptxAppProperties,
@@ -23,26 +39,6 @@ import type {
 	PptxThemeOption,
 	PptxViewProperties,
 } from 'pptx-viewer-core';
-import type {
-	CanvasSize,
-	CompatibilityWarningToast,
-	CropSession,
-	ElementClipboardPayload,
-	FreeformToolKind,
-	InlineTextSelection,
-	Guide,
-	ModifyPasswordCheckResult,
-	ReadOnlyRecommendation,
-	RemoteCursor,
-	RunProgramNotice,
-	SanitizedPresence,
-	SlideSizeEmu,
-} from 'ooxml-ui/pptx';
-import {
-	DEFAULT_CANVAS_HEIGHT,
-	DEFAULT_CANVAS_WIDTH,
-	DEFAULT_STROKE_COLOR,
-} from 'ooxml-ui/pptx';
 
 import type { ChartPartSelection } from '../render';
 

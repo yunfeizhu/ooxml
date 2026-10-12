@@ -1,6 +1,6 @@
 {
 	"name": "openteams-server",
-	"version": "0.1.2",
+	"version": "0.1.3",
 	"description": "Reference bring-your-own server for OpenTeams: Yjs sync, WebRTC signaling relay and file storage in one small Node process.",
 	"keywords": [
 		"openteams",

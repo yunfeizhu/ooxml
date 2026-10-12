@@ -48,9 +48,10 @@ describe('split colour buttons', () => {
 		main.click();
 		expect(actions.at(-1)).toEqual({ type: 'font', key: 'color', value: '#c00000' });
 		(main.nextElementSibling as HTMLButtonElement).click();
-		const swatch = document.querySelector<HTMLButtonElement>(
-			'.ribbon-popover [aria-label="Blue"]',
-		)!;
+		// The shared colour grid, in Word's popover.
+		const swatch = document
+			.querySelector('.ribbon-popover office-ui-color-grid')!
+			.shadowRoot!.querySelector<HTMLButtonElement>('[aria-label="Blue"]')!;
 		swatch.click();
 		expect(actions.at(-1)).toEqual({ type: 'font', key: 'color', value: '#0070c0' });
 		expect(main.dataset.value).toBe('#0070c0');

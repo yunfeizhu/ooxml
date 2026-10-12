@@ -23,7 +23,9 @@ export function visioSizePositionState(
 ): VisioSizePositionState | undefined {
 	const shape = visioMovementShape(page, id),
 		ratio = page.drawingToPageScale ?? 1;
-	if (!shape || !Number.isFinite(ratio) || ratio <= 0) return undefined;
+	// Stencil shapes are edited on their stencil's layer; other layered shapes are not yet.
+	const layered = !!shape?.layerIds?.length && !shape.masterId;
+	if (!shape || layered || !Number.isFinite(ratio) || ratio <= 0) return undefined;
 	const rotation = shape.rotation!;
 	const state = {
 		pageId: page.id,

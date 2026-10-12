@@ -1,4 +1,3 @@
-import type { PptxSlide } from 'pptx-viewer-core';
 import {
 	HIDDEN_SLIDE_ATTRIBUTE,
 	HIDDEN_SLIDE_LABEL_KEY,
@@ -13,6 +12,7 @@ import {
 	sorterGridColumns,
 } from 'ooxml-ui/pptx';
 import type { SlideSorterState, SlideSorterKeyActionName } from 'ooxml-ui/pptx';
+import type { PptxSlide } from 'pptx-viewer-core';
 
 import type { Translator } from '../i18n';
 import { createEl } from '../render';

@@ -2,7 +2,8 @@ import { expect, test, type Locator } from '@playwright/test';
 import JSZip from 'jszip';
 import type { VisioViewerElement } from 'ooxml-ui/visio';
 import { createVsdxFixture } from './fixture.mjs';
-import { downloadCopy } from './ribbon';
+import { downloadCopy, pickColor, ribbonGroup } from './ribbon';
+import { openDemo } from './demo-page';
 
 async function fixture(scale: number, protectedSecond = false) {
 	const zip = await JSZip.loadAsync(await createVsdxFixture('Paint source'));
@@ -55,28 +56,25 @@ async function inventory(viewer: Locator) {
 }
 async function selectAll(viewer: Locator) {
 	await viewer.getByRole('tab', { name: 'Home', exact: true }).click();
+	await ribbonGroup(viewer, 'Editing');
 	await viewer.getByRole('button', { name: 'Select', exact: true }).click();
 	await viewer.locator('[command="select-all"]').click();
 }
-async function lineAction(viewer: Locator, id: string, nested = false) {
-	await viewer.getByRole('button', { name: 'Line', exact: true }).click();
-	if (nested)
-		await viewer
-			.locator('[data-menu="line-pattern"]')
-			.getByRole('button', { name: 'Pattern', exact: true })
-			.click();
-	await viewer.locator(`[command="${id}"]`).click();
-	await idle(viewer);
-}
-async function properties(viewer: Locator) {
+/** Fill > More Options... opens the Format Shape task pane at its Fill section. */
+async function properties(viewer: Locator): Promise<Locator> {
 	await viewer.getByRole('button', { name: 'Fill', exact: true }).click();
 	await viewer.locator('[command="fill-options"]').click();
-	await expect(viewer.locator('.paint-properties-dialog')).toHaveAttribute('open', '');
+	const pane = viewer.locator('.format-pane');
+	await expect(pane).toBeVisible();
+	await expect(viewer.locator('#inspector-pane')).toHaveAttribute('label', 'Format Shape');
+	return pane;
 }
-async function choose(viewer: Locator, field: string, label: string) {
-	const control = viewer.locator(`[data-paint-field="${field}"]`);
-	await control.getByRole('combobox').click();
-	await control.getByRole('option', { name: label, exact: true }).click();
+/** Type into a pane number field and leave it, which applies the value. */
+async function enter(viewer: Locator, pane: Locator, field: string, value: string) {
+	const input = pane.locator(`[data-pane-field="${field}"]`);
+	await input.fill(value);
+	await input.press('Tab');
+	await idle(viewer);
 }
 
 for (const [index, framework] of [
@@ -93,51 +91,55 @@ for (const [index, framework] of [
 		const errors: string[] = [];
 		page.on('pageerror', (error) => errors.push(error.message));
 		await page.setViewportSize({ width: 1600, height: 1000 });
-		await page.goto(framework === 'vanilla' ? '/demo/?sample=1' : `/demo-${framework}/?sample=1`);
+		await openDemo(
+			page,
+			framework === 'vanilla' ? '/demo/?sample=1' : `/demo-${framework}/?sample=1`,
+		);
 		const viewer = page.locator('visio-viewer'),
 			scale = [0.5, 1, 2][index % 3]!;
 		const load = async (buffer: Buffer) => {
-			await page
-				.locator('#file')
-				.setInputFiles({
-					name: 'paint.vsdx',
-					mimeType: 'application/vnd.ms-visio.drawing',
-					buffer,
-				});
+			await page.locator('#file').setInputFiles({
+				name: 'paint.vsdx',
+				mimeType: 'application/vnd.ms-visio.drawing',
+				buffer,
+			});
+			await expect(page.locator('#file-name')).toHaveText('paint.vsdx');
 			await idle(viewer);
 		};
 		await load(await fixture(scale));
 		await selectAll(viewer);
 		expect((await inventory(viewer)).selected).toEqual(['1', '2']);
-		await lineAction(viewer, 'line-pattern-0');
+		await pickColor(viewer, 'line', 'none');
+		await idle(viewer);
 		await expect(viewer.locator('svg.paper [data-shape-id="1"] > path')).toHaveAttribute(
 			'stroke',
 			'none',
 		);
-		await lineAction(viewer, 'line-blue');
+		await pickColor(viewer, 'line', '#0070c0');
+		await idle(viewer);
 		expect((await inventory(viewer)).shapes.map((shape) => shape.line)).toEqual([0, 0]);
 		const before = await inventory(viewer);
-		await properties(viewer);
-		await choose(viewer, 'fillPattern', 'Pattern 24');
-		await choose(viewer, 'linePattern', 'Pattern 23');
-		await viewer
-			.getByRole('textbox', { name: 'Fill background color', exact: true })
-			.fill('#123456');
-		await viewer
-			.getByRole('spinbutton', { name: 'Fill transparency (%)', exact: true })
-			.fill('17.5');
-		await viewer
-			.getByRole('spinbutton', { name: 'Line transparency (%)', exact: true })
-			.fill('62.5');
-		expect((await inventory(viewer)).bytes).toEqual(before.bytes);
-		await viewer.locator('[command="paint-apply"] button').click();
+		const pane = await properties(viewer);
+		// The old Fill & Line dialog is gone: every pane change applies at once, as one undo step.
+		await expect(viewer.locator('.paint-properties-dialog')).toHaveCount(0);
+		await pane.locator('[data-pane-field="fillPattern"]').selectOption('24');
 		await idle(viewer);
-		await expect(viewer.locator('.paint-properties-dialog')).not.toHaveAttribute('open', '');
+		await pane.locator('[data-format-color="fillBackground"]').click();
+		await pane
+			.locator('office-ui-color-grid[data-color-grid="fillBackground"] [data-color="#00b050"]')
+			.click();
+		await idle(viewer);
+		await enter(viewer, pane, 'fillTransparency', '17.5');
+		await pane.getByRole('radio', { name: 'Solid line', exact: true }).check();
+		await idle(viewer);
+		await pane.locator('[data-pane-field="linePattern"]').selectOption('23');
+		await idle(viewer);
+		await enter(viewer, pane, 'lineTransparency', '62.5');
 		const accepted = await inventory(viewer);
 		expect(accepted.selected).toEqual(['1', '2']);
 		for (const shape of accepted.shapes) {
 			expect(shape.pattern).toBe(24);
-			expect(shape.background).toBe('#123456');
+			expect(shape.background).toBe('#00b050');
 			expect(shape.line).toBe(23);
 			expect(shape.foregroundOpacity).toBeCloseTo(0.825, 12);
 			expect(shape.backgroundOpacity).toBeCloseTo(0.825, 12);
@@ -147,15 +149,15 @@ for (const [index, framework] of [
 		await expect(path).toHaveAttribute('stroke-opacity', '0.375');
 		await expect(path).toHaveAttribute('stroke-dasharray', /\S+/);
 		await expect(path).toHaveAttribute('fill', /^url\(#/u);
-		await viewer.locator('[command="undo"] button').click();
-		await idle(viewer);
+		for (let step = 0; step < 6; step++) {
+			await viewer.locator('.qat [data-command="undo"]').click();
+			await idle(viewer);
+		}
 		expect((await inventory(viewer)).bytes).toEqual(before.bytes);
-		await viewer.locator('[command="redo"] button').click();
-		await idle(viewer);
-		expect((await inventory(viewer)).bytes).toEqual(accepted.bytes);
-		await properties(viewer);
-		await viewer.getByRole('spinbutton', { name: 'Line transparency (%)', exact: true }).fill('90');
-		await page.keyboard.press('Escape');
+		for (let step = 0; step < 6; step++) {
+			await viewer.locator('.qat [data-command="redo"]').click();
+			await idle(viewer);
+		}
 		expect((await inventory(viewer)).bytes).toEqual(accepted.bytes);
 		const downloadCommand = await downloadCopy(viewer),
 			pending = page.waitForEvent('download');
@@ -164,21 +166,19 @@ for (const [index, framework] of [
 		await page.locator('#file').setInputFiles((await download.path())!);
 		await idle(viewer);
 		expect((await inventory(viewer)).shapes).toEqual(accepted.shapes);
+		// The shape menu's Format Shape opens the same pane.
+		await viewer.locator('#inspector-pane .close').click();
+		await expect(pane).toBeHidden();
 		await viewer.locator('[data-shape-id="1"]').click({ button: 'right' });
 		await viewer.locator('[command="ctx-format"]').click();
-		await expect(viewer.locator('.paint-properties-dialog')).toHaveAttribute('open', '');
-		await viewer.locator('[command="paint-cancel"] button').click();
+		await expect(pane).toBeVisible();
 		await load(await fixture(scale, true));
 		await selectAll(viewer);
 		const protectedSource = await inventory(viewer);
-		await properties(viewer);
-		await viewer.getByRole('spinbutton', { name: 'Line transparency (%)', exact: true }).fill('25');
-		await viewer.locator('[command="paint-apply"] button').click();
-		await idle(viewer);
-		await expect(viewer.locator('[data-paint-error]')).toContainText('EDIT_PROTECTED_CELL');
+		await enter(viewer, pane, 'lineTransparency', '25');
+		await expect(viewer.locator('[data-status]')).toContainText('protection is active');
 		expect((await inventory(viewer)).bytes).toEqual(protectedSource.bytes);
 		expect((await inventory(viewer)).selected).toEqual(['1', '2']);
-		await viewer.locator('[command="paint-cancel"] button').click();
 		expect(errors).toEqual([]);
 	});
 }

@@ -6,7 +6,12 @@ const vite = fileURLToPath(new URL('../node_modules/vite/bin/vite.js', import.me
 const demos = process.env.TEAMS_DEMOS ?? 'vanilla,react';
 const procs = [
 	spawn(process.execPath, ['server/index.mjs'], { stdio: 'inherit' }),
-	...demos.split(',').map((d) => spawn(process.execPath, [vite, '--host', '127.0.0.1'], { stdio: 'inherit', cwd: '../../demos/teams/' + d })),
+	...demos.split(',').map((d) =>
+		spawn(process.execPath, [vite, '--host', '127.0.0.1'], {
+			stdio: 'inherit',
+			cwd: '../../demos/teams/' + d,
+		}),
+	),
 ];
 const stop = () => procs.forEach((p) => p.kill());
 process.on('SIGINT', stop);

@@ -1,6 +1,6 @@
 {
 	"name": "docx-viewer-mcp",
-	"version": "0.1.7",
+	"version": "0.1.9",
 	"description": "Headless DOCX MCP tools backed only by OOXML core",
 	"homepage": "https://christophervr.github.io/ooxml/docx/",
 	"bugs": {
@@ -32,8 +32,8 @@
 		"test": "node --test test/*.test.js"
 	},
 	"dependencies": {
-		"@modelcontextprotocol/sdk": "^1.32.0",
-		"ooxml-core": "^1.4.0",
+		"@modelcontextprotocol/sdk": "^1.32.1",
+		"ooxml-core": "^1.8.0",
 		"zod": "^4.6.5"
 	},
 	"engines": {

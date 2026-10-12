@@ -1,10 +1,10 @@
 import { mount } from '@vue/test-utils';
-import type { PptxSlide, PptxSlideTransition } from 'pptx-viewer-core';
 import {
 	EFFECT_SOUND_CATALOGUE,
 	registerPptxWebControls,
 	TRANSITION_PREVIEW_ATTR,
 } from 'ooxml-ui/pptx';
+import type { PptxSlide, PptxSlideTransition } from 'pptx-viewer-core';
 import { describe, expect, it, vi } from 'vitest';
 
 import { setControlValue } from '../inspector/test-control-value';

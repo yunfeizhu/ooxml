@@ -4,6 +4,7 @@ export * from './callout-geometry';
 export * from './cloud-bezier-paths';
 export * from './com-avlst-ground-truth';
 export * from './connector-elbow-geometry';
+export * from './connector-router';
 export * from './guide-formula-api';
 export * from './guide-formula-eval';
 export * from './preset-clip-paths-core';
@@ -84,3 +85,6 @@ export * from './align-distribute';
 
 export * from './rotation-drag';
 export * from './rotate-handle-placement';
+export * from './graph-layout';
+export * from './auto-align';
+export * from './nudge';

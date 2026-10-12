@@ -388,6 +388,19 @@ describe('renderChartViewModel gradient defs (COM: charts-com.pptx slide 23)', (
 							],
 						},
 						{
+							kind: 'linearGradient',
+							id: 'g-line',
+							gradientUnits: 'userSpaceOnUse',
+							x1: 10,
+							y1: 40,
+							x2: 90,
+							y2: 40,
+							stops: [
+								{ offset: 0, color: '#c08fbf' },
+								{ offset: 1, color: '#800f85' },
+							],
+						},
+						{
 							kind: 'radialGradient',
 							id: 'g-rad',
 							cx: 0.5,
@@ -409,6 +422,9 @@ describe('renderChartViewModel gradient defs (COM: charts-com.pptx slide 23)', (
 			'href="data:image/svg+xml;base64,rect" x="0" y="0" width="1" height="1" preserveAspectRatio="none"',
 		);
 		expect(html).toContain('<linearGradient id="g-lin" x1="0.5" y1="0" x2="0.5" y2="1">');
+		expect(html).toContain(
+			'<linearGradient id="g-line" gradientUnits="userSpaceOnUse" x1="10" y1="40" x2="90" y2="40">',
+		);
 		expect(html).toContain('<radialGradient id="g-rad"');
 		expect(html).toContain('stop-color="#262626"');
 		expect(html).toContain('fill="url(#g-rad)"');

@@ -15,10 +15,10 @@ import {
 	input,
 } from '@angular/core';
 import { TranslatePipe } from '@ngx-translate/core';
-import type { PptxElement } from 'pptx-viewer-core';
-
 import { CONTEXTUAL_TAB_GROUPS } from 'ooxml-ui/pptx';
 import type { RibbonContextualTabId } from 'ooxml-ui/pptx';
+import type { PptxElement } from 'pptx-viewer-core';
+
 import { RibbonGalleryComponent } from './ribbon-gallery.component';
 
 @Component({

@@ -9,7 +9,8 @@ import { fail } from './package-common';
 import type { VisioPackage } from './package';
 import type { VisioPageSizeEdit } from './edit-commands';
 
-function constant(node: Element | undefined, length: boolean): number {
+/** A proven explicit numeric page setting: no inheritance, error or dependent formula. */
+export function pageSettingConstant(node: Element | undefined, length: boolean): number {
 	if (!node || node.hasAttribute('E') || attribute(node, 'F') === 'Inh')
 		fail('EDIT_UNSUPPORTED_PAGE_SIZE', 'A valid explicit page size or mode cache is required.');
 	const value = visioFormulaCachedValue(attribute(node, 'V') ?? '', attribute(node, 'U'));
@@ -149,6 +150,27 @@ function assertDependencies(
 		}
 }
 
+/** Refuse when any formula in the package may depend on the page cells about to change. */
+export async function assertPageCellsIndependent(
+	pkg: VisioPackage,
+	pagesPart: string,
+	pages: Element,
+	pagePaths: ReadonlyMap<string, string>,
+	dirty: Map<string, Element>,
+	pageId: string,
+	changed: readonly string[],
+	check: () => void,
+): Promise<void> {
+	const roots = await editableVisioPageRoots(pkg, pagesPart, pages, pagePaths, dirty, check);
+	// Include unknown Visio XML metadata, not just canonical sheets and inherited definitions.
+	for (const path of pkg.paths())
+		if (/^visio\/.*\.xml$/i.test(path) && !roots.has(path)) {
+			check();
+			roots.set(path, dirty.get(path) ?? (await pkg.readXml(path)));
+		}
+	assertDependencies(roots, pagesPart, pages, pagePaths, pageId, changed, check);
+}
+
 /** Set physical dimensions and explicit fixed/custom mode, preserving shapes and printer settings. */
 export async function setVisioPageSize(
 	pkg: VisioPackage,
@@ -178,15 +200,15 @@ export async function setVisioPageSize(
 			[...cells.keys()].some((key) => key.toLowerCase() === name.toLowerCase())
 		)
 			fail('EDIT_AMBIGUOUS_CELL', 'Page settings require canonical cell names.');
-	const pageScale = constant(cells.get('PageScale'), true),
-		drawingScale = constant(cells.get('DrawingScale'), true);
+	const pageScale = pageSettingConstant(cells.get('PageScale'), true),
+		drawingScale = pageSettingConstant(cells.get('DrawingScale'), true);
 	if (pageScale <= 0 || drawingScale <= 0)
 		fail('EDIT_UNSUPPORTED_PAGE_SIZE', 'Page and drawing scales must be positive.');
-	const width = constant(cells.get('PageWidth'), true),
-		height = constant(cells.get('PageHeight'), true);
-	const size = constant(cells.get('DrawingSizeType'), false);
+	const width = pageSettingConstant(cells.get('PageWidth'), true),
+		height = pageSettingConstant(cells.get('PageHeight'), true);
+	const size = pageSettingConstant(cells.get('DrawingSizeType'), false);
 	const resize = cells.has('DrawingResizeType')
-		? constant(cells.get('DrawingResizeType'), false)
+		? pageSettingConstant(cells.get('DrawingResizeType'), false)
 		: undefined;
 	if (
 		width <= 0 ||
@@ -225,14 +247,16 @@ export async function setVisioPageSize(
 					: resize !== 0,
 	);
 	if (!changed.length) return;
-	const roots = await editableVisioPageRoots(pkg, pagesPart, pages, pagePaths, dirty, check);
-	// Include unknown Visio XML metadata, not just canonical sheets and inherited definitions.
-	for (const path of pkg.paths())
-		if (/^visio\/.*\.xml$/i.test(path) && !roots.has(path)) {
-			check();
-			roots.set(path, dirty.get(path) ?? (await pkg.readXml(path)));
-		}
-	assertDependencies(roots, pagesPart, pages, pagePaths, command.pageId, changed, check);
+	await assertPageCellsIndependent(
+		pkg,
+		pagesPart,
+		pages,
+		pagePaths,
+		dirty,
+		command.pageId,
+		changed,
+		check,
+	);
 	for (const name of changed) setCell(sheet, name, values.get(name)!);
 	dirty.set(pagesPart, pages);
 }

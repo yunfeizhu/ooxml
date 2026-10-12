@@ -9,6 +9,7 @@ import {
 	DEFAULT_CURSOR_COLOR,
 	observeExternalCollaborationReadiness,
 } from 'ooxml-ui/pptx';
+
 import { LocalPresencePublisher } from './collaboration-local-presence';
 import type { ActiveSession, ActivateSessionDeps } from './collaboration-session-setup';
 

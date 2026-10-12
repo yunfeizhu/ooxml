@@ -1,3 +1,12 @@
+import type { PasteSpecialFormat } from 'ooxml-ui/pptx';
+import {
+	applyPasteSpecialFormat,
+	buildRasterPictureElement,
+	cloneElementForPaste,
+	findCanvasElementNode,
+	isTemplateElementId,
+	rasterizeElementToDataUrl,
+} from 'ooxml-ui/pptx';
 /**
  * usePasteSpecial: Paste Special (Ctrl+Alt+V) + the Paste Options mini-toolbar
  * PowerPoint shows right after an ordinary paste.
@@ -12,15 +21,6 @@
  * is how PowerPoint's own Paste Options toolbar behaves.
  */
 import type { PptxElement } from 'pptx-viewer-core';
-import type { PasteSpecialFormat } from 'ooxml-ui/pptx';
-import {
-	applyPasteSpecialFormat,
-	buildRasterPictureElement,
-	cloneElementForPaste,
-	findCanvasElementNode,
-	isTemplateElementId,
-	rasterizeElementToDataUrl,
-} from 'ooxml-ui/pptx';
 import { ref, shallowRef } from 'vue';
 import type { Ref, ShallowRef } from 'vue';
 

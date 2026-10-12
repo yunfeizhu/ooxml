@@ -171,10 +171,11 @@ export function createBackstage(doc: Document): HTMLElement {
 		facts.append(el(doc, 'dt', '', label), value);
 	}
 	const notes = el(doc, 'div', 'backstage-notes');
+	notes.hidden = true;
 	notes.append(
 		el(doc, 'h2', '', 'Compatibility'),
 		el(doc, 'p', 'backstage-note-count'),
-		action(doc, 'notes', 'View compatibility notes', 'What this viewer approximates or omits.'),
+		el(doc, 'ul', 'backstage-notes-list'),
 	);
 	const file = el(doc, 'h2', 'backstage-file');
 	file.dataset.info = 'name';
@@ -193,7 +194,15 @@ export function createBackstage(doc: Document): HTMLElement {
 	preview.setAttribute('label', 'Print preview of the current page');
 	preview.setAttribute('empty-label', 'Open a drawing to print it.');
 	root.append(
-		page(doc, 'info', 'Info', file, facts, notes),
+		page(
+			doc,
+			'info',
+			'Info',
+			file,
+			facts,
+			action(doc, 'add-comment', 'Add Comment', 'Comment on the current page or selected shape.'),
+			notes,
+		),
 		page(doc, 'new', 'New', templates),
 		page(
 			doc,
@@ -225,7 +234,19 @@ export function createBackstage(doc: Document): HTMLElement {
 				'An approximate picture with compatibility notes.',
 			),
 		),
-		page(doc, 'print', 'Print', action(doc, 'print', 'Print', 'Print the current page.'), preview),
+		page(
+			doc,
+			'print',
+			'Print',
+			action(doc, 'print', 'Print', 'Print the current page.'),
+			action(
+				doc,
+				'page-setup',
+				'Page Setup',
+				'Printer paper, page size, drawing scale and page properties.',
+			),
+			preview,
+		),
 		page(
 			doc,
 			'share',
@@ -247,15 +268,23 @@ export function createBackstage(doc: Document): HTMLElement {
 				doc,
 				'export-pdf',
 				'Create PDF/XPS Document',
-				'A fixed-layout document.',
-				'Needs PDF output.',
+				'A PDF with one picture page per foreground page, at the page size. Text is not selectable; XPS is not offered.',
 			),
+			el(doc, 'h2', 'backstage-subheading', 'Change File Type'),
+			action(doc, 'download', 'Visio Drawing (*.vsdx)', 'A copy of the drawing with your edits.'),
 			action(
 				doc,
-				'change-type',
-				'Change File Type',
-				'Save in another Visio format.',
-				'Needs core format conversion.',
+				'export-svg',
+				'SVG (*.svg)',
+				'The current page as an approximate vector picture.',
+			),
+			action(doc, 'export-pdf', 'PDF (*.pdf)', 'Every foreground page as a picture page.'),
+			action(doc, 'export-png', 'PNG picture (*.png)', 'The current page at 150 dpi.'),
+			el(
+				doc,
+				'p',
+				'backstage-muted',
+				'VSD, VSDM, VDX, stencil, template and XPS formats are not offered: they need conversions this viewer does not have.',
 			),
 		),
 		page(doc, 'account', 'Account', account(doc)),

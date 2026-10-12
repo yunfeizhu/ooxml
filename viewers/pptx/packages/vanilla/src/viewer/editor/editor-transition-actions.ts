@@ -1,4 +1,3 @@
-import type { PptxSlideTransition, PptxTransitionType } from 'pptx-viewer-core';
 import type { RibbonTransitionDraft } from 'ooxml-ui/pptx';
 import {
 	applyRibbonTransitionDraft,
@@ -7,6 +6,7 @@ import {
 	updateAllSlides,
 	updateSlide,
 } from 'ooxml-ui/pptx';
+import type { PptxSlideTransition, PptxTransitionType } from 'pptx-viewer-core';
 
 import type { Store, ViewerState } from '../state';
 import type { EditorOps } from './editor-operations';

@@ -1,4 +1,3 @@
-import type { PptxEmbeddedFont, PptxSlide } from 'pptx-viewer-core';
 import {
 	collectReferencedFontFamilies,
 	fetchGoogleWebfontOutlineBytes,
@@ -6,6 +5,7 @@ import {
 	selectGoogleWebfontFamilies,
 	syncGoogleWebfontStylesheet,
 } from 'ooxml-ui/pptx';
+import type { PptxEmbeddedFont, PptxSlide } from 'pptx-viewer-core';
 /**
  * useFontInjection: Injects @font-face declarations for embedded PPTX fonts
  * and loads Google Fonts fallbacks for referenced families the API serves.

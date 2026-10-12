@@ -6,8 +6,8 @@ import {
 	output,
 } from '@angular/core';
 import { TranslatePipe } from '@ngx-translate/core';
-
 import { HELP_RIBBON_COMMANDS } from 'ooxml-ui/pptx';
+
 import { ViewerCustomizationService } from './viewer-customization.service';
 
 @Component({

@@ -1,6 +1,6 @@
-import type { PptxElement } from 'pptx-viewer-core';
 import { selectionBounds, slideSpaceElement } from 'ooxml-ui/pptx';
 import type { InteractionBox, SnapSibling } from 'ooxml-ui/pptx';
+import type { PptxElement } from 'pptx-viewer-core';
 
 import type { OverlayBox } from './types';
 

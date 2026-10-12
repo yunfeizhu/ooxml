@@ -1,5 +1,15 @@
 <script setup lang="ts">
 import { EyeOff, MessageSquare, Plus } from 'lucide-vue-next';
+import {
+	computeVirtualRange,
+	HIDDEN_SLIDE_LABEL_KEY,
+	HIDDEN_SLIDE_SLASH_GRADIENT,
+	hiddenSlideCue,
+	SLIDE_VIRTUALIZATION_THRESHOLD,
+	editorThumbnailHeight,
+	editorThumbnailStep,
+	EDITOR_THUMBNAIL_WIDTH,
+} from 'ooxml-ui/pptx';
 /**
  * SlidesPaneSidebar - Vue port of React's `SlidesPaneSidebar` + `SlideItem`.
  *
@@ -13,16 +23,6 @@ import { EyeOff, MessageSquare, Plus } from 'lucide-vue-next';
  * and virtualizes decks at the same 50-slide threshold as React.
  */
 import type { PptxSlide } from 'pptx-viewer-core';
-import {
-	computeVirtualRange,
-	HIDDEN_SLIDE_LABEL_KEY,
-	HIDDEN_SLIDE_SLASH_GRADIENT,
-	hiddenSlideCue,
-	SLIDE_VIRTUALIZATION_THRESHOLD,
-	editorThumbnailHeight,
-	editorThumbnailStep,
-	EDITOR_THUMBNAIL_WIDTH,
-} from 'ooxml-ui/pptx';
 import { computed, nextTick, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 

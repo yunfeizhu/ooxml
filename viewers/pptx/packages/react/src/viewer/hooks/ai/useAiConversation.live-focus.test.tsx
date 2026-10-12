@@ -1,7 +1,6 @@
 // @vitest-environment happy-dom
 import { useChat } from '@ai-sdk/react';
 import type { ChatTransport } from 'ai';
-import type { PptxSlide } from 'pptx-viewer-core';
 import type {
 	PptxAiBridge,
 	PptxAiChatSession,
@@ -10,6 +9,7 @@ import type {
 	ToolCanvasTarget,
 } from 'ooxml-ui/pptx/ai';
 import { createAiChatSession } from 'ooxml-ui/pptx/ai';
+import type { PptxSlide } from 'pptx-viewer-core';
 /**
  * Live "AI as a collaborator" focus: as each tool call streams in, the canvas
  * must navigate to the slide it targets AND flash the highlight, driven from the

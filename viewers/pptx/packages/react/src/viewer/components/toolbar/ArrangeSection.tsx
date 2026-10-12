@@ -1,10 +1,6 @@
-import type { PptxElement, ShapeStyle } from 'pptx-viewer-core';
-import {
-	arrangeAlignAction,
-	arrangeHomeControls,
-	arrangePainterHomeControls,
-} from 'ooxml-ui/pptx';
+import { arrangeAlignAction, arrangeHomeControls, arrangePainterHomeControls } from 'ooxml-ui/pptx';
 import type { ToolbarActionId } from 'ooxml-ui/pptx';
+import type { PptxElement, ShapeStyle } from 'pptx-viewer-core';
 import React, { useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 

@@ -1,5 +1,3 @@
-import type { PptxSmartArtData, SmartArtColorScheme, SmartArtLayoutType } from 'pptx-viewer-core';
-import { SWITCHABLE_LAYOUT_TYPES, updateSmartArtNodeText } from 'pptx-viewer-core';
 import {
 	addSiblingAfter,
 	canRemoveTopLevelNode,
@@ -11,6 +9,8 @@ import {
 	SMARTART_COLOR_SCHEME_LABEL_KEYS,
 	SMARTART_LAYOUT_LABEL_KEYS,
 } from 'ooxml-ui/pptx';
+import type { PptxSmartArtData, SmartArtColorScheme, SmartArtLayoutType } from 'pptx-viewer-core';
+import { SWITCHABLE_LAYOUT_TYPES, updateSmartArtNodeText } from 'pptx-viewer-core';
 
 import type { Translator } from '../../i18n';
 import { createEl } from '../../render';

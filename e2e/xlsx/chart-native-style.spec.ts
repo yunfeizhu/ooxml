@@ -125,7 +125,7 @@ for (const framework of FRAMEWORKS)
 		await fill.selectOption('solid');
 		const transparency = pane.getByRole('spinbutton', { name: 'Transparency', exact: true });
 		await pane.getByRole('button', { name: 'Color', exact: true }).click();
-		await page.getByRole('menuitem', { name: 'Accent 1, Lighter 40%', exact: true }).click();
+		await page.getByRole('menuitemradio', { name: 'Accent 1, Lighter 40%', exact: true }).click();
 		await transparency.fill('37');
 		await transparency.press('Tab');
 		await expect(chart.locator('g[data-chart-series="1"] rect').first()).toHaveAttribute(
@@ -133,7 +133,7 @@ for (const framework of FRAMEWORKS)
 			/^rgba\(.*0\.63\)$/,
 		);
 		await pane.getByRole('button', { name: 'Color', exact: true }).click();
-		await page.getByRole('menuitem', { name: 'Accent 1, Lighter 40%', exact: true }).click();
+		await page.getByRole('menuitemradio', { name: 'Accent 1, Lighter 40%', exact: true }).click();
 		await expect(transparency).toHaveValue('37');
 		const bytes = await editor(page).evaluate(async (node) =>
 			Array.from(await (node as unknown as { saveBytes(): Promise<Uint8Array> }).saveBytes()),
@@ -276,7 +276,7 @@ for (const framework of FRAMEWORKS)
 		await transparency.fill('37');
 		await transparency.press('Tab');
 		await pane.getByRole('button', { name: 'Color', exact: true }).click();
-		await page.getByRole('menuitem', { name: 'Red', exact: true }).click();
+		await page.getByRole('menuitemradio', { name: 'Red', exact: true }).click();
 		await expect(chart.locator('linearGradient[id$="-s1"] stop').nth(1)).toHaveAttribute(
 			'stop-opacity',
 			'0.63',

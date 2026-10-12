@@ -20,8 +20,6 @@ import {
 	CUSTOM_ELEMENTS_SCHEMA,
 } from '@angular/core';
 import { TranslatePipe } from '@ngx-translate/core';
-import type { BevelPresetType, Text3DStyle } from 'pptx-viewer-core';
-
 import {
 	BEVEL_PRESETS,
 	TEXT_3D_MAX_BEVEL_PT,
@@ -29,6 +27,7 @@ import {
 	text3dEmuToPt,
 	text3dPtToEmu,
 } from 'ooxml-ui/pptx';
+import type { BevelPresetType, Text3DStyle } from 'pptx-viewer-core';
 
 /** The three `Text3DStyle` fields one bevel block owns. */
 export interface Text3DBevelKeys {

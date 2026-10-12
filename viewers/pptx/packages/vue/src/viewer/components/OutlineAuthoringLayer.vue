@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { canEditElementPoints } from 'ooxml-ui/pptx';
 /**
  * OutlineAuthoringLayer: stage-level host of the Edit Points overlay and the
  * Freeform: Shape / Curve drawing overlay (Vue port of React's
@@ -7,7 +8,6 @@
  * (deleted, slide changed) or becomes locked.
  */
 import type { PptxSlide } from 'pptx-viewer-core';
-import { canEditElementPoints } from 'ooxml-ui/pptx';
 import { computed, watch } from 'vue';
 
 import { useOutlineAuthoring } from '../composables/useOutlineAuthoring';

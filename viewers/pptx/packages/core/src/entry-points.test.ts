@@ -8,9 +8,9 @@ import * as ooxmlMath from 'ooxml-core/math';
 import * as ooxmlCore from 'ooxml-core/pptx';
 import * as ooxmlConverter from 'ooxml-core/pptx/converter';
 import * as ooxmlSignatureNode from 'ooxml-core/pptx/signature-node';
-import * as ooxmlText from 'ooxml-core/text';
 import * as ooxmlSmartArtLayouts from 'ooxml-core/pptx/smartart-layouts';
 import * as ooxmlUi from 'ooxml-core/pptx/ui';
+import * as ooxmlText from 'ooxml-core/text';
 import { describe, expect, it } from 'vitest';
 
 import * as chart from './chart';

@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import type { PptxElement, ShapeStyle, StrokeDashType } from 'pptx-viewer-core';
-import { hasShapeProperties } from 'pptx-viewer-core';
 import type { ThemeColorPickerCommit } from 'ooxml-ui/pptx';
 import { STROKE_DASH_OPTIONS } from 'ooxml-ui/pptx';
+import type { PptxElement, ShapeStyle, StrokeDashType } from 'pptx-viewer-core';
+import { hasShapeProperties } from 'pptx-viewer-core';
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 

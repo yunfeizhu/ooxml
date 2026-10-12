@@ -1,5 +1,3 @@
-import type { PptxElement, TextStyle } from 'pptx-viewer-core';
-import { hasTextProperties } from 'pptx-viewer-core';
 import {
 	getInlineEditorSelectionResult,
 	isBulletMarkerSegment,
@@ -9,6 +7,8 @@ import {
 	takePendingCaretPoint,
 } from 'ooxml-ui/pptx';
 import type { InlineTextEditSnapshot } from 'ooxml-ui/pptx';
+import type { PptxElement, TextStyle } from 'pptx-viewer-core';
+import { hasTextProperties } from 'pptx-viewer-core';
 import React, { useRef, useEffect, useLayoutEffect, useCallback } from 'react';
 
 import { DEFAULT_TEXT_COLOR } from '../../constants';

@@ -21,7 +21,6 @@ The component fills its parent, so give the parent an explicit height.
 ```ts
 import { Component, signal } from '@angular/core';
 import { PowerPointViewerComponent } from 'pptx-angular-viewer';
-
 // Base chrome styles (toolbar, thumbnails, layout). Import once, e.g. in styles.css or main.ts.
 import 'pptx-angular-viewer/styles';
 

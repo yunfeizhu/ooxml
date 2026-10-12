@@ -1,4 +1,23 @@
 import type {
+	DeckSaveIntent,
+	ElementBoxPatch,
+	ElementClipboardPayload,
+	FontEmbeddingDescriptor,
+	TableStyleSaveOptions,
+	TemplateElementMap,
+	InlineTextEditSnapshot,
+	PendingInlineTextEdit,
+	InlineListController,
+} from 'ooxml-ui/pptx';
+import {
+	canInteractWithElement,
+	describeFontEmbedding,
+	isElementIdInteractive,
+	pushRecentColor,
+	slideSpaceElement,
+	slideSpaceMembers,
+} from 'ooxml-ui/pptx';
+import type {
 	PptxAppProperties,
 	PptxCommentAuthor,
 	PptxCoreProperties,
@@ -22,25 +41,6 @@ import type {
 	TextSegment,
 } from 'pptx-viewer-core';
 import { buildThemeColorMap } from 'pptx-viewer-core';
-import type {
-	DeckSaveIntent,
-	ElementBoxPatch,
-	ElementClipboardPayload,
-	FontEmbeddingDescriptor,
-	TableStyleSaveOptions,
-	TemplateElementMap,
-	InlineTextEditSnapshot,
-	PendingInlineTextEdit,
-	InlineListController,
-} from 'ooxml-ui/pptx';
-import {
-	canInteractWithElement,
-	describeFontEmbedding,
-	isElementIdInteractive,
-	pushRecentColor,
-	slideSpaceElement,
-	slideSpaceMembers,
-} from 'ooxml-ui/pptx';
 
 import { EditorAnimationController } from './editor-animation-controller';
 import { EditorArrangeController } from './editor-arrange-controller';

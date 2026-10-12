@@ -1,5 +1,3 @@
-import type { PptxElement, PptxThemeColorRef } from 'pptx-viewer-core';
-import { hasShapeProperties, hasTextProperties } from 'pptx-viewer-core';
 import {
 	fontSizeOf,
 	shapeFillChange,
@@ -9,6 +7,8 @@ import {
 	textFontSizePtToPx,
 	textStylePatch,
 } from 'ooxml-ui/pptx';
+import type { PptxElement, PptxThemeColorRef } from 'pptx-viewer-core';
+import { hasShapeProperties, hasTextProperties } from 'pptx-viewer-core';
 
 /**
  * Pure patch builders for the formatting toolbar / inspector.

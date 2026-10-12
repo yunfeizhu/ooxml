@@ -10,8 +10,7 @@ export class ViewerDuplication {
 		private readonly edit: (run: () => Promise<void>, message: string) => void,
 	) {}
 	private reason(state: ViewerState): string {
-		if (!state.edit.sourceAvailable)
-			return 'Open a .vsdx file to duplicate shapes. Model-only documents are read only.';
+		if (!state.edit.sourceAvailable) return 'Open a .vsdx file to duplicate shapes.';
 		if (state.loading || state.edit.busy) return 'Wait for the current operation to finish.';
 		if (!state.selectedShapes.length) return 'Select shapes to duplicate.';
 		const page = state.document?.pages[state.pageIndex];
@@ -23,7 +22,7 @@ export class ViewerDuplication {
 				state.selectedShapes.map((shape) => shape.id),
 			)
 		)
-			return 'Duplicate requires ordinary local two-dimensional shapes without masters, groups, or connections. Source protection and formulas are checked when applying the edit.';
+			return 'Duplicate does not take lines, connectors, pictures, groups made here, drawn shapes on a layer or with glue, shapes on a locked layer or shapes glued to another shape.';
 		return '';
 	}
 	run(): void {

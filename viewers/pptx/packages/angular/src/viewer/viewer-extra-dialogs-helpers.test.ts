@@ -4,10 +4,10 @@
  * ink conversion, and accepted-diff application).
  */
 
+import type { SlideDiff } from 'ooxml-ui/pptx';
 import type { PptxElement, PptxSlide } from 'pptx-viewer-core';
 import { describe, expect, it } from 'vitest';
 
-import type { SlideDiff } from 'ooxml-ui/pptx';
 import type { AnnotationStroke, SlideAnnotationMap } from './presentation-annotations-helpers';
 import {
 	annotationMapToInkInserts,

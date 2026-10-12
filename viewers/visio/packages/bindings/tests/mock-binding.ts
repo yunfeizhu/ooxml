@@ -14,6 +14,7 @@ export interface FakeBinding {
 const mocks = vi.hoisted(() => ({ instances: [] as FakeBinding[], mount: vi.fn() }));
 vi.mock('ooxml-ui/visio', async (importOriginal) => ({
 	...(await importOriginal<typeof import('ooxml-ui/visio')>()),
+	// oxlint-disable-next-line typescript/no-extraneous-class -- stands in for the real class.
 	ViewerController: class ViewerController {},
 	mountViewer: mocks.mount.mockImplementation((host: HTMLElement, initial: ViewerOptions) => {
 		const element = document.createElement('section');

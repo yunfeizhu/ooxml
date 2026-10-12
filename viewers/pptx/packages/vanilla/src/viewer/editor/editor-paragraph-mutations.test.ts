@@ -1,10 +1,10 @@
-import type { PptxElement } from 'pptx-viewer-core';
 import {
 	buildParagraphs,
 	createInlineListSeed,
 	initializeInlineListDom,
 	attachInlineListController,
 } from 'ooxml-ui/pptx';
+import type { PptxElement } from 'pptx-viewer-core';
 import { afterEach, describe, expect, it } from 'vitest';
 
 import { renderTextBlock } from '../render/elements/text-block';

@@ -5,11 +5,7 @@
 // wiring pptx-viewer repeated five times (provider, gate, heartbeat, teardown, departure).
 import { Awareness } from 'y-protocols/awareness';
 import * as Y from 'yjs';
-import {
-	type AwarenessLike,
-	type PresencePublisher,
-	createPresencePublisher,
-} from './awareness';
+import { type AwarenessLike, type PresencePublisher, createPresencePublisher } from './awareness';
 import { Emitter } from './emitter';
 import { type CollaborationRole, assignUserColor, canWrite as roleCanWrite } from './identity';
 import { createDepartureChannel, registerTeardown, type TeardownOptions } from './lifecycle';

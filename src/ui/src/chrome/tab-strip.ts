@@ -27,7 +27,9 @@ const KEY_STEPS: Record<string, number> = {
  * Attributes: `label` (tab list name, default "Tabs"), `previous-label` and `next-label`
  * (step button names, default "Previous" and "Next"), `disabled`, and `add-label` to show an
  * add button after the tabs (Insert Page, New Sheet) that emits `office-command`
- * `{ command: 'tab-add' }`; `add-disabled` and `add-title` disable and explain it.
+ * `{ command: 'tab-add' }`; `add-disabled` and `add-title` disable and explain it. The
+ * `after-tabs` slot sits between the tabs and the add button (Visio's All pages list), and the
+ * `plain` attribute draws the selected tab as bold accent text without a box, as Visio does.
  */
 export class OfficeUiTabStrip extends OfficeElement {
 	static override styles = controlStyles(css);
@@ -172,6 +174,7 @@ export class OfficeUiTabStrip extends OfficeElement {
 					>`;
 				})}
 			</div>
+			<slot name="after-tabs"></slot>
 			<button
 				type="button"
 				class="step add"

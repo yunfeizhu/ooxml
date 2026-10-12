@@ -31,8 +31,6 @@ import {
 } from '@angular/core';
 import { LucideChevronLeft, LucideChevronRight, LucideX } from '@lucide/angular';
 import { TranslatePipe } from '@ngx-translate/core';
-import type { PptxSlide } from 'pptx-viewer-core';
-
 import {
 	CLOSED_READING_VIEW,
 	applyReadingViewCommand,
@@ -45,6 +43,8 @@ import {
 	readingViewFitScale,
 } from 'ooxml-ui/pptx';
 import type { CanvasSize, ReadingViewCommand, ReadingViewState } from 'ooxml-ui/pptx';
+import type { PptxSlide } from 'pptx-viewer-core';
+
 import { READING_VIEW_OVERLAY_STYLES } from './reading-view-overlay.styles';
 import { SlideCanvasComponent } from './slide-canvas.component';
 

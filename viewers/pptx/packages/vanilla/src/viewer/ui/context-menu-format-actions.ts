@@ -1,3 +1,12 @@
+import type { InspectorSectionAnchor, RasterStrategyOptions } from 'ooxml-ui/pptx';
+import {
+	buildRasterPictureElement,
+	elementPictureFilename,
+	findCanvasElementNode,
+	rasterizeElementToDataUrl,
+	saveElementAsPicture,
+	scrollInspectorSectionIntoView,
+} from 'ooxml-ui/pptx';
 /**
  * DOM-driving implementations of the three "format object" context-menu
  * commands (Edit Text, Save as Picture, and the inspector-focus trio: Edit
@@ -9,15 +18,6 @@
  * @module ui/context-menu-format-actions
  */
 import type { PptxElement } from 'pptx-viewer-core';
-import type { InspectorSectionAnchor, RasterStrategyOptions } from 'ooxml-ui/pptx';
-import {
-	buildRasterPictureElement,
-	elementPictureFilename,
-	findCanvasElementNode,
-	rasterizeElementToDataUrl,
-	saveElementAsPicture,
-	scrollInspectorSectionIntoView,
-} from 'ooxml-ui/pptx';
 
 import { findActiveElement } from '../editor/editor-active-elements';
 import { renderToCanvas } from '../export/render-to-canvas';

@@ -1,5 +1,3 @@
-import type { PptxElement, TextSegment, TextStyle } from 'pptx-viewer-core';
-import { hasTextProperties } from 'pptx-viewer-core';
 import type { InlineTextEditSnapshot, NormAutofitShrinkResult } from 'ooxml-ui/pptx';
 import {
 	canInteractWithElement,
@@ -8,6 +6,8 @@ import {
 	resolveInlineEditAutoFitHeight,
 	resolveInlineEditNormAutofitShrink,
 } from 'ooxml-ui/pptx';
+import type { PptxElement, TextSegment, TextStyle } from 'pptx-viewer-core';
+import { hasTextProperties } from 'pptx-viewer-core';
 
 export { readEditableText } from 'ooxml-ui/pptx';
 

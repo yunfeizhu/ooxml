@@ -24,7 +24,15 @@ export default defineConfig((options) => ({
 	// font-cache.ts`) is external for the same reason as `dompurify`: every
 	// binding that bundles shared declares it directly (see each binding's own
 	// package.json) so there is one copy, not one per binding.
-	external: ['pptx-viewer-core', /^ooxml-ui(\/|$)/, 'three', /^three\//u, 'dompurify', 'ai', 'opentype.js'],
+	external: [
+		'pptx-viewer-core',
+		/^ooxml-ui(\/|$)/,
+		'three',
+		/^three\//u,
+		'dompurify',
+		'ai',
+		'opentype.js',
+	],
 	treeshake: true,
 	platform: 'neutral',
 }));

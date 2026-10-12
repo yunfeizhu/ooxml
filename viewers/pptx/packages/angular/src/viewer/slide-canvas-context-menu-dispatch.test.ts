@@ -7,10 +7,10 @@
  * @module angular-viewer/slide-canvas-context-menu-dispatch.test
  */
 
-import { describe, expect, it } from 'vitest';
-
 import type { CanvasContextMenuCommandId } from 'ooxml-ui/pptx';
 import { buildCanvasContextMenuEntries } from 'ooxml-ui/pptx';
+import { describe, expect, it } from 'vitest';
+
 import type { CanvasContextMenuActions } from './slide-canvas-context-menu-dispatch';
 import { runCanvasContextMenuCommand } from './slide-canvas-context-menu-dispatch';
 

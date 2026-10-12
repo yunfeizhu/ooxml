@@ -10,10 +10,7 @@ import {
 	clampFlyoutPosition,
 	slideSorterContextMenuLabel,
 } from 'ooxml-ui/pptx';
-import type {
-	SlideSorterContextMenuContext,
-	SlideSorterContextMenuCommandId,
-} from 'ooxml-ui/pptx';
+import type { SlideSorterContextMenuContext, SlideSorterContextMenuCommandId } from 'ooxml-ui/pptx';
 
 import type { Translator } from '../i18n';
 import { createEl } from '../render';

@@ -1,6 +1,6 @@
+import { elementHitTargetStyle, shouldRenderHitTarget } from 'ooxml-ui/pptx';
 import type { PptxElement, ShapeStyle } from 'pptx-viewer-core';
 
-import { elementHitTargetStyle, shouldRenderHitTarget } from 'ooxml-ui/pptx';
 import { getContainerStyle, getShapeFillStrokeStyle } from './element-style';
 import type { StyleMap } from './element-style';
 import { showsTemplateAffordance } from './template-mode';

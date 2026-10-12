@@ -1,7 +1,4 @@
-import {
-	buildSlideSorterContextMenuEntries,
-	slideSorterContextMenuLabel,
-} from 'ooxml-ui/pptx';
+import { buildSlideSorterContextMenuEntries, slideSorterContextMenuLabel } from 'ooxml-ui/pptx';
 import type { SlideSorterContextMenuCommandId } from 'ooxml-ui/pptx';
 import React from 'react';
 import { useTranslation } from 'react-i18next';

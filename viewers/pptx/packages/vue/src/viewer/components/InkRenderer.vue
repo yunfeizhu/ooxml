@@ -1,7 +1,7 @@
 <script setup lang="ts">
+import { buildInkGroupStrokes, getInkReplayStyles, INK_REPLAY_KEYFRAMES } from 'ooxml-ui/pptx';
 import type { InkPptxElement, PptxElement } from 'pptx-viewer-core';
 import { isInkElement } from 'pptx-viewer-core';
-import { buildInkGroupStrokes, getInkReplayStyles, INK_REPLAY_KEYFRAMES } from 'ooxml-ui/pptx';
 import type { CSSProperties } from 'vue';
 import { computed, watchEffect } from 'vue';
 

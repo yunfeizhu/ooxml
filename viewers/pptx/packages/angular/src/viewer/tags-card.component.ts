@@ -18,14 +18,14 @@
  */
 import { ChangeDetectionStrategy, Component, computed, inject, input, signal } from '@angular/core';
 import { TranslatePipe } from '@ngx-translate/core';
-import type { PptxTagCollection } from 'pptx-viewer-core';
-
 import {
 	addTagToCollections,
 	deleteTagFromCollections,
 	flattenTagCollections,
 	updateTagInCollections,
 } from 'ooxml-ui/pptx';
+import type { PptxTagCollection } from 'pptx-viewer-core';
+
 import { EditorStateService } from './editor-state.service';
 import { INSPECTOR_CARD_STYLES } from './inspector-card-styles';
 import { LoadContentService } from './load-content.service';

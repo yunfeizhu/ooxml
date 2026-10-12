@@ -83,7 +83,7 @@ export class ViewerFormatPainter {
 		if (!armed.sticky) this.#cancel();
 		if (!edits?.length) {
 			this.announce(
-				'Format Painter applies to local shapes without a master, group, foreign image or layer membership.',
+				'Format Painter applies to single shapes: not groups, pictures, stencil connectors, drawn shapes on a layer or shapes on a locked layer.',
 			);
 			return;
 		}
@@ -117,7 +117,7 @@ export class ViewerFormatPainter {
 			: state.selectedShapes.length !== 1
 				? 'Select one shape to copy its formatting.'
 				: !copyable
-					? 'Format Painter copies from a local shape without a master, group, foreign image or layer membership.'
+					? 'Format Painter copies from a single shape: not a group, a picture, a stencil connector, a drawn shape on a layer or a shape on a locked layer.'
 					: '';
 		button.disabled = !this.#armed && (!!reason || !this.#canEdit(state));
 		button.setAttribute('pressed', String(!!this.#armed));

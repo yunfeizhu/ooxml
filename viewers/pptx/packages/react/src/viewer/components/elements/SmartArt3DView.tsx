@@ -1,3 +1,11 @@
+import type { ElementAnimationState } from 'ooxml-ui/pptx';
+import {
+	commitSmartArtNodeFill,
+	commitSmartArtNodeText,
+	measureSvgViewportRect,
+	resolvePalette,
+	resolveSmartArtThreeViewSpec,
+} from 'ooxml-ui/pptx';
 /**
  * Renders a SmartArt element's `<pptx-three-view>` when the host opted into
  * `smartArt3D` and the diagram resolves to a 3D model; falls back to the
@@ -12,14 +20,6 @@
  * @module SmartArt3DView
  */
 import type { PptxElement } from 'pptx-viewer-core';
-import type { ElementAnimationState } from 'ooxml-ui/pptx';
-import {
-	commitSmartArtNodeFill,
-	commitSmartArtNodeText,
-	measureSvgViewportRect,
-	resolvePalette,
-	resolveSmartArtThreeViewSpec,
-} from 'ooxml-ui/pptx';
 import React, { useMemo } from 'react';
 
 import { SmartArtEditableLayer } from './SmartArtEditableLayer';

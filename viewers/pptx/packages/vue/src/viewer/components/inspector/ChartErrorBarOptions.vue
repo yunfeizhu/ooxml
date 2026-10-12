@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import type { PptxChartErrBars, PptxChartSeries, PptxChartType } from 'pptx-viewer-core';
 import {
 	ERROR_BAR_SUPPORTED_TYPES,
 	ERROR_BAR_TYPE_OPTIONS,
 	ERROR_BAR_VALTYPE_OPTIONS,
 	ERROR_BAR_VALUE_TYPES,
 } from 'ooxml-ui/pptx';
+import type { PptxChartErrBars, PptxChartSeries, PptxChartType } from 'pptx-viewer-core';
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 

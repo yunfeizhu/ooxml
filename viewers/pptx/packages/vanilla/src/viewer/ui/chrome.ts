@@ -1,4 +1,3 @@
-import type { TextSegment } from 'pptx-viewer-core';
 import type {
 	AccountAuthConfig,
 	CompatibilityWarningToast,
@@ -7,6 +6,7 @@ import type {
 	ToolbarActionId,
 } from 'ooxml-ui/pptx';
 import { observeElementHeight } from 'ooxml-ui/pptx';
+import type { TextSegment } from 'pptx-viewer-core';
 
 import type { Translator } from '../i18n';
 import { createEl } from '../render';

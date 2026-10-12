@@ -1,12 +1,7 @@
 @import 'tailwindcss';
 
 body {
-	font-family:
-		system-ui,
-		-apple-system,
-		'Segoe UI',
-		Roboto,
-		sans-serif;
+	font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
 	/* Never let demo chrome overflow horizontally; on mobile a wider-than-viewport
 	   page expands the layout viewport and mis-anchors fixed chrome. */
 	overflow-x: hidden;

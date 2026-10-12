@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import type { PptxChartSeries, PptxChartType } from 'pptx-viewer-core';
 import { COMBO_SERIES_TYPE_OPTIONS, COMBO_SUPPORTED_TYPES } from 'ooxml-ui/pptx';
+import type { PptxChartSeries, PptxChartType } from 'pptx-viewer-core';
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 

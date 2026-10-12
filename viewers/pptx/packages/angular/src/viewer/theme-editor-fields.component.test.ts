@@ -1,5 +1,6 @@
 import { Injector, runInInjectionContext } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
+import { keyToLabel, translationsEn } from 'ooxml-ui/pptx/i18n';
 /**
  * theme-editor-fields.component.test.ts: the theme editor's colour swatches.
  *
@@ -14,7 +15,6 @@ import { TranslateService } from '@ngx-translate/core';
  */
 import { describe, expect, it } from 'vitest';
 
-import { keyToLabel, translationsEn } from 'ooxml-ui/pptx/i18n';
 import { themeColorSlotLabelKey } from './schema-token-labels';
 import {
 	ThemeEditorFieldsComponent,

@@ -1,5 +1,4 @@
 import { Injectable, signal } from '@angular/core';
-
 import type { Rendering3DFlags } from 'ooxml-ui/pptx';
 
 /** All off: the default outside `PowerPointViewerComponent` (tests, isolated thumbnails). */

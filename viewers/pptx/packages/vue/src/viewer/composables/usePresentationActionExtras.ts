@@ -1,3 +1,10 @@
+import {
+	downloadDataUrl,
+	openUrlInNewTab,
+	resolveOleVerbTarget,
+	safeOpenUrl,
+	toggleStageElementMedia,
+} from 'ooxml-ui/pptx';
 /**
  * usePresentationActionExtras: the wave-4 `PresentationActionRunner` verbs
  * (`lastViewed`, `customShow`, `openFile`, `openPresentation`, `playMedia`,
@@ -14,13 +21,6 @@
  * writes to it.
  */
 import type { PptxCustomShow, PptxSlide } from 'pptx-viewer-core';
-import {
-	downloadDataUrl,
-	openUrlInNewTab,
-	resolveOleVerbTarget,
-	safeOpenUrl,
-	toggleStageElementMedia,
-} from 'ooxml-ui/pptx';
 import { ref, watch } from 'vue';
 import type { Ref } from 'vue';
 

@@ -1,12 +1,4 @@
-import {
-	NS,
-	buildXml,
-	children,
-	elements,
-	first,
-	parseXml,
-	type XmlElement,
-} from '../xml/index';
+import { NS, buildXml, children, elements, first, parseXml, type XmlElement } from '../xml/index';
 import type { ConditionalRule, Worksheet } from './model';
 import { formatRange } from './address';
 import { descendants, selfContainedXml, numAttr } from './read/xml-util';

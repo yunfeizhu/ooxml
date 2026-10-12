@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { buildLayoutPreviewGeometry, isCurrentLayout } from 'ooxml-ui/pptx';
 /**
  * LayoutGalleryMenu: the grid of layout thumbnails shared by the New Slide and
  * Layout menus. Vue port of React's `toolbar/LayoutGalleryMenu.tsx`.
@@ -7,7 +8,6 @@
  * to tell "Title and Content" from "Two Content" in a themed deck.
  */
 import type { PptxLayoutOption, PptxLayoutPreview, PptxSlide } from 'pptx-viewer-core';
-import { buildLayoutPreviewGeometry, isCurrentLayout } from 'ooxml-ui/pptx';
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 

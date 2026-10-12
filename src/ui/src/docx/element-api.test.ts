@@ -108,11 +108,11 @@ describe('dirty tracking and save API', () => {
 		});
 		URL.revokeObjectURL = vi.fn();
 		const clicked: string[] = [];
-		vi.spyOn(HTMLAnchorElement.prototype, 'click').mockImplementation(
-			function (this: HTMLAnchorElement) {
-				clicked.push(this.download);
-			},
-		);
+		vi.spyOn(HTMLAnchorElement.prototype, 'click').mockImplementation(function (
+			this: HTMLAnchorElement,
+		) {
+			clicked.push(this.download);
+		});
 		await editor.download('report');
 		expect(clicked).toEqual(['report.docx']);
 		expect(urls).toHaveLength(1);

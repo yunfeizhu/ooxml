@@ -32,7 +32,9 @@ export function useInlineEditingState(
 			const entry = { elementId, read };
 			inlineEditingReaderRef.current = entry;
 			return () => {
-				if (inlineEditingReaderRef.current === entry) inlineEditingReaderRef.current = undefined;
+				if (inlineEditingReaderRef.current === entry) {
+					inlineEditingReaderRef.current = undefined;
+				}
 			};
 		},
 		[],

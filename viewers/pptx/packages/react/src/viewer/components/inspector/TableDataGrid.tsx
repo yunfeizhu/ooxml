@@ -1,3 +1,15 @@
+import {
+	appendTableElementColumn,
+	appendTableElementRow,
+	buildTableDataGrid,
+	getDenseGridLayoutPlan,
+	getDensePanelTouchTargetPx,
+	removeLastTableElementColumn,
+	removeLastTableElementRow,
+	removeTableElementColumn,
+	removeTableElementRow,
+	setTableElementCellText,
+} from 'ooxml-ui/pptx';
 /**
  * TableDataGrid.tsx: Inspector-resident spreadsheet editor for table cell TEXT.
  *
@@ -15,18 +27,6 @@
  * @module react/inspector/TableDataGrid
  */
 import type { PptxElement, TablePptxElement } from 'pptx-viewer-core';
-import {
-	appendTableElementColumn,
-	appendTableElementRow,
-	buildTableDataGrid,
-	getDenseGridLayoutPlan,
-	getDensePanelTouchTargetPx,
-	removeLastTableElementColumn,
-	removeLastTableElementRow,
-	removeTableElementColumn,
-	removeTableElementRow,
-	setTableElementCellText,
-} from 'ooxml-ui/pptx';
 import type React from 'react';
 import { useTranslation } from 'react-i18next';
 

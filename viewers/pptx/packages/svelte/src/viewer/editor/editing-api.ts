@@ -1,5 +1,5 @@
-import type { PptxSaveFormat } from 'pptx-viewer-core';
 import { downloadBlob, savedPresentationFileName } from 'ooxml-ui/pptx';
+import type { PptxSaveFormat } from 'pptx-viewer-core';
 
 import type { EditorState } from './editor-state.svelte';
 

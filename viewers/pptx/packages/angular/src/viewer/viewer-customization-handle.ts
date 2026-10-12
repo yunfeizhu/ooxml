@@ -29,6 +29,7 @@ import type {
 	ViewerOptionPrimitive,
 	ViewerPanelId,
 } from 'ooxml-ui/pptx';
+
 import type { ViewerCustomizationService } from './viewer-customization.service';
 
 export abstract class ViewerCustomizationHandle implements ViewerCustomizationApi {

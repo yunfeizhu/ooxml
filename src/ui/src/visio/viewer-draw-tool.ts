@@ -1,4 +1,4 @@
-import type { VisioPage, VisioGeometryEdit, VisioBasicShape } from 'ooxml-core/visio';
+import type { VisioPage, VisioEdit, VisioGeometryEdit } from 'ooxml-core/visio';
 import {
 	editErrorMessage,
 	isEditCancellation,
@@ -25,20 +25,11 @@ export async function insertRectangle(
 		visioBoxCreationCommand(page, 'rectangle', centre, size),
 	);
 }
-/** Add a Basic Shapes master: Ellipse and Circle are native ellipses, the rest core outlines. */
-export async function insertMaster(
-	controller: ViewerController,
-	page: VisioPage,
-	master: { kind: 'ellipse' } | { kind: 'rectangle'; shape: VisioBasicShape },
-	centre: VisioDrawingPoint,
-	size: { width: number; height: number },
-): Promise<string> {
-	return insertGeometry(controller, page, () =>
-		master.kind === 'ellipse'
-			? visioBoxCreationCommand(page, 'ellipse', centre, size)
-			: visioBoxCreationCommand(page, 'rectangle', centre, size, undefined, master.shape),
-	);
-}
+/**
+ * Quick Style a dropped master gets: variant colour 1 (Accent 1 in every built-in theme's first
+ * variant, and in the theme-less Office colours), theme style 4, so drops follow Design > Variants.
+ */
+export const MASTER_QUICK_STYLE = { color: 100, matrix: 4 } as const;
 export async function insertLine(
 	controller: ViewerController,
 	page: VisioPage,
@@ -51,6 +42,7 @@ async function insertGeometry(
 	controller: ViewerController,
 	page: VisioPage,
 	build: () => VisioGeometryEdit,
+	style?: (shapeId: string) => VisioEdit[],
 ): Promise<string> {
 	const state = controller.state;
 	if (state.document?.pages[state.pageIndex] !== page)
@@ -67,7 +59,7 @@ async function insertGeometry(
 		!controller.isCreationTokenCurrent(token)
 	)
 		throw new DOMException('The drawing intent changed.', 'AbortError');
-	await controller.applyCreationEdits([command], token);
+	await controller.applyCreationEdits([command, ...(style?.(command.shapeId) ?? [])], token);
 	return command.shapeId;
 }
 

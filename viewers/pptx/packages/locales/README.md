@@ -8,9 +8,9 @@ any viewer binding.
 Repository workspaces reference the dictionaries by package name:
 
 ```ts
-import { translationsFr } from 'pptx-viewer-locales/fr';
-import { translationsEs } from 'pptx-viewer-locales/es';
 import { translationsDe } from 'pptx-viewer-locales/de';
+import { translationsEs } from 'pptx-viewer-locales/es';
+import { translationsFr } from 'pptx-viewer-locales/fr';
 import { translationsZhCN } from 'pptx-viewer-locales/zh-CN';
 ```
 

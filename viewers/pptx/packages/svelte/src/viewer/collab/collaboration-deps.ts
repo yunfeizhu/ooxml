@@ -1,10 +1,10 @@
+import type { CollaborationConfig } from 'ooxml-ui/pptx';
 /**
  * collaboration-deps.ts: the host-dependency seam for `CollaborationController`.
  * Split from `collaboration.svelte.ts` purely to keep that class within the
  * repo's file-size budget; no runtime code lives here.
  */
 import type { PptxHandlerSaveOptions, PptxSlide } from 'pptx-viewer-core';
-import type { CollaborationConfig } from 'ooxml-ui/pptx';
 
 import type { CollabSessionFactory } from './collaboration-session';
 

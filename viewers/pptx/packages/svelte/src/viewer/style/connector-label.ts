@@ -1,5 +1,5 @@
-import type { TextSegment, TextStyle } from 'pptx-viewer-core';
 import type { CssStyleMap } from 'ooxml-ui/pptx';
+import type { TextSegment, TextStyle } from 'pptx-viewer-core';
 
 /**
  * Style computation for connector text labels (port of the Vue

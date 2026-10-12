@@ -6,9 +6,9 @@
  * holds no state of its own.
  */
 
-import type { PptxSlide } from 'pptx-viewer-core';
 import type { CollaborationConfig } from 'ooxml-ui/pptx';
 import { registerCollaborationTeardown } from 'ooxml-ui/pptx';
+import type { PptxSlide } from 'pptx-viewer-core';
 
 export interface CollaborationEffectsHost {
 	getConfig: () => CollaborationConfig | undefined;

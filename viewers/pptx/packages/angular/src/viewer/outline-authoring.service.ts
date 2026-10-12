@@ -14,10 +14,10 @@
  * @module angular-viewer/outline-authoring.service
  */
 import { computed, inject, Injectable, signal } from '@angular/core';
-import type { PptxElement } from 'pptx-viewer-core';
-
 import type { FreeformToolKind } from 'ooxml-ui/pptx';
 import { canEditElementPoints } from 'ooxml-ui/pptx';
+import type { PptxElement } from 'pptx-viewer-core';
+
 import { EditorStateService } from './editor-state.service';
 
 @Injectable()

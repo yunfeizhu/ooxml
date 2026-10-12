@@ -1,0 +1,36 @@
+name: Welcome
+
+# Greets someone opening their first issue or pull request here, with the pointers that save a
+# round trip. Runs on `pull_request_target` so it can comment on PRs from forks; it never checks
+# out or runs the PR's code (it has no checkout at all), only posts a fixed message.
+on:
+  issues:
+    types: [opened]
+  pull_request_target: # zizmor: ignore[dangerous-triggers] posts a fixed comment, never runs PR code
+    types: [opened]
+
+permissions:
+  contents: read
+
+jobs:
+  welcome:
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      pull-requests: write
+    steps:
+      - uses: actions/first-interaction@1c4688942c71f71d4f5502a26ea67c331730fa4d # v3
+        with:
+          issue_message: |
+            Thanks for opening your first issue here! If it is about a specific file, attaching a
+            small document that shows the problem (with anything private removed) is the fastest
+            way to a fix. Questions and ideas are also welcome in
+            [Discussions](https://github.com/ChristopherVR/ooxml/discussions).
+          pr_message: |
+            Thanks for your first pull request! A few things that help it land:
+
+            - Commit subjects and the PR title follow [Conventional Commits](https://www.conventionalcommits.org) with the area as the scope (for example `fix(xlsx): ...`); the `Conventional Commits` check explains any it rejects.
+            - Format logic belongs in `src/core/<area>/`, with a regression test next to the code; [AGENTS.md](https://github.com/ChristopherVR/ooxml/blob/main/AGENTS.md) explains where things live.
+            - Run `bun run verify` before pushing to run what CI will.
+
+            See [CONTRIBUTING.md](https://github.com/ChristopherVR/ooxml/blob/main/CONTRIBUTING.md) for the rest.

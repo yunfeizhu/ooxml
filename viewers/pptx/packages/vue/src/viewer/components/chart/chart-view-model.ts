@@ -1,3 +1,5 @@
+import { buildChartViewModel, resolveChartPalette } from 'ooxml-ui/pptx';
+import type { ChartViewModel } from 'ooxml-ui/pptx';
 /**
  * Vue adapter for the framework-agnostic chart view-model engine.
  *
@@ -19,8 +21,6 @@
  * @module chart-view-model
  */
 import type { PptxChartData, PptxElement } from 'pptx-viewer-core';
-import { buildChartViewModel, resolveChartPalette } from 'ooxml-ui/pptx';
-import type { ChartViewModel } from 'ooxml-ui/pptx';
 
 /**
  * The colour palette Vue paints a chart with: the shared `resolveChartPalette`

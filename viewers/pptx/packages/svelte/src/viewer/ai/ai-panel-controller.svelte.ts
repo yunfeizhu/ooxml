@@ -1,3 +1,10 @@
+import type {
+	AiCanvasHighlight,
+	AiChangeBatch,
+	PptxAiFocusedTarget,
+	ToolCanvasTarget,
+} from 'ooxml-ui/pptx/ai';
+import { computeFocusTargets } from 'ooxml-ui/pptx/ai';
 /**
  * `AiPanelController` - the runes-based owner of the AI panel's on-canvas scope
  * (Svelte port of React's `useAiPanelController`). It keeps `PowerPointViewer`
@@ -17,13 +24,6 @@
  * stays scoped even after the user clicks away.
  */
 import type { PptxElement } from 'pptx-viewer-core';
-import type {
-	AiCanvasHighlight,
-	AiChangeBatch,
-	PptxAiFocusedTarget,
-	ToolCanvasTarget,
-} from 'ooxml-ui/pptx/ai';
-import { computeFocusTargets } from 'ooxml-ui/pptx/ai';
 
 export type { AiCanvasHighlight } from 'ooxml-ui/pptx/ai';
 

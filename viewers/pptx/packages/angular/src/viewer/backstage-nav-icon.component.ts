@@ -14,7 +14,6 @@ import {
 	LucideUserRound,
 	LucideX,
 } from '@lucide/angular';
-
 import type { BackstagePage } from 'ooxml-ui/pptx';
 
 @Component({

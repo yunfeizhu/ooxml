@@ -10,6 +10,8 @@ export const grid: Record<string, string> = {
 		'El nombre de una hoja no puede contener \\ / ? * [ ] ni :',
 	'A sheet name cannot start or end with an apostrophe.':
 		'El nombre de una hoja no puede empezar ni terminar con un apóstrofo.',
+	'Cannot insert cells: non-empty cells would be pushed off the sheet.':
+		'No se pueden insertar celdas: las celdas no vacías se desplazarían fuera de la hoja.',
 	Cancel: 'Cancelar',
 	'Cell editor': 'Editor de celdas',
 	Chart: 'Gráfico',
@@ -76,6 +78,8 @@ export const grid: Record<string, string> = {
 	'That name is already taken.': 'Ese nombre ya está en uso.',
 	"The browser didn't allow access to the clipboard. Use Ctrl+V to paste.":
 		'El explorador no permitió el acceso al portapapeles. Use Ctrl+V para pegar.',
+	'The insert area extends beyond the sheet.':
+		'El área de inserción se extiende más allá de la hoja.',
 	'The paste area extends beyond the sheet.': 'El área de pegado se extiende más allá de la hoja.',
 	"This action won't work on multiple selections.":
 		'Esta acción no funciona en selecciones múltiples.',

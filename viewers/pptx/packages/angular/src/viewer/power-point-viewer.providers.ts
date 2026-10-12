@@ -41,6 +41,7 @@ import { PictureCropService } from './picture-crop.service';
 import { PrintService } from './print.service';
 import { RecentColorsService } from './recent-colors.service';
 import { Rendering3DService } from './rendering-3d.service';
+import { RibbonAddInsService } from './ribbon-add-ins.service';
 import { TableSelectionService } from './table-selection.service';
 import { ViewerCanvasEditingService } from './viewer-canvas-editing.service';
 import { ViewerCollabCursorService } from './viewer-collab-cursor.service';
@@ -90,6 +91,7 @@ export const POWER_POINT_VIEWER_PROVIDERS = [
 	Rendering3DService,
 	FieldContextService,
 	RecentColorsService,
+	RibbonAddInsService,
 	ZoomTargetService,
 	AiPanelStore,
 	ViewerDialogsService,

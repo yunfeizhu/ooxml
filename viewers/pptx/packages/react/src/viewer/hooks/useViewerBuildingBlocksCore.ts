@@ -1,3 +1,5 @@
+import type { ViewerOptions, ViewportFitOptions } from 'ooxml-ui/pptx';
+import { resolveHistoryDepth, resolveImageResolutionScale } from 'ooxml-ui/pptx';
 import type { PptxHandler, PptxSlide } from 'pptx-viewer-core';
 /**
  * useViewerBuildingBlocksCore: The "core state" third of
@@ -10,8 +12,6 @@ import type { PptxHandler, PptxSlide } from 'pptx-viewer-core';
  * corresponding section of `PowerPointViewer.tsx`.
  */
 import { buildThemeColorMap } from 'pptx-viewer-core';
-import type { ViewerOptions, ViewportFitOptions } from 'ooxml-ui/pptx';
-import { resolveHistoryDepth, resolveImageResolutionScale } from 'ooxml-ui/pptx';
 import { useCallback, useMemo } from 'react';
 
 import type { ViewerMode } from '../types-core';

@@ -30,15 +30,15 @@ import {
 	CUSTOM_ELEMENTS_SCHEMA,
 } from '@angular/core';
 import { TranslatePipe } from '@ngx-translate/core';
-import type { PptxElement, ShapeStyle } from 'pptx-viewer-core';
-import { hasShapeProperties } from 'pptx-viewer-core';
-
 import {
 	COMPOUND_LINE_OPTIONS,
 	LINE_CAP_OPTIONS,
 	LINE_JOIN_OPTIONS,
 	STROKE_DASH_OPTIONS,
 } from 'ooxml-ui/pptx';
+import type { PptxElement, ShapeStyle } from 'pptx-viewer-core';
+import { hasShapeProperties } from 'pptx-viewer-core';
+
 import { isSelectControl } from './control-event-targets';
 
 @Component({

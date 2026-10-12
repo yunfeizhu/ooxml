@@ -1,9 +1,9 @@
-import type { PptxElement } from 'pptx-viewer-core';
 import type {
 	GestureController,
 	ResizeHandleId,
 	ShapeAdjustmentHandleDescriptor,
 } from 'ooxml-ui/pptx';
+import type { PptxElement } from 'pptx-viewer-core';
 
 import type { AdjustGestureController } from './editor-adjust-gesture';
 import type { SelectionInteractivity } from './editor-selection-interactivity';

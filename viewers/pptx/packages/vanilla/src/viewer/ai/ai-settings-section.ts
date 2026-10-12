@@ -6,11 +6,7 @@
  */
 import { downloadBlob } from 'ooxml-ui/pptx';
 import type { AiLogFormat, PptxAiChatStore, SaveChatLogFile } from 'ooxml-ui/pptx/ai';
-import {
-	collectStoredChats,
-	createChatHistoryStore,
-	exportAiChatLogs,
-} from 'ooxml-ui/pptx/ai';
+import { collectStoredChats, createChatHistoryStore, exportAiChatLogs } from 'ooxml-ui/pptx/ai';
 
 import type { Translator } from '../i18n';
 import { createEl } from '../render';

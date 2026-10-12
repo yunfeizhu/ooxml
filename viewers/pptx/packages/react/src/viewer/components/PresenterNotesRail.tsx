@@ -1,4 +1,3 @@
-import type { PptxElement, PptxSlide } from 'pptx-viewer-core';
 import type { AuthoredSlideRange, ShowOrderCustomShow } from 'ooxml-ui/pptx';
 import {
 	nextPresentedSlide,
@@ -6,6 +5,7 @@ import {
 	presenterNextDisabled,
 	presenterPrevDisabled,
 } from 'ooxml-ui/pptx';
+import type { PptxElement, PptxSlide } from 'pptx-viewer-core';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { LuChevronLeft, LuChevronRight, LuMinus, LuPlus } from 'react-icons/lu';

@@ -8,10 +8,10 @@ import {
 	CUSTOM_ELEMENTS_SCHEMA,
 } from '@angular/core';
 import { TranslatePipe } from '@ngx-translate/core';
+import { ARTISTIC_EFFECTS, imageResetPatch, imageResetState } from 'ooxml-ui/pptx';
 import type { PptxElement, PptxImageEffects } from 'pptx-viewer-core';
 import { isImageLikeElement } from 'pptx-viewer-core';
 
-import { ARTISTIC_EFFECTS, imageResetPatch, imageResetState } from 'ooxml-ui/pptx';
 import { ImageCropWashPanelComponent } from './image-crop-wash-panel.component';
 import { RecentColorsService } from './recent-colors.service';
 

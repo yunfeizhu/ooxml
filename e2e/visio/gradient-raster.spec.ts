@@ -3,6 +3,7 @@ import { readFile, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import type { VisioDocument } from 'ooxml-core/visio';
 import { prepareNativeGradientEdit } from './gradient-edit';
+import { openDemo } from './demo-page';
 
 const directory = process.env.VISIO_NATIVE_GRADIENT_RASTER_DIR;
 const resizeSourceDirectory = process.env.VISIO_NATIVE_GRADIENT_RESIZE_SOURCE_DIR;
@@ -69,7 +70,10 @@ for (const framework of ['vanilla', 'react', 'vue', 'angular', 'svelte', 'solid'
 					}),
 			);
 			test.skip(samples.length === 0, 'The native capture has no cases for this outline group.');
-			await page.goto(framework === 'vanilla' ? '/demo/?sample=1' : `/demo-${framework}/?sample=1`);
+			await openDemo(
+				page,
+				framework === 'vanilla' ? '/demo/?sample=1' : `/demo-${framework}/?sample=1`,
+			);
 			await prepareNativeGradientEdit(
 				page,
 				directory!,

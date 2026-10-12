@@ -1,6 +1,6 @@
 {
 	"name": "docx-vue-viewer",
-	"version": "0.4.10",
+	"version": "0.5.0",
 	"description": "Vue 3 component for the DOCX editor. Self-contained: includes the editor, layout engine and legacy .doc reader.",
 	"keywords": [
 		"doc",

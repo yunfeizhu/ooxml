@@ -1,9 +1,11 @@
+import { visioThemeColorFormula } from './theme-color-ref';
 import type { VisioShapeFormatEdit } from './edit-formatting-commands';
 import type { FormattingWrite } from './edit-formatting';
 import { assertNonGradientPaint } from './edit-formatting-paint-scope';
 import type { VisioPackage } from './package';
 import type { FormattingRowContext } from './edit-style-admission';
 import { quickStyleWrites, shadowWrites } from './edit-formatting-effects';
+import { effectWrites } from './edit-formatting-glow';
 
 export function shapeFormattingWrites(edit: VisioShapeFormatEdit): FormattingWrite[] {
 	const writes = new Map<string, FormattingWrite>();
@@ -25,7 +27,13 @@ export function shapeFormattingWrites(edit: VisioShapeFormatEdit): FormattingWri
 		add('FillPattern', edit.fillColor === 'none' ? 0 : 1, 'FillStyle');
 		add('FillGradientEnabled', 0, 'FillStyle');
 		if (edit.fillColor !== 'none') {
-			add('FillForegnd', edit.fillColor, 'FillStyle', undefined, rgb(edit.fillColor));
+			add(
+				'FillForegnd',
+				edit.fillColor,
+				'FillStyle',
+				undefined,
+				edit.fillColorTheme ? visioThemeColorFormula(edit.fillColorTheme) : rgb(edit.fillColor),
+			);
 			add('FillForegndTrans', 0, 'FillStyle');
 		}
 	}
@@ -47,7 +55,13 @@ export function shapeFormattingWrites(edit: VisioShapeFormatEdit): FormattingWri
 			add(name, edit.fillTransparency / 100, 'FillStyle');
 	}
 	if (edit.lineColor !== undefined) {
-		add('LineColor', edit.lineColor, 'LineStyle', undefined, rgb(edit.lineColor));
+		add(
+			'LineColor',
+			edit.lineColor,
+			'LineStyle',
+			undefined,
+			edit.lineColorTheme ? visioThemeColorFormula(edit.lineColorTheme) : rgb(edit.lineColor),
+		);
 		add('LineColorTrans', 0, 'LineStyle');
 		add('LineGradientEnabled', 0, 'LineStyle');
 	}
@@ -56,6 +70,16 @@ export function shapeFormattingWrites(edit: VisioShapeFormatEdit): FormattingWri
 		add('LineColorTrans', edit.lineTransparency / 100, 'LineStyle');
 	}
 	if (edit.lineWeight !== undefined) add('LineWeight', edit.lineWeight / 72, 'LineStyle', 'PT');
+	// As Visio saves them: plain codes, and the rounding radius in inches shown as points.
+	for (const [name, cell] of [
+		['beginArrow', 'BeginArrow'],
+		['endArrow', 'EndArrow'],
+		['beginArrowSize', 'BeginArrowSize'],
+		['endArrowSize', 'EndArrowSize'],
+		['lineCap', 'LineCap'],
+	] as const)
+		if (edit[name] !== undefined) add(cell, edit[name], 'LineStyle');
+	if (edit.rounding !== undefined) add('Rounding', edit.rounding / 72, 'LineStyle', 'PT');
 	return [...writes.values()];
 }
 /** Paint writes plus Shape Styles (Quick Style and shadow) writes; later writes win by name. */
@@ -85,6 +109,7 @@ export async function shapeFormattingPlan(
 		? await quickStyleWrites(pkg, document, shape, edit.pageId, edit.quickStyle, add, check)
 		: undefined;
 	if (edit.shadow) shadowWrites(edit.shadow, add);
+	effectWrites(edit, add);
 	return { writes: [...writes.values()], ...(rows ? { rows } : {}) };
 }
 export async function assertShapeFormattingPaintScope(

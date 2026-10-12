@@ -11,9 +11,11 @@ describe('canonical core dependency', () => {
 	it('declares an installable core automation release', () => {
 		expect(manifest.dependencies['ooxml-core']).toMatch(/^\^1\.\d+\.\d+$/u);
 	});
+
 	it('does not install the viewer facade and a second document engine', () => {
 		expect(manifest.dependencies['pptx-viewer-core']).toBeUndefined();
 	});
+
 	it('re-exports the same engine used by the document tools', () => {
 		expect(PptxHandler).toBe(CoreHandler);
 	});

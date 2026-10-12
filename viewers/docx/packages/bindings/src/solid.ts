@@ -18,6 +18,7 @@ export function WordEditor(props: WordEditorProps) {
 			'document-error': props.onDocumentError,
 			'page-change': props.onPageChange,
 			'dirty-change': props.onDirtyChange,
+			'office-ribbon-add-in': props.onRibbonAddIn,
 		}),
 	});
 	onMount(() => {

@@ -5,12 +5,12 @@ import { join } from 'node:path';
 import { Client } from '@modelcontextprotocol/sdk/client/index.js';
 import { InMemoryTransport } from '@modelcontextprotocol/sdk/inMemory.js';
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
-import { expect, it } from 'vitest';
+import { expect, test } from 'vitest';
 
 import { registerTools } from '../../mcp/index';
 import { createTestPptxBytes } from '../helpers/create-test-pptx';
 
-it('the importable MCP entry registers tools and honors a composed server root', async () => {
+test('the importable MCP entry registers tools and honors a composed server root', async () => {
 	const rootDir = await mkdtemp(join(tmpdir(), 'pptx-composed-'));
 	const server = new McpServer({ name: 'combined-test', version: '1.0.0' });
 	const client = new Client({ name: 'test-client', version: '1.0.0' });
@@ -24,8 +24,8 @@ it('the importable MCP entry registers tools and honors a composed server root',
 			name: 'get_slide',
 			arguments: { filePath: 'test.pptx', slideIndex: 0 },
 		});
-		expect(result.isError).not.toBe(true);
-		expect(result.content).toEqual([
+		expect(result.isError).not.toBeTruthy();
+		expect(result.content).toStrictEqual([
 			expect.objectContaining({ type: 'text', text: expect.stringContaining('Slide 1 Title') }),
 		]);
 	} finally {

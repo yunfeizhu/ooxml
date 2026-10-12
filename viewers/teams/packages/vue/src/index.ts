@@ -61,7 +61,15 @@ export const Teams = defineComponent({
 			sync();
 		});
 		watch(
-			() => [props.workspaceId, props.userName, props.userId, props.config, props.uploadFile, props.openers, props.embeds],
+			() => [
+				props.workspaceId,
+				props.userName,
+				props.userId,
+				props.config,
+				props.uploadFile,
+				props.openers,
+				props.embeds,
+			],
 			sync,
 		);
 		onBeforeUnmount(() => binding?.destroy());

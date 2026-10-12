@@ -1,4 +1,3 @@
-import type { PptxElement } from 'pptx-viewer-core';
 import {
 	createInlineListModelObserver,
 	overlayInlineTextSnapshot,
@@ -10,6 +9,7 @@ import type {
 	InlineTextEditSnapshot,
 	PendingInlineTextEdit,
 } from 'ooxml-ui/pptx';
+import type { PptxElement } from 'pptx-viewer-core';
 
 import type { ViewerState } from '../state';
 import type { InlineEditorSession } from './inline-text-editor';
@@ -51,14 +51,16 @@ export function retainAcceptedInlineTextModel(
 		state.loading ||
 		state.masterViewTarget ||
 		slide?.id !== target.slideId
-	)
+	) {
 		return undefined;
+	}
 	const snapshot = session.readAccepted();
 	if (
 		!snapshot ||
 		!session.checkModel?.(slide.elements.find((element) => element.id === snapshot.elementId))
-	)
+	) {
 		return undefined;
+	}
 	const elements = overlayInlineTextSnapshot(slide.elements, snapshot);
 	return elements === slide.elements
 		? undefined

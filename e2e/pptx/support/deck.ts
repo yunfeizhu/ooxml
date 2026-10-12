@@ -41,6 +41,10 @@ export async function loadDeck(
 	// `goto` + upload rather than going through here.
 	await resetTabSession(page);
 	await page.goto(path);
+	// The page we just left may have had an autosave pending (a deck edited earlier in the test): it
+	// can land after the clear above, and this fresh page would then offer it back. The old page is
+	// gone now and nothing probes until a deck opens, so clearing again is deterministic.
+	await clearAutosaveSnapshots(page);
 	await uploadDeck(page, fixturePath);
 }
 

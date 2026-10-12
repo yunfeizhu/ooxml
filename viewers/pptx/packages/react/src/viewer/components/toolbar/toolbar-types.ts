@@ -1,4 +1,11 @@
 import type {
+	AnimationApplyGroup,
+	FreeformToolKind,
+	InsertChartKind,
+	SlideTemplateId,
+	ToolbarActionId,
+} from 'ooxml-ui/pptx';
+import type {
 	PptxElement,
 	PptxLayoutOption,
 	PptxLayoutPreview,
@@ -9,13 +16,6 @@ import type {
 	PptxCustomShow,
 	ShapeStyle,
 } from 'pptx-viewer-core';
-import type {
-	AnimationApplyGroup,
-	FreeformToolKind,
-	InsertChartKind,
-	SlideTemplateId,
-	ToolbarActionId,
-} from 'ooxml-ui/pptx';
 
 import type {
 	DrawingTool,

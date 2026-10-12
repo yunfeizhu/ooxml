@@ -28,6 +28,7 @@ const { PptxHandler } = await import('pptx-viewer-core');
 const { PowerPointViewer } = await import('../index');
 type ViewerHandle = import('../index').PowerPointViewerHandle;
 type ViewerCustomization = import('../index').ViewerCustomization;
+type ViewerProps = import('../index').PowerPointViewerProps;
 
 async function sampleDeck(): Promise<Uint8Array> {
 	const { handler, data } = await PptxHandler.create({ initialSlideCount: 1 });
@@ -67,12 +68,20 @@ function handleOf(ref: React.RefObject<ViewerHandle | null>): ViewerHandle {
 
 async function mount(
 	customization?: ViewerCustomization,
+	extra: Partial<ViewerProps> = {},
+	content?: Uint8Array,
 ): Promise<React.RefObject<ViewerHandle | null>> {
-	const content = await sampleDeck();
+	const bytes = content ?? (await sampleDeck());
 	const ref = createRef<ViewerHandle>();
 	await act(async () => {
 		root.render(
-			<PowerPointViewer ref={ref} content={content} canEdit customization={customization} />,
+			<PowerPointViewer
+				ref={ref}
+				content={bytes}
+				canEdit
+				customization={customization}
+				{...extra}
+			/>,
 		);
 	});
 	for (let attempt = 0; attempt < 80; attempt += 1) {
@@ -117,5 +126,53 @@ describe('powerPointViewer customization', () => {
 			handleOf(ref).showRibbonTab('insert');
 		});
 		expect(ribbonTabs()).toContain(INSERT);
+	});
+});
+
+describe('powerPointViewer host ribbon tabs', () => {
+	const reports = (run: () => void) => [
+		{
+			id: 'reports',
+			label: 'Reports',
+			groups: [{ label: 'Export', commands: [{ id: 'export', label: 'Export', run }] }],
+		},
+	];
+	const tab = () => container.querySelector<HTMLButtonElement>('[data-ribbon-add-in-tab]');
+
+	it('adds the host tab after Help, runs its command and returns to Home when it is removed', async () => {
+		const run = vi.fn();
+		const heard = vi.fn();
+		container.addEventListener('office-ribbon-add-in', (event) =>
+			heard((event as CustomEvent).detail),
+		);
+		const content = await sampleDeck();
+		await mount(undefined, { ribbonAddIns: reports(run) }, content);
+		// The ribbon's own tab row: the viewer has other tab lists (inspector, comments).
+		const row = () =>
+			Array.from(container.querySelectorAll('[data-pptx-chrome="ribbon-tabs"] [role="tab"]'));
+		expect(row().at(-1)).toBe(tab());
+		expect(tab()!.textContent).toBe('Reports');
+		expect(container.querySelector('pptx-ui-ribbon-add-in')).toBeNull();
+		await act(async () => {
+			tab()!.click();
+		});
+		const selected = () =>
+			row()
+				.filter((item) => item.getAttribute('aria-selected') === 'true')
+				.map((item) => item.textContent?.trim());
+		expect(selected()).toStrictEqual(['Reports']);
+		const command = container.querySelector('pptx-ui-ribbon-add-in pptx-ui-ribbon-command')!;
+		expect(command.getAttribute('label')).toBe('Export');
+		// The host tab replaces the fixed tab's groups rather than joining them.
+		expect(container.querySelector('[data-ribbon-group="home.font"]')).toBeNull();
+		await act(async () => {
+			command.shadowRoot!.querySelector('button')!.click();
+		});
+		expect(run).toHaveBeenCalledOnce();
+		expect(heard).toHaveBeenCalledWith({ tab: 'reports', command: 'export' });
+		await mount(undefined, { ribbonAddIns: [] }, content);
+		expect(tab()).toBeNull();
+		expect(container.querySelector('pptx-ui-ribbon-add-in')).toBeNull();
+		expect(selected()).toStrictEqual([translationsEn['pptx.ribbon.tab.home']]);
 	});
 });

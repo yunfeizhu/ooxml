@@ -27,8 +27,6 @@ import {
 	signal,
 } from '@angular/core';
 import { TranslatePipe } from '@ngx-translate/core';
-import type { PptxElement } from 'pptx-viewer-core';
-
 import { DEFAULT_INSERT_CHART_KIND } from 'ooxml-ui/pptx';
 import type {
 	AccountAuthConfig,
@@ -36,6 +34,8 @@ import type {
 	ShapePresetType,
 	ToolbarActionId,
 } from 'ooxml-ui/pptx';
+import type { PptxElement } from 'pptx-viewer-core';
+
 import { EditorStateService } from './editor-state.service';
 import { RibbonArrangeSectionComponent } from './ribbon-arrange-section.component';
 import { RibbonDrawingGroupComponent } from './ribbon-drawing-group.component';

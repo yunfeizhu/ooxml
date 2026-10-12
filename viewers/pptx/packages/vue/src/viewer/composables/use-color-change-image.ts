@@ -1,3 +1,10 @@
+import {
+	applyColorChange,
+	buildCacheKey,
+	DEFAULT_COLOR_CHANGE_TOLERANCE,
+	getCachedResult,
+	setCachedResult,
+} from 'ooxml-ui/pptx';
 /**
  * useColorChangeImage: Vue composable that applies the PowerPoint
  * `<a:clrChange>` colour-replacement (chroma-key) effect to an image.
@@ -12,13 +19,6 @@
  * `displaySrc` ref and renders a plain `<img>`.
  */
 import type { PptxImageEffects } from 'pptx-viewer-core';
-import {
-	applyColorChange,
-	buildCacheKey,
-	DEFAULT_COLOR_CHANGE_TOLERANCE,
-	getCachedResult,
-	setCachedResult,
-} from 'ooxml-ui/pptx';
 import type { ComputedRef, Ref } from 'vue';
 import { computed, ref, watch } from 'vue';
 

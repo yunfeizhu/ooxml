@@ -2,7 +2,8 @@ import { test, expect, type Locator } from '@playwright/test';
 import JSZip from 'jszip';
 import type { VisioViewerElement } from 'ooxml-ui/visio';
 import { createVsdxFixture } from './fixture.mjs';
-import { downloadCopy } from './ribbon';
+import { downloadCopy, ribbonGroup } from './ribbon';
+import { openDemo } from './demo-page';
 
 async function arrangementFixture(): Promise<Buffer> {
 	const zip = await JSZip.loadAsync(await createVsdxFixture('Arrangement anchor'));
@@ -53,6 +54,7 @@ async function selectAll(viewer: Locator): Promise<void> {
 	await viewer.getByRole('tab', { name: 'Home', exact: true }).click();
 	const tools = viewer.locator('.ribbon-tools');
 	if ((await tools.getAttribute('open')) === null) await tools.locator('summary').click();
+	await ribbonGroup(viewer, 'Editing');
 	await viewer.locator('[data-menu="select"] button').first().click();
 	await viewer.locator('[command="select-all"]').click();
 	await expectSelection(viewer);
@@ -65,13 +67,17 @@ for (const framework of ['vanilla', 'react', 'vue', 'angular', 'svelte', 'solid'
 		const errors: string[] = [];
 		page.on('pageerror', (error) => errors.push(error.message));
 		await page.setViewportSize({ width: 1600, height: 1000 });
-		await page.goto(framework === 'vanilla' ? '/demo/?sample=1' : `/demo-${framework}/?sample=1`);
+		await openDemo(
+			page,
+			framework === 'vanilla' ? '/demo/?sample=1' : `/demo-${framework}/?sample=1`,
+		);
 		const viewer = page.locator('visio-viewer');
 		await page.locator('#file').setInputFiles({
 			name: 'arrangement.vsdx',
 			mimeType: 'application/vnd.ms-visio.drawing',
 			buffer: await arrangementFixture(),
 		});
+		await expect(page.locator('#file-name')).toHaveText('arrangement.vsdx');
 		await expect(viewer.locator('svg.paper')).toContainText('Arrangement 3');
 		const original = [
 			[4, 7],
@@ -90,13 +96,13 @@ for (const framework of ['vanilla', 'react', 'vue', 'angular', 'svelte', 'solid'
 		];
 		await expect.poll(() => pins(viewer)).toEqual(aligned);
 		await expectSelection(viewer);
-		await viewer.locator('[command="undo"] button').click();
+		await viewer.locator('.qat [data-command="undo"]').click();
 		await expect.poll(() => pins(viewer)).toEqual(original);
 		await expectSelection(viewer);
-		await viewer.locator('[command="redo"] button').click();
+		await viewer.locator('.qat [data-command="redo"]').click();
 		await expect.poll(() => pins(viewer)).toEqual(aligned);
 		await expectSelection(viewer);
-		await viewer.locator('[command="undo"] button').click();
+		await viewer.locator('.qat [data-command="undo"]').click();
 		await expect.poll(() => pins(viewer)).toEqual(original);
 		await viewer.locator('[data-menu="position"] button').first().click();
 		await viewer.locator('[command="distribute-horizontal"]').click();
@@ -116,10 +122,10 @@ for (const framework of ['vanilla', 'react', 'vue', 'angular', 'svelte', 'solid'
 		];
 		await expect.poll(() => pins(viewer)).toEqual(distributed);
 		await expectSelection(viewer);
-		await viewer.locator('[command="undo"] button').click();
+		await viewer.locator('.qat [data-command="undo"]').click();
 		await expect.poll(() => pins(viewer)).toEqual(horizontal);
 		await expectSelection(viewer);
-		await viewer.locator('[command="redo"] button').click();
+		await viewer.locator('.qat [data-command="redo"]').click();
 		await expect.poll(() => pins(viewer)).toEqual(distributed);
 		await expectSelection(viewer);
 		const downloading = page.waitForEvent('download');
@@ -139,8 +145,8 @@ for (const framework of ['vanilla', 'react', 'vue', 'angular', 'svelte', 'solid'
 		await viewer.locator('.viewport').press('Delete');
 		await expect(viewer.locator('svg.paper [data-shape-id]')).toHaveCount(0);
 		await expect.poll(() => pins(viewer)).toEqual([]);
-		await expect(viewer.locator('[command="undo"] button')).toBeEnabled();
-		await viewer.locator('[command="undo"] button').click();
+		await expect(viewer.locator('.qat [data-command="undo"]')).toBeEnabled();
+		await viewer.locator('.qat [data-command="undo"]').click();
 		await expect.poll(() => pins(viewer)).toEqual(distributed);
 		await expectSelection(viewer);
 		await expect

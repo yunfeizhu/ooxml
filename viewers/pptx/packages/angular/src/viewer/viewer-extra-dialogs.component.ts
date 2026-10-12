@@ -23,12 +23,12 @@ import {
 	output,
 	signal,
 } from '@angular/core';
-import type { PptxCustomShow, PptxPresentationProperties } from 'pptx-viewer-core';
-
 import { THEME_CATALOG } from 'ooxml-ui/pptx';
 import type { ThemeCatalogEntry, ViewerAddinStatus } from 'ooxml-ui/pptx';
 import { LOCALE_CATALOG } from 'ooxml-ui/pptx/i18n';
 import type { LocaleCatalogEntry } from 'ooxml-ui/pptx/i18n';
+import type { PptxCustomShow, PptxPresentationProperties } from 'pptx-viewer-core';
+
 import { CollaborationService } from './collaboration.service';
 import { ComparePanelComponent } from './compare-panel.component';
 import { CustomFontsService } from './custom-fonts.service';

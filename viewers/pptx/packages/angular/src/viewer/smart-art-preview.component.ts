@@ -12,9 +12,9 @@
  */
 
 import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
+import { buildSmartArtPreviewElement } from 'ooxml-ui/pptx';
 import type { PptxElement, SmartArtLayout } from 'pptx-viewer-core';
 
-import { buildSmartArtPreviewElement } from 'ooxml-ui/pptx';
 import { SmartArtRendererComponent } from './smart-art-renderer.component';
 
 @Component({

@@ -6,11 +6,7 @@
  * @module collaboration/types
  */
 
-import type {
-	CollaborationConfig,
-	CollaborationRole,
-	CollaborationTransport,
-} from 'ooxml-ui/pptx';
+import type { CollaborationConfig, CollaborationRole, CollaborationTransport } from 'ooxml-ui/pptx';
 import type { Doc as YDoc } from 'yjs';
 
 // ---------------------------------------------------------------------------

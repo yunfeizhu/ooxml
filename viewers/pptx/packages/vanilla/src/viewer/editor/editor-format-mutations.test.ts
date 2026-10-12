@@ -1,5 +1,5 @@
-import type { PptxElement, TextSegment } from 'pptx-viewer-core';
 import { remapTextToSegments } from 'ooxml-ui/pptx';
+import type { PptxElement, TextSegment } from 'pptx-viewer-core';
 import { describe, expect, it, test } from 'vitest';
 
 import {

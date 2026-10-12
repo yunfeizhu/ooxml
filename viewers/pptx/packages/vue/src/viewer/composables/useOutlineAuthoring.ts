@@ -1,10 +1,10 @@
-import type { PptxElement, ShapePptxElement } from 'pptx-viewer-core';
 import type {
 	EditPointsElementPatch,
 	FreeformToolKind,
 	ResolvedCustomization,
 } from 'ooxml-ui/pptx';
 import { canEditElementPoints, isEditPointsEnabled } from 'ooxml-ui/pptx';
+import type { PptxElement, ShapePptxElement } from 'pptx-viewer-core';
 import { inject, provide, ref } from 'vue';
 import type { InjectionKey, Ref } from 'vue';
 

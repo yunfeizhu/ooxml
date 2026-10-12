@@ -17,10 +17,9 @@
  * @module viewer/activex-controls-overlay
  */
 import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
-import type { PptxActiveXControl } from 'pptx-viewer-core';
-
 import { getActiveXControlOverlayView } from 'ooxml-ui/pptx';
 import type { CanvasSize } from 'ooxml-ui/pptx';
+import type { PptxActiveXControl } from 'pptx-viewer-core';
 
 interface ActiveXControlRow {
 	readonly key: string;
@@ -46,6 +45,7 @@ interface ActiveXControlRow {
 							class="pptx-ng-activex-overlay__image"
 							[src]="row.imageUrl"
 							[alt]="row.label"
+							draggable="false"
 							[title]="'ActiveX control: ' + row.label"
 							[style.left.px]="row.left"
 							[style.top.px]="row.top"

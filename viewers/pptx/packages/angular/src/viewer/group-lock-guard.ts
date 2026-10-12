@@ -1,3 +1,4 @@
+import { canInteractWithElement } from 'ooxml-ui/pptx';
 /**
  * group-lock-guard: the `a:spLocks`/`a:grpSpLocks`/@noGrouping check for
  * `EditorStateService`'s group/ungroup commands.
@@ -9,8 +10,6 @@
  * parity audit D3).
  */
 import type { PptxElement, PptxSlide } from 'pptx-viewer-core';
-
-import { canInteractWithElement } from 'ooxml-ui/pptx';
 
 /**
  * May every one of `ids` be grouped together?

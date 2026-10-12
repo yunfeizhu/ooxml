@@ -1,6 +1,6 @@
-import type { PptxElement, TextSegment, TextStyle } from 'pptx-viewer-core';
 import { buildParagraphs } from 'ooxml-ui/pptx';
 import type { ParagraphRun } from 'ooxml-ui/pptx';
+import type { PptxElement, TextSegment, TextStyle } from 'pptx-viewer-core';
 import { describe, it, expect } from 'vitest';
 
 import { renderParagraphRun } from './text-segment-render';

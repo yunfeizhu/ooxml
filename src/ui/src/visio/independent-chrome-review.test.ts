@@ -31,11 +31,10 @@ describe('independent shared-chrome regression review', () => {
 		const item = root.querySelector('[data-menu="all-pages"] office-ui-menu-item')!;
 		expect(item.getAttribute('label')).toBe(doc.pages[0]!.name);
 		expect(item.shadowRoot!.textContent).toContain(doc.pages[0]!.name);
-		expect(root.querySelector('[data-page-name]')!.textContent).toBe(doc.pages[0]!.name);
 		expect(strip.querySelector('img, [onerror]')).toBeNull();
 		expect(item.shadowRoot!.querySelector('img, [onerror]')).toBeNull();
 	});
-	it('keeps page tabs, All pages, stepper, status and inspector on the same real page', () => {
+	it('keeps page tabs, All pages, stepper and status on the same real page', () => {
 		const { viewer, root } = setup();
 		const strip = root.querySelector('office-ui-tab-strip')!.shadowRoot!;
 		const step = (label: string) =>
@@ -49,7 +48,6 @@ describe('independent shared-chrome regression review', () => {
 		expect(
 			root.querySelector('[data-menu="all-pages"] [command="page-1"]')!.getAttribute('checked'),
 		).toBe('true');
-		expect(root.querySelector('[data-page-name]')!.textContent).toBe(demoDocument.pages[1]!.name);
 		expect(step('Next page').disabled).toBe(true);
 		root
 			.querySelector('[data-menu="all-pages"] [command="page-0"]')!
@@ -76,9 +74,12 @@ describe('independent shared-chrome regression review', () => {
 		const { viewer, root, button } = setup();
 		viewer.update({ zoom: 1.75 });
 		const original = viewer.controller.state.document;
-		button('[data-chrome="inspector"]').click();
+		// The task pane starts closed; the Shapes window toggles from its own collapse button.
 		expect(root.querySelector<HTMLElement>('.inspector-pane')!.hidden).toBe(true);
-		button('[data-chrome="inspector"]').click();
+		button('.pane-collapse[data-chrome="shapes"]').click();
+		expect(root.querySelector<HTMLElement>('.shapes-pane')!.hidden).toBe(true);
+		button('.shapes-strip').click();
+		expect(root.querySelector<HTMLElement>('.shapes-pane')!.hidden).toBe(false);
 		viewer.update({ showToolbar: false });
 		expect(root.querySelector<HTMLElement>('.toolbar')!.hidden).toBe(true);
 		expect(root.querySelector<HTMLElement>('.zoom-controls')!.hidden).toBe(true);

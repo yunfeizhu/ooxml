@@ -13,11 +13,11 @@
  * a stale one.
  */
 import { DestroyRef, Injector, runInInjectionContext } from '@angular/core';
+import { applyMasterViewCrudAction, masterViewCrudActions } from 'ooxml-ui/pptx';
 import type { PptxData, PptxHandler } from 'pptx-viewer-core';
 import { PptxHandler as PptxHandlerCtor } from 'pptx-viewer-core';
 import { describe, expect, it } from 'vitest';
 
-import { applyMasterViewCrudAction, masterViewCrudActions } from 'ooxml-ui/pptx';
 import { LoadContentService } from './load-content.service';
 
 /** Build the service in a throwaway injection context with a DestroyRef stub. */

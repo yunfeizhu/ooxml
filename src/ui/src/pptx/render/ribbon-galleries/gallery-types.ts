@@ -108,6 +108,12 @@ export interface RibbonGalleryDescriptor {
 	 * click picks its only item and no panel opens.
 	 */
 	command?: RibbonGalleryCommandView;
+	/**
+	 * Set when part of the gallery loads lazily and was not ready when the descriptor was built.
+	 * Resolves with the rebuilt descriptor once it has landed (or `undefined` when it never will),
+	 * so the element can swap it in and a binding that memoizes its descriptor need not know.
+	 */
+	ready?: Promise<RibbonGalleryDescriptor | undefined>;
 }
 
 /** How a command-style entry draws (see {@link RibbonGalleryDescriptor.command}). */

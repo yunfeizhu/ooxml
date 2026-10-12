@@ -1,3 +1,4 @@
+import { PRESET_THEMES } from 'ooxml-ui/pptx';
 import type {
 	PptxElement,
 	PptxHandler,
@@ -5,7 +6,6 @@ import type {
 	PptxSlideMaster,
 	PptxThemeColorScheme,
 } from 'pptx-viewer-core';
-import { PRESET_THEMES } from 'ooxml-ui/pptx';
 import { describe, expect, it, vi } from 'vitest';
 
 import { createInitialViewerState, createStore } from '../state';

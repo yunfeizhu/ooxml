@@ -1,10 +1,6 @@
 import { mount } from '@vue/test-utils';
+import { hasPersistentAudio, registerPersistentAudio, stopAllPersistentAudio } from 'ooxml-ui/pptx';
 import type { PptxPresentationProperties, PptxSlide } from 'pptx-viewer-core';
-import {
-	hasPersistentAudio,
-	registerPersistentAudio,
-	stopAllPersistentAudio,
-} from 'ooxml-ui/pptx';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { nextTick } from 'vue';
 

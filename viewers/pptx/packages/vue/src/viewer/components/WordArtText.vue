@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import type { PptxElement, PptxElementWithText, TextSegment, TextStyle } from 'pptx-viewer-core';
-import { getSubstituteFontFamily, hasTextProperties } from 'pptx-viewer-core';
 import {
 	buildWarpPath,
 	DEFAULT_FONT_FAMILY,
@@ -10,6 +8,8 @@ import {
 	substituteFieldText,
 } from 'ooxml-ui/pptx';
 import type { EnvelopeGlyphPlacement, WarpParagraph } from 'ooxml-ui/pptx';
+import type { PptxElement, PptxElementWithText, TextSegment, TextStyle } from 'pptx-viewer-core';
+import { getSubstituteFontFamily, hasTextProperties } from 'pptx-viewer-core';
 import { computed } from 'vue';
 
 import { injectFieldContext, resolveFieldContext } from '../composables/field-context';

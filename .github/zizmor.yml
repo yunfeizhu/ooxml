@@ -1,0 +1,14 @@
+# Configuration for zizmor (https://docs.zizmor.sh), run by .github/workflows/workflow-lint.yml.
+rules:
+  unpinned-uses:
+    config:
+      policies:
+        # GitHub's own actions may follow a major tag; every third-party action is pinned to a
+        # commit SHA (with the version in a comment, which Dependabot keeps up to date).
+        actions/*: ref-pin
+        github/*: ref-pin
+        '*': hash-pin
+  # Dependabot waits three days before proposing a new version (.github/dependabot.yml).
+  dependabot-cooldown:
+    config:
+      days: 3

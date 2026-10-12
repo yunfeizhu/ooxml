@@ -7,6 +7,8 @@ export interface FieldSpec {
 	choices?: boolean;
 	maxLength?: number;
 	placeholder?: string;
+	/** A checkbox (read with `checked`) or a number field instead of text. */
+	input?: 'checkbox' | 'number';
 }
 
 /**
@@ -39,8 +41,9 @@ export class InsertDialog {
 			field.name = spec.name;
 			field.setAttribute('aria-label', spec.label);
 			if (field instanceof HTMLInputElement) {
-				field.type = 'text';
-				field.maxLength = spec.maxLength ?? 4096;
+				field.type = spec.input ?? 'text';
+				if (spec.input === 'number') field.step = 'any';
+				if (!spec.input) field.maxLength = spec.maxLength ?? 4096;
 				if (spec.placeholder) field.placeholder = spec.placeholder;
 				field.addEventListener('keydown', (event) => {
 					if (event.key !== 'Enter') return;
@@ -48,7 +51,8 @@ export class InsertDialog {
 					press(buttons[0]!);
 				});
 			}
-			label.append(field);
+			if (spec.input === 'checkbox') label.prepend(field);
+			else label.append(field);
 			this.fields.set(spec.name, field);
 			this.dialog.append(label);
 		}
@@ -71,18 +75,32 @@ export class InsertDialog {
 	value(name: string): string {
 		return this.fields.get(name)?.value ?? '';
 	}
-	/** Replace a select's choices; the current value is kept as an extra choice when unknown. */
-	choices(name: string, values: readonly string[], current: string): void {
+	checked(name: string): boolean {
+		const field = this.fields.get(name);
+		return field instanceof HTMLInputElement && field.checked;
+	}
+	/**
+	 * Replace a select's choices; the current value is kept as an extra choice when unknown.
+	 * `labels` names each value; `none: false` drops the leading empty choice.
+	 */
+	choices(
+		name: string,
+		values: readonly string[],
+		current: string,
+		options: { labels?: readonly string[]; none?: boolean } = {},
+	): void {
 		const select = this.fields.get(name);
 		if (!(select instanceof HTMLSelectElement)) return;
 		const doc = select.ownerDocument;
-		const options = ['', ...values];
-		if (!options.includes(current)) options.push(current);
+		const list = options.none === false ? [...values] : ['', ...values];
+		if (!list.includes(current)) list.push(current);
 		select.replaceChildren(
-			...options.map((value) => {
+			...list.map((value) => {
 				const option = doc.createElement('option');
 				option.value = value;
-				option.textContent = value || '(none)';
+				const index = values.indexOf(value);
+				option.textContent =
+					(index >= 0 ? options.labels?.[index] : undefined) ?? (value || '(none)');
 				return option;
 			}),
 		);

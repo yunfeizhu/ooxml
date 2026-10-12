@@ -22,15 +22,15 @@ describe('tabRowActions', () => {
 			props: { onEnterRehearsalMode: () => {}, onToggleComments: () => {} },
 		});
 		expect(wrapper.find('[aria-label="Record"]').exists()).toBeTruthy();
-		expect(actions(wrapper).state.noShare).toBe(false);
-		expect(actions(wrapper).state.noComments).toBe(false);
+		expect(actions(wrapper).state.noShare).toBeFalsy();
+		expect(actions(wrapper).state.noComments).toBeFalsy();
 	});
 
 	it('hides Share when "share" is in hiddenActions', () => {
 		const wrapper = mount(TabRowActions, {
 			props: { onEnterRehearsalMode: () => {}, hiddenActions: ['share'] },
 		});
-		expect(actions(wrapper).state.noShare).toBe(true);
+		expect(actions(wrapper).state.noShare).toBeTruthy();
 		expect(wrapper.find('[aria-label="Record"]').exists()).toBeTruthy();
 	});
 
@@ -39,7 +39,7 @@ describe('tabRowActions', () => {
 			props: { onEnterRehearsalMode: () => {}, hiddenActions: ['record'] },
 		});
 		expect(wrapper.find('[aria-label="Record"]').exists()).toBeFalsy();
-		expect(actions(wrapper).state.noShare).toBe(false);
+		expect(actions(wrapper).state.noShare).toBeFalsy();
 	});
 
 	it('reflects the comments pane and routes the element events', async () => {
@@ -52,10 +52,10 @@ describe('tabRowActions', () => {
 				slideCommentCount: 2,
 			},
 		});
-		expect(actions(wrapper).state.commentsPressed).toBe(true);
+		expect(actions(wrapper).state.commentsPressed).toBeTruthy();
 		expect(actions(wrapper).state.commentsCount).toBe(2);
 		await wrapper.find('pptx-ui-ribbon-actions').trigger('comments-toggle');
 		await wrapper.find('pptx-ui-ribbon-actions').trigger('share-request');
-		expect(calls).toEqual(['comments', 'share']);
+		expect(calls).toStrictEqual(['comments', 'share']);
 	});
 });

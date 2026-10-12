@@ -1,5 +1,5 @@
-import type { PptxSlide, PptxSlideTransition } from 'pptx-viewer-core';
 import type { CanvasSize } from 'ooxml-ui/pptx';
+import type { PptxSlide, PptxSlideTransition } from 'pptx-viewer-core';
 import type { Component } from 'svelte';
 
 import PresentationTransitionOverlayComponent from './PresentationTransitionOverlay.svelte';

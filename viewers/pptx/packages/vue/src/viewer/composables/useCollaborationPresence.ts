@@ -4,11 +4,7 @@ import type {
 	PresencePublisher,
 	SanitizedPresence,
 } from 'ooxml-ui/pptx';
-import {
-	assignUserColor,
-	createPresencePublisher,
-	PRESENCE_HEARTBEAT_MS,
-} from 'ooxml-ui/pptx';
+import { assignUserColor, createPresencePublisher, PRESENCE_HEARTBEAT_MS } from 'ooxml-ui/pptx';
 import { computed, ref } from 'vue';
 
 import type { RemoteCursor } from '../components/CollaborationCursors.vue';

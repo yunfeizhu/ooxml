@@ -25,13 +25,9 @@
 import { ChangeDetectionStrategy, Component, computed, inject, input, output } from '@angular/core';
 import { LucideEye, LucideEyeOff } from '@lucide/angular';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
+import { hideChartSeries, restoreFilteredSeries, setDataLabelsRangeCache } from 'ooxml-ui/pptx';
 import type { ChartPptxElement, PptxChartFilteredSeries, PptxChartSeries } from 'pptx-viewer-core';
 
-import {
-	hideChartSeries,
-	restoreFilteredSeries,
-	setDataLabelsRangeCache,
-} from 'ooxml-ui/pptx';
 import { patchChartData } from './chart-data-helpers';
 import { CHART_EDITOR_STYLES } from './chart-editor-styles';
 import { stringFromEvent } from './chart-event-helpers';

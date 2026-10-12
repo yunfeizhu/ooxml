@@ -1,13 +1,21 @@
-import type { PptxElement } from 'pptx-viewer-core';
-import type { AccountAuthConfig, RibbonContextualTabId, ToolbarActionId } from 'ooxml-ui/pptx';
+import type {
+	AccountAuthConfig,
+	PptxUiRibbonAddInElement,
+	RibbonAddInTab,
+	RibbonContextualTabId,
+	ToolbarActionId,
+} from 'ooxml-ui/pptx';
 import {
 	attachRibbonOverflow,
 	homeLaunchers,
 	filterVisibleTabs,
 	isActionHidden,
+	resolveActiveRibbonAddIn,
 	resolveActiveRibbonTab,
 	visibleContextualTabs,
+	visibleRibbonAddIns,
 } from 'ooxml-ui/pptx';
+import type { PptxElement } from 'pptx-viewer-core';
 
 import type { Translator } from '../../i18n';
 import { createEl } from '../../render';
@@ -151,7 +159,8 @@ export function createRibbon(
 	const viewTab = hidden('view') ? null : createViewTab(doc, t, handlers.nav, hiddenActions);
 	const helpTab = hidden('help') ? null : createHelpTab(doc, t, handlers.nav);
 
-	type AnyTabId = RibbonTabId | RibbonContextualTabId;
+	// A host's add-in tab (`setRibbonAddIns`) is any other id.
+	type AnyTabId = RibbonTabId | RibbonContextualTabId | string;
 	const panes: Partial<Record<AnyTabId, HTMLElement>> = {
 		file: fileTab?.el,
 		home: homeTab?.el,
@@ -252,6 +261,45 @@ export function createRibbon(
 		});
 	};
 
+	// Host tabs: one pane per tab, each holding the shared `pptx-ui-ribbon-add-in` element.
+	const addInPanes = new Map<string, { pane: HTMLElement; body: PptxUiRibbonAddInElement }>();
+	const setRibbonAddIns = (tabs: readonly RibbonAddInTab[]): void => {
+		const visible = visibleRibbonAddIns(tabs);
+		for (const [id, entry] of addInPanes) {
+			if (!visible.some((tab) => tab.id === id)) {
+				entry.pane.remove();
+				addInPanes.delete(id);
+				delete panes[id];
+			}
+		}
+		for (const tab of visible) {
+			let entry = addInPanes.get(tab.id);
+			if (!entry) {
+				const pane = createEl(doc, 'div', 'pptxv-ribbon-tab-content');
+				pane.dataset.pptxChrome = 'ribbon-content';
+				pane.hidden = true;
+				const body = doc.createElement('pptx-ui-ribbon-add-in');
+				pane.appendChild(body);
+				el.appendChild(pane);
+				entry = { pane, body };
+				addInPanes.set(tab.id, entry);
+				panes[tab.id] = pane;
+			}
+			entry.body.tab = tab;
+		}
+		tabBar.setAddInTabs(visible);
+		// A removed tab that was showing falls back, as a contextual tab does.
+		const next = resolveActiveRibbonAddIn(
+			activeTab,
+			visible,
+			(id) => !addInPanes.has(id) && panes[id] !== undefined,
+			defaultVisibleTab,
+		);
+		if (next !== activeTab || !panes[activeTab]) {
+			setActiveTab(panes[next] ? next : defaultVisibleTab);
+		}
+	};
+
 	let lastEditable = false;
 	let optionHiddenTabs = new Set<string>();
 
@@ -332,6 +380,7 @@ export function createRibbon(
 		},
 		showDefaultTab: () => setActiveTab(defaultVisibleTab),
 		setHiddenOptionTabs,
+		setRibbonAddIns,
 		applyScreenTips: (tip) => tabBar.applyScreenTips(tip),
 		updateSelection(selectedElement, extra) {
 			latestSelected = selectedElement;

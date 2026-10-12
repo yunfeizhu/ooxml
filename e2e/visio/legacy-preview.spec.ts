@@ -3,6 +3,7 @@ import { saveCommand } from './ribbon';
 import { readFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import { createVsdxFixture } from './fixture.mjs';
+import { openDemo } from './demo-page';
 
 const legacy = readFileSync(new URL('./fixtures/owned-v11.vsd', import.meta.url));
 expect(createHash('sha256').update(legacy).digest('hex')).toBe(
@@ -12,7 +13,7 @@ expect(createHash('sha256').update(legacy).digest('hex')).toBe(
 test('shipped worker detects legacy bytes under a modern filename and disables VSDX saving', async ({
 	page,
 }) => {
-	await page.goto('/demo/?sample=1');
+	await openDemo(page);
 	await page
 		.locator('#file')
 		.setInputFiles({ name: 'legacy.vsdx', mimeType: 'application/octet-stream', buffer: legacy });
@@ -27,19 +28,21 @@ test('shipped worker detects legacy bytes under a modern filename and disables V
 		mimeType: 'application/octet-stream',
 		buffer: await createVsdxFixture('Modern after legacy'),
 	});
-	await expect(page.locator('visio-viewer svg text')).toContainText('Modern after legacy');
+	await expect(page.locator('#file-name')).toHaveText('modern.vsd');
+	await expect(page.locator('visio-viewer svg.paper text')).toContainText('Modern after legacy');
 	await expect(saveCommand(page.locator('visio-viewer'))).toBeEnabled();
 	await page.locator('#file').setInputFiles({
 		name: 'legacy-again.vsd',
 		mimeType: 'application/octet-stream',
 		buffer: legacy,
 	});
+	await expect(page.locator('#file-name')).toHaveText('legacy-again.vsd');
 	await expect(page.locator('#edit-label')).toHaveText('LEGACY VSD PREVIEW');
 	await expect(saveCommand(page.locator('visio-viewer'))).toBeDisabled();
 });
 
 test('malformed binary input retains the prior bounded legacy preview', async ({ page }) => {
-	await page.goto('/demo/?sample=1');
+	await openDemo(page);
 	await page
 		.locator('#file')
 		.setInputFiles({ name: 'owned.vsd', mimeType: 'application/octet-stream', buffer: legacy });

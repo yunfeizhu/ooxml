@@ -1,10 +1,6 @@
 // Rule description panels of the New / Edit Formatting Rule dialog for the rule types that
 // carry a format: cell contents, top / bottom, average, unique / duplicate and formula.
-import type {
-	ConditionalOperator,
-	ConditionalRule,
-	DifferentialStyle,
-} from 'ooxml-core/xlsx';
+import type { ConditionalOperator, ConditionalRule, DifferentialStyle } from 'ooxml-core/xlsx';
 import type { EditorContext } from 'ooxml-core/xlsx/ui';
 import { OPERATORS, TIME_PERIOD_LABELS, operand, operandText } from './cf-common';
 import { checkbox, el, field, numberInput, row, select, textInput } from './fields';

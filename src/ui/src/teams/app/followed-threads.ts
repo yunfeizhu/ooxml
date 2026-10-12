@@ -43,33 +43,34 @@ export function followedThreads(
 			${
 				threads.length
 					? threads.map(
-							(thread) => html`<li data-unread=${String(thread.unread > 0)}>
-								<button
-									type="button"
-									@click=${() => open(thread)}
-									aria-label=${`Open thread in ${thread.channelName}: ${thread.root.deleted ? 'Deleted message' : thread.root.text}`}
-								>
-									<strong># ${thread.channelName}</strong
-									><span
-										>${thread.root.deleted ? 'This message was deleted' : thread.root.text || 'Shared file'}</span
+							(thread) =>
+								html`<li data-unread=${String(thread.unread > 0)}>
+									<button
+										type="button"
+										@click=${() => open(thread)}
+										aria-label=${`Open thread in ${thread.channelName}: ${thread.root.deleted ? 'Deleted message' : thread.root.text}`}
 									>
-									<small
-										>${thread.replyCount} ${thread.replyCount === 1 ? 'reply' : 'replies'} ·
-										${new Date(thread.updatedAt).toLocaleString()}</small
-									></button
-								><span>${thread.unread > 0 ? `${thread.unread} unread` : 'Read'}</span
-								><button
-									type="button"
-									@click=${() => client.markThreadRead(thread.channelId, thread.root.id, thread.unread > 0)}
-								>
-									${thread.unread > 0 ? 'Mark as read' : 'Mark as unread'}</button
-								><button
-									type="button"
-									@click=${() => client.followThread(thread.channelId, thread.root.id, false)}
-								>
-									Unfollow thread
-								</button>
-							</li>`,
+										<strong># ${thread.channelName}</strong
+										><span
+											>${thread.root.deleted ? 'This message was deleted' : thread.root.text || 'Shared file'}</span
+										>
+										<small
+											>${thread.replyCount} ${thread.replyCount === 1 ? 'reply' : 'replies'} ·
+											${new Date(thread.updatedAt).toLocaleString()}</small
+										></button
+									><span>${thread.unread > 0 ? `${thread.unread} unread` : 'Read'}</span
+									><button
+										type="button"
+										@click=${() => client.markThreadRead(thread.channelId, thread.root.id, thread.unread > 0)}
+									>
+										${thread.unread > 0 ? 'Mark as read' : 'Mark as unread'}</button
+									><button
+										type="button"
+										@click=${() => client.followThread(thread.channelId, thread.root.id, false)}
+									>
+										Unfollow thread
+									</button>
+								</li>`,
 						)
 					: html`<li>
 							${unreadOnly ? 'No unread followed threads.' : 'No followed threads yet. Open a thread and choose Follow thread.'}

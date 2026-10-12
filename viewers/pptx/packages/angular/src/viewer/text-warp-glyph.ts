@@ -1,3 +1,5 @@
+import { buildGlyphEnvelopeBlock, DEFAULT_FONT_FAMILY } from 'ooxml-ui/pptx';
+import type { EnvelopeGlyphSlice, EnvelopeSegmentInput, WarpParagraph } from 'ooxml-ui/pptx';
 /**
  * True two-curve WordArt envelope descriptor (inflate/deflate/can) for the
  * Angular viewer. Split out of `text-warp.ts` to keep that file under the
@@ -11,8 +13,6 @@
 import type { PptxTextWarpPreset, TextSegment, TextStyle } from 'pptx-viewer-core';
 import { getSubstituteFontFamily } from 'pptx-viewer-core';
 
-import { buildGlyphEnvelopeBlock, DEFAULT_FONT_FAMILY } from 'ooxml-ui/pptx';
-import type { EnvelopeGlyphSlice, EnvelopeSegmentInput, WarpParagraph } from 'ooxml-ui/pptx';
 import { getGlyphOutline, glyphOutlineFontsTick } from './glyph-outline-cache';
 
 const DEFAULT_FONT_SIZE = 18;

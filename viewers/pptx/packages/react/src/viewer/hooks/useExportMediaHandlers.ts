@@ -1,3 +1,12 @@
+import {
+	EXPORT_ASSEMBLING_PERCENT,
+	EXPORT_DONE_PERCENT,
+	isExportAbortError,
+	recordProgressPercent,
+	resolveExportCaptureDecision,
+	slideProgressPercent,
+	slideStatusLabel,
+} from 'ooxml-ui/pptx';
 /**
  * useExportMediaHandlers: the GIF and WebM video export handlers, split out
  * of useExportHandlers.ts to keep that file under the project's per-file
@@ -10,15 +19,6 @@
  * matches every other binding instead of each one picking its own constant.
  */
 import type { PptxSlide } from 'pptx-viewer-core';
-import {
-	EXPORT_ASSEMBLING_PERCENT,
-	EXPORT_DONE_PERCENT,
-	isExportAbortError,
-	recordProgressPercent,
-	resolveExportCaptureDecision,
-	slideProgressPercent,
-	slideStatusLabel,
-} from 'ooxml-ui/pptx';
 import { useCallback } from 'react';
 import type { Dispatch, RefObject, SetStateAction } from 'react';
 

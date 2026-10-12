@@ -1,4 +1,10 @@
 import JSZip from 'jszip';
+import {
+	attachInlineListController,
+	createInlineListSeed,
+	initializeInlineListDom,
+	buildParagraphs,
+} from 'ooxml-ui/pptx';
 import type {
 	PptxElement,
 	PptxHandoutMaster,
@@ -7,12 +13,6 @@ import type {
 	PptxSlideMaster,
 } from 'pptx-viewer-core';
 import { createTextElement, PptxHandler } from 'pptx-viewer-core';
-import {
-	attachInlineListController,
-	createInlineListSeed,
-	initializeInlineListDom,
-	buildParagraphs,
-} from 'ooxml-ui/pptx';
 import { flushSync, mount, unmount } from 'svelte';
 import { describe, expect, it, vi } from 'vitest';
 

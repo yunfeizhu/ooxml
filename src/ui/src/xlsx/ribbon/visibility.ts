@@ -27,6 +27,8 @@ export function applyRibbonVisibility(root: HTMLElement, isHidden: (id: string) 
 		stack.toggleAttribute(HIDDEN, empty(stack));
 	for (const group of root.querySelectorAll('.ribbon-group'))
 		group.toggleAttribute(HIDDEN, empty(group));
-	for (const panel of [...root.children].filter((node): node is HTMLElement => node.classList.contains('ribbon-panel')))
+	for (const panel of [...root.children].filter((node): node is HTMLElement =>
+		node.classList.contains('ribbon-panel'),
+	))
 		setTabHidden(root, panel.dataset.tab ?? '', 'custom', empty(panel));
 }

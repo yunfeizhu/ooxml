@@ -198,7 +198,7 @@ it('shows clipboard availability honestly in Tell me, including read-only and pe
 	const view = await setup(false);
 	expect(view.button('copy').disabled).toBe(true);
 	expect(view.button('ctx-page-paste').disabled).toBe(true);
-	await expect(view.commands.clipboard('copy')).rejects.toThrow('Model-only');
+	await expect(view.commands.clipboard('copy')).rejects.toThrow('Open a .vsdx file');
 	await view.controller.load(view.bytes);
 	view.selection();
 	await vi.waitFor(() => expect(view.controller.state.clipboard.ready).toBe(true));

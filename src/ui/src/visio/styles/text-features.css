@@ -1,0 +1,116 @@
+/* Text dialog, Symbol, Field and Language dialogs, and the Text Block tool overlay. */
+.text-dialog-tabs {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 2px;
+	margin: 0 0 12px;
+	border-bottom: 1px solid var(--_vv-border);
+}
+.text-dialog-tabs [role='tab'] {
+	padding: 6px 10px;
+	color: inherit;
+	background: transparent;
+	border: 1px solid transparent;
+	border-bottom: 2px solid transparent;
+	cursor: pointer;
+	font: inherit;
+}
+.text-dialog-tabs [role='tab'][aria-selected='true'] {
+	border-bottom-color: var(--_vv-accent);
+	font-weight: 600;
+}
+.text-dialog-panel {
+	display: grid;
+	gap: 10px;
+	min-width: min(420px, 80vw);
+}
+.field-dialog label,
+.language-dialog label {
+	min-width: min(420px, 80vw);
+	margin: 0 0 10px;
+}
+.text-dialog-panel label,
+.field-dialog label,
+.language-dialog label {
+	display: grid;
+	grid-template-columns: minmax(150px, 1fr) minmax(140px, 1fr);
+	align-items: center;
+	gap: 12px;
+}
+.text-dialog-panel label.text-dialog-check {
+	display: flex;
+	gap: 8px;
+}
+.text-dialog-panel input:not([type='checkbox']),
+.text-dialog-panel select,
+.field-dialog input,
+.field-dialog select,
+.language-dialog select {
+	box-sizing: border-box;
+	width: 100%;
+	min-height: 28px;
+	padding: 4px 6px;
+	color: inherit;
+	background: var(--_vv-surface);
+	border: 1px solid var(--_vv-border);
+	border-radius: 3px;
+}
+.text-dialog .text-dialog-note,
+.field-dialog .text-dialog-note,
+.symbol-dialog .text-dialog-note {
+	max-width: 440px;
+	margin: 8px 0 0;
+	font-size: 12px;
+}
+.text-dialog [role='alert'],
+.field-dialog [role='alert'],
+.symbol-dialog [role='alert'],
+.language-dialog [role='alert'] {
+	margin: 6px 0 0;
+	color: var(--office-error, #b00020);
+}
+.symbol-dialog office-ui-symbol-picker {
+	min-width: min(360px, 80vw);
+}
+@media (max-width: 480px) {
+	.text-dialog-panel label,
+	.field-dialog label,
+	.language-dialog label {
+		grid-template-columns: 1fr;
+		gap: 5px;
+	}
+}
+
+/* Text Block tool: the text block frame replaces the shape's resize and rotation handles. */
+.viewport[data-text-block='true'] [data-resize-overlay],
+.viewport[data-text-block='true'] .rotation-overlay {
+	display: none;
+}
+.paper [data-text-block-frame] {
+	fill: transparent;
+	stroke: var(--_vv-accent);
+	stroke-width: 1px;
+	stroke-dasharray: 4 3;
+	cursor: move;
+	pointer-events: all;
+	touch-action: none;
+}
+.paper circle[data-text-block-handle] {
+	fill: white;
+	stroke: var(--_vv-accent);
+	stroke-width: 1.5px;
+	cursor: crosshair;
+	pointer-events: all;
+	touch-action: none;
+}
+.paper circle[data-text-block-handle='rotate'] {
+	fill: var(--_vv-accent);
+	cursor: grab;
+}
+.paper [data-text-block-preview] [data-text-block-frame] {
+	stroke-dasharray: 2 2;
+}
+.text-dialog-panel[hidden],
+.field-dialog label[hidden] {
+	display: none;
+}

@@ -1,3 +1,13 @@
+import { applyElementUpdate, deckDataFieldChanged } from 'ooxml-ui/pptx/ai';
+import type {
+	PptxAiBridge,
+	PptxAiDataUpdater,
+	PptxAiDeckMeta,
+	PptxAiElementUpdate,
+	PptxAiFocusedTarget,
+	PptxAiNotifyLevel,
+	PptxAiSlidesUpdater,
+} from 'ooxml-ui/pptx/ai';
 /**
  * createAngularAiBridge: builds a {@link PptxAiBridge} that lets the
  * framework-agnostic AI core (`pptx-viewer-shared/ai`) read the open deck,
@@ -25,17 +35,6 @@ import type {
 	PptxTheme,
 	PptxViewProperties,
 } from 'pptx-viewer-core';
-
-import { applyElementUpdate, deckDataFieldChanged } from 'ooxml-ui/pptx/ai';
-import type {
-	PptxAiBridge,
-	PptxAiDataUpdater,
-	PptxAiDeckMeta,
-	PptxAiElementUpdate,
-	PptxAiFocusedTarget,
-	PptxAiNotifyLevel,
-	PptxAiSlidesUpdater,
-} from 'ooxml-ui/pptx/ai';
 
 /** Live accessors the bridge closes over, supplied by the viewer component. */
 export interface BridgeDeps {

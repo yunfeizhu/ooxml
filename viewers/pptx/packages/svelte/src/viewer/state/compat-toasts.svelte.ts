@@ -1,6 +1,6 @@
-import type { PptxCompatibilityWarning } from 'pptx-viewer-core';
 import type { CompatibilityWarningToast } from 'ooxml-ui/pptx';
 import { compatibilityWarningToasts } from 'ooxml-ui/pptx';
+import type { PptxCompatibilityWarning } from 'pptx-viewer-core';
 
 /** Cap the visible toast stack; the rest collapse into a "+N" count. */
 const VISIBLE_TOAST_LIMIT = 5;

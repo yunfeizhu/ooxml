@@ -30,8 +30,6 @@
 
 import { ChangeDetectionStrategy, Component, computed, inject, input, output } from '@angular/core';
 import { TranslatePipe } from '@ngx-translate/core';
-import type { TablePptxElement } from 'pptx-viewer-core';
-
 import {
 	appendTableElementColumn,
 	appendTableElementRow,
@@ -40,6 +38,8 @@ import {
 	removeLastTableElementRow,
 	setTableElementCellText,
 } from 'ooxml-ui/pptx';
+import type { TablePptxElement } from 'pptx-viewer-core';
+
 import { TABLE_DATA_EDITOR_STYLES } from './table-data-editor-styles';
 import { removeColumn, removeRow } from './table-data-helpers';
 import { TableSelectionService } from './table-selection.service';

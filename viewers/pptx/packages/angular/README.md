@@ -66,7 +66,6 @@ degrade gracefully (poster images, no live session).
 ```ts
 import { Component, signal } from '@angular/core';
 import { PowerPointViewerComponent } from 'pptx-angular-viewer';
-
 // Base chrome styles (toolbar, thumbnails, layout). Import once.
 import 'pptx-angular-viewer/styles';
 
@@ -250,6 +249,7 @@ geometry or user zoom. See the [cross-binding defaults](../../docs/guide/viewpor
 | `surfaceChart3D`, `barChart3D`, `lineChart3D`, `areaChart3D`, `pieChart3D` | `boolean`                            | `false` | Independently opt in to interactive Three.js renderers for the matching 3D chart kinds; each falls back to SVG when WebGL is unavailable.                                                                                                                                                                                                                            |
 | `ai`                                                                       | `PptxAiConfig`                       | n/a     | Optional AI assistant configuration. The SDK peer loads only when its panel is opened.                                                                                                                                                                                                                                                                               |
 | `hiddenActions`                                                            | `ToolbarActionId[]`                  | `[]`    | Toolbar buttons/ribbon tabs to hide individually (e.g. `['share', 'broadcast']`), instead of hiding the whole toolbar.                                                                                                                                                                                                                                               |
+| `ribbonAddIns`                                                             | `RibbonAddInTab[]`                   | n/a     | Ribbon tabs the host adds after Help; a command runs its `run` callback and raises `office-ribbon-add-in` (see the customization guide)                                                                                                                                                                                                                              |
 | `customization`                                                            | `ViewerCustomization`                | -       | Hide, lock or remap any part of the UI (ribbon tabs/buttons, File > Options pages/sections/settings, File tab, context menus, shortcuts, panels, AI/collaboration, dialogs); the same helpers (`hideRibbonTab`, `lockSetting`, ...) are on the component instance. See the [UI Customization guide](https://christophervr.github.io/ooxml/pptx/guide/customization). |
 | `defaultThemeKey`                                                          | `string`                             | n/a     | Initial File > Options > Appearance selection when no persisted preference exists.                                                                                                                                                                                                                                                                                   |
 | `availableThemes`                                                          | `ThemeCatalogEntry[]`                | n/a     | Theme choices offered by File > Options > Appearance (defaults to the built-in catalog).                                                                                                                                                                                                                                                                             |
@@ -347,9 +347,9 @@ for the full list.
 UI labels go through [@ngx-translate/core](https://github.com/ngx-translate/core) with dotted keys such as `pptx.statusBar.allSaved`. Provide it with `provideTranslateService()` (the demo's `src/i18n.ts` shows a minimal config, including a `MissingTranslationHandler` that derives Title Case labels for any key you don't explicitly translate):
 
 ```ts
-import { translationsEn, keyToLabel } from 'pptx-angular-viewer';
 import { inject } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
+import { translationsEn, keyToLabel } from 'pptx-angular-viewer';
 
 // register the English dictionary, e.g. in your root component
 inject(TranslateService).setTranslation('en', translationsEn);

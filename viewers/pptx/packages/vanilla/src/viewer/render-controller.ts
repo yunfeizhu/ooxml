@@ -1,8 +1,3 @@
-/* oxlint-disable eslint/one-var -- pervasive pre-existing pattern in this file
-   (many independent short-lived `const`s per render pass); merging them
-   isn't a style choice here. */
-import type { PptxChartData, PptxElement, PptxSlide } from 'pptx-viewer-core';
-import { buildThemeColorMap } from 'pptx-viewer-core';
 import type {
 	ChartPartRef,
 	MasterViewCrudAction,
@@ -17,6 +12,11 @@ import {
 	masterViewPseudoSlide,
 	visibleTemplateElements,
 } from 'ooxml-ui/pptx';
+/* oxlint-disable eslint/one-var -- pervasive pre-existing pattern in this file
+   (many independent short-lived `const`s per render pass); merging them
+   isn't a style choice here. */
+import type { PptxChartData, PptxElement, PptxSlide } from 'pptx-viewer-core';
+import { buildThemeColorMap } from 'pptx-viewer-core';
 
 import type { PresentationPlayback } from './animation';
 import { createPresentationPlayback } from './animation';

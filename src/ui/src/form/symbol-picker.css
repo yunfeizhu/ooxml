@@ -1,0 +1,75 @@
+/* Tokens: --office-field-*, --office-border, --office-selected. */
+:host {
+	display: grid;
+	gap: var(--office-space-2);
+	color: var(--office-foreground);
+	font: inherit;
+}
+.grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(2.5em, 1fr));
+	gap: var(--office-space-0);
+	max-height: 15em;
+	overflow: auto;
+}
+.symbol {
+	min-width: 2.5em;
+	height: 2.5em;
+	border: var(--office-border-width) solid var(--office-border);
+	border-radius: var(--office-radius-sm);
+	background: var(--office-field-background);
+	color: var(--office-field-foreground);
+	font-size: var(--office-font-size-lg);
+	cursor: pointer;
+}
+.symbol:hover:not(:disabled),
+.symbol:focus-visible {
+	background: var(--office-selected);
+	border-color: var(--office-field-border-focus);
+}
+.code {
+	display: flex;
+	align-items: end;
+	gap: var(--office-space-2);
+}
+label {
+	display: grid;
+	gap: var(--office-space-1);
+	font-size: var(--office-font-size-sm);
+}
+input {
+	width: 9ch;
+	height: var(--office-field-height);
+	padding: 0 var(--office-space-2);
+	border: var(--office-border-width) solid var(--office-field-border);
+	border-radius: var(--office-field-radius);
+	background: var(--office-field-background);
+	color: var(--office-field-foreground);
+	font: inherit;
+}
+input:focus {
+	border-color: var(--office-field-border-focus);
+	outline: none;
+}
+.preview {
+	min-width: 2.5em;
+	height: var(--office-field-height);
+	font-size: var(--office-font-size-lg);
+	line-height: var(--office-field-height);
+	text-align: center;
+}
+.insert {
+	height: var(--office-field-height);
+	padding: 0 var(--office-space-3);
+	border: var(--office-border-width) solid var(--office-border);
+	border-radius: var(--office-radius);
+	background: var(--office-field-background);
+	color: var(--office-field-foreground);
+	font: inherit;
+	cursor: pointer;
+}
+button:disabled,
+input:disabled {
+	opacity: 0.5;
+	cursor: default;
+}

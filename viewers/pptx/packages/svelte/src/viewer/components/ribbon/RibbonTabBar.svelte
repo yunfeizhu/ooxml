@@ -11,7 +11,7 @@
 		filterVisibleTabs,
 		isActionHidden,
 	} from 'ooxml-ui/pptx';
-	import type { RibbonContextualTabId, ToolbarActionId } from 'ooxml-ui/pptx';
+	import type { RibbonAddInTab, RibbonContextualTabId, ToolbarActionId } from 'ooxml-ui/pptx';
 	import { useTranslator } from '../../../i18n/context';
 	import type { ChromeUiState } from '../../state/chrome-ui.svelte';
 	import { useViewerOptions } from '../../state/viewer-options-context';
@@ -26,11 +26,14 @@
 		collabActive = false,
 		hiddenActions,
 		contextualTabs = [],
+		addInTabs = [],
 		chromeUi,
 		commentCount = 0,
 	}: {
-		active: RibbonTabId | RibbonContextualTabId;
-		onselect: (id: RibbonTabId | RibbonContextualTabId) => void;
+		active: RibbonTabId | RibbonContextualTabId | string;
+		onselect: (id: RibbonTabId | RibbonContextualTabId | string) => void;
+		/** The host's tabs (`ribbonAddIns`), shown after the fixed tabs. */
+		addInTabs?: readonly RibbonAddInTab[];
 		/** Selection-driven tabs (Shape Format, ...), appended after the fixed tabs. */
 		contextualTabs?: readonly RibbonContextualTabId[];
 		onrecord?: () => void;
@@ -71,6 +74,20 @@
 				onclick={() => onselect(tab.id)}
 			>
 				{t(tab.labelKey)}
+			</button>
+		{/each}
+		{#each addInTabs as tab (tab.id)}
+			<button
+				type="button"
+				class="pptx-svelte-ribbon-tab"
+				class:pptx-svelte-ribbon-tab-active={active === tab.id}
+				role="tab"
+				aria-selected={active === tab.id}
+				data-ribbon-add-in-tab={tab.id}
+				title={optionsState.screenTip(tab.label)}
+				onclick={() => onselect(tab.id)}
+			>
+				{tab.label}
 			</button>
 		{/each}
 		{#each contextualTabs as tab (tab)}

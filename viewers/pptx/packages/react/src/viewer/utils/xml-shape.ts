@@ -1,5 +1,5 @@
-import type { ConnectorPptxElement, PptxElementWithText, XmlObject } from 'pptx-viewer-core';
 import { translationsEn } from 'ooxml-ui/pptx/i18n';
+import type { ConnectorPptxElement, PptxElementWithText, XmlObject } from 'pptx-viewer-core';
 
 import { DEFAULT_STROKE_COLOR, EMU_PER_PX } from '../constants';
 import { normalizeHexColor } from './color';

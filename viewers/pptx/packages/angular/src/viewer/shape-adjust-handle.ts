@@ -1,3 +1,9 @@
+import {
+	beginShapeAdjustment,
+	getDraggedShapeAdjustments,
+	getShapeAdjustmentHandleDescriptors,
+} from 'ooxml-ui/pptx';
+import type { ShapeAdjustmentDragState, ShapeAdjustmentHandleDescriptor } from 'ooxml-ui/pptx';
 /**
  * shape-adjust-handle.ts: the Angular view-mapping for the SHARED shape
  * adjustment (`a:avLst`) affordance.
@@ -20,12 +26,6 @@
  */
 import type { PptxElement } from 'pptx-viewer-core';
 
-import {
-	beginShapeAdjustment,
-	getDraggedShapeAdjustments,
-	getShapeAdjustmentHandleDescriptors,
-} from 'ooxml-ui/pptx';
-import type { ShapeAdjustmentDragState, ShapeAdjustmentHandleDescriptor } from 'ooxml-ui/pptx';
 import type { Box } from './drag-resize';
 
 /** One adjustment handle's render box in STAGE (unscaled slide) coordinates. */

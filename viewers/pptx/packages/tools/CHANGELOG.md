@@ -7,6 +7,19 @@ A release listed with no entries carried no Conventional Commit in this package'
 scope: scripts/release-plan.mjs releases whenever any published file changes, not only on
 conventional commits.
 
+## [2.8.5](https://github.com/ChristopherVR/ooxml/releases/tag/pptx-viewer-mcp@2.8.5) - 2026-10-11
+
+### Styling
+
+- Fix the oxfmt and oxlint warnings in the viewers ([db0314f](https://github.com/ChristopherVR/ooxml/commit/db0314f319e3d0508960872260792215477d9ca5))
+- **pptx:** Format the pptx viewer with its own oxfmt configuration ([7ca9f51](https://github.com/ChristopherVR/ooxml/commit/7ca9f51be7d0926e28cc5913792cfc1c966c0d35))
+
+## [2.8.4](https://github.com/ChristopherVR/ooxml/releases/tag/pptx-viewer-mcp@2.8.4) - 2026-10-09
+
+### Dependencies
+
+- **deps:** Bump the production-minor-and-patch group with 5 updates ([#42](https://github.com/ChristopherVR/ooxml/issues/42)) ([fda493e](https://github.com/ChristopherVR/ooxml/commit/fda493e2697908c477ce845019d9c2fe8b591ab2))
+
 ## [2.8.3](https://github.com/ChristopherVR/ooxml/releases/tag/pptx-viewer-mcp@2.8.3) - 2026-10-08
 
 ### Documentation

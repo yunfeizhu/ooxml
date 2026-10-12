@@ -1,5 +1,5 @@
-import type { MediaPptxElement, MediaCaptionTrack, MediaMetadata } from 'pptx-viewer-core';
 import { getImageFitStyle } from 'ooxml-ui/pptx';
+import type { MediaPptxElement, MediaCaptionTrack, MediaMetadata } from 'pptx-viewer-core';
 import React, { useEffect, useState } from 'react';
 
 // ---------------------------------------------------------------------------

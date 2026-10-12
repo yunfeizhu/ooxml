@@ -222,7 +222,8 @@ export async function readZipParts(
 		zip = await JSZip.loadAsync(bytes);
 	} catch (error) {
 		throw new Error(
-			`Not a valid XLSX package: ${error instanceof Error ? error.message : String(error)}`, { cause: error },
+			`Not a valid XLSX package: ${error instanceof Error ? error.message : String(error)}`,
+			{ cause: error },
 		);
 	}
 	const entries = Object.values(zip.files).filter((entry) => !entry.dir);

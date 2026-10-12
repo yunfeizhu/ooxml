@@ -1,9 +1,9 @@
-import type { PptxElement, PptxSlide, TextStyle } from 'pptx-viewer-core';
 import type {
 	InlineTextEditSnapshot,
 	PlaceholderPromptMode,
 	ZoomNavigationTarget,
 } from 'ooxml-ui/pptx';
+import type { PptxElement, PptxSlide, TextStyle } from 'pptx-viewer-core';
 import type React from 'react';
 
 import type { TableCellEditorState } from '../../types';

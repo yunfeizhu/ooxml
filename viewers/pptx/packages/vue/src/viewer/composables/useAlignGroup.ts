@@ -1,5 +1,3 @@
-import { createEditorId } from 'pptx-viewer-core';
-import type { PptxElement, PptxSlide } from 'pptx-viewer-core';
 import {
 	alignElements,
 	canInteractWithElement,
@@ -9,6 +7,8 @@ import {
 	ungroupElements,
 } from 'ooxml-ui/pptx';
 import type { AlignEdge, DistributeAxis } from 'ooxml-ui/pptx';
+import { createEditorId } from 'pptx-viewer-core';
+import type { PptxElement, PptxSlide } from 'pptx-viewer-core';
 import { computed } from 'vue';
 import type { ComputedRef, Ref } from 'vue';
 

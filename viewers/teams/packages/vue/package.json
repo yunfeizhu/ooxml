@@ -1,6 +1,6 @@
 {
 	"name": "openteams-vue-viewer",
-	"version": "0.2.3",
+	"version": "0.2.4",
 	"description": "Vue 3 component and composable for OpenTeams, the open-source bring-your-own-server team workspace. Self-contained: includes the <teams-app> UI.",
 	"keywords": [
 		"chat",

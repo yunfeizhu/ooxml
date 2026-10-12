@@ -17,11 +17,11 @@ import { readFile } from 'node:fs/promises';
 import { resolve as resolvePath } from 'node:path';
 
 import { DestroyRef, Injector } from '@angular/core';
+import type { CollaborationConfig, YjsFactories } from 'ooxml-ui/pptx';
 import { PptxHandler } from 'pptx-viewer-core';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import * as Y from 'yjs';
 
-import type { CollaborationConfig, YjsFactories } from 'ooxml-ui/pptx';
 import type {
 	AwarenessLike,
 	DestroyableYDoc,
@@ -108,7 +108,9 @@ describe('collaborationService connect reentrancy', () => {
 
 	it('writes back an already-synced owner startup deck without a later edit', async () => {
 		const source = new Uint8Array(
-			await readFile(resolvePath(__dirname, '../../../../../../e2e/pptx/fixtures/text-layout.pptx')),
+			await readFile(
+				resolvePath(__dirname, '../../../../../../e2e/pptx/fixtures/text-layout.pptx'),
+			),
 		);
 		const data = await new PptxHandler().load(source.buffer);
 		const doc = new Y.Doc();

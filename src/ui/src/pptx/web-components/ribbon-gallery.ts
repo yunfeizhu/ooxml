@@ -125,6 +125,13 @@ export function definePptxRibbonGallery(registry: CustomElementRegistry): void {
 		set descriptor(value: RibbonGalleryDescriptor | undefined) {
 			this.#descriptor = value;
 			this.#sync();
+			// Lazily loaded content: swap in the rebuilt descriptor unless the host set another since.
+			void value?.ready?.then((next) => {
+				if (next && this.#descriptor === value) {
+					this.#descriptor = next;
+					this.#sync();
+				}
+			});
 		}
 		get translateLabel(): GalleryTranslate {
 			return this.#t;

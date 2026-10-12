@@ -20,9 +20,8 @@ import {
 	input,
 	ViewEncapsulation,
 } from '@angular/core';
-import type { PptxElement } from 'pptx-viewer-core';
-
 import type { AiCanvasHighlight } from 'ooxml-ui/pptx/ai';
+import type { PptxElement } from 'pptx-viewer-core';
 
 interface HighlightBox extends AiCanvasHighlight {
 	x: number;

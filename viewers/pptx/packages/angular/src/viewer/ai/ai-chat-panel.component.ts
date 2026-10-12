@@ -19,9 +19,9 @@ import {
 } from '@angular/core';
 import { LucideLoaderCircle, LucideSparkles, LucideTriangleAlert, LucideX } from '@lucide/angular';
 import { TranslatePipe } from '@ngx-translate/core';
-
 import type { PptxAiBridge, PptxAiConfig } from 'ooxml-ui/pptx/ai';
 import { deckIdFromBridge } from 'ooxml-ui/pptx/ai';
+
 import { AiChatService } from './ai-chat.service';
 import { AiComposerComponent } from './ai-composer.component';
 import { AiFocusBarComponent } from './ai-focus-bar.component';

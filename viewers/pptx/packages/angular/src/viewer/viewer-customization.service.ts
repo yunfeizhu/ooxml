@@ -18,7 +18,6 @@
 
 import { DestroyRef, effect, inject, Injectable, signal, untracked } from '@angular/core';
 import type { EffectRef, ProviderToken, Signal } from '@angular/core';
-
 import {
 	createCustomizationController,
 	EMPTY_RESOLVED_CUSTOMIZATION,
@@ -37,6 +36,7 @@ import type {
 	ViewerPanelId,
 	ViewerQuickAccessOptions,
 } from 'ooxml-ui/pptx';
+
 import { ViewerOptionsService } from './viewer-options.service';
 
 /** `inject()` that tolerates a plain `new` outside an injection context. */

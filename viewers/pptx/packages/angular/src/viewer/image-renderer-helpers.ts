@@ -1,6 +1,3 @@
-import type { PptxElement } from 'pptx-viewer-core';
-import { isImageLikeElement } from 'pptx-viewer-core';
-
 import {
 	getComputedImageStyle,
 	getCropShapeClipPath,
@@ -11,6 +8,9 @@ import {
 	resolveShapeGeometry,
 } from 'ooxml-ui/pptx';
 import type { ImageSvgFilterDefinition, NativeImageSize } from 'ooxml-ui/pptx';
+import type { PptxElement } from 'pptx-viewer-core';
+import { isImageLikeElement } from 'pptx-viewer-core';
+
 import { getClrChangeParams } from './color-changed-image-helpers';
 import type { ClrChangeParams } from './color-changed-image-helpers';
 import type { StyleMap } from './element-style';

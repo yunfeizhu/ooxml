@@ -1,10 +1,10 @@
-import type { PptxSlide, PptxSlideTransition } from 'pptx-viewer-core';
 import {
 	beginZoomExcursion,
 	buildZoomTransitionOverride,
 	resolveForwardSlideWithZoomReturn,
 } from 'ooxml-ui/pptx';
 import type { ZoomExcursion, ZoomNavigationTarget } from 'ooxml-ui/pptx';
+import type { PptxSlide, PptxSlideTransition } from 'pptx-viewer-core';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 
 // ---------------------------------------------------------------------------

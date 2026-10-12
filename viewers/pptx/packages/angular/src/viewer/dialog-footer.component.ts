@@ -20,12 +20,12 @@ import {
 	output,
 } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-
 import type {
 	DialogFooterAction,
 	DialogFooterRequestEvent,
 	DialogFooterViewState,
 } from 'ooxml-ui/pptx';
+
 import { translationsSignal } from './translations-signal';
 
 /** A footer action whose label is a translation key. */

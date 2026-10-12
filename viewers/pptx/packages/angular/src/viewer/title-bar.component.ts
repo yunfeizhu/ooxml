@@ -23,8 +23,6 @@ import {
 } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { TranslateService } from '@ngx-translate/core';
-import { map, merge, startWith } from 'rxjs';
-
 import {
 	buildTitleBarState,
 	DEFAULT_VIEWER_OPTIONS,
@@ -38,6 +36,8 @@ import type {
 	ToolbarActionId,
 	ViewerQuickAccessOptions,
 } from 'ooxml-ui/pptx';
+import { map, merge, startWith } from 'rxjs';
+
 import type { AutosaveStatus } from './autosave.service';
 import { ViewerOptionsService } from './viewer-options.service';
 

@@ -1,17 +1,3 @@
-/* oxlint-disable eslint/one-var -- the many action factory closures below each
-   declare their own independent locals; merging unrelated declarations across
-   them would hurt readability, not help it. */
-import type {
-	PptxAfterAnimationAction,
-	PptxAnimationPreset,
-	PptxAnimationDirection,
-	PptxAnimationRepeatMode,
-	PptxAnimationSequence,
-	PptxAnimationTimelineAnchor,
-	PptxAnimationTimingCurve,
-	PptxAnimationTrigger,
-	PptxElementAnimation,
-} from 'pptx-viewer-core';
 import type { AnimationGroup } from 'ooxml-ui/pptx';
 import {
 	applyAnimationPreset,
@@ -42,6 +28,20 @@ import {
 	setTriggerShapeId,
 	updateSlide,
 } from 'ooxml-ui/pptx';
+/* oxlint-disable eslint/one-var -- the many action factory closures below each
+   declare their own independent locals; merging unrelated declarations across
+   them would hurt readability, not help it. */
+import type {
+	PptxAfterAnimationAction,
+	PptxAnimationPreset,
+	PptxAnimationDirection,
+	PptxAnimationRepeatMode,
+	PptxAnimationSequence,
+	PptxAnimationTimelineAnchor,
+	PptxAnimationTimingCurve,
+	PptxAnimationTrigger,
+	PptxElementAnimation,
+} from 'pptx-viewer-core';
 
 import type { Store, ViewerState } from '../state';
 import type { EditorOps } from './editor-operations';

@@ -3,6 +3,7 @@ import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { parseVsdx } from 'ooxml-core/visio';
 import { verifyBlockedMenuTransform } from './native-menu-noop';
+import { openDemo } from './demo-page';
 
 for (const variable of [
 	'VISIO_NATIVE_QUARTER_LEFT_DIR',
@@ -39,7 +40,8 @@ for (const variable of [
 				const evidence = JSON.parse(await readFile(join(directory!, 'evidence.json'), 'utf8'));
 				const id = (flip ? evidence.flipped : evidence.quarterTurned)[kind].shapeId;
 				const expected = native.pages[0]!.shapes.find((shape) => shape.id === id)!;
-				await page.goto(
+				await openDemo(
+					page,
 					framework === 'vanilla' ? '/demo/?sample=1' : `/demo-${framework}/?sample=1`,
 				);
 				await page.locator('#file').setInputFiles({

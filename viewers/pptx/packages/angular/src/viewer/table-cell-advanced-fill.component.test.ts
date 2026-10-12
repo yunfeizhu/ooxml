@@ -1,3 +1,5 @@
+import { PATTERN_OPTIONS } from 'ooxml-ui/pptx';
+import { keyToLabel, translationsEn } from 'ooxml-ui/pptx/i18n';
 /**
  * table-cell-advanced-fill.component.test.ts: the cell pattern picker.
  *
@@ -13,8 +15,6 @@
  */
 import { describe, expect, it } from 'vitest';
 
-import { PATTERN_OPTIONS } from 'ooxml-ui/pptx';
-import { keyToLabel, translationsEn } from 'ooxml-ui/pptx/i18n';
 import { fillPatternLabelKey } from './schema-token-labels';
 import { DEFAULT_PATTERN_FILL_PRESET, patternPresetOptions } from './table-properties-helpers';
 

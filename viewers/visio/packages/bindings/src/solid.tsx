@@ -78,4 +78,7 @@ export type {
 	VisioShapeSelection,
 	ViewerEditState,
 	VsdxExportResult,
+	RibbonAddInCommand,
+	RibbonAddInGroup,
+	RibbonAddInTab,
 } from './common';

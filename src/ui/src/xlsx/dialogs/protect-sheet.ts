@@ -1,11 +1,7 @@
 // Protect Sheet and Protect Workbook (structure), with an optional password that the core stores
 // as Excel's legacy hash, and the Unprotect prompts that check it. The legacy hash is a checksum,
 // not encryption: it keeps honest users from editing by accident, nothing more.
-import {
-	type SheetProtection,
-	verifySheetPassword,
-	verifyWorkbookPassword,
-} from 'ooxml-core/xlsx';
+import { type SheetProtection, verifySheetPassword, verifyWorkbookPassword } from 'ooxml-core/xlsx';
 import { target } from 'ooxml-core/xlsx/ui';
 import type { EditorContext } from 'ooxml-core/xlsx/ui';
 import { checkbox, field, fieldset, invalid, textInput } from './fields';

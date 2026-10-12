@@ -1,7 +1,3 @@
-/* oxlint-disable eslint/one-var -- pervasive pre-existing pattern in this file
-   (each wrapper is a short sequence of independent `const`s); merging them
-   isn't a style choice here. */
-import type { PptxComment, PptxCommentMention, PptxSlide } from 'pptx-viewer-core';
 // The comment-array mutations themselves are pure and shared with every
 // other binding; these helpers only add the slide-indexing wrapper the full
 // `PptxSlide[]` deck array needs on top of them.
@@ -13,6 +9,10 @@ import {
 	replyToCommentInList,
 	toggleCommentResolvedInList,
 } from 'ooxml-ui/pptx';
+/* oxlint-disable eslint/one-var -- pervasive pre-existing pattern in this file
+   (each wrapper is a short sequence of independent `const`s); merging them
+   isn't a style choice here. */
+import type { PptxComment, PptxCommentMention, PptxSlide } from 'pptx-viewer-core';
 
 // ---------------------------------------------------------------------------
 // Input / output interfaces

@@ -8,9 +8,6 @@ import {
 	CUSTOM_ELEMENTS_SCHEMA,
 } from '@angular/core';
 import { TranslatePipe } from '@ngx-translate/core';
-import type { GroupPptxElement, OlePptxElement, PptxElement, ShapeStyle } from 'pptx-viewer-core';
-import { getOleObjectTypeLabel } from 'pptx-viewer-core';
-
 import type { ConnectorArrowControl } from 'ooxml-ui/pptx';
 import {
 	buildOleObjectNamePatch,
@@ -20,6 +17,9 @@ import {
 	connectorArrowPatch,
 	connectorArrowValue,
 } from 'ooxml-ui/pptx';
+import type { GroupPptxElement, OlePptxElement, PptxElement, ShapeStyle } from 'pptx-viewer-core';
+import { getOleObjectTypeLabel } from 'pptx-viewer-core';
+
 import { OleEditorDialogComponent } from './ole-editor-dialog.component';
 import { schemaLabelKey } from './schema-token-labels';
 

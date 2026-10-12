@@ -88,9 +88,9 @@ const ai: PptxAiConfig = {
 服务器使用 AI SDK 调用模型，并以**仅包含 schema** 的形式注册演示文稿工具。工具没有 `execute`，因此模型发起的工具调用会流式传回浏览器，在当前演示文稿上执行，再将结果返回模型。密钥始终留在服务器。
 
 ```ts
+import { openai } from '@ai-sdk/openai';
 // A backend route (framework-agnostic helpers from the shared package)
 import { streamText } from 'ai';
-import { openai } from '@ai-sdk/openai';
 import { buildPptxAiTools, buildPptxAiSystemPrompt } from 'pptx-viewer-shared/ai';
 
 export async function POST(request: Request) {

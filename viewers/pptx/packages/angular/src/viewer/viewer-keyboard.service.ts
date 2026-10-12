@@ -21,8 +21,6 @@
  */
 
 import { inject, Injectable } from '@angular/core';
-import type { PptxElement } from 'pptx-viewer-core';
-
 import {
 	cycleSelectableElement,
 	EMPTY_RESOLVED_CUSTOMIZATION,
@@ -32,6 +30,8 @@ import {
 	mapCustomizedEditorKey,
 	mapSlideShowStartKey,
 } from 'ooxml-ui/pptx';
+import type { PptxElement } from 'pptx-viewer-core';
+
 import { EditorStateService } from './editor-state.service';
 import { escapeSelectionTarget } from './group-drill-canvas';
 import { PictureCropService } from './picture-crop.service';

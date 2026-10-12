@@ -1,7 +1,6 @@
 <script setup lang="ts">
 /** Slide previews and reactive adapters over the shared sorter decisions. */
 import { X } from 'lucide-vue-next';
-import type { PptxSlide } from 'pptx-viewer-core';
 import {
 	buildSlideSorterContextMenuEntries,
 	HIDDEN_SLIDE_SLASH_GRADIENT,
@@ -17,6 +16,7 @@ import {
 	sorterGridColumns,
 } from 'ooxml-ui/pptx';
 import type { SlideSorterKeyActionName, SlideSorterContextMenuCommandId } from 'ooxml-ui/pptx';
+import type { PptxSlide } from 'pptx-viewer-core';
 import type { CSSProperties } from 'vue';
 import { computed, onBeforeUnmount, onMounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n';

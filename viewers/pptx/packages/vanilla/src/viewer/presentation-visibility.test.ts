@@ -1,8 +1,4 @@
-import {
-	hasPersistentAudio,
-	registerPersistentAudio,
-	stopAllPersistentAudio,
-} from 'ooxml-ui/pptx';
+import { hasPersistentAudio, registerPersistentAudio, stopAllPersistentAudio } from 'ooxml-ui/pptx';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { attachShowVisibilityPause } from './presentation-visibility';

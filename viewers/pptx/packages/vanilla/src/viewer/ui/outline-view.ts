@@ -1,4 +1,3 @@
-import type { PptxSlide } from 'pptx-viewer-core';
 import type { CanvasSize, OutlineEdit, OutlineRow } from 'ooxml-ui/pptx';
 import {
 	applyOutlineEdit,
@@ -9,6 +8,7 @@ import {
 	OUTLINE_SLIDE_ATTR,
 	OUTLINE_VIEW_ATTR,
 } from 'ooxml-ui/pptx';
+import type { PptxSlide } from 'pptx-viewer-core';
 
 import type { Translator } from '../i18n';
 import { createEl } from '../render';

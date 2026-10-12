@@ -14,10 +14,10 @@
  * @module angular-viewer/editor-context-menu-dispatch
  */
 
-import type { TablePptxElement } from 'pptx-viewer-core';
-
 import type { ContextMenuCommandId, MergeShapeOperation } from 'ooxml-ui/pptx';
 import { mergeOperationForCommand } from 'ooxml-ui/pptx';
+import type { TablePptxElement } from 'pptx-viewer-core';
+
 import {
 	insertColumn,
 	insertRow,

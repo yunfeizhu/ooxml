@@ -8,6 +8,8 @@ import {
 	type PageChangeDetail,
 	normalizeRibbonActions,
 	type RibbonActionInput,
+	type RibbonAddInCommandDetail,
+	type RibbonAddInTab,
 } from 'docx-web-component';
 import type { DocumentModel } from 'docx-core';
 
@@ -26,6 +28,8 @@ export interface EditorProps {
 	showToolbar?: boolean | undefined;
 	/** Ribbon controls to hide, by stable id (`RIBBON_ACTION_IDS`). Old English labels still work but warn. */
 	hiddenActions?: readonly RibbonActionInput[] | undefined;
+	/** Tabs the host adds after Word's own, as an Office add-in does. */
+	ribbonAddIns?: readonly RibbonAddInTab[] | undefined;
 }
 /** Editor callbacks; each is the framework-neutral form of one entry in `EDITOR_EVENT_NAMES`. */
 export interface EditorEventOptions {
@@ -33,6 +37,8 @@ export interface EditorEventOptions {
 	onDocumentError?: ((error: Error) => void) | undefined;
 	onPageChange?: ((detail: PageChangeDetail) => void) | undefined;
 	onDirtyChange?: ((dirty: boolean) => void) | undefined;
+	/** A command of a host tab (`ribbonAddIns`) was chosen. */
+	onRibbonAddIn?: ((detail: RibbonAddInCommandDetail) => void) | undefined;
 }
 export interface EditorOptions extends EditorProps, EditorEventOptions {}
 
@@ -45,6 +51,7 @@ export const EDITOR_PROP_KEYS = [
 	'showThumbnails',
 	'showToolbar',
 	'hiddenActions',
+	'ribbonAddIns',
 ] as const satisfies readonly (keyof EditorProps)[];
 export type EditorPropKey = (typeof EDITOR_PROP_KEYS)[number];
 // Compile-time guard: adding a key to EditorProps without listing it above is an error.
@@ -58,6 +65,7 @@ export const EDITOR_EVENT_NAMES = [
 	'document-error',
 	'page-change',
 	'dirty-change',
+	'office-ribbon-add-in',
 ] as const satisfies readonly DocxEditorEventName[];
 export type EditorEventName = (typeof EDITOR_EVENT_NAMES)[number];
 /** One handler per bound event; a missing key is a compile error in every adapter. */
@@ -84,6 +92,7 @@ export function eventOptions(handlers: EditorEventHandlers): EditorEventOptions 
 		onDocumentError: handlers['document-error'],
 		onPageChange: handlers['page-change'],
 		onDirtyChange: handlers['dirty-change'],
+		onRibbonAddIn: handlers['office-ribbon-add-in'],
 	};
 }
 
@@ -108,6 +117,7 @@ export function mountEditor(host: HTMLElement, initial: EditorOptions = {}): Edi
 	let options: EditorOptions = {};
 	let lastInput: DocumentModel | undefined;
 	let lastEmitted: DocumentModel | undefined;
+	let lastAddIns: readonly RibbonAddInTab[] | undefined;
 	let destroyed = false;
 	const changed = (event: CustomEvent<DocumentModel>) => {
 		lastEmitted = event.detail;
@@ -116,10 +126,13 @@ export function mountEditor(host: HTMLElement, initial: EditorOptions = {}): Edi
 	const failed = (event: CustomEvent<Error>) => options.onDocumentError?.(event.detail);
 	const paged = (event: CustomEvent<PageChangeDetail>) => options.onPageChange?.(event.detail);
 	const dirtied = (event: CustomEvent<boolean>) => options.onDirtyChange?.(event.detail);
+	const addIn = (event: CustomEvent<RibbonAddInCommandDetail>) =>
+		options.onRibbonAddIn?.(event.detail);
 	element.addEventListener('document-change', changed);
 	element.addEventListener('document-error', failed);
 	element.addEventListener('page-change', paged);
 	element.addEventListener('dirty-change', dirtied);
+	element.addEventListener('office-ribbon-add-in', addIn);
 	const binding: EditorBinding = {
 		element,
 		update(next) {
@@ -132,6 +145,9 @@ export function mountEditor(host: HTMLElement, initial: EditorOptions = {}): Edi
 			element.showToolbar = next.showToolbar ?? true;
 			if (!sameList(element.hiddenActions, normalizeRibbonActions(next.hiddenActions ?? []).ids))
 				element.hiddenActions = next.hiddenActions ?? [];
+			// The element keeps panels whose look is unchanged, so a fresh array per render is cheap.
+			if (next.ribbonAddIns !== lastAddIns) element.ribbonAddIns = next.ribbonAddIns ?? [];
+			lastAddIns = next.ribbonAddIns;
 			if (
 				next.documentModel &&
 				next.documentModel !== lastInput &&
@@ -155,6 +171,7 @@ export function mountEditor(host: HTMLElement, initial: EditorOptions = {}): Edi
 			element.removeEventListener('document-error', failed);
 			element.removeEventListener('page-change', paged);
 			element.removeEventListener('dirty-change', dirtied);
+			element.removeEventListener('office-ribbon-add-in', addIn);
 			element.remove();
 		},
 	};

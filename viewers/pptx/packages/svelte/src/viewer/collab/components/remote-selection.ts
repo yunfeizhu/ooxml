@@ -1,5 +1,5 @@
-import type { PptxElement } from 'pptx-viewer-core';
 import type { SanitizedPresence } from 'ooxml-ui/pptx';
+import type { PptxElement } from 'pptx-viewer-core';
 
 /**
  * remote-selection.ts: pure resolution logic for `RemoteSelectionOverlay`.

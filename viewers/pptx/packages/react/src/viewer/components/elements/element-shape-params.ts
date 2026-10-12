@@ -1,6 +1,6 @@
+import { paintedStrokeWidth } from 'ooxml-ui/pptx';
 import type { PptxElement } from 'pptx-viewer-core';
 import { hasShapeProperties } from 'pptx-viewer-core';
-import { paintedStrokeWidth } from 'ooxml-ui/pptx';
 
 import { DEFAULT_FILL_COLOR, DEFAULT_STROKE_COLOR } from '../../constants';
 import { buildCssGradientFromShapeStyle, normalizeHexColor } from '../../utils';

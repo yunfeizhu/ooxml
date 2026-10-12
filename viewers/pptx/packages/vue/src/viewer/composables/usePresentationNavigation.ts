@@ -1,3 +1,11 @@
+import {
+	acceptsPresentationInput,
+	beginZoomExcursion,
+	buildZoomTransitionOverride,
+	isClickAdvanceAllowed,
+	resolveForwardSlideWithZoomReturn,
+} from 'ooxml-ui/pptx';
+import type { ZoomExcursion, ZoomNavigationTarget } from 'ooxml-ui/pptx';
 /**
  * usePresentationNavigation: where a slideshow advance actually lands.
  *
@@ -9,14 +17,6 @@
  * driven by the same index change, so it lives here too.
  */
 import type { PptxSlide, PptxSlideTransition } from 'pptx-viewer-core';
-import {
-	acceptsPresentationInput,
-	beginZoomExcursion,
-	buildZoomTransitionOverride,
-	isClickAdvanceAllowed,
-	resolveForwardSlideWithZoomReturn,
-} from 'ooxml-ui/pptx';
-import type { ZoomExcursion, ZoomNavigationTarget } from 'ooxml-ui/pptx';
 import type { ComputedRef, Ref } from 'vue';
 import { computed, ref, watch } from 'vue';
 

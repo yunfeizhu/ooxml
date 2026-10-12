@@ -27,10 +27,10 @@ import {
 	CUSTOM_ELEMENTS_SCHEMA,
 } from '@angular/core';
 import { TranslatePipe } from '@ngx-translate/core';
+import type { ThemeColorPickerCommit } from 'ooxml-ui/pptx';
 import type { PptxElement } from 'pptx-viewer-core';
 import { ooxmlGradientAngleToCssDegrees } from 'pptx-viewer-core';
 
-import type { ThemeColorPickerCommit } from 'ooxml-ui/pptx';
 import { isSelectControl } from './control-event-targets';
 import {
 	addGradientStopPatch,

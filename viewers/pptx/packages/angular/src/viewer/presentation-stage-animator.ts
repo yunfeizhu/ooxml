@@ -16,6 +16,7 @@ import { PRESENTATION_ANIM_TRIGGER_ATTRIBUTE } from 'ooxml-ui/pptx';
  * single `querySelectorAll` and needs no per-element renderer plumbing.
  */
 import type { ElementAnimationState } from 'ooxml-ui/pptx';
+
 import type { AnimationPlaybackService } from './animation-playback.service';
 
 /** True when at least one staged node belongs to the tracked element states. */

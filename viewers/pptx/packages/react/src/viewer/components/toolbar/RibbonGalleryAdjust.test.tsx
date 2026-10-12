@@ -1,3 +1,5 @@
+import type { RibbonGalleryPlacement } from 'ooxml-ui/pptx';
+import { CONTEXTUAL_TAB_GROUPS } from 'ooxml-ui/pptx';
 // @vitest-environment happy-dom
 /**
  * Picture Format > Adjust: the Corrections, Color and Artistic Effects
@@ -7,8 +9,6 @@
  * viewer's `updateElementById` out.
  */
 import type { PptxElement, PptxImageEffects } from 'pptx-viewer-core';
-import type { RibbonGalleryPlacement } from 'ooxml-ui/pptx';
-import { CONTEXTUAL_TAB_GROUPS } from 'ooxml-ui/pptx';
 import React, { act, useRef, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import type { Root } from 'react-dom/client';

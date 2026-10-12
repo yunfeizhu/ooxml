@@ -117,6 +117,20 @@ svg {
 	padding: 0 var(--office-space-1);
 	flex: 0 1 auto;
 }
+/* `centered`: the file name sits in the middle of the bar, as in Visio's window title. */
+@media (min-width: 761px) {
+	:host([centered]) .bar {
+		position: relative;
+	}
+	:host([centered]) .file {
+		position: absolute;
+		inset-inline-start: 50%;
+		transform: translateX(-50%);
+	}
+	:host([centered][dir='rtl']) .file {
+		transform: translateX(50%);
+	}
+}
 .name {
 	max-width: var(--office-title-bar-name-max-width);
 	overflow: hidden;
@@ -200,6 +214,8 @@ svg {
 }
 .end {
 	flex: none;
+	/* Without a search box nothing else pushes the account to the far edge. */
+	margin-inline-start: auto;
 	display: flex;
 	align-items: center;
 	justify-content: flex-end;

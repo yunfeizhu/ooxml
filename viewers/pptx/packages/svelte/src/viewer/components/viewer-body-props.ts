@@ -1,4 +1,3 @@
-import type { PptxHandler, PptxSlide, PptxTheme, TextSegment } from 'pptx-viewer-core';
 import type {
 	CanvasSize,
 	Guide,
@@ -8,6 +7,7 @@ import type {
 	SanitizedPresence,
 } from 'ooxml-ui/pptx';
 import type { AiChangeBatch } from 'ooxml-ui/pptx/ai';
+import type { PptxHandler, PptxSlide, PptxTheme, TextSegment } from 'pptx-viewer-core';
 
 import type { Translator } from '../../i18n/translator';
 import type { AiCanvasHighlight } from '../ai/ai-panel-controller.svelte';

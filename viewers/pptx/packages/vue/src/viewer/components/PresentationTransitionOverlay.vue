@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import type { PptxSlide, PptxSlideTransition } from 'pptx-viewer-core';
 import type { FragmentedTransitionDescriptor } from 'ooxml-ui/pptx';
 import { applySlideTransitionSound, getFragmentedTransitionDescriptor } from 'ooxml-ui/pptx';
+import type { PptxSlide, PptxSlideTransition } from 'pptx-viewer-core';
 import type { CSSProperties } from 'vue';
 import { computed, onBeforeUnmount, onMounted, watch } from 'vue';
 

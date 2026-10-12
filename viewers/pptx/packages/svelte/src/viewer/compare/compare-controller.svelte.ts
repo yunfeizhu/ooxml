@@ -1,6 +1,6 @@
-import { PptxHandler } from 'pptx-viewer-core';
 import type { CompareResult } from 'ooxml-ui/pptx';
 import { applyAcceptAllSlides, applyAcceptSlide, compareSlides } from 'ooxml-ui/pptx';
+import { PptxHandler } from 'pptx-viewer-core';
 
 import type { EditorState } from '../editor/editor-state.svelte';
 

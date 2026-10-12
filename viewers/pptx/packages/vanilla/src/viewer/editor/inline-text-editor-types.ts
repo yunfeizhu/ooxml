@@ -1,10 +1,10 @@
-import type { PptxElement } from 'pptx-viewer-core';
 import type {
 	CollaborationLivePatcher,
 	InlineListReadResult,
 	InlineTextEditSnapshot,
 	InlineTextSelection,
 } from 'ooxml-ui/pptx';
+import type { PptxElement } from 'pptx-viewer-core';
 
 import type { OverlayBox } from './selection-overlay';
 

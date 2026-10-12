@@ -1,6 +1,6 @@
-import type { PptxElement } from 'pptx-viewer-core';
 import { chartPreserveAspectRatio, resolveChartKind } from 'ooxml-ui/pptx';
 import { translationsEn } from 'ooxml-ui/pptx/i18n';
+import type { PptxElement } from 'pptx-viewer-core';
 import React from 'react';
 
 import { buildReactChartViewModel, renderChartViewModel } from './chart-view-model-render';

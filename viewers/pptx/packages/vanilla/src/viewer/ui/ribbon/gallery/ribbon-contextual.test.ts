@@ -1,6 +1,6 @@
-import type { PptxElement } from 'pptx-viewer-core';
 import type { RibbonGalleryContext } from 'ooxml-ui/pptx';
 import { EMPTY_RIBBON_TRANSITION_DRAFT, resolveCustomization } from 'ooxml-ui/pptx';
+import type { PptxElement } from 'pptx-viewer-core';
 import { describe, expect, it, vi } from 'vitest';
 
 import { createTranslator } from '../../../i18n';

@@ -18,6 +18,7 @@ describe('complete shared adapter contract', () => {
 			pageIndex: 0,
 			zoom: 2,
 			showToolbar: false,
+			ribbonAddIns: [],
 			events: { 'zoom-change': vi.fn() },
 		};
 		expect(Object.keys(viewerOptions(props)).sort()).toEqual([...propertyKeys, 'events'].sort());

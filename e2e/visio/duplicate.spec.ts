@@ -2,6 +2,7 @@ import { expect, test, type Locator } from '@playwright/test';
 import type { VisioViewerElement } from 'ooxml-ui/visio';
 import { createVsdxFixture } from './fixture.mjs';
 import { downloadCopy } from './ribbon';
+import { openDemo } from './demo-page';
 
 const inventory = (viewer: Locator) =>
 	viewer.evaluate((node) => {
@@ -36,13 +37,17 @@ for (const framework of ['vanilla', 'react', 'vue', 'angular', 'svelte', 'solid'
 		const errors: string[] = [];
 		page.on('pageerror', (error) => errors.push(error.message));
 		await page.setViewportSize({ width: 1600, height: 1000 });
-		await page.goto(framework === 'vanilla' ? '/demo/?sample=1' : `/demo-${framework}/?sample=1`);
+		await openDemo(
+			page,
+			framework === 'vanilla' ? '/demo/?sample=1' : `/demo-${framework}/?sample=1`,
+		);
 		const viewer = page.locator('visio-viewer');
 		await page.locator('#file').setInputFiles({
 			name: 'duplicate.vsdx',
 			mimeType: 'application/vnd.ms-visio.drawing',
 			buffer: await createVsdxFixture('Duplicate source'),
 		});
+		await expect(page.locator('#file-name')).toHaveText('duplicate.vsdx');
 		await expect(viewer.locator('svg.paper')).toContainText('Duplicate source');
 		await viewer.getByRole('tab', { name: 'Home', exact: true }).click();
 		await viewer.locator('svg.paper [data-shape-id="1"]').click();
@@ -58,10 +63,10 @@ for (const framework of ['vanilla', 'react', 'vue', 'angular', 'svelte', 'solid'
 			{ id: '1', x: 4, y: 7, width: 3, height: 1, text: 'Duplicate source' },
 			{ id: '2', x: 4.33, y: 6.67, width: 3, height: 1, text: 'Duplicate source' },
 		]);
-		await viewer.locator('[command="undo"] button').click();
+		await viewer.locator('.qat [data-command="undo"]').click();
 		await expect(viewer.locator('svg.paper [data-shape-id]')).toHaveCount(1);
 		await selected(viewer, ['1']);
-		await viewer.locator('[command="redo"] button').click();
+		await viewer.locator('.qat [data-command="redo"]').click();
 		await selected(viewer, ['2']);
 		await viewer.locator('.viewport').press('Control+a');
 		await selected(viewer, ['1', '2']);
@@ -79,10 +84,10 @@ for (const framework of ['vanilla', 'react', 'vue', 'angular', 'svelte', 'solid'
 			['5', 4.66, 6.34],
 			['6', 4.99, 6.01],
 		]);
-		await viewer.locator('[command="undo"] button').click();
+		await viewer.locator('.qat [data-command="undo"]').click();
 		await expect(viewer.locator('svg.paper [data-shape-id]')).toHaveCount(4);
 		await selected(viewer, ['3', '4']);
-		await viewer.locator('[command="redo"] button').click();
+		await viewer.locator('.qat [data-command="redo"]').click();
 		await selected(viewer, ['5', '6']);
 		const downloading = page.waitForEvent('download');
 		await (await downloadCopy(viewer)).click();

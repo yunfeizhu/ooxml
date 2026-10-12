@@ -1,5 +1,3 @@
-import type { PptxElement, PptxSlide } from 'pptx-viewer-core';
-import { cloneSlide } from 'pptx-viewer-core';
 import {
 	commitElementUpdateBatch,
 	clampZoomScale,
@@ -9,6 +7,8 @@ import {
 	slideSpaceElement,
 } from 'ooxml-ui/pptx';
 import type { PowerPointViewerAPI, ViewerMode } from 'ooxml-ui/pptx';
+import type { PptxElement, PptxSlide } from 'pptx-viewer-core';
+import { cloneSlide } from 'pptx-viewer-core';
 
 import type { ViewerState } from '../state/viewer-state.svelte';
 import type { EditorState } from './editor-state.svelte';

@@ -19,9 +19,9 @@ import {
 	signal,
 } from '@angular/core';
 import { TranslatePipe } from '@ngx-translate/core';
-
 import { PASTE_SPECIAL_OPTIONS } from 'ooxml-ui/pptx';
 import type { PasteSpecialFormat } from 'ooxml-ui/pptx';
+
 import { DialogFooterComponent } from './dialog-footer.component';
 import type { DialogFooterActionSpec } from './dialog-footer.component';
 import { ModalDialogComponent } from './modal-dialog.component';

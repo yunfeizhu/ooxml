@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { getResizeHandleHitAreaStyle } from 'ooxml-ui/pptx';
 /**
  * SelectionOverlay - the editing interaction layer.
  *
@@ -28,7 +29,6 @@
  * `transformEnd` as the commit point for history/undo.
  */
 import type { PptxElement } from 'pptx-viewer-core';
-import { getResizeHandleHitAreaStyle } from 'ooxml-ui/pptx';
 import { computed, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 

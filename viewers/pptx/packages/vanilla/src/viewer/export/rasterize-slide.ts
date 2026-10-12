@@ -1,4 +1,3 @@
-import type { PptxSlide } from 'pptx-viewer-core';
 import type {
 	RasterizeElementResult,
 	RasterizeElementTiledCanvasResult,
@@ -9,6 +8,7 @@ import {
 	rasterizeElementTiledToCanvas,
 	rasterizeElementTiles,
 } from 'ooxml-ui/pptx';
+import type { PptxSlide } from 'pptx-viewer-core';
 
 import type { Translator } from '../i18n';
 import type { ElementRendererRegistry } from '../render';

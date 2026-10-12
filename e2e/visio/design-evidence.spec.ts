@@ -1,4 +1,6 @@
 import { test, expect } from '@playwright/test';
+import { openDemo } from './demo-page';
+import { officeTheme } from './ribbon';
 
 for (const theme of ['light', 'dark'] as const) {
 	for (const size of [
@@ -55,14 +57,15 @@ test('workspace appearance persists across navigation and embed mode is compact'
 		if (!localStorage.getItem('vitepress-theme-appearance'))
 			localStorage.setItem('vitepress-theme-appearance', 'dark');
 	});
-	await page.goto('/demo/?sample=1');
+	await openDemo(page);
 	await expect(page.locator('visio-viewer .viewport > svg')).toBeVisible();
-	await page.getByRole('button', { name: 'Switch to light theme', exact: true }).click();
+	// Light or dark is chosen in the editor, in File > Options > Office Theme.
+	await officeTheme(page.locator('visio-viewer'), 'White');
 	await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
 	await page.reload();
 	await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
 	await page.goto('/demo/?embed=1');
 	await expect(page.locator('html')).toHaveAttribute('data-embedded', '');
-	await expect(page.locator('.workspace-footer')).toBeHidden();
+	await expect(page.locator('#demo-state')).toBeHidden();
 	await expect(page.locator('visio-viewer office-ui-ribbon .file')).toBeVisible();
 });

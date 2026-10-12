@@ -21,6 +21,7 @@
  */
 
 import type { TranslateService } from '@ngx-translate/core';
+import { switchSmartArtLayoutData } from 'ooxml-ui/pptx';
 import type {
 	PptxSmartArtData,
 	PptxSmartArtNode,
@@ -37,7 +38,6 @@ import {
 	reorderSmartArtNode,
 	updateSmartArtNodeText,
 } from './editor-insert';
-import { switchSmartArtLayoutData } from 'ooxml-ui/pptx';
 
 // ── Option constants (mirror the React panel) ───────────────────────────────
 

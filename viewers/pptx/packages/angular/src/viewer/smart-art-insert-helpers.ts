@@ -22,10 +22,9 @@
  */
 
 import type { TranslateService } from '@ngx-translate/core';
-import type { PptxElement, PptxSmartArtNode, SmartArtLayout } from 'pptx-viewer-core';
-
 import { buildSmartArtPresetNodes, PRESETS } from 'ooxml-ui/pptx';
 import type { SmartArtCategory, SmartArtPreset } from 'ooxml-ui/pptx';
+import type { PptxElement, PptxSmartArtNode, SmartArtLayout } from 'pptx-viewer-core';
 
 /** Default insert position / size for a new SmartArt element (mirrors React). */
 const INSERT_X = 100;

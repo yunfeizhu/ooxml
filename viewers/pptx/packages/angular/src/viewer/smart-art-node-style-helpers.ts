@@ -27,6 +27,10 @@
  */
 
 import type { TranslateService } from '@ngx-translate/core';
+import {
+	describeSmartArtBounds as describeSmartArtBoundsNeutral,
+	getSmartArtNodeBounds,
+} from 'ooxml-ui/pptx';
 import type {
 	PptxSmartArtData,
 	PptxSmartArtNode,
@@ -34,11 +38,6 @@ import type {
 	SmartArtLayoutType,
 } from 'pptx-viewer-core';
 import { setSmartArtNodeStyle } from 'pptx-viewer-core';
-
-import {
-	describeSmartArtBounds as describeSmartArtBoundsNeutral,
-	getSmartArtNodeBounds,
-} from 'ooxml-ui/pptx';
 
 export {
 	DEFAULT_BOUNDS,

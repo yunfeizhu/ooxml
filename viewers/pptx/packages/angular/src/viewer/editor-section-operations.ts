@@ -1,5 +1,3 @@
-import type { PptxSection, PptxSlide } from 'pptx-viewer-core';
-
 import {
 	addSection,
 	deleteSection,
@@ -8,6 +6,7 @@ import {
 	moveSlidesToSection,
 	renameSection,
 } from 'ooxml-ui/pptx';
+import type { PptxSection, PptxSlide } from 'pptx-viewer-core';
 
 export interface EditorSectionOperations {
 	add(afterSlideIndex: number, name: string): void;

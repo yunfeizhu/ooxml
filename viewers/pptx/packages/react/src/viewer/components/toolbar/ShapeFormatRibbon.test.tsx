@@ -1,3 +1,4 @@
+import type { ToolbarActionId } from 'ooxml-ui/pptx';
 // @vitest-environment happy-dom
 /**
  * Home > Arrange > Merge Shapes and Crop in the React ribbon.
@@ -8,7 +9,6 @@
  * comes out in the first-selected shape's place.
  */
 import type { PptxElement, PptxSlide } from 'pptx-viewer-core';
-import type { ToolbarActionId } from 'ooxml-ui/pptx';
 import React, { act, useMemo, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import type { Root } from 'react-dom/client';

@@ -1,6 +1,6 @@
-import type { PptxTableCell } from 'pptx-viewer-core';
 import type { CellTextRun } from 'ooxml-ui/pptx';
 import { cellParagraphBlocks, cellRunStyle } from 'ooxml-ui/pptx';
+import type { PptxTableCell } from 'pptx-viewer-core';
 import React from 'react';
 
 /**
@@ -27,10 +27,7 @@ export function renderTableCellContent(
 	const blocks = cell ? cellParagraphBlocks(cell) : undefined;
 	if (blocks) {
 		return blocks.map((block, index) => (
-			<div
-				key={`p-${index}`}
-				style={{ display: 'block', ...(block.css as React.CSSProperties) }}
-			>
+			<div key={`p-${index}`} style={{ display: 'block', ...(block.css as React.CSSProperties) }}>
 				{block.runs.map(renderRun)}
 			</div>
 		));

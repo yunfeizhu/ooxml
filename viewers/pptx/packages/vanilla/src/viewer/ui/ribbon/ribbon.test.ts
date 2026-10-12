@@ -470,6 +470,66 @@ describe('createRibbon', () => {
 	});
 });
 
+describe('host ribbon tabs', () => {
+	const reports = (run: () => void, label = 'Reports') => ({
+		id: 'reports',
+		label,
+		groups: [{ label: 'Export', commands: [{ id: 'export', label: 'Export', run }] }],
+	});
+	const tabOf = (ribbon: ReturnType<typeof createRibbon>, id: string) =>
+		ribbon.el.querySelector<HTMLButtonElement>(`[data-ribbon-add-in-tab="${id}"]`);
+
+	it('adds a tab after Help, shows its commands and reports the one chosen', () => {
+		const ribbon = createRibbon(document, createTranslator(), buildHandlers());
+		document.body.append(ribbon.el);
+		const first = vi.fn();
+		const latest = vi.fn();
+		const heard = vi.fn();
+		ribbon.el.addEventListener('office-ribbon-add-in', (event) =>
+			heard((event as CustomEvent).detail),
+		);
+		ribbon.setRibbonAddIns([reports(first), { ...reports(first), id: 'home', label: 'Fake' }]);
+		const tabs = [...ribbon.el.querySelectorAll('[data-pptx-chrome="ribbon-tabs"] [role="tab"]')];
+		// After the fixed tabs; a host tab cannot take a built-in id.
+		expect(tabs.at(-1)).toBe(tabOf(ribbon, 'reports'));
+		expect(tabs.map((tab) => tab.textContent)).not.toContain('Fake');
+		expect(tabOf(ribbon, 'reports')!.textContent).toBe('Reports');
+		const body = ribbon.el.querySelector('pptx-ui-ribbon-add-in')!;
+		const pane = body.parentElement!;
+		expect(pane.hidden).toBeTruthy();
+		tabOf(ribbon, 'reports')!.click();
+		expect(pane.hidden).toBeFalsy();
+		expect(tabOf(ribbon, 'reports')!.getAttribute('aria-selected')).toBe('true');
+		// A new descriptor keeps the pane and the command element, and runs the new callback.
+		const command = body.querySelector('pptx-ui-ribbon-command')!;
+		ribbon.setRibbonAddIns([reports(latest, 'Reporting')]);
+		expect(tabOf(ribbon, 'reports')!.textContent).toBe('Reporting');
+		expect(body.querySelector('pptx-ui-ribbon-command')).toBe(command);
+		command.shadowRoot!.querySelector('button')!.click();
+		expect(first).not.toHaveBeenCalled();
+		expect(latest).toHaveBeenCalledOnce();
+		expect(heard).toHaveBeenCalledWith({ tab: 'reports', command: 'export' });
+		ribbon.el.remove();
+	});
+
+	it('falls back to the default tab when the host removes the tab that is showing', () => {
+		const ribbon = createRibbon(document, createTranslator(), buildHandlers());
+		document.body.append(ribbon.el);
+		ribbon.setRibbonAddIns([reports(vi.fn())]);
+		tabOf(ribbon, 'reports')!.click();
+		ribbon.setRibbonAddIns([]);
+		expect(tabOf(ribbon, 'reports')).toBeNull();
+		expect(ribbon.el.querySelector('pptx-ui-ribbon-add-in')).toBeNull();
+		const selected = ribbon.el.querySelector('[role="tab"][aria-selected="true"]')!;
+		expect(selected.hasAttribute('data-ribbon-add-in-tab')).toBeFalsy();
+		const shown = [
+			...ribbon.el.querySelectorAll<HTMLElement>('[data-pptx-chrome="ribbon-content"]'),
+		].filter((pane) => !pane.hidden);
+		expect(shown).toHaveLength(1);
+		ribbon.el.remove();
+	});
+});
+
 describe('home font size', () => {
 	it.each([
 		['empty selection', false, true, true],

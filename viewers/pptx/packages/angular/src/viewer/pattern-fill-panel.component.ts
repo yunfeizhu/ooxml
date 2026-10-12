@@ -25,10 +25,10 @@
  */
 import { ChangeDetectionStrategy, Component, computed, inject, input, output } from '@angular/core';
 import { TranslatePipe } from '@ngx-translate/core';
+import { getPatternSvg, PATTERN_PRESET_OPTIONS } from 'ooxml-ui/pptx';
 import type { PptxElement, ShapeStyle } from 'pptx-viewer-core';
 import { hasShapeProperties } from 'pptx-viewer-core';
 
-import { getPatternSvg, PATTERN_PRESET_OPTIONS } from 'ooxml-ui/pptx';
 import { RecentColorsService } from './recent-colors.service';
 
 @Component({

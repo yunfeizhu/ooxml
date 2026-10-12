@@ -9,8 +9,8 @@
  * belong together rather than in three composables.
  */
 
-import type { PptxElement, PptxSlide } from 'pptx-viewer-core';
 import { isTemplateElementId, slideSpaceMembers } from 'ooxml-ui/pptx';
+import type { PptxElement, PptxSlide } from 'pptx-viewer-core';
 import type { ComputedRef, Ref, ShallowRef } from 'vue';
 import { computed, ref } from 'vue';
 

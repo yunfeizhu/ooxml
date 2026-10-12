@@ -15,11 +15,11 @@
  * `collaboration-helpers.test.ts`); no TestBed.
  */
 import { DestroyRef, Injector, runInInjectionContext } from '@angular/core';
+import type { PendingInlineTextEdit } from 'ooxml-ui/pptx';
 import type { PptxCustomProperty } from 'pptx-viewer-core';
 import { PptxHandler } from 'pptx-viewer-core';
 import { describe, expect, it } from 'vitest';
 
-import type { PendingInlineTextEdit } from 'ooxml-ui/pptx';
 import { LoadContentService } from './load-content.service';
 
 /** Build the service in a throwaway injection context with a DestroyRef stub. */

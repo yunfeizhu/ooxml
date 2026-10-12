@@ -1,6 +1,6 @@
-import type { PptxElement } from 'pptx-viewer-core';
 import type { ShapeAdjustmentHandleDescriptor } from 'ooxml-ui/pptx';
 import { canInteractWithElement, getShapeAdjustmentHandleDescriptors } from 'ooxml-ui/pptx';
+import type { PptxElement } from 'pptx-viewer-core';
 
 /**
  * What the selection overlay is allowed to offer, given the authored

@@ -88,14 +88,12 @@ describe('custom element safety', () => {
 			element.showToolbar = true;
 		}).toThrow('destroyed');
 	});
-	it('exposes full compatibility notes in accessible disclosure', () => {
+	it('lists full compatibility notes in File > Info', () => {
 		const viewer = mountViewer(document.createElement('div'), { document: demoDocument });
-		expect(viewer.element.shadowRoot?.querySelector('.notes summary')?.textContent).toBe(
-			'Compatibility notes',
-		);
-		expect(viewer.element.shadowRoot?.querySelector('.notes ul')?.textContent).toContain(
-			'Text metrics',
-		);
+		const notes = viewer.element.shadowRoot!.querySelector<HTMLElement>('.backstage-notes')!;
+		expect(notes.hidden).toBe(false);
+		expect(notes.querySelector('h2')?.textContent).toBe('Compatibility');
+		expect(notes.querySelector('ul')?.textContent).toContain('Text metrics');
 		viewer.destroy();
 	});
 });
@@ -213,12 +211,17 @@ describe('shared shape details across bindings', () => {
 		];
 		const viewer = mountViewer(document.createElement('div'), { document: model });
 		viewer.controller.selectShape({ id: 's1', name: 'Start', pageId: '1' });
-		const inspector =
-			viewer.element.shadowRoot!.querySelector<HTMLDetailsElement>('.shape-inspector')!;
-		expect(inspector.hidden).toBe(false);
+		const root = viewer.element.shadowRoot!;
+		const inspector = root.querySelector<HTMLElement>('.shape-inspector')!;
+		const hint = inspector.querySelector<HTMLElement>('.selection-hint')!;
 		expect(inspector.textContent).toContain('Alex');
+		expect(hint.hidden).toBe(true);
+		// The Shape Data window opens on request, as in Visio, not with every selection.
+		expect(root.querySelector<HTMLElement>('#inspector-pane')!.hidden).toBe(true);
 		viewer.controller.selectShape(null);
-		expect(inspector.hidden).toBe(true);
+		expect(inspector.textContent).not.toContain('Alex');
+		expect(hint.hidden).toBe(false);
+		expect(hint.textContent).toBe('No Shape Data');
 		viewer.destroy();
 	});
 });

@@ -1,3 +1,4 @@
+import type { RibbonAddInTab } from '../ribbon/add-in-tabs';
 import { FormatDialogs } from './format-dialogs';
 import type { EditorState, Transaction } from 'prosemirror-state';
 import type { EditorView } from 'prosemirror-view';
@@ -55,6 +56,8 @@ export interface ShellParts {
  */
 export class EditorCore {
 	model: DocumentModel = createDocument();
+	/** Tabs the host added after Word's own (`ribbonAddIns` of the element). */
+	ribbonAddIns: readonly RibbonAddInTab[] = [];
 	view?: EditorView | undefined;
 	loaded?: LoadedDocument | undefined;
 	loadGeneration = 0;

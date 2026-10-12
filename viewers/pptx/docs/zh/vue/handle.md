@@ -36,8 +36,8 @@ async function save(): Promise<void> {
 `PowerPointViewerExpose` 继承共享的 `PowerPointViewerAPI` 约定（定义于 `pptx-viewer-shared`），并添加 `getContent`。三种框架绑定（React、Vue、Angular）暴露相同的 API：React 通过 `forwardRef` 和 `PowerPointViewerHandle` 访问，Vue 通过 `defineExpose`，Angular 通过组件公开方法。
 
 ```ts
-import type { PowerPointViewerExpose } from 'pptx-vue-viewer';
 import type { ViewerMode, PowerPointViewerAPI } from 'pptx-viewer-shared';
+import type { PowerPointViewerExpose } from 'pptx-vue-viewer';
 ```
 
 ## 方法 {#methods}

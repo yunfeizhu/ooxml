@@ -17,10 +17,10 @@ import path from 'node:path';
 
 import { Injector, runInInjectionContext, signal } from '@angular/core';
 import type { InputSignal } from '@angular/core';
-import { describe, expect, it } from 'vitest';
-
 import { build3DExtrusionData } from 'ooxml-ui/pptx';
 import type { Extrusion3DData } from 'ooxml-ui/pptx';
+import { describe, expect, it } from 'vitest';
+
 import { Extrusion3DOverlayComponent } from './extrusion-3d-overlay.component';
 
 function read(file: string): string {

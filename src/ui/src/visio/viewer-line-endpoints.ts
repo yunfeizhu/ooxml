@@ -1,7 +1,15 @@
-import type { VisioDocument, VisioPage } from 'ooxml-core/visio';
+import {
+	visioSnapGlue,
+	type VisioDocument,
+	type VisioEdit,
+	type VisioPage,
+	type VisioShape,
+} from 'ooxml-core/visio';
 import {
 	editErrorMessage,
 	isEditCancellation,
+	visioConnectorEndHandles,
+	visioConnectorRouteOf,
 	visioPageEditToDrawing,
 	visioStraightLineHandles,
 	visioSelectionIsOnPage,
@@ -9,25 +17,31 @@ import {
 import type { ViewerController, ViewerState } from './controller';
 import { pagePoint } from './viewer-draw-tool';
 import { handleGestureIsCurrent, wireHandleEvents } from './viewer-handle-events';
+import { connectorGlueAt, type ConnectorGlueHit } from './viewer-connector-tool';
 
 const SVG = 'http://www.w3.org/2000/svg';
 const pointOptions = { snap: false, bounded: false } as const;
+interface EndpointDrag {
+	pointer: number;
+	svg: SVGSVGElement;
+	page: VisioPage;
+	document: VisioDocument;
+	shapeId: string;
+	endpoint: 'begin' | 'end';
+	preview: SVGLineElement;
+	startX: number;
+	startY: number;
+}
+/** Local end handles: a straight line's (0,0) and (Width,0), or a routed connector's ends. */
+function lineHandles(shape: VisioShape) {
+	if (visioStraightLineHandles(shape))
+		return { begin: { x: 0, y: 0 }, end: { x: shape.width, y: 0 } };
+	return visioConnectorEndHandles(shape);
+}
 
 /** A preview-only endpoint gesture; release commits one source-backed core transaction. */
 export class ViewerLineEndpoints {
-	#drag:
-		| {
-				pointer: number;
-				svg: SVGSVGElement;
-				page: VisioPage;
-				document: VisioDocument;
-				shapeId: string;
-				endpoint: 'begin' | 'end';
-				preview: SVGLineElement;
-				startX: number;
-				startY: number;
-		  }
-		| undefined;
+	#drag: EndpointDrag | undefined;
 	#request = 0;
 	#overlay: SVGGElement | undefined;
 	constructor(
@@ -55,9 +69,10 @@ export class ViewerLineEndpoints {
 		)
 			return;
 		const shape = page.shapes.find((shape) => shape.id === state.selectedShape!.id);
+		const ends = shape ? lineHandles(shape) : undefined;
 		if (
 			!shape ||
-			!visioStraightLineHandles(shape) ||
+			!ends ||
 			// Dragging a glued connector's endpoint unglues that end, as in Visio.
 			page.connectors.some((connection) => connection.toShapeId === shape.id)
 		)
@@ -88,8 +103,8 @@ export class ViewerLineEndpoints {
 			const handle = this.viewport.ownerDocument.createElementNS(SVG, 'circle');
 			handle.dataset.lineEndpoint = endpoint;
 			handle.dataset.lineShapeId = shape.id;
-			handle.setAttribute('cx', String(endpoint === 'begin' ? 0 : shape.width));
-			handle.setAttribute('cy', '0');
+			handle.setAttribute('cx', String(ends[endpoint].x));
+			handle.setAttribute('cy', String(ends[endpoint].y));
 			handle.setAttribute('r', String(5 / screenScale));
 			handle.setAttribute('vector-effect', 'non-scaling-stroke');
 			handle.setAttribute('aria-label', `Drag ${endpoint} endpoint`);
@@ -143,7 +158,9 @@ export class ViewerLineEndpoints {
 		);
 		const matrix = other?.getScreenCTM();
 		if (!other || !matrix) return;
-		const centre = new DOMPoint(other.cx.baseVal.value, 0).matrixTransform(matrix);
+		const centre = new DOMPoint(other.cx.baseVal.value, other.cy.baseVal.value).matrixTransform(
+			matrix,
+		);
 		const fixed = pagePoint(svg, page, { clientX: centre.x, clientY: centre.y }, pointOptions);
 		const start = pagePoint(svg, page, event, pointOptions);
 		if (!fixed || !start) return;
@@ -185,15 +202,52 @@ export class ViewerLineEndpoints {
 			drag.preview.setAttribute('x2', String(point.x));
 			drag.preview.setAttribute('y2', String(point.y));
 		}
+		this.#target(this.#glueAt(drag, event));
 		event.preventDefault();
 		event.stopImmediatePropagation();
 	}
+	/**
+	 * Where a dragged connector end would glue: dynamic connectors drawn by the Connector tool
+	 * re-glue to a shape or connection point under the pointer (never the other end's shape).
+	 */
+	#glueAt(drag: EndpointDrag, event: PointerEvent): ConnectorGlueHit | undefined {
+		const shape = drag.page.shapes.find((candidate) => candidate.id === drag.shapeId);
+		if (!shape || visioConnectorRouteOf(shape) === undefined) return undefined;
+		const other = drag.page.connectors.find(
+			(connection) =>
+				connection.fromShapeId === drag.shapeId &&
+				connection.fromCell === (drag.endpoint === 'begin' ? 'EndX' : 'BeginX'),
+		)?.toShapeId;
+		const hit = connectorGlueAt(
+			this.viewport,
+			drag.page,
+			event,
+			this.controller.state.zoom,
+			visioSnapGlue(this.controller.state.document ?? {}).glueSettings,
+		);
+		return hit && hit.shapeId !== other ? hit : undefined;
+	}
+	#target(hit: ConnectorGlueHit | undefined): void {
+		for (const group of this.viewport.querySelectorAll<SVGGElement>('[data-connect-target]'))
+			if (group.dataset.shapeId !== hit?.shapeId) delete group.dataset.connectTarget;
+		if (hit)
+			for (const group of this.viewport.querySelectorAll<SVGGElement>('[data-shape-id]'))
+				if (group.dataset.shapeId === hit.shapeId) group.dataset.connectTarget = 'true';
+	}
 	#cancel(): void {
+		this.#release()();
+	}
+	/**
+	 * Ends the gesture and returns the removal of its previews, which a finished drag keeps until its
+	 * source edit settles (removing them first showed the old geometry for as long as the edit took).
+	 */
+	#release(): () => void {
 		const drag = this.#drag;
 		this.#drag = undefined;
-		drag?.preview.remove();
+		this.#target(undefined);
 		if (drag && this.viewport.hasPointerCapture?.(drag.pointer))
 			this.viewport.releasePointerCapture(drag.pointer);
+		return () => drag?.preview.remove();
 	}
 	async #finish(event: PointerEvent): Promise<void> {
 		const drag = this.#drag;
@@ -205,30 +259,45 @@ export class ViewerLineEndpoints {
 		event.preventDefault();
 		event.stopImmediatePropagation();
 		const point = pagePoint(drag.svg, drag.page, event, pointOptions);
-		this.#cancel();
+		const glue = this.#glueAt(drag, event);
+		const settle = this.#release();
 		if (
 			!point ||
 			Math.hypot(event.clientX - drag.startX, event.clientY - drag.startY) < 0.5 ||
 			this.controller.state.document !== drag.document
-		)
+		) {
+			settle();
 			return;
+		}
 		const request = ++this.#request;
-		try {
-			await this.controller.applyEdits([
-				visioPageEditToDrawing(drag.page, {
+		const edit: VisioEdit = glue
+			? {
+					type: 'glue-connector',
+					pageId: drag.page.id,
+					shapeId: drag.shapeId,
+					endpoint: drag.endpoint,
+					target: glue.shapeId,
+					...(glue.point === undefined ? {} : { point: glue.point }),
+				}
+			: visioPageEditToDrawing(drag.page, {
 					type: 'move-line-endpoint',
 					pageId: drag.page.id,
 					shapeId: drag.shapeId,
 					endpoint: drag.endpoint,
 					x: point.x,
 					y: drag.page.height - point.y,
-				}),
-			]);
+				});
+		try {
+			await this.controller.applyEdits([edit]);
 			if (request === this.#request)
-				this.options.announce(`${drag.endpoint === 'begin' ? 'Begin' : 'End'} endpoint moved.`);
+				this.options.announce(
+					`${drag.endpoint === 'begin' ? 'Begin' : 'End'} endpoint ${glue ? 'glued' : 'moved'}.`,
+				);
 		} catch (error) {
 			if (request === this.#request && !isEditCancellation(error))
 				this.options.announce(editErrorMessage(error));
+		} finally {
+			settle();
 		}
 	}
 }

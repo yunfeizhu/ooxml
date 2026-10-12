@@ -1,4 +1,10 @@
 <script setup lang="ts">
+import {
+	isEditableMotionPath,
+	motionPathEndPixel,
+	motionPathToSvgD,
+	setMotionPathEnd,
+} from 'ooxml-ui/pptx';
 /**
  * MotionPathOverlay: draws the selected element's motion path on the stage and
  * lets the user drag its end point. Vue port of React's
@@ -12,12 +18,6 @@
  * `scale`.
  */
 import type { PptxElement } from 'pptx-viewer-core';
-import {
-	isEditableMotionPath,
-	motionPathEndPixel,
-	motionPathToSvgD,
-	setMotionPathEnd,
-} from 'ooxml-ui/pptx';
 import { computed, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 

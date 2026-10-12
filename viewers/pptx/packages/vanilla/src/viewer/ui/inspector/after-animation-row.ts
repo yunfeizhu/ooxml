@@ -1,5 +1,5 @@
-import type { PptxAfterAnimationAction } from 'pptx-viewer-core';
 import { AFTER_ANIMATION_VALUES } from 'ooxml-ui/pptx';
+import type { PptxAfterAnimationAction } from 'pptx-viewer-core';
 
 import type { Translator } from '../../i18n';
 import { createEl } from '../../render';

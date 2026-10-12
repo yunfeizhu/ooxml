@@ -10,6 +10,7 @@
  */
 
 import type { TranslateService } from '@ngx-translate/core';
+import type { SlideDiff, ViewerAddinStatus } from 'ooxml-ui/pptx';
 import type {
 	InkPptxElement,
 	PptxElement,
@@ -18,7 +19,6 @@ import type {
 	TextStyle,
 } from 'pptx-viewer-core';
 
-import type { SlideDiff, ViewerAddinStatus } from 'ooxml-ui/pptx';
 import { strokeToInkElement } from './ink-drawing-helpers';
 import type { SlideAnnotationMap } from './presentation-annotations-helpers';
 

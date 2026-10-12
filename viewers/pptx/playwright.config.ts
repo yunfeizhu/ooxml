@@ -1,4 +1,14 @@
+import { existsSync } from 'node:fs';
+
 import { defineConfig, devices } from '@playwright/test';
+
+import { e2eServers } from './e2e-servers';
+
+// Machine-specific settings (PPTX_E2E_WORKERS, PPTX_E2E_ALL_BINDINGS, ...) live in the git-ignored
+// `.env.local` next to this file; CI has none and so keeps the defaults below.
+if (existsSync('.env.local')) {
+	process.loadEnvFile('.env.local');
+}
 
 /**
  * One product e2e spec set, run against every framework demo.
@@ -35,8 +45,22 @@ const VUE_PORT = 4175 + PORT_OFFSET;
 const ANGULAR_PORT = 4174 + PORT_OFFSET;
 const VANILLA_PORT = 4176 + PORT_OFFSET;
 const SVELTE_PORT = 4177 + PORT_OFFSET;
-const COLLAB_PORT = 1234 + PORT_OFFSET;
 const isCI = Boolean(process.env.CI);
+const WORKERS = Number(process.env.PPTX_E2E_WORKERS) || undefined;
+/**
+ * Locally the suite runs React only unless asked otherwise. React is the parity reference: its
+ * parity specs drive all five demos and diff them, so one project still checks every binding
+ * against it, at a fifth of the cost of running each binding's own copy of the product specs.
+ * `--project=<name>` or `PPTX_E2E_ALL_BINDINGS=1` runs the others; CI always runs them all.
+ */
+// Workers are forked without the CLI flags, so the main process hands them its decision.
+const explicitProject =
+	process.env.PPTX_E2E_EXPLICIT_PROJECT === '1' ||
+	process.argv.some((arg) => /^(--project|-p)(=|$)/.test(arg));
+if (explicitProject) {
+	process.env.PPTX_E2E_EXPLICIT_PROJECT = '1';
+}
+const onlyReference = !isCI && !explicitProject && process.env.PPTX_E2E_ALL_BINDINGS !== '1';
 
 export default defineConfig({
 	testDir: '../../e2e/pptx',
@@ -53,6 +77,7 @@ export default defineConfig({
 	timeout: 60_000,
 	expect: { timeout: 10_000 },
 	fullyParallel: false,
+	workers: WORKERS,
 	forbidOnly: isCI,
 	// Tests tagged `@local-only` do real-time video capture
 	// (MediaRecorder/canvas.captureStream()) that reliably takes down the
@@ -148,62 +173,18 @@ export default defineConfig({
 			testMatch: '**/host-owned-collaboration.spec.ts',
 			use: { ...devices['Desktop Chrome'], baseURL: `http://localhost:${port}` },
 		})),
-	],
-	webServer: [
-		{
-			// Host-owned collaboration tests use the real relay, not BroadcastChannel.
-			command: 'bun ../../demos/pptx/demo-react/collab-server.mjs',
-			env: { PORT: String(COLLAB_PORT) },
-			port: COLLAB_PORT,
-			reuseExistingServer: !isCI,
-			timeout: 30_000,
-			stdout: 'ignore',
-			stderr: 'pipe',
-		},
-		{
-			command: `npx vite --force --port ${REACT_PORT} --strictPort`,
-			cwd: '../../demos/pptx/demo-react',
-			url: `http://localhost:${REACT_PORT}`,
-			reuseExistingServer: !isCI,
-			timeout: 120_000,
-			stdout: 'ignore',
-			stderr: 'pipe',
-		},
-		{
-			command: `npx vite --force --port ${VUE_PORT} --strictPort`,
-			cwd: '../../demos/pptx/demo-vue',
-			url: `http://localhost:${VUE_PORT}`,
-			reuseExistingServer: !isCI,
-			timeout: 120_000,
-			stdout: 'ignore',
-			stderr: 'pipe',
-		},
-		{
-			command: `npx vite --force --port ${ANGULAR_PORT} --strictPort`,
-			cwd: '../../demos/pptx/demo-angular',
-			url: `http://localhost:${ANGULAR_PORT}`,
-			reuseExistingServer: !isCI,
-			timeout: 120_000,
-			stdout: 'ignore',
-			stderr: 'pipe',
-		},
-		{
-			command: `npx vite --force --port ${VANILLA_PORT} --strictPort`,
-			cwd: '../../demos/pptx/demo-vanilla',
-			url: `http://localhost:${VANILLA_PORT}`,
-			reuseExistingServer: !isCI,
-			timeout: 120_000,
-			stdout: 'ignore',
-			stderr: 'pipe',
-		},
-		{
-			command: `npx vite --force --port ${SVELTE_PORT} --strictPort`,
-			cwd: '../../demos/pptx/demo-svelte',
-			url: `http://localhost:${SVELTE_PORT}`,
-			reuseExistingServer: !isCI,
-			timeout: 120_000,
-			stdout: 'ignore',
-			stderr: 'pipe',
-		},
-	],
+	].filter((project) => !onlyReference || project.name.startsWith('react')),
+	// The same list backs `bun e2e-servers.ts start`, which keeps these servers warm between runs;
+	// a server that is already listening is reused outside CI. The first entry is the relay the
+	// host-owned collaboration tests use instead of BroadcastChannel.
+	webServer: e2eServers().map((server) => ({
+		command: server.command,
+		cwd: server.cwd,
+		env: server.env,
+		...(server.url ? { url: server.url } : { port: server.port }),
+		reuseExistingServer: !isCI,
+		timeout: server.url ? 120_000 : 30_000,
+		stdout: 'ignore' as const,
+		stderr: 'pipe' as const,
+	})),
 });

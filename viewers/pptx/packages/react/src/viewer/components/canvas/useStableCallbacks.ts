@@ -1,5 +1,5 @@
-import type { PptxElement, TextStyle } from 'pptx-viewer-core';
 import type { InlineTextEditSnapshot } from 'ooxml-ui/pptx';
+import type { PptxElement, TextStyle } from 'pptx-viewer-core';
 import React, { useCallback, useRef } from 'react';
 
 import type { ShapeAdjustmentHandleDescriptor, TableCellEditorState } from '../../types';

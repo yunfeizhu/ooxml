@@ -1,16 +1,16 @@
 import { Worker } from 'node:worker_threads';
 import { readdir, readFile } from 'node:fs/promises';
 import { pathToFileURL } from 'node:url';
-import { resolve } from 'node:path';
+import { resolve as resolvePath } from 'node:path';
 import assert from 'node:assert/strict';
 import { createMetafileFixture } from '../../../e2e/visio/metafile-fixture.mjs';
 import { createVsdxFixture } from '../../../e2e/visio/fixture.mjs';
 
-const assetDirectory = resolve(process.argv[2] ?? 'site-dist/assets');
+const assetDirectory = resolvePath(process.argv[2] ?? 'site-dist/assets');
 const assets = await readdir(assetDirectory);
 const name = assets.find((file) => /^parse-worker-.*\.js$/.test(file));
 assert.ok(name, 'Production worker bundle must exist');
-const url = pathToFileURL(resolve(assetDirectory, name)).href;
+const url = pathToFileURL(resolvePath(assetDirectory, name)).href;
 // Exercise the actual browser-targeted production bundle in an isolated Node worker.
 // This verifies serialization/parsing; it is not a substitute for browser/CSP testing.
 const worker = new Worker(
@@ -66,19 +66,21 @@ try {
 	assert.equal(legacyResult.document.pages[0].shapes[0].id, '7');
 	assert.equal(legacyResult.document.pages[0].shapes[0].text.plainText, 'Hello\n');
 	for (const unsupported of [false, true]) {
-		const response = new Promise((resolve, reject) => {
+		const metafileReply = new Promise((resolve, reject) => {
 			worker.once('message', resolve);
 			worker.once('error', reject);
 		});
 		worker.postMessage(Uint8Array.from(await createMetafileFixture(unsupported)).buffer);
-		const result = await response;
-		assert.equal(result.ok, true, result.message);
-		const shape = result.document.pages[0].shapes.find((shape) => shape.id === 'emf');
-		if (unsupported) assert.equal(shape.foreignVector, undefined);
+		const metafileResult = await metafileReply;
+		assert.equal(metafileResult.ok, true, metafileResult.message);
+		const emf = metafileResult.document.pages[0].shapes.find((candidate) => candidate.id === 'emf');
+		if (unsupported) assert.equal(emf.foreignVector, undefined);
 		else {
-			assert.ok(shape.foreignVector.vector.items.length > 0);
-			assert.equal(shape.foreignVector.vector.width, 100);
-			assert.ok(result.document.diagnostics.some((note) => note.code === 'emf-limited-rendering'));
+			assert.ok(emf.foreignVector.vector.items.length > 0);
+			assert.equal(emf.foreignVector.vector.width, 100);
+			assert.ok(
+				metafileResult.document.diagnostics.some((note) => note.code === 'emf-limited-rendering'),
+			);
 		}
 	}
 	console.log(
@@ -91,7 +93,7 @@ try {
 
 const editName = assets.find((file) => /^edit-worker-.*\.js$/.test(file));
 assert.ok(editName, 'Production edit worker bundle must exist');
-const editUrl = pathToFileURL(resolve(assetDirectory, editName)).href;
+const editUrl = pathToFileURL(resolvePath(assetDirectory, editName)).href;
 const editWorker = new Worker(
 	`
  const { parentPort } = require('node:worker_threads');
@@ -168,7 +170,7 @@ try {
 	// The separate registry compatibility gate can consume a runtime predating clipboard support.
 	if (!process.argv.includes('--registry-runtime') || clipboardName) {
 		assert.ok(clipboardName, 'Production clipboard capture worker must exist');
-		const clipboardUrl = pathToFileURL(resolve(assetDirectory, clipboardName)).href;
+		const clipboardUrl = pathToFileURL(resolvePath(assetDirectory, clipboardName)).href;
 		const clipboardWorker = new Worker(
 			`
  const { parentPort } = require('node:worker_threads');

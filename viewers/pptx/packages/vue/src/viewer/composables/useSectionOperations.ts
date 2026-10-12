@@ -1,4 +1,3 @@
-import type { PptxSection, PptxSlide } from 'pptx-viewer-core';
 import {
 	addSection as addSectionTransform,
 	deleteSection as deleteSectionTransform,
@@ -9,6 +8,7 @@ import {
 	renameSection as renameSectionTransform,
 } from 'ooxml-ui/pptx';
 import type { SectionSlideGroup } from 'ooxml-ui/pptx';
+import type { PptxSection, PptxSlide } from 'pptx-viewer-core';
 import { computed } from 'vue';
 import type { ComputedRef, Ref } from 'vue';
 

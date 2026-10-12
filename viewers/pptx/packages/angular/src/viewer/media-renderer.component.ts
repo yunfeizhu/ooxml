@@ -13,8 +13,6 @@ import {
 import type { SafeResourceUrl } from '@angular/platform-browser';
 import { DomSanitizer } from '@angular/platform-browser';
 import { TranslateService } from '@ngx-translate/core';
-import type { PptxElement, PptxMediaType } from 'pptx-viewer-core';
-
 import {
 	MEDIA_FULLSCREEN_OVERLAY_STYLE,
 	ONLINE_VIDEO_IFRAME_ALLOW,
@@ -31,6 +29,8 @@ import {
 	startMediaAutoplay,
 } from 'ooxml-ui/pptx';
 import type { MediaFallbackVisual, MediaSurface } from 'ooxml-ui/pptx';
+import type { PptxElement, PptxMediaType } from 'pptx-viewer-core';
+
 import { getClrChangeParams } from './color-changed-image-helpers';
 import type { ClrChangeParams } from './color-changed-image-helpers';
 import { ColorChangedImageComponent } from './color-changed-image.component';
@@ -170,6 +170,7 @@ import type { ResolvedCaptionTrack } from './media-renderer-helpers';
 						[src]="posterSrc"
 						alt=""
 						class="pptx-ng-img"
+						draggable="false"
 						[class.pptx-ng-media-dim]="fallback().dimPoster"
 					/>
 				}

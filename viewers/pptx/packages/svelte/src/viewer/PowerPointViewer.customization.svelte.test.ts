@@ -1,7 +1,6 @@
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 
-import type { PptxElement } from 'pptx-viewer-core';
 import {
 	contextualTabsForElement,
 	RIBBON_CONTROL_IDS,
@@ -10,6 +9,7 @@ import {
 	TOOLBAR_BUTTON_IDS,
 } from 'ooxml-ui/pptx';
 import type { ViewerCustomization, ViewerCustomizationApi } from 'ooxml-ui/pptx';
+import type { PptxElement } from 'pptx-viewer-core';
 import { flushSync, mount, unmount } from 'svelte';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
@@ -240,5 +240,54 @@ describe('public customisation exports', () => {
 			publicApi.VIEWER_EXPORT_FORMAT_IDS,
 		];
 		expect(catalogues.every((list) => Array.isArray(list) && list.length > 0)).toBeTruthy();
+	});
+});
+
+describe('powerPointViewer host ribbon tabs', () => {
+	const reports = (run: () => void) => [
+		{
+			id: 'reports',
+			label: 'Reports',
+			groups: [{ label: 'Export', commands: [{ id: 'export', label: 'Export', run }] }],
+		},
+	];
+
+	it('adds the host tab after Help, runs its command and returns to Home when it is removed', async () => {
+		const run = vi.fn();
+		const heard = vi.fn();
+		const state = $state<{ ribbonAddIns: ReturnType<typeof reports> }>({
+			ribbonAddIns: reports(run),
+		});
+		const { target } = await mountViewer({
+			get ribbonAddIns() {
+				return state.ribbonAddIns;
+			},
+		});
+		target.addEventListener('office-ribbon-add-in', (event) =>
+			heard((event as CustomEvent).detail),
+		);
+		const tab = () => target.querySelector<HTMLButtonElement>('[data-ribbon-add-in-tab]');
+		const selected = () =>
+			// The ribbon's own tab row: the viewer has other tab lists (inspector).
+			[
+				...target.querySelectorAll('.pptx-svelte-ribbon-tabs [role="tab"][aria-selected="true"]'),
+			].map((item) => item.textContent?.trim());
+		expect(tabLabels(target).at(-1)).toBe('Reports');
+		expect(target.querySelector('pptx-ui-ribbon-add-in')).toBeNull();
+		tab()!.click();
+		flushSync();
+		expect(selected()).toStrictEqual(['Reports']);
+		const command = target.querySelector('pptx-ui-ribbon-add-in pptx-ui-ribbon-command')!;
+		expect(command.getAttribute('label')).toBe('Export');
+		// The host tab replaces the fixed tab's groups rather than joining them.
+		expect(target.querySelector('[data-ribbon-group="home.font"]')).toBeNull();
+		command.shadowRoot!.querySelector('button')!.click();
+		expect(run).toHaveBeenCalledOnce();
+		expect(heard).toHaveBeenCalledWith({ tab: 'reports', command: 'export' });
+		state.ribbonAddIns = [];
+		flushSync();
+		expect(tab()).toBeNull();
+		expect(target.querySelector('pptx-ui-ribbon-add-in')).toBeNull();
+		expect(selected()).toStrictEqual(['Home']);
 	});
 });

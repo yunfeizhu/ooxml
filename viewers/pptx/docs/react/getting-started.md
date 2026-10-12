@@ -20,7 +20,6 @@ bytes. The component fills its parent, so give the parent an explicit height.
 ```tsx
 import { PowerPointViewer } from 'pptx-react-viewer';
 import { useEffect, useState } from 'react';
-
 // If your app does NOT use Tailwind CSS v4, import the bundled stylesheet once
 // at your entry point (see Theming for the three styling modes):
 import 'pptx-react-viewer/styles';
@@ -86,8 +85,8 @@ Set `canEdit` to turn on the editing toolbar and inspector. Track changes with t
 
 ```tsx
 import { PowerPointViewer } from 'pptx-react-viewer';
-import { useRef, useState } from 'react';
 import type { PowerPointViewerHandle } from 'pptx-react-viewer';
+import { useRef, useState } from 'react';
 
 export function Editor({ initial }: { initial: Uint8Array }) {
 	const ref = useRef<PowerPointViewerHandle>(null);

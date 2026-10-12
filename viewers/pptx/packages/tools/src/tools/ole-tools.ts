@@ -1,5 +1,6 @@
 // Compatibility exports: all document operations are owned by OOXML core.
 import { apiToolsOleTools as operations } from 'ooxml-core/pptx/automation';
+
 export type GetOleContentParams = operations.GetOleContentParams;
 export type GetOleContentResult = operations.GetOleContentResult;
 export const getOleContent = operations.getOleContent;

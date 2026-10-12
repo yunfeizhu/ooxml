@@ -3,6 +3,7 @@ import JSZip from 'jszip';
 import type { VisioViewerElement } from 'ooxml-ui/visio';
 import { createVsdxFixture } from './fixture.mjs';
 import { downloadCopy } from './ribbon';
+import { openDemo } from './demo-page';
 
 async function fixture(
 	scale: number,
@@ -110,7 +111,10 @@ for (const [index, framework] of [
 		const errors: string[] = [];
 		page.on('pageerror', (error) => errors.push(error.message));
 		await page.setViewportSize({ width: 1600, height: 1000 });
-		await page.goto(framework === 'vanilla' ? '/demo/?sample=1' : `/demo-${framework}/?sample=1`);
+		await openDemo(
+			page,
+			framework === 'vanilla' ? '/demo/?sample=1' : `/demo-${framework}/?sample=1`,
+		);
 		const viewer = page.locator('visio-viewer');
 		const load = async (locked = false) => {
 			await page.locator('#file').setInputFiles({
@@ -118,6 +122,7 @@ for (const [index, framework] of [
 				mimeType: 'application/vnd.ms-visio.drawing',
 				buffer: await fixture(scale, angle, flipX, flipY, locked),
 			});
+			await expect(page.locator('#file-name')).toHaveText('resize.vsdx');
 			await waitForIdle(viewer);
 			await expect(viewer.locator('svg.paper')).toContainText('Resize source');
 			await viewer.locator('svg.paper [data-shape-id="1"]').click();
@@ -142,7 +147,7 @@ for (const [index, framework] of [
 		expect(projected.height).toBeCloseTo(1.27, 5);
 		expect((await inventory(viewer)).bytes).toEqual(before.bytes);
 		expect((await inventory(viewer)).transform).toEqual(before.transform);
-		await expect(viewer.locator('[command="undo"] button')).toBeDisabled();
+		await expect(viewer.locator('.qat [data-command="undo"]')).toBeDisabled();
 		await page.mouse.up();
 		await expect.poll(async () => (await inventory(viewer)).width).toBeCloseTo(projected.width, 9);
 		const resized = await inventory(viewer);
@@ -158,9 +163,9 @@ for (const [index, framework] of [
 			return [matrix.a, matrix.b, matrix.c, matrix.d, matrix.e, matrix.f];
 		});
 		accepted.forEach((value, index) => expect(value).toBeCloseTo(projected.matrix[index]!, 8));
-		await viewer.locator('[command="undo"] button').click();
+		await viewer.locator('.qat [data-command="undo"]').click();
 		await expect.poll(async () => (await inventory(viewer)).bytes).toEqual(before.bytes);
-		await viewer.locator('[command="redo"] button').click();
+		await viewer.locator('.qat [data-command="redo"]').click();
 		await expect.poll(async () => (await inventory(viewer)).bytes).toEqual(resized.bytes);
 		const cancelStart = await handlePosition(viewer);
 		await page.mouse.move(cancelStart.x, cancelStart.y);
@@ -200,7 +205,7 @@ for (const [index, framework] of [
 			)
 			.toMatch(/LockWidth|locked/i);
 		expect((await inventory(viewer)).bytes).toEqual(locked.bytes);
-		await expect(viewer.locator('[command="undo"] button')).toBeDisabled();
+		await expect(viewer.locator('.qat [data-command="undo"]')).toBeDisabled();
 		expect(errors).toEqual([]);
 	});
 }

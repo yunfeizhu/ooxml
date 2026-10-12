@@ -2,7 +2,9 @@ import type { VisioPackage } from './package';
 import type { VisioTextRangesEdit } from './edit-text-range-commands';
 import { children, attribute } from './sheet';
 import { fail } from './package-common';
-import { localTextTarget } from './edit-text-target';
+import { localTextTarget, textTarget } from './edit-text-target';
+import { instanceTextNode } from './edit-text-instance';
+import { masterTemplate } from './edit-text-scope';
 import { effectiveFormattingRows } from './edit-style-admission';
 import { assertFormattingText } from './edit-formatting-rows';
 import { assertFormattingDependencies } from './edit-formatting-scope';
@@ -16,26 +18,30 @@ export async function replaceScopedTextRanges(
 	edit: VisioTextRangesEdit,
 	check: () => void,
 ): Promise<boolean> {
-	const shape = localTextTarget(roots.get(edit.pageId)!, document, edit.shapeId, check);
-	if (children(shape, 'Section').some((section) => attribute(section, 'N') === 'Field'))
-		fail('UNSUPPORTED_TEXT_RANGE', 'Text range editing of shapes with fields is unsupported.');
+	// A stencil instance edits its own Text, or a local copy of the master's with its markers.
+	const found = textTarget(roots.get(edit.pageId)!, edit.shapeId, check);
+	const instance =
+		found.masterId === undefined
+			? undefined
+			: instanceTextNode(
+					found.node,
+					await masterTemplate(pkg)(found.masterId, found.masterShapeId),
+				);
+	const shape = instance
+		? found.node
+		: localTextTarget(roots.get(edit.pageId)!, document, edit.shapeId, check);
 	const texts = children(shape, 'Text');
 	if (texts.length !== 1)
 		fail('UNSUPPORTED_TEXT_RANGE', 'Range editing requires one existing local Text element.');
 	const text = texts[0]!;
 	// Plain source keeps the existing writer's admission: unrelated stored formatting rows
-	// need no rich-marker provenance proof when there are no markers to interpret.
-	if (Array.from(text.childNodes).some((node) => ![3, 4].includes(node.nodeType))) {
+	// need no rich-marker provenance proof when there are no markers to interpret. An instance's
+	// markers point at rows inherited from its master and are carried over unchanged.
+	if (!instance && Array.from(text.childNodes).some((node) => ![3, 4].includes(node.nodeType))) {
 		const characters = effectiveFormattingRows(shape, document, 'Character'),
 			paragraphs = effectiveFormattingRows(shape, document, 'Paragraph');
 		assertFormattingText(shape, characters, paragraphs);
 	}
-	if (
-		Array.from(text.childNodes).some(
-			(node) => node.nodeType === 1 && (node as Element).localName === 'fld',
-		)
-	)
-		fail('UNSUPPORTED_TEXT_RANGE', 'Text range editing of fields is unsupported.');
 	let preceding = '';
 	for (const node of Array.from(text.childNodes)) {
 		if (node.nodeType === 3 || node.nodeType === 4) preceding += node.nodeValue ?? '';
@@ -52,16 +58,21 @@ export async function replaceScopedTextRanges(
 		}
 	}
 	const plan = textRangeNodes(text, edit);
-	if (!plan.changed) return false;
-	await assertFormattingDependencies(
-		pkg,
-		pagePaths,
-		roots,
-		edit.pageId,
-		shape,
-		new Map([['TheText', text]]),
-		check,
-	);
+	if (!plan.changed) {
+		instance?.discard();
+		return false;
+	}
+	// Visio recalculates an instance's text-sized master formulas when it opens the file.
+	if (!instance)
+		await assertFormattingDependencies(
+			pkg,
+			pagePaths,
+			roots,
+			edit.pageId,
+			shape,
+			new Map([['TheText', text]]),
+			check,
+		);
 	check();
 	while (text.firstChild) text.removeChild(text.firstChild);
 	for (const node of plan.nodes) text.appendChild(node);

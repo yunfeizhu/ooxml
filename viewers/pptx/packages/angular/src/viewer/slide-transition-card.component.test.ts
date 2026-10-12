@@ -12,10 +12,10 @@
  * satisfies that contract without a real Angular input binding.
  */
 import { Injector, runInInjectionContext } from '@angular/core';
+import { TRANSITION_MORPH_OPTIONS, TRANSITION_SPEED_OPTIONS } from 'ooxml-ui/pptx';
 import type { PptxSlide, PptxSlideTransition } from 'pptx-viewer-core';
 import { describe, expect, it } from 'vitest';
 
-import { TRANSITION_MORPH_OPTIONS, TRANSITION_SPEED_OPTIONS } from 'ooxml-ui/pptx';
 import { EditorStateService } from './editor-state.service';
 import { SlideTransitionCardComponent } from './slide-transition-card.component';
 

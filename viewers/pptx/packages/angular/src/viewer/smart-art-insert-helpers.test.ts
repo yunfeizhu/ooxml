@@ -1,3 +1,4 @@
+import { PRESETS } from 'ooxml-ui/pptx';
 /**
  * Tests for the Angular "Insert SmartArt" dialog logic.
  *
@@ -12,7 +13,6 @@
 import type { SmartArtPptxElement } from 'pptx-viewer-core';
 import { describe, expect, it } from 'vitest';
 
-import { PRESETS } from 'ooxml-ui/pptx';
 import {
 	buildSmartArtInsertElement,
 	buildSmartArtNodes,

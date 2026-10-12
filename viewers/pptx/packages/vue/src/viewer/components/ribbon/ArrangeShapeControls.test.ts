@@ -4,8 +4,8 @@
  * elements, gated and routed by the Vue ArrangeSection adapter.
  */
 import { mount } from '@vue/test-utils';
-import type { PptxElement } from 'pptx-viewer-core';
 import { MERGE_SHAPES_MENU_ITEMS, registerPptxWebControls } from 'ooxml-ui/pptx';
+import type { PptxElement } from 'pptx-viewer-core';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { nextTick } from 'vue';
 

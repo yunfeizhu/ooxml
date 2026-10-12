@@ -1,5 +1,5 @@
-import type { PptxSlide } from 'pptx-viewer-core';
 import { isPresentationAudience, strokeToInkElement } from 'ooxml-ui/pptx';
+import type { PptxSlide } from 'pptx-viewer-core';
 import { ref } from 'vue';
 import type { Ref } from 'vue';
 

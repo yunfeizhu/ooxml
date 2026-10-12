@@ -1,3 +1,4 @@
+import { applyReroutedConnectors, rerouteConnectorsForMovedElements } from 'ooxml-ui/pptx';
 /**
  * connector-reroute-store.ts: keep connectors attached to the shapes they point
  * at when one of those shapes finishes a move / resize / rotate gesture.
@@ -22,7 +23,6 @@
  * @module composables/connector-reroute-store
  */
 import type { PptxElement, PptxSlide } from 'pptx-viewer-core';
-import { applyReroutedConnectors, rerouteConnectorsForMovedElements } from 'ooxml-ui/pptx';
 import type { Ref } from 'vue';
 
 import { setTemplateElements } from './template-editing';

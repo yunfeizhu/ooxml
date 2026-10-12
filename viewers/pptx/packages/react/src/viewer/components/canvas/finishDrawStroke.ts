@@ -1,5 +1,5 @@
-import type { InkPptxElement, ShapePptxElement } from 'pptx-viewer-core';
 import { buildFreeformShapeElement, hasTiltData } from 'ooxml-ui/pptx';
+import type { InkPptxElement, ShapePptxElement } from 'pptx-viewer-core';
 
 import type { DrawingTool } from '../../types-ui';
 import { buildCanvasPathD } from './canvas-path';

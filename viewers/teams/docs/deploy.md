@@ -6,12 +6,12 @@
 cd server && node index.mjs          # PORT=8787 HOST=127.0.0.1 by default
 ```
 
-| Variable        | Meaning                                                                                  |
-| --------------- | ---------------------------------------------------------------------------------------- |
-| `PORT`, `HOST`  | Listen address. Bind `0.0.0.0` only behind TLS.                                          |
-| `TEAMS_TOKEN`   | If set, sockets take it as `?token=` and file requests as `Authorization: Bearer`.        |
-| `TEAMS_ORIGINS` | Comma-separated allowed `Origin`s for sockets and files. Empty allows any.               |
-| `TEAMS_DATA`    | Data directory (default `./data`): `rooms/<room>.bin` snapshots and `files/`.            |
+| Variable        | Meaning                                                                            |
+| --------------- | ---------------------------------------------------------------------------------- |
+| `PORT`, `HOST`  | Listen address. Bind `0.0.0.0` only behind TLS.                                    |
+| `TEAMS_TOKEN`   | If set, sockets take it as `?token=` and file requests as `Authorization: Bearer`. |
+| `TEAMS_ORIGINS` | Comma-separated allowed `Origin`s for sockets and files. Empty allows any.         |
+| `TEAMS_DATA`    | Data directory (default `./data`): `rooms/<room>.bin` snapshots and `files/`.      |
 
 It serves `ws /sync/<room>` (y-websocket compatible, one persisted `Y.Doc` per room),
 `ws /signal/<room>` (a JSON relay) and `POST|GET /files/<workspace>/<name>` (25 MB cap, names

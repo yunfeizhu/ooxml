@@ -1,8 +1,4 @@
-import {
-	buildReviewRibbon,
-	EMPTY_RESOLVED_CUSTOMIZATION,
-	isDialogAvailable,
-} from 'ooxml-ui/pptx';
+import { buildReviewRibbon, EMPTY_RESOLVED_CUSTOMIZATION, isDialogAvailable } from 'ooxml-ui/pptx';
 import type { RibbonCommandRequestEvent } from 'ooxml-ui/pptx';
 
 import type { Translator } from '../../../i18n';

@@ -1,3 +1,10 @@
+import type { SlideSizeEmu } from 'ooxml-ui/pptx';
+import {
+	downloadBlob,
+	exportDeckJson,
+	resolveSlideSizeSelection,
+	savedPresentationFileName,
+} from 'ooxml-ui/pptx';
 import type {
 	PptxAppProperties,
 	PptxCoreProperties,
@@ -14,13 +21,6 @@ import type {
 	PptxTagCollection,
 	PptxTheme,
 } from 'pptx-viewer-core';
-import type { SlideSizeEmu } from 'ooxml-ui/pptx';
-import {
-	downloadBlob,
-	exportDeckJson,
-	resolveSlideSizeSelection,
-	savedPresentationFileName,
-} from 'ooxml-ui/pptx';
 
 import type { CanvasSize } from '../types';
 import { buildSaveSlides } from '../utils/template-editing';

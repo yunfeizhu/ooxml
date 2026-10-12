@@ -1,3 +1,5 @@
+import type { RibbonAddInTab } from '../ribbon/add-in-tabs';
+import { applyRibbonAddIns } from './editor-shell';
 import type { CollabSession } from 'ooxml-core/collab';
 import type { WordYjsOptions } from 'ooxml-core/docx/ui';
 import { renderDocument } from './editor-render';
@@ -84,6 +86,18 @@ export abstract class DocxEditorApi extends HTMLElementBase {
 			applyViewOptions(this.core);
 		}
 		reflectAttribute(this, 'show-thumbnails', this.showThumbnails);
+	}
+
+	/**
+	 * Tabs a host adds after Word's own, as an Office add-in does. Each command runs its `run`
+	 * callback and dispatches `office-ribbon-add-in` (`{ tab, command }`) from the editor.
+	 */
+	get ribbonAddIns(): readonly RibbonAddInTab[] {
+		return this.core.ribbonAddIns;
+	}
+	set ribbonAddIns(value: readonly RibbonAddInTab[]) {
+		this.core.ribbonAddIns = value ?? [];
+		applyRibbonAddIns(this.core);
 	}
 
 	/** Hides the ribbon (the title bar and status bar stay). Default true; `show-toolbar="false"`. */

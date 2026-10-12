@@ -1,5 +1,3 @@
-import { hasTextProperties } from 'pptx-viewer-core';
-import type { PptxElement, TextSegment, TextStyle } from 'pptx-viewer-core';
 import {
 	applyListStyleUpdate,
 	applyTextStyleUpdate,
@@ -10,6 +8,8 @@ import {
 	remapTextToSegments,
 	toggleSelectionBullets,
 } from 'ooxml-ui/pptx';
+import { hasTextProperties } from 'pptx-viewer-core';
+import type { PptxElement, TextSegment, TextStyle } from 'pptx-viewer-core';
 import { useCallback } from 'react';
 
 import { setPendingSelectionRestore } from '../utils/inline-selection-utils';

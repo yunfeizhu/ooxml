@@ -1,7 +1,7 @@
+import { getShapeAdjustmentHandleDescriptor } from 'ooxml-ui/pptx';
 // @vitest-environment happy-dom
 import { PptxHandler } from 'pptx-viewer-core';
 import type { PptxElement, PptxSlide } from 'pptx-viewer-core';
-import { getShapeAdjustmentHandleDescriptor } from 'ooxml-ui/pptx';
 import React, { act } from 'react';
 import { createRoot } from 'react-dom/client';
 import type { Root } from 'react-dom/client';

@@ -42,6 +42,7 @@ import {
 	viewChild,
 } from '@angular/core';
 import { TranslatePipe } from '@ngx-translate/core';
+import { buildOleContentUpdatePatch, buildOleEditDialogDescriptor } from 'ooxml-ui/pptx';
 import type {
 	OleNestedDeckSlideDetail,
 	OlePptxElement,
@@ -58,7 +59,6 @@ import {
 	replaceOleFile,
 } from 'pptx-viewer-core';
 
-import { buildOleContentUpdatePatch, buildOleEditDialogDescriptor } from 'ooxml-ui/pptx';
 import type { DialogFooterActionSpec } from './dialog-footer.component';
 import { DialogFooterComponent } from './dialog-footer.component';
 import { ModalDialogComponent } from './modal-dialog.component';

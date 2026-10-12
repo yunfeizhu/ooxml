@@ -1,4 +1,3 @@
-import type { MediaPptxElement } from 'pptx-viewer-core';
 import {
 	MEDIA_CHROME_ATTRIBUTE,
 	getImageFitStyle,
@@ -8,6 +7,7 @@ import {
 } from 'ooxml-ui/pptx';
 import type { MediaFallbackVisual, MediaSurface } from 'ooxml-ui/pptx';
 import { translationsEn } from 'ooxml-ui/pptx/i18n';
+import type { MediaPptxElement } from 'pptx-viewer-core';
 import React from 'react';
 
 /**
@@ -164,6 +164,7 @@ export function renderMediaFallback({
 					}
 					className={`w-full h-full${visual.dimPoster ? ' opacity-50' : ''}`}
 					style={getImageFitStyle(element)}
+					draggable={false}
 				/>
 				<Badge visual={visual} element={element} />
 			</div>

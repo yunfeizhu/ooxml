@@ -1,7 +1,7 @@
 <script setup lang="ts">
+import { getPatternSvg, PATTERN_PRESET_OPTIONS } from 'ooxml-ui/pptx';
 import type { PptxElement, ShapeStyle } from 'pptx-viewer-core';
 import { hasShapeProperties } from 'pptx-viewer-core';
-import { getPatternSvg, PATTERN_PRESET_OPTIONS } from 'ooxml-ui/pptx';
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 

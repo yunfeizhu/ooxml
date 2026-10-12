@@ -13,9 +13,8 @@
  * @module viewer/duotone-filter
  */
 
-import type { PptxElement } from 'pptx-viewer-core';
-
 import { hexToRgbUnit } from 'ooxml-ui/pptx';
+import type { PptxElement } from 'pptx-viewer-core';
 
 // ── Filter primitive descriptors ──────────────────────────────────────────────
 

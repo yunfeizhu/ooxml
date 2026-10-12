@@ -1,4 +1,3 @@
-import type { PptxSlide, PptxSlideTransition } from 'pptx-viewer-core';
 import {
 	buildMorphScopedCss,
 	buildMorphTransitionPlan,
@@ -6,6 +5,7 @@ import {
 	MORPH_CROSSFADE_HALF_BLEND_MODE,
 	morphOptionToMode,
 } from 'ooxml-ui/pptx';
+import type { PptxSlide, PptxSlideTransition } from 'pptx-viewer-core';
 import type { CSSProperties } from 'vue';
 import { computed } from 'vue';
 

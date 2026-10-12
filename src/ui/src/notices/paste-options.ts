@@ -111,13 +111,14 @@ export class OfficeUiPasteOptions extends OfficeElement {
 				${repeat(
 					this.model.options,
 					(option) => option.id,
-					(option) => html`<button
-						type="button"
-						data-format=${option.id}
-						title=${option.label}
-						@click=${() => this.choose(option)}
-						>${option.label}</button
-					>`,
+					(option) =>
+						html`<button
+							type="button"
+							data-format=${option.id}
+							title=${option.label}
+							@click=${() => this.choose(option)}
+							>${option.label}</button
+						>`,
 				)}
 			</div>
 		`;

@@ -19,13 +19,11 @@ for (const framework of FRAMEWORKS)
 			const source = original.sheets[0]!.drawings[0]!;
 			if (source.kind !== 'chart') throw new Error('Missing source chart');
 			const expected = chartView(original, 0, source, () => []);
-			await page
-				.locator('#landing-file')
-				.setInputFiles({
-					name: `${sample.referenceName}.xlsx`,
-					mimeType: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-					buffer,
-				});
+			await page.locator('#landing-file').setInputFiles({
+				name: `${sample.referenceName}.xlsx`,
+				mimeType: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+				buffer,
+			});
 			const host = editor(page);
 			await expect(host.locator('.xg-chart svg')).toHaveCount(1);
 			const verify = async () => {
@@ -54,14 +52,12 @@ for (const framework of FRAMEWORKS)
 				] as const)
 					expect(Math.abs(bounds[name] - (value * 4) / 3)).toBeLessThan(0.1);
 				await expect(group.locator('text')).toHaveText(['Sales', 'Costs', 'Profit']);
-				const positions = await group
-					.locator('text')
-					.evaluateAll((nodes) =>
-						nodes.map((node) => ({
-							x: Number(node.getAttribute('x')),
-							y: Number(node.getAttribute('y')),
-						})),
-					);
+				const positions = await group.locator('text').evaluateAll((nodes) =>
+					nodes.map((node) => ({
+						x: Number(node.getAttribute('x')),
+						y: Number(node.getAttribute('y')),
+					})),
+				);
 				if (sample.referenceName.includes('bottom') || sample.referenceName.includes('wide')) {
 					expect(new Set(positions.map((p) => p.y)).size).toBe(1);
 					expect(positions[0]!.x).toBeLessThan(positions[1]!.x);

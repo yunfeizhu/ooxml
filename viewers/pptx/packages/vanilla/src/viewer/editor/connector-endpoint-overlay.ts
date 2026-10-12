@@ -1,4 +1,3 @@
-import type { PptxElement } from 'pptx-viewer-core';
 import {
 	collectConnectorSiteCandidates,
 	findConnectorSiteNear,
@@ -7,6 +6,7 @@ import {
 	withConnectorEndpointUpdate,
 } from 'ooxml-ui/pptx';
 import type { ConnectorEndpointKind } from 'ooxml-ui/pptx';
+import type { PptxElement } from 'pptx-viewer-core';
 
 import type { Store, ViewerState } from '../state';
 import { getActiveElements, replaceActiveElements } from './editor-active-elements';

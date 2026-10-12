@@ -1,4 +1,10 @@
 <script setup lang="ts">
+import {
+	mediaTrimEndAbsoluteMs,
+	mediaTrimEndMsFromAbsoluteMs,
+	mediaTrimResetPatch,
+	mediaTrimResetState,
+} from 'ooxml-ui/pptx';
 /**
  * MediaPropertiesPanel: inspector panel for `media` (audio/video) elements,
  * ported from React's `MediaPropertiesPanel`. Composes an optional live preview
@@ -14,12 +20,6 @@
  * used by the slide renderer, so embedded and package media preview identically.
  */
 import type { MediaPptxElement, PptxElement } from 'pptx-viewer-core';
-import {
-	mediaTrimEndAbsoluteMs,
-	mediaTrimEndMsFromAbsoluteMs,
-	mediaTrimResetPatch,
-	mediaTrimResetState,
-} from 'ooxml-ui/pptx';
 import { computed, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 

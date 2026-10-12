@@ -1,12 +1,7 @@
 // Selection actions shared by keyboard and pointer: moving the active cell with the core's
 // `navigate` (Excel Ctrl+arrow semantics, hidden rows skipped), extending, header selections and
 // moving within a selection after Enter / Tab.
-import {
-	navigate,
-	type CellAddress,
-	type CellRange,
-	type NavigationKey,
-} from 'ooxml-core/xlsx';
+import { navigate, type CellAddress, type CellRange, type NavigationKey } from 'ooxml-core/xlsx';
 import type { Selection } from 'ooxml-core/xlsx/ui';
 import type { GridView } from './grid-view';
 import {

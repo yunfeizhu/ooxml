@@ -1,5 +1,5 @@
-import type { ShapeStyle } from 'pptx-viewer-core';
 import { getDensePanelTouchTargetPx, quickStyleSwatchCss } from 'ooxml-ui/pptx';
+import type { ShapeStyle } from 'pptx-viewer-core';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 

@@ -5,7 +5,7 @@
 	 * shell under the file-size budget; it owns no state and reads everything
 	 * off the shell's own props.
 	 */
-	import type { RibbonContextualTabId } from 'ooxml-ui/pptx';
+	import type { RibbonAddInTab as RibbonAddInTabView, RibbonContextualTabId } from 'ooxml-ui/pptx';
 	import { RIBBON_CONTEXTUAL_TABS, homeLaunchers } from 'ooxml-ui/pptx';
 
 	import { useTranslator } from '../../../i18n/context';
@@ -18,6 +18,7 @@
 	import HomeTab from './home/HomeTab.svelte';
 	import InsertTab from './insert/InsertTab.svelte';
 	import RecordTab from './record/RecordTab.svelte';
+	import RibbonAddInTab from './RibbonAddInTab.svelte';
 	import ReviewTab from './review/ReviewTab.svelte';
 	import { ribbonOverflow } from './ribbon-overflow';
 	import type { RibbonTabId } from './ribbon-tabs';
@@ -29,11 +30,14 @@
 	const {
 		ribbon,
 		tab,
+		addIn,
 		onselecttab,
 		onslidesize,
 	}: {
 		ribbon: RibbonProps;
-		tab: RibbonTabId | RibbonContextualTabId;
+		tab: RibbonTabId | RibbonContextualTabId | string;
+		/** The host tab `tab` names, when it is one. */
+		addIn?: RibbonAddInTabView | undefined;
 		onselecttab: (id: RibbonTabId | RibbonContextualTabId) => void;
 		onslidesize: () => void;
 	} = $props();
@@ -55,7 +59,9 @@
 </script>
 
 <div class="pptx-svelte-ribbon-content" data-pptx-chrome="ribbon-content" use:ribbonOverflow={launchers}>
-	{#if tab === 'home'}
+	{#if addIn}
+		<RibbonAddInTab tab={addIn} />
+	{:else if tab === 'home'}
 		<HomeTab editor={ribbon.editor} findReplace={ribbon.findReplace} onnavigateslide={ribbon.onnavigateslide} hiddenActions={ribbon.hiddenActions} />
 	{:else if tab === 'insert'}
 		<InsertTab editor={ribbon.editor} canvasSize={ribbon.canvasSize} onheaderfooter={ribbon.onheaderfooter} />

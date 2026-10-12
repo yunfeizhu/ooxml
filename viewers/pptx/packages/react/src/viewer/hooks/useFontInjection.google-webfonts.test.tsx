@@ -1,3 +1,4 @@
+import { resetGoogleWebfontSessionCache } from 'ooxml-ui/pptx';
 // @vitest-environment happy-dom
 /**
  * Regression coverage for the Google Fonts webfont fallback in
@@ -8,7 +9,6 @@
  * catalogue does not know it. Nothing may reach the network.
  */
 import type { PptxElement, PptxEmbeddedFont, PptxSlide } from 'pptx-viewer-core';
-import { resetGoogleWebfontSessionCache } from 'ooxml-ui/pptx';
 import React, { act } from 'react';
 import { createRoot } from 'react-dom/client';
 import type { Root } from 'react-dom/client';

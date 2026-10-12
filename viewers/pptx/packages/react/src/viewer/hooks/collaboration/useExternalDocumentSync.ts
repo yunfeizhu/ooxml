@@ -1,4 +1,3 @@
-import type { PptxSlide } from 'pptx-viewer-core';
 import type { ExternalCollaborationReadiness, YjsFactories } from 'ooxml-ui/pptx';
 import {
 	createSyncGate,
@@ -6,6 +5,7 @@ import {
 	observeExternalCollaborationReadiness,
 	reconcileSlidesInYDoc,
 } from 'ooxml-ui/pptx';
+import type { PptxSlide } from 'pptx-viewer-core';
 import { useEffect, useRef } from 'react';
 
 import type { UseYjsDocumentSyncInput } from './useYjsDocumentSync';

@@ -1,4 +1,3 @@
-import type { PptxData, PptxSlide } from 'pptx-viewer-core';
 import type {
 	CanvasSize,
 	RasterizeElementResult,
@@ -13,6 +12,7 @@ import {
 	rasterResultToPngDataUrl,
 	resolveExportBaseName,
 } from 'ooxml-ui/pptx';
+import type { PptxData, PptxSlide } from 'pptx-viewer-core';
 
 import type { ExportGifOptions } from './export-gif';
 import { exportSlidesToGifBlob } from './export-gif';

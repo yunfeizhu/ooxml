@@ -1,3 +1,8 @@
+import {
+	buildTextFillCss as sharedBuildTextFillCss,
+	buildTextBody3DSceneStyle as sharedBuildTextBody3DSceneStyle,
+} from 'ooxml-ui/pptx';
+import type { ElementSizePx } from 'ooxml-ui/pptx';
 /**
  * Text fill + text effect CSS builders.
  *
@@ -20,11 +25,6 @@
  * at the binding boundary so React call sites are unchanged.
  */
 import type { TextStyle } from 'pptx-viewer-core';
-import {
-	buildTextFillCss as sharedBuildTextFillCss,
-	buildTextBody3DSceneStyle as sharedBuildTextBody3DSceneStyle,
-} from 'ooxml-ui/pptx';
-import type { ElementSizePx } from 'ooxml-ui/pptx';
 import type React from 'react';
 
 export {

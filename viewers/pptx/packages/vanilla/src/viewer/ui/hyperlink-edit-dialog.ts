@@ -1,9 +1,5 @@
+import { buildClearHyperlinkPatch, buildHyperlinkPatch, seedHyperlinkDraft } from 'ooxml-ui/pptx';
 import type { PptxElement } from 'pptx-viewer-core';
-import {
-	buildClearHyperlinkPatch,
-	buildHyperlinkPatch,
-	seedHyperlinkDraft,
-} from 'ooxml-ui/pptx';
 
 import type { Translator } from '../i18n';
 import { createEl } from '../render';

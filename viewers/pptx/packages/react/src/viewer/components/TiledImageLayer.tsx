@@ -1,5 +1,5 @@
-import type { PptxElement } from 'pptx-viewer-core';
 import { getCachedNativeImageSize, probeNativeImageSize } from 'ooxml-ui/pptx';
+import type { PptxElement } from 'pptx-viewer-core';
 /**
  * React component that renders an `a:blipFill/a:tile` repeating texture.
  *

@@ -56,5 +56,5 @@ it('snapshots the shape and rejects an unknown one', async () => {
 	expect(snapshotEdits([create('star')])).toEqual([create('star')]);
 	await expect(
 		editVsdx(await fixture(), [{ ...create('star'), shape: 'blob' as VisioBasicShape }]),
-	).rejects.toThrow(/Unknown basic shape/);
+	).rejects.toThrow(/Unknown outline shape/);
 });

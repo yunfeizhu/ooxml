@@ -14,10 +14,10 @@
 import { Injector, runInInjectionContext, signal } from '@angular/core';
 import type { InputSignal, OutputEmitterRef } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
+import { motionPathPresetById } from 'ooxml-ui/pptx';
 import type { PptxElement, PptxElementAnimation } from 'pptx-viewer-core';
 import { describe, expect, it, vi } from 'vitest';
 
-import { motionPathPresetById } from 'ooxml-ui/pptx';
 import { AnimationAuthorPanelComponent } from './animation-author-panel.component';
 import { componentSource } from './component-source.test-support';
 import { presentationStageStyle } from './presentation-overlay-helpers';

@@ -1,4 +1,3 @@
-import type { PptxElement, PptxHandler, PptxModifyVerifier, PptxSlide } from 'pptx-viewer-core';
 import type {
 	CompatibilityWarningToast,
 	ReadOnlyRecommendation,
@@ -12,6 +11,7 @@ import {
 	prepareElementForInsertion,
 	slideSpaceElement,
 } from 'ooxml-ui/pptx';
+import type { PptxElement, PptxHandler, PptxModifyVerifier, PptxSlide } from 'pptx-viewer-core';
 /**
  * useViewerIntegration: Wires pointer handling, content lifecycle,
  * I/O, annotations, recovery, imperative handle, parent callbacks,

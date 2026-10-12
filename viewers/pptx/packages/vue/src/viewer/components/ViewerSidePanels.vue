@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { isPanelVisible } from 'ooxml-ui/pptx';
+import type { PptxAiBridge, PptxAiConfig } from 'ooxml-ui/pptx/ai';
 /**
  * ViewerSidePanels: the desktop right rail, which is a stack of mutually
  * exclusive-ish panels (property inspector, AI chat, accessibility checker,
@@ -18,8 +20,6 @@ import type {
 	PptxPresentationProperties,
 	PptxSlide,
 } from 'pptx-viewer-core';
-import { isPanelVisible } from 'ooxml-ui/pptx';
-import type { PptxAiBridge, PptxAiConfig } from 'ooxml-ui/pptx/ai';
 import { computed } from 'vue';
 
 import type { AiPanelController } from '../composables/ai/useAiPanelController';

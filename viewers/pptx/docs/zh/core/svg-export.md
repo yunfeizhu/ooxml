@@ -85,8 +85,9 @@ const svg = SvgExporter.exportSlide(data.slides[0], data.width, data.height, {
 ::: code-group
 
 ```ts [Node fs]
-import { PptxHandler, SvgExporter } from 'pptx-viewer-core';
 import { readFile, writeFile } from 'node:fs/promises';
+
+import { PptxHandler, SvgExporter } from 'pptx-viewer-core';
 
 const file = await readFile('deck.pptx');
 const buffer = file.buffer.slice(file.byteOffset, file.byteOffset + file.byteLength);

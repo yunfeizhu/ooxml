@@ -1,4 +1,3 @@
-import type { PptxSlide, PptxSlideTransition } from 'pptx-viewer-core';
 import {
 	buildMorphScopedCss,
 	buildMorphTransitionPlan,
@@ -7,6 +6,7 @@ import {
 	resolveSlideTransition,
 	resolveTransitionDurationMs,
 } from 'ooxml-ui/pptx';
+import type { PptxSlide, PptxSlideTransition } from 'pptx-viewer-core';
 
 import { ensurePresentationKeyframes } from './animation-dom';
 import { buildFragmentedLayer } from './fragmented-transition-layer';

@@ -1,49 +1,110 @@
+/* Visio's Size & Position window: anchored at the bottom left of the drawing, a vertical caption
+   strip and rows of label, value and unit. */
 .size-position {
 	position: absolute;
-	right: 16px;
+	left: 16px;
 	bottom: 16px;
 	z-index: 8;
-	width: 250px;
+	display: flex;
+	width: 236px;
 	max-width: calc(100% - 32px);
 	max-height: calc(100% - 32px);
 	overflow: auto;
-	padding: 12px;
 	background: var(--_vv-surface);
 	color: var(--_vv-ink);
 	border: 1px solid var(--_vv-border);
-	border-radius: 4px;
-	box-shadow: 0 4px 16px #0002;
+	box-shadow: 0 2px 8px #0002;
+	font-size: 12px;
 }
 .size-position[hidden] {
 	display: none;
 }
-.size-position .pane-heading {
+/* Anchored to the drawing window, so it clears the Shapes window or its minimised strip. */
+.shapes-pane:not([hidden]) ~ .size-position {
+	left: 248px;
+}
+.shapes-strip:not([hidden]) ~ .size-position {
+	left: 44px;
+}
+@media (max-width: 760px) {
+	.shapes-pane:not([hidden]) ~ .size-position {
+		left: 16px;
+	}
+}
+.size-caption {
 	display: flex;
+	flex: none;
+	flex-direction: column;
 	align-items: center;
 	justify-content: space-between;
-	margin-bottom: 12px;
+	gap: 6px;
+	width: 24px;
+	padding: 8px 0 4px;
+}
+.size-caption strong {
+	writing-mode: vertical-rl;
+	color: var(--_vv-accent);
+	font-size: 10px;
+	font-weight: 700;
+	letter-spacing: 0.04em;
+	text-transform: uppercase;
+	white-space: nowrap;
+}
+.size-caption button {
+	width: 22px;
+	min-width: 0;
+	min-height: 22px;
+	padding: 0;
+	border: 0;
+	background: transparent;
+	color: var(--_vv-muted);
+	font-size: 15px;
+	line-height: 1;
+}
+.size-body {
+	flex: 1;
+	min-width: 0;
+	padding: 4px 6px 4px 0;
 }
 .size-position label {
 	display: grid;
-	grid-template-columns: 90px 1fr;
+	grid-template-columns: 58px 1fr auto;
 	align-items: center;
-	gap: 8px;
-	margin: 8px 0;
+	gap: 4px;
+	border-bottom: 1px solid var(--_vv-border);
+}
+.size-position label > span:first-child {
+	padding: 4px 6px;
+	border-right: 1px solid var(--_vv-border);
+	color: var(--_vv-muted);
 }
 .size-position input {
 	min-width: 0;
 	width: 100%;
+	min-height: 0;
 	box-sizing: border-box;
-	padding: 5px;
+	padding: 3px 4px;
 	font: inherit;
 	color: inherit;
-	background: var(--_vv-surface);
-	border: 1px solid var(--_vv-border);
+	background: transparent;
+	border: 0;
+	border-radius: 0;
+}
+.size-position input:focus-visible {
+	outline: 1px solid var(--_vv-focus);
+	outline-offset: -1px;
+}
+.size-unit {
+	padding-right: 4px;
+	color: var(--_vv-muted);
 }
 .size-position p {
-	font-size: 12px;
-	margin: 8px 0 0;
+	margin: 6px 6px 2px;
+	color: var(--_vv-muted);
+}
+.size-position p:empty {
+	display: none;
 }
 .size-position [role='alert'] {
-	color: var(--_vv-error, #a4262c);
+	color: var(--_vv-danger);
 }

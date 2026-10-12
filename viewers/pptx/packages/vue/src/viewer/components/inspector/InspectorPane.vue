@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { shouldShowAccessibilitySection } from 'ooxml-ui/pptx';
 import type {
 	ParsedTableStyleMap,
 	PptxAnimationTimelineAnchor,
@@ -7,7 +8,6 @@ import type {
 	PptxElementAnimation,
 } from 'pptx-viewer-core';
 import { hasShapeProperties, hasTextProperties, isImageLikeElement } from 'pptx-viewer-core';
-import { shouldShowAccessibilitySection } from 'ooxml-ui/pptx';
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 

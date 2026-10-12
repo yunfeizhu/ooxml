@@ -1,3 +1,4 @@
+// @vitest-environment jsdom
 import { afterEach, beforeAll, describe, expect, it } from 'vitest';
 import { registerOfficeUi } from '../index';
 import { OfficeUiMenuButton } from './menu-button';

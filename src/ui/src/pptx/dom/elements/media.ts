@@ -187,6 +187,7 @@ export const renderMediaElement: ElementRenderer = (element, zIndex, context) =>
 		});
 		img.src = posterSrc;
 		img.alt = '';
+		img.setAttribute('draggable', 'false');
 		el.appendChild(img);
 		if (fallback.badge !== 'none') {
 			const badge = createEl(doc, 'div', 'pptxv-media-badge');

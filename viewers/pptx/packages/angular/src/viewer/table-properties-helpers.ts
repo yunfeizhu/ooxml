@@ -1,3 +1,4 @@
+import { PATTERN_OPTIONS } from 'ooxml-ui/pptx';
 /**
  * table-properties-helpers.ts: pure helpers for the table properties inspector.
  *
@@ -15,8 +16,6 @@
 /* oxlint-disable eslint/one-var -- independent, unrelated locals across these
    helpers; merging them into one statement would hurt readability. */
 import { ooxmlGradientAngleToCssDegrees } from 'pptx-viewer-core';
-
-import { PATTERN_OPTIONS } from 'ooxml-ui/pptx';
 
 /** Default row height (px) used when a row has no explicit height. */
 export const DEFAULT_TABLE_ROW_HEIGHT = 32;

@@ -1,9 +1,9 @@
-import type { PptxElement } from 'pptx-viewer-core';
 import {
 	buildRasterPictureElement,
 	findCanvasElementNode,
 	rasterizeElementToDataUrl,
 } from 'ooxml-ui/pptx';
+import type { PptxElement } from 'pptx-viewer-core';
 
 import { renderToCanvas } from './render-to-canvas';
 

@@ -1,8 +1,3 @@
-/**
- * Extracted pointer-move processing logic for usePointerHandlers.
- * Handles marquee, drag, resize, and shape-adjustment interactions.
- */
-import type { PptxElement } from 'pptx-viewer-core';
 import {
 	applyResize,
 	getDraggedShapeAdjustments,
@@ -11,6 +6,11 @@ import {
 	snapBoxToGrid,
 } from 'ooxml-ui/pptx';
 import type { ResizeHandleId } from 'ooxml-ui/pptx';
+/**
+ * Extracted pointer-move processing logic for usePointerHandlers.
+ * Handles marquee, drag, resize, and shape-adjustment interactions.
+ */
+import type { PptxElement } from 'pptx-viewer-core';
 
 import { MIN_ELEMENT_SIZE } from '../constants';
 import { computeSnapToShapeResult } from '../utils/geometry-selection';

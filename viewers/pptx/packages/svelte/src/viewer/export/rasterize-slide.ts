@@ -1,4 +1,3 @@
-import type { PptxSlide } from 'pptx-viewer-core';
 import type {
 	CanvasSize,
 	RasterizeElementResult,
@@ -9,6 +8,7 @@ import {
 	rasterizeElementTiledToCanvas,
 	rasterizeElementTiles,
 } from 'ooxml-ui/pptx';
+import type { PptxSlide } from 'pptx-viewer-core';
 import { mount, unmount } from 'svelte';
 
 import { I18N_CONTEXT_KEY } from '../../i18n/context';

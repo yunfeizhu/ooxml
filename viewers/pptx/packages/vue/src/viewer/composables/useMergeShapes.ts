@@ -1,3 +1,4 @@
+import { applyMergeShapesPlan, canMergeShapes, planMergeShapes } from 'ooxml-ui/pptx';
 /**
  * useMergeShapes: Shape Format > Merge Shapes (Union / Combine / Fragment /
  * Intersect / Subtract) for the Vue editor.
@@ -9,7 +10,6 @@
  * and selects the new shape(s).
  */
 import type { MergeShapeOperation, PptxElement, PptxSlide } from 'pptx-viewer-core';
-import { applyMergeShapesPlan, canMergeShapes, planMergeShapes } from 'ooxml-ui/pptx';
 import { computed } from 'vue';
 import type { ComputedRef, Ref } from 'vue';
 

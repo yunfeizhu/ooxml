@@ -87,3 +87,31 @@ describe('powerPointViewerComponent root display inputs', () => {
 		expect(resolveInitialSlideIndex(undefined, 3)).toBe(0);
 	});
 });
+
+describe('powerPointViewerComponent host ribbon tabs', () => {
+	const ribbon = componentSource(import.meta.dirname, 'ribbon.component.ts');
+
+	it('hands the ribbonAddIns input to the ribbon through the per-viewer service', () => {
+		expect(source).toContain(
+			'readonly ribbonAddIns = input<readonly RibbonAddInTab[] | undefined>(undefined);',
+		);
+		expect(source).toContain('inject(RibbonAddInsService).bind(this.ribbonAddIns)');
+		expect(componentSource(import.meta.dirname, 'power-point-viewer.providers.ts')).toMatch(
+			/^	RibbonAddInsService,$/mu,
+		);
+	});
+
+	it('lists the host tabs in the tab row and draws the active one instead of the fixed content', () => {
+		expect(ribbon).toContain('[addInTabs]="addInTabs()"');
+		expect(ribbon).toContain('[activeAddIn]="activeAddIn()?.id ?? null"');
+		expect(ribbon).toContain('(selectAddIn)="selectAddIn($event)"');
+		expect(ribbon).toMatch(
+			/@if \(activeAddIn\(\); as addIn\) \{\s*<pptx-ui-ribbon-add-in \[tab\]="addIn"><\/pptx-ui-ribbon-add-in>\s*\}/u,
+		);
+		// Both fixed content hosts step aside while a host tab shows.
+		expect(ribbon.match(/\[style\.display\]="activeAddIn\(\) \? 'none' : null"/gu)).toHaveLength(2);
+		// Any fixed or contextual tab pick clears the host tab; no direct activeTab.set stays in the template.
+		expect(ribbon).not.toContain('(selectTab)="activeTab.set($event)"');
+		expect(ribbon.match(/\(selectTab\)="selectTab\(\$event\)"/gu)).toHaveLength(2);
+	});
+});

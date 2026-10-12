@@ -9,8 +9,8 @@ The UI is split the same way as every other product:
 
 | Layer                | Where                                                        | Owns                                                                   |
 | -------------------- | ------------------------------------------------------------ | ---------------------------------------------------------------------- |
-| Logic                | `src/core/teams/` (this area)                                     | model, chat CRDT, signaling, calls, server config, client store        |
-| Visual primitives    | `src/ui/src/teams/` (`ooxml-ui/teams`)                  | `office-ui-avatar`, `-app-rail`, `-channel-list`, `-chat-list`, ...    |
+| Logic                | `src/core/teams/` (this area)                                | model, chat CRDT, signaling, calls, server config, client store        |
+| Visual primitives    | `src/ui/src/teams/` (`ooxml-ui/teams`)                       | `office-ui-avatar`, `-app-rail`, `-channel-list`, `-chat-list`, ...    |
 | App, bindings, demos | the `teams-viewer` repository (`ChristopherVR/teams-viewer`) | `<teams-app>`, React/Vue/Solid/Svelte/Angular/vanilla bindings, server |
 
 ## The client: one state, plain actions

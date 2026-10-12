@@ -187,12 +187,7 @@ pptx-element-renderer {
 	min-height: 0;
 	background: var(--pptx-background, #030712);
 	color: var(--pptx-foreground, #f3f4f6);
-	font-family:
-		system-ui,
-		-apple-system,
-		'Segoe UI',
-		Roboto,
-		sans-serif;
+	font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
 }
 
 .pptx-ng-master-overlay {

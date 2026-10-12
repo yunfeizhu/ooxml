@@ -1,4 +1,3 @@
-import type { PptxTableCell, PptxTableData } from 'pptx-viewer-core';
 import type {
 	CellTextRun,
 	CssStyleMap,
@@ -15,6 +14,7 @@ import {
 	tableCellCss,
 	tableContainerCss,
 } from 'ooxml-ui/pptx';
+import type { PptxTableCell, PptxTableData } from 'pptx-viewer-core';
 
 import { styleToString } from '../style';
 

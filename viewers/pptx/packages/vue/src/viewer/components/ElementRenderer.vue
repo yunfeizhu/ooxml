@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import type { PptxElement, ShapeStyle } from 'pptx-viewer-core';
-import { hasShapeProperties, hasTextProperties } from 'pptx-viewer-core';
 import {
 	buildParagraphs,
 	buildTextBody3DSceneStyle,
@@ -13,6 +11,8 @@ import {
 	isEquationOnlyText,
 	placeholderPromptDescriptor,
 } from 'ooxml-ui/pptx';
+import type { PptxElement, ShapeStyle } from 'pptx-viewer-core';
+import { hasShapeProperties, hasTextProperties } from 'pptx-viewer-core';
 import type { CSSProperties } from 'vue';
 import { computed } from 'vue';
 

@@ -193,3 +193,30 @@ it('refuses a background shape with the same foreground ID and cancels page chan
 	expect(ui.edits).toHaveLength(1);
 	ui.dispose();
 });
+it('keeps the moved preview until the source edit settles instead of snapping back', async () => {
+	const ui = await pointerViewer();
+	ui.select(['2']);
+	let release!: () => void;
+	const gate = new Promise<void>((resolve) => {
+		release = resolve;
+	});
+	const apply = ui.controller.applySelectionEdits.bind(ui.controller);
+	vi.spyOn(ui.controller, 'applySelectionEdits').mockImplementation(async (edits) => {
+		await gate;
+		return apply(edits);
+	});
+	ui.pointer('pointerdown', ui.group('2'));
+	ui.pointer('pointermove', ui.svg, 52.3, 34.7);
+	const moved = ui.svg.querySelector('[data-movement-preview]')!.getAttribute('transform');
+	ui.pointer('pointerup', ui.svg, 52.3, 34.7);
+	// While the edit runs, the shape stays where it was dropped, not at its old position.
+	await Promise.resolve();
+	const preview = ui.svg.querySelector('[data-movement-preview]');
+	expect(preview?.getAttribute('transform')).toBe(moved);
+	expect(ui.group('2').style.visibility).toBe('hidden');
+	release();
+	await ui.done();
+	expect(ui.edits).toHaveLength(1);
+	await vi.waitFor(() => expect(ui.svg.querySelector('[data-movement-preview]')).toBeNull());
+	expect(ui.group('2').style.visibility).toBe('');
+});

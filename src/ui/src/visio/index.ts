@@ -50,3 +50,11 @@ export type { VisioEdit, VisioGeometryEdit } from 'ooxml-core/visio';
 
 /** The built-in demo document, for the demo and tests. */
 export { demoDocument } from 'ooxml-core/visio/ui';
+export {
+	RIBBON_ADD_IN_EVENT,
+	type OfficeRibbonAddInEvent,
+	type RibbonAddInCommand,
+	type RibbonAddInCommandDetail,
+	type RibbonAddInGroup,
+	type RibbonAddInTab,
+} from '../ribbon/add-in-tabs';

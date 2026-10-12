@@ -7,11 +7,10 @@ import {
 	output,
 } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import { THEME_COLOR_SCHEME_KEYS } from 'pptx-viewer-core';
-import type { PptxTheme, PptxThemeColorScheme } from 'pptx-viewer-core';
-
 import { themeEditorLabels } from 'ooxml-ui/pptx';
 import type { ThemeEditorApplyEvent, ThemeEditorEdit } from 'ooxml-ui/pptx';
+import { THEME_COLOR_SCHEME_KEYS } from 'pptx-viewer-core';
+import type { PptxTheme, PptxThemeColorScheme } from 'pptx-viewer-core';
 
 export type CustomThemeEdit = ThemeEditorEdit;
 export { createCustomThemeEdit } from 'ooxml-ui/pptx';

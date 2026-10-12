@@ -10,8 +10,6 @@ import {
 	output,
 } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import type { PptxElement, TablePptxElement } from 'pptx-viewer-core';
-
 import type {
 	ContextMenuRequestEvent,
 	ContextMenuViewState,
@@ -28,6 +26,8 @@ import {
 	resolveEditPointsAvailability,
 	scrollInspectorSectionIntoView,
 } from 'ooxml-ui/pptx';
+import type { PptxElement, TablePptxElement } from 'pptx-viewer-core';
+
 import type { MenuTranslate } from './context-menu-translate';
 import { injectMenuTranslate } from './context-menu-translate';
 import { tableMenuContext } from './editor-context-menu-context';

@@ -38,8 +38,6 @@ import {
 } from '@angular/core';
 import { LucideFilter, LucidePaintbrush, LucidePlus } from '@lucide/angular';
 import { TranslatePipe } from '@ngx-translate/core';
-import type { ChartPptxElement, PptxChartData } from 'pptx-viewer-core';
-
 import {
 	applyChartElementToggle,
 	applyChartStylePreset,
@@ -49,6 +47,8 @@ import {
 	restoreFilteredSeries,
 } from 'ooxml-ui/pptx';
 import type { ChartQuickElementKey } from 'ooxml-ui/pptx';
+import type { ChartPptxElement, PptxChartData } from 'pptx-viewer-core';
+
 import { commitChartElementData } from './chart-element-view-helpers';
 import { EditorStateService } from './editor-state.service';
 import { SLIDE_CONTEXT } from './slide-context';

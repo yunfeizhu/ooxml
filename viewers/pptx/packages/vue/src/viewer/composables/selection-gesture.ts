@@ -1,3 +1,5 @@
+import type { GestureController, GestureKind, InteractionBox, ResizeHandleId } from 'ooxml-ui/pptx';
+import { createGestureController } from 'ooxml-ui/pptx';
 /**
  * selection-gesture.ts: the pointer wiring behind `SelectionOverlay.vue`.
  *
@@ -22,13 +24,6 @@
  * @module viewer/composables/selection-gesture
  */
 import type { PptxElement } from 'pptx-viewer-core';
-import type {
-	GestureController,
-	GestureKind,
-	InteractionBox,
-	ResizeHandleId,
-} from 'ooxml-ui/pptx';
-import { createGestureController } from 'ooxml-ui/pptx';
 import type { Ref } from 'vue';
 
 import type {

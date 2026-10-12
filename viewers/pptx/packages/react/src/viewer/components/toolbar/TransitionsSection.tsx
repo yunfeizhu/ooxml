@@ -1,8 +1,4 @@
-import type { PptxSlide, PptxSlideTransition } from 'pptx-viewer-core';
-import type {
-	PptxUiRibbonTransitionsElement,
-	RibbonTransitionsRequestEvent,
-} from 'ooxml-ui/pptx';
+import type { PptxUiRibbonTransitionsElement, RibbonTransitionsRequestEvent } from 'ooxml-ui/pptx';
 import {
 	playSlideTransitionPreview,
 	readRibbonTransitionDraft,
@@ -11,6 +7,7 @@ import {
 	ribbonTransitionStockSoundUrl,
 	ribbonTransitionUpdates,
 } from 'ooxml-ui/pptx';
+import type { PptxSlide, PptxSlideTransition } from 'pptx-viewer-core';
 import React, { useEffect, useMemo, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 

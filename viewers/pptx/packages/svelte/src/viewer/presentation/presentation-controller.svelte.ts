@@ -1,4 +1,3 @@
-import type { PptxCustomShow, PptxSlide, PptxSlideTransition } from 'pptx-viewer-core';
 import {
 	applyHighlightClickStyle,
 	beginZoomExcursion,
@@ -25,6 +24,7 @@ import type {
 	ZoomExcursion,
 	ZoomNavigationTarget,
 } from 'ooxml-ui/pptx';
+import type { PptxCustomShow, PptxSlide, PptxSlideTransition } from 'pptx-viewer-core';
 
 import type { CustomShowReturnState } from './action-runner-callbacks';
 import { buildWaveFourActionCallbacks } from './action-runner-callbacks';

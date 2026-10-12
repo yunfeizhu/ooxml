@@ -1,3 +1,10 @@
+import type { YDocLike, YjsFactories } from 'ooxml-ui/pptx';
+import {
+	LOCAL_SYNC_ORIGIN,
+	observeYDocSlides,
+	reconcileSlidesInYDoc,
+	readSlidesFromYDoc,
+} from 'ooxml-ui/pptx';
 /**
  * Tests for the document-sync data path used by useYjsDocumentSync.
  *
@@ -11,13 +18,6 @@
  * @module collaboration/useYjsDocumentSync.test
  */
 import type { PptxSlide, PptxElement } from 'pptx-viewer-core';
-import type { YDocLike, YjsFactories } from 'ooxml-ui/pptx';
-import {
-	LOCAL_SYNC_ORIGIN,
-	observeYDocSlides,
-	reconcileSlidesInYDoc,
-	readSlidesFromYDoc,
-} from 'ooxml-ui/pptx';
 import { describe, it, expect, vi } from 'vitest';
 import * as Y from 'yjs';
 

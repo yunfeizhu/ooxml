@@ -1,3 +1,19 @@
+import {
+	addChartCategory,
+	addChartSeries,
+	chartGridlinesPatch,
+	chartGridlinesState,
+	collapseChartTitleRunsForEdit,
+	hideChartSeries,
+	patchChartData,
+	removeChartCategory,
+	removeChartSeries,
+	restoreFilteredSeries,
+	seriesSecondaryAxisPatch,
+	setChartCategoryLabel,
+	setChartCellValue,
+	setDataLabelsRangeCache,
+} from 'ooxml-ui/pptx';
 import type {
 	PptxElement,
 	ChartPptxElement,
@@ -21,22 +37,6 @@ import {
 	setChartDataPointMarker,
 	setChartDataPointLabel,
 } from 'pptx-viewer-core';
-import {
-	addChartCategory,
-	addChartSeries,
-	chartGridlinesPatch,
-	chartGridlinesState,
-	collapseChartTitleRunsForEdit,
-	hideChartSeries,
-	patchChartData,
-	removeChartCategory,
-	removeChartSeries,
-	restoreFilteredSeries,
-	seriesSecondaryAxisPatch,
-	setChartCategoryLabel,
-	setChartCellValue,
-	setDataLabelsRangeCache,
-} from 'ooxml-ui/pptx';
 import { useCallback } from 'react';
 
 import { useChartPartSelection } from '../chart-part-selection';

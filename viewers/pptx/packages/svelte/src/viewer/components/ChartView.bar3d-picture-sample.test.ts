@@ -1,3 +1,9 @@
+import {
+	ensureBarFacePicturePixelSampled,
+	getCachedBarFacePicturePixelColor,
+	resetBarFacePicturePixelCacheForTests,
+	resolveUntargetedBarFaceFill,
+} from 'ooxml-ui/pptx';
 /**
  * Regression test for the async first-pixel colour sample cache
  * (`chart-bar3d-face-picture-sample.ts`): once a picture's first pixel has
@@ -10,12 +16,6 @@
  * environment's `Image`/`<canvas>` decode.
  */
 import type { PptxChartData, PptxElement } from 'pptx-viewer-core';
-import {
-	ensureBarFacePicturePixelSampled,
-	getCachedBarFacePicturePixelColor,
-	resetBarFacePicturePixelCacheForTests,
-	resolveUntargetedBarFaceFill,
-} from 'ooxml-ui/pptx';
 import { flushSync, mount, unmount } from 'svelte';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 

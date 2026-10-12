@@ -17,10 +17,7 @@ import { fileURLToPath } from 'node:url';
 import JSZip from 'jszip';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
-const source = path.join(
-	root,
-	'pptx/__tests__/fixtures/corpus/smartart-orgchart-assistants.pptx',
-);
+const source = path.join(root, 'pptx/__tests__/fixtures/corpus/smartart-orgchart-assistants.pptx');
 const output = path.join(root, 'docx/__fixtures__/smartart.docx');
 
 const pptx = await JSZip.loadAsync(await readFile(source));

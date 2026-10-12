@@ -1,3 +1,5 @@
+import type { CollabLoadOrigin, YDocLike } from 'ooxml-ui/pptx';
+import { readSlidesFromYDoc, shouldRoomSlidesReplaceLoad } from 'ooxml-ui/pptx';
 /**
  * collaboration-load-adoption.ts: re-adopt the shared doc's slides after a
  * local content load completes mid-session.
@@ -12,8 +14,6 @@
  * client is the seeder and its loaded deck stands.
  */
 import type { PptxSlide } from 'pptx-viewer-core';
-import type { CollabLoadOrigin, YDocLike } from 'ooxml-ui/pptx';
-import { readSlidesFromYDoc, shouldRoomSlidesReplaceLoad } from 'ooxml-ui/pptx';
 import { watch } from 'vue';
 import type { Ref, WatchStopHandle } from 'vue';
 

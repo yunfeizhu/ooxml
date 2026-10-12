@@ -1,9 +1,9 @@
+import type { CanvasSize, TableStyleContext } from 'ooxml-ui/pptx';
 import type {
 	ParsedTableStyleMap,
 	PptxThemeColorScheme,
 	PptxThemeFontScheme,
 } from 'pptx-viewer-core';
-import type { CanvasSize, TableStyleContext } from 'ooxml-ui/pptx';
 import { getContext, setContext } from 'svelte';
 
 const RENDER_CONTEXT = Symbol('pptx-svelte-render-context');

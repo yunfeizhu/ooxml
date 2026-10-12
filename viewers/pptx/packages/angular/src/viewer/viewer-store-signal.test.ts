@@ -12,9 +12,9 @@
  * not tell "never written" from "written the same number again".
  */
 import { Injector, runInInjectionContext } from '@angular/core';
+import { createViewerStore } from 'ooxml-ui/pptx';
 import { describe, expect, it } from 'vitest';
 
-import { createViewerStore } from 'ooxml-ui/pptx';
 import { viewerStoreSignal } from './viewer-store-signal';
 
 interface State {

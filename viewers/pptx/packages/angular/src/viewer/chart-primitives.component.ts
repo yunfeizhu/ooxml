@@ -13,13 +13,13 @@
  * plain SVG `<g>` inside the chart renderer's `<svg>`).
  */
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
-
 import {
 	CHART_PART_ATTR,
 	CHART_PART_POINT_ATTR,
 	CHART_PART_SERIES_ATTR,
 	chartPartToAttrs,
 } from 'ooxml-ui/pptx';
+
 import type {
 	ChartPartRef,
 	SvgCircle,

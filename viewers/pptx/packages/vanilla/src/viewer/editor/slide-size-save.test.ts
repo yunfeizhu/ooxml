@@ -13,8 +13,8 @@
  * would have been satisfied by an option core ignored.
  */
 import JSZip from 'jszip';
-import { PptxHandler } from 'pptx-viewer-core';
 import { SLIDE_SIZE_PRESETS, slideSizeFromPreset } from 'ooxml-ui/pptx';
+import { PptxHandler } from 'pptx-viewer-core';
 import { describe, expect, it, vi } from 'vitest';
 
 import { createTranslator } from '../i18n';

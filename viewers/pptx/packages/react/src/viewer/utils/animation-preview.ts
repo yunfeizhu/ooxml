@@ -1,3 +1,9 @@
+import {
+	buildMotionPathPreview,
+	buildPreviewAnimation,
+	measurePreviewGeometry,
+} from 'ooxml-ui/pptx';
+import type { AnimationPreviewDescriptor } from 'ooxml-ui/pptx';
 /**
  * Animation Preview: DOM player + pure descriptor re-exports.
  *
@@ -12,12 +18,6 @@ import type {
 	PptxAnimationDirection,
 	PptxAnimationTimingCurve,
 } from 'pptx-viewer-core';
-import {
-	buildMotionPathPreview,
-	buildPreviewAnimation,
-	measurePreviewGeometry,
-} from 'ooxml-ui/pptx';
-import type { AnimationPreviewDescriptor } from 'ooxml-ui/pptx';
 
 export type { AnimationPreviewDescriptor } from 'ooxml-ui/pptx';
 export { timingCurveToCss, buildPreviewAnimation, parseOoxmlBezierCurve } from 'ooxml-ui/pptx';

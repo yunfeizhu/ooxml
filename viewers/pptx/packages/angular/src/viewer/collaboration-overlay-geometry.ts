@@ -13,10 +13,10 @@
  * in this module multiplies by zoom.
  */
 
-import type { PptxElement } from 'pptx-viewer-core';
-
 import { clampCursorPosition } from 'ooxml-ui/pptx';
 import type { CanvasSize } from 'ooxml-ui/pptx';
+import type { PptxElement } from 'pptx-viewer-core';
+
 import type { RemotePresence } from './collaboration-helpers';
 
 /** A single resolved remote selection box, in unscaled slide coordinates. */

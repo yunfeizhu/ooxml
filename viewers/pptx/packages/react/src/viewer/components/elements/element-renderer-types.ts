@@ -1,5 +1,5 @@
-import type { PptxAction, PptxElement, PptxSlide, TextStyle } from 'pptx-viewer-core';
 import type { InlineTextEditSnapshot, ZoomNavigationTarget } from 'ooxml-ui/pptx';
+import type { PptxAction, PptxElement, PptxSlide, TextStyle } from 'pptx-viewer-core';
 
 import type { ShapeAdjustmentHandleDescriptor, TableCellEditorState } from '../../types';
 import type { ElementAnimationState } from '../../utils/animation-timeline';

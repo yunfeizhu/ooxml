@@ -1,11 +1,11 @@
+import type { MasterViewCrudAction, MasterViewCrudActionId } from 'ooxml-ui/pptx';
+import { masterViewBackgroundColor } from 'ooxml-ui/pptx';
 import type {
 	PptxSlideMaster,
 	PptxNotesMaster,
 	PptxHandoutMaster,
 	MasterViewTab,
 } from 'pptx-viewer-core';
-import type { MasterViewCrudAction, MasterViewCrudActionId } from 'ooxml-ui/pptx';
-import { masterViewBackgroundColor } from 'ooxml-ui/pptx';
 import React, { useCallback, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { LuPanelLeftClose } from 'react-icons/lu';

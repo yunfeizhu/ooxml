@@ -5,14 +5,14 @@ OpenTeams is split the same way as the other products built on
 visual primitives live there, and this repository (`teams-viewer`) holds only the app that
 composes them, the framework bindings, a reference server and the demos.
 
-| Layer                | Where                                                                 | Owns                                                                                     |
-| -------------------- | --------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
-| Logic                | `ooxml-core/teams` (`src/core/teams` in the ooxml repository)              | the chat CRDT, presence, calls, signaling, server configuration, the `createTeamsClient` store |
-| Collaboration        | `ooxml-core/collab`                                                   | Yjs sessions and transports (WebSocket, `BroadcastChannel`), format-neutral                |
-| Visual primitives    | `ooxml-ui` (`src/ui/src/teams`)                                  | avatar, app rail, channel list, chat list, composer, pre-join, call grid and controls     |
-| App                  | `packages/web-component` here (private `teams-viewer`, never published) | `<teams-app>`: composes the primitives over the store, settings dialog, raw store helpers |
-| Bindings             | `packages/{react,vue,angular,svelte,solid,vanilla}` here              | lifecycle adapters plus a raw hook each, published as `openteams-<framework>-viewer`      |
-| Reference server     | `server/` here                                                        | Yjs sync, signaling relay, file storage, published as `openteams-server`                  |
+| Layer             | Where                                                                   | Owns                                                                                           |
+| ----------------- | ----------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
+| Logic             | `ooxml-core/teams` (`src/core/teams` in the ooxml repository)           | the chat CRDT, presence, calls, signaling, server configuration, the `createTeamsClient` store |
+| Collaboration     | `ooxml-core/collab`                                                     | Yjs sessions and transports (WebSocket, `BroadcastChannel`), format-neutral                    |
+| Visual primitives | `ooxml-ui` (`src/ui/src/teams`)                                         | avatar, app rail, channel list, chat list, composer, pre-join, call grid and controls          |
+| App               | `packages/web-component` here (private `teams-viewer`, never published) | `<teams-app>`: composes the primitives over the store, settings dialog, raw store helpers      |
+| Bindings          | `packages/{react,vue,angular,svelte,solid,vanilla}` here                | lifecycle adapters plus a raw hook each, published as `openteams-<framework>-viewer`           |
+| Reference server  | `server/` here                                                          | Yjs sync, signaling relay, file storage, published as `openteams-server`                       |
 
 The core's own description of the area is
 [`docs/teams-area.md`](https://github.com/ChristopherVR/ooxml/blob/main/docs/teams-area.md).
@@ -48,14 +48,14 @@ A binding is a lifecycle adapter: it creates `<teams-app>`, forwards props with 
 and re-emits events, all in `packages/web-component/src/bind.ts`. `onOpenFile` is `(detail, event)` everywhere except Angular, whose single-value output emits `{ detail, event }`. Each
 also exposes the raw hook over `createTeams`:
 
-| Binding | Component                           | Raw hook                                                |
-| ------- | ----------------------------------- | ------------------------------------------------------- |
-| React   | `<Teams />`                         | `useTeams(options)` (`useTeamsClient`, `useTeamsState`) |
-| Vue 3   | `<Teams />`                         | `useTeams(() => options)` returns shallow refs          |
-| Solid   | `Teams(props)`                      | `createTeamsClient(() => options)` returns signals      |
-| Svelte 5| `Teams.svelte` (default export)     | `teamsStore(options)` from `/runtime` (a readable store) |
-| Angular | `<teams-workspace>`                 | `TeamsService` (signals)                                |
-| Vanilla | `mountTeams(el, props)`             | `createTeams(options)`                                  |
+| Binding  | Component                       | Raw hook                                                 |
+| -------- | ------------------------------- | -------------------------------------------------------- |
+| React    | `<Teams />`                     | `useTeams(options)` (`useTeamsClient`, `useTeamsState`)  |
+| Vue 3    | `<Teams />`                     | `useTeams(() => options)` returns shallow refs           |
+| Solid    | `Teams(props)`                  | `createTeamsClient(() => options)` returns signals       |
+| Svelte 5 | `Teams.svelte` (default export) | `teamsStore(options)` from `/runtime` (a readable store) |
+| Angular  | `<teams-workspace>`             | `TeamsService` (signals)                                 |
+| Vanilla  | `mountTeams(el, props)`         | `createTeams(options)`                                   |
 
 A behaviour bug is fixed once, in the web component or the core. A hook or wiring bug is fixed in
 every binding in the same change.

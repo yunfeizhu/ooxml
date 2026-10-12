@@ -1,4 +1,3 @@
-import type { PptxThemeColorRef } from 'pptx-viewer-core';
 import type { ThemeColorPickerCommit } from 'ooxml-ui/pptx';
 import {
 	buildThemeColorSwatchGrid,
@@ -6,6 +5,7 @@ import {
 	themeColorSwatchRows,
 	themeSwatchCommit,
 } from 'ooxml-ui/pptx';
+import type { PptxThemeColorRef } from 'pptx-viewer-core';
 import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 

@@ -17,8 +17,6 @@
  * Provided per viewer (see `POWER_POINT_VIEWER_PROVIDERS`).
  */
 import { computed, inject, Injectable, signal } from '@angular/core';
-import type { PptxElement } from 'pptx-viewer-core';
-
 import {
 	cancelCropUpdate,
 	cropFrameOf,
@@ -29,6 +27,8 @@ import {
 	startCropSession,
 } from 'ooxml-ui/pptx';
 import type { CropElementUpdate, CropSession } from 'ooxml-ui/pptx';
+import type { PptxElement } from 'pptx-viewer-core';
+
 import { EditorStateService } from './editor-state.service';
 
 /** A live crop session and the slide its picture sits on. */

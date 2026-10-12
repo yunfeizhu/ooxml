@@ -102,7 +102,8 @@ export function createViewerCustomizationLifecycle(
 				...options,
 				hiddenActions: resolveEffectiveHiddenActions(resolved, options.hiddenActions),
 				showThumbnails:
-					resolveViewerRootOptions(options).showThumbnails && isPanelVisible(resolved, 'slidesPane'),
+					resolveViewerRootOptions(options).showThumbnails &&
+					isPanelVisible(resolved, 'slidesPane'),
 				showInspector: (options.showInspector ?? true) && isPanelVisible(resolved, 'inspector'),
 			};
 		}

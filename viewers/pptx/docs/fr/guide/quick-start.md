@@ -41,8 +41,9 @@ await writeFile('presentation.pptx', output);
 Construisez un `PptxHandler`, `load()` un `ArrayBuffer`, parcourez le [modele de donnees](/fr/guide/data-model), modifiez-le et `save()`.
 
 ```ts
-import { PptxHandler } from 'pptx-viewer-core';
 import { readFile, writeFile } from 'node:fs/promises';
+
+import { PptxHandler } from 'pptx-viewer-core';
 
 const handler = new PptxHandler();
 const buffer = await readFile('presentation.pptx');
@@ -94,8 +95,8 @@ console.log(markdown);
 Le composant `PowerPointViewer` affiche un deck depuis un `Uint8Array`.
 
 ```tsx
-import { useState } from 'react';
 import { PowerPointViewer } from 'pptx-react-viewer/viewer';
+import { useState } from 'react';
 
 function App() {
 	const [content, setContent] = useState<Uint8Array>();

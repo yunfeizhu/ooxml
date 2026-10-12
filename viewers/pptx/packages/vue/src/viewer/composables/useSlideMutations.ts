@@ -1,3 +1,5 @@
+import { applyMotionPathPreset } from 'ooxml-ui/pptx';
+import type { AnimationApplyGroup } from 'ooxml-ui/pptx';
 import type {
 	PptxAnimationPreset,
 	PptxElement,
@@ -6,8 +8,6 @@ import type {
 	PptxSlideTransition,
 	TextSegment,
 } from 'pptx-viewer-core';
-import { applyMotionPathPreset } from 'ooxml-ui/pptx';
-import type { AnimationApplyGroup } from 'ooxml-ui/pptx';
 import type { ComputedRef, Ref } from 'vue';
 
 import { applyAnimationPreset, removeElementAnimation } from './element-animation';

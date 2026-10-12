@@ -1,11 +1,11 @@
-import type { PptxElement } from 'pptx-viewer-core';
-import { hasTextProperties } from 'pptx-viewer-core';
 import {
 	elementBulletKind,
 	getInlineEditorSelectionResult,
 	selectedParagraphBulletKind,
 } from 'ooxml-ui/pptx';
 import type { ElementBulletKind } from 'ooxml-ui/pptx';
+import type { PptxElement } from 'pptx-viewer-core';
+import { hasTextProperties } from 'pptx-viewer-core';
 import { useCallback, useSyncExternalStore } from 'react';
 
 function subscribe(onChange: () => void): () => void {

@@ -69,9 +69,10 @@ export default i18nInstance;
 ```
 
 ```tsx
+import { I18nextProvider } from 'react-i18next';
+
 // app entry
 import i18nInstance from './i18n';
-import { I18nextProvider } from 'react-i18next';
 
 <I18nextProvider i18n={i18nInstance}>
 	<App />
@@ -103,6 +104,7 @@ export default i18n;
 ```ts
 // main.ts
 import { createApp } from 'vue';
+
 import App from './App.vue';
 import i18n from './i18n';
 
@@ -165,6 +167,7 @@ Vanilla 组件没有框架级 i18n 接入点，因此自带轻量翻译器。直
 
 ```ts
 import { createPptxViewer } from 'pptx-vanilla-viewer';
+
 import { translationsFr } from './translations/fr';
 
 const viewer = createPptxViewer(document.querySelector('#host')!, {
@@ -183,6 +186,7 @@ Svelte 没有指定统一的 i18n 运行时，因此组件从 `/i18n` 子路径�
 ```ts
 // i18n.ts
 import { registerTranslations } from 'pptx-svelte-viewer/i18n';
+
 import { translationsFr } from './translations/fr';
 
 registerTranslations('fr', translationsFr);

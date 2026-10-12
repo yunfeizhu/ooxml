@@ -20,8 +20,6 @@ import {
 	CUSTOM_ELEMENTS_SCHEMA,
 } from '@angular/core';
 import { TranslatePipe } from '@ngx-translate/core';
-import type { ChartPptxElement, PptxChartData } from 'pptx-viewer-core';
-
 import type { ChartTypeSelectValue } from 'ooxml-ui/pptx';
 import {
 	CHART_TYPE_OPTIONS,
@@ -31,6 +29,8 @@ import {
 	patchChartData,
 	resolveDisplayedChartType,
 } from 'ooxml-ui/pptx';
+import type { ChartPptxElement, PptxChartData } from 'pptx-viewer-core';
+
 import { isSelectControl } from './control-event-targets';
 
 /**

@@ -1,3 +1,4 @@
+import type { RibbonGalleryApplyResult, RibbonGalleryContext } from 'ooxml-ui/pptx';
 /**
  * useRibbonGalleryCommands: builds the {@link RibbonGalleryCommands} value
  * the viewer provides to every ribbon gallery.
@@ -15,7 +16,6 @@ import type {
 	PptxThemeColorScheme,
 	PptxThemeFontScheme,
 } from 'pptx-viewer-core';
-import type { RibbonGalleryApplyResult, RibbonGalleryContext } from 'ooxml-ui/pptx';
 import { useCallback, useMemo } from 'react';
 import type { RefObject } from 'react';
 

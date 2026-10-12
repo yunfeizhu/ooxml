@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import type { PptxChartSeries, PptxChartTrendline, PptxChartType } from 'pptx-viewer-core';
 import { TRENDLINE_SUPPORTED_TYPES, TRENDLINE_TYPE_OPTIONS } from 'ooxml-ui/pptx';
+import type { PptxChartSeries, PptxChartTrendline, PptxChartType } from 'pptx-viewer-core';
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 

@@ -1,9 +1,5 @@
 import { mount } from '@vue/test-utils';
-import {
-	MOTION_PATH_FAMILIES,
-	MOTION_PATH_PRESETS,
-	motionPathPresetById,
-} from 'ooxml-ui/pptx';
+import { MOTION_PATH_FAMILIES, MOTION_PATH_PRESETS, motionPathPresetById } from 'ooxml-ui/pptx';
 import { describe, expect, it } from 'vitest';
 
 import { translationsEn } from '../../../i18n';

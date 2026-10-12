@@ -30,7 +30,7 @@ type NativeMount = (
 	options: ViewerOptions,
 ) => Promise<{
 	handle: ViewerHandle;
-	update(options: ViewerOptions): Promise<void>;
+	update(next: ViewerOptions): Promise<void>;
 	destroy(): Promise<void>;
 }>;
 const mounts: Record<string, NativeMount> = {
@@ -38,8 +38,8 @@ const mounts: Record<string, NativeMount> = {
 		const handle = mountViewer(host, options);
 		return {
 			handle,
-			async update(options) {
-				handle.update(options);
+			async update(next) {
+				handle.update(next);
 			},
 			async destroy() {
 				handle.destroy();
@@ -54,9 +54,9 @@ const mounts: Record<string, NativeMount> = {
 		});
 		return {
 			handle: ref.current!,
-			async update(options) {
+			async update(next) {
 				await act(async () => {
-					root.render(createElement(ReactViewer, { ...options, ref }));
+					root.render(createElement(ReactViewer, { ...next, ref }));
 				});
 			},
 			async destroy() {
@@ -80,8 +80,8 @@ const mounts: Record<string, NativeMount> = {
 		await nextTick();
 		return {
 			handle,
-			async update(options) {
-				props.value = options;
+			async update(next) {
+				props.value = next;
 				await nextTick();
 			},
 			async destroy() {
@@ -100,9 +100,8 @@ const mounts: Record<string, NativeMount> = {
 		component.changeDetectorRef.detectChanges();
 		return {
 			handle: component.instance,
-			async update(options) {
-				for (const key of [...propertyKeys, 'events'] as const)
-					component.setInput(key, options[key]);
+			async update(next) {
+				for (const key of [...propertyKeys, 'events'] as const) component.setInput(key, next[key]);
 				component.changeDetectorRef.detectChanges();
 			},
 			async destroy() {
@@ -130,6 +129,9 @@ const mounts: Record<string, NativeMount> = {
 					get showToolbar() {
 						return props().showToolbar;
 					},
+					get ribbonAddIns() {
+						return props().ribbonAddIns;
+					},
 					get events() {
 						return props().events;
 					},
@@ -141,8 +143,8 @@ const mounts: Record<string, NativeMount> = {
 		);
 		return {
 			handle,
-			async update(options) {
-				setProps(options);
+			async update(next) {
+				setProps(next);
 			},
 			async destroy() {
 				destroy();
@@ -155,8 +157,8 @@ const mounts: Record<string, NativeMount> = {
 		await tick();
 		return {
 			handle: component.getHandle(),
-			async update(options) {
-				component.update(options);
+			async update(next) {
+				component.update(next);
 				flushSync();
 				await tick();
 			},
@@ -174,6 +176,7 @@ const payloads: ViewerEvents = {
 	'zoom-change': 3,
 	'shape-select': { id: 'shape-7', name: 'Example' },
 	'selection-change': Object.freeze([{ id: 'shape-7', name: 'Example' }]),
+	'office-ribbon-add-in': { tab: 'reports', command: 'export' },
 };
 describe('native adapters against the real shared custom element', () => {
 	for (const [framework, mountNative] of Object.entries(mounts)) {
@@ -266,6 +269,47 @@ describe('native adapters against the real shared custom element', () => {
 			expect(() => mounted.handle.selectAll()).toThrow(/not mounted|destroyed/);
 			expect(() => mounted.handle.clearSelection()).toThrow(/not mounted|destroyed/);
 			expect(changed).toHaveBeenCalledTimes(before);
+			host.remove();
+		});
+		it(`${framework}: host ribbon tabs are a prop, and their commands an event`, async () => {
+			const host = document.createElement('div');
+			document.body.append(host);
+			const tabs = (run: () => void) => [
+				{
+					id: 'reports',
+					label: 'Reports',
+					groups: [{ label: 'Export', commands: [{ id: 'export', label: 'Export', run }] }],
+				},
+			];
+			const first = vi.fn();
+			const latest = vi.fn();
+			const chosen = vi.fn();
+			const events = { 'office-ribbon-add-in': chosen };
+			const mounted = await mountNative(host, {
+				document: demoDocument,
+				ribbonAddIns: tabs(first),
+				events,
+			});
+			const root = mounted.handle.element.shadowRoot!;
+			const panel = () => root.querySelector<HTMLElement>('[data-add-in]');
+			const built = panel()!;
+			expect(built.dataset.label).toBe('Reports');
+			// A re-render with an equal descriptor and a new closure keeps the panel.
+			await mounted.update({ document: demoDocument, ribbonAddIns: tabs(latest), events });
+			expect(panel()).toBe(built);
+			built
+				.querySelector('[data-add-in-command="export"]')!
+				.shadowRoot!.querySelector('button')!
+				.click();
+			expect(first).not.toHaveBeenCalled();
+			expect(latest).toHaveBeenCalledTimes(1);
+			expect(chosen).toHaveBeenCalledWith({ tab: 'reports', command: 'export' });
+			// Leaving the prop out keeps the tabs; an empty list removes them.
+			await mounted.update({ document: demoDocument, events });
+			expect(panel()).toBe(built);
+			await mounted.update({ document: demoDocument, ribbonAddIns: [], events });
+			expect(panel()).toBeNull();
+			await mounted.destroy();
 			host.remove();
 		});
 		it(`${framework}: properties, complete event map, real load rejection, disposal`, async () => {

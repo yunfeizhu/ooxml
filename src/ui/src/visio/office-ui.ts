@@ -16,6 +16,9 @@ const VISIO_ICONS: Readonly<Record<string, string>> = {
 	visioChangeShape:
 		'M2.5 12.5a4.5 4.5 0 1 0 9 0 4.5 4.5 0 1 0-9 0M10 3h7.5v7.5H10ZM6 5.5 8 3.5M6 5.5 4 3.5',
 	visioPresentation: 'M2.5 3.5h15v10h-15ZM10 13.5V17M7 17h6M8.5 6.5l3.5 2-3.5 2Z',
+	visioRotateText:
+		'M3 16.5 6.5 7l3.5 9.5M4.3 13.5h4.4M12 4.5h1.5a3.5 3.5 0 0 1 3.5 3.5v5M14.5 10.5 17 13l2.5-2.5',
+	visioInk: 'M3 16.5c2-5 3-9 5-9s1 6 3 6 2-4 6-8M3 16.5h3',
 	visioMacros: 'M5 4.5 2 10l3 5.5M15 4.5l3 5.5-3 5.5M11.5 3.5l-3 13',
 	visioPicture: 'M2.5 4h15v12h-15ZM2.5 13l4-4 3 3 2-2 6 5M12.5 7.5h.1',
 	visioChart: 'M3 16.5h14M5 16.5v-5M9 16.5V5M13 16.5v-8M17 16.5v-3',

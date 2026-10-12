@@ -3,6 +3,8 @@ import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { editVsdx, parseVsdx } from 'ooxml-core/visio';
 import { nativeSvgLineEndpoints } from './native-line-svg';
+import { openDemo } from './demo-page';
+import { editSelection } from './ribbon';
 
 for (const variable of [
 	'VISIO_NATIVE_DRAW_DEFAULTS_DIR',
@@ -45,7 +47,8 @@ for (const variable of [
 						}),
 					),
 				);
-				await page.goto(
+				await openDemo(
+					page,
 					framework === 'vanilla' ? '/demo/?sample=1' : `/demo-${framework}/?sample=1`,
 				);
 				await page.locator('#file').setInputFiles({
@@ -165,24 +168,18 @@ for (const variable of [
 					const beforeResize = (await created.getAttribute('transform'))!;
 					await created.focus();
 					await created.press('Enter');
-					const controls = viewer.locator('.edit-controls');
-					await controls.locator('summary').click();
-					await controls
-						.getByLabel('Width (inches)', { exact: true })
-						.fill(String(target.editedCells.Width!.value));
-					await controls
-						.getByLabel('Height (inches)', { exact: true })
-						.fill(String(target.editedCells.Height!.value));
-					await controls.getByRole('button', { name: 'Resize selected', exact: true }).click();
+					await editSelection(viewer, {
+						type: 'resize-shape',
+						width: target.editedCells.Width!.value,
+						height: target.editedCells.Height!.value,
+					});
 					await expect(created).not.toHaveAttribute('transform', beforeResize);
 					const beforeMove = (await created.getAttribute('transform'))!;
-					await controls
-						.getByLabel('Pin X (inches)', { exact: true })
-						.fill(String(target.editedCells.PinX!.value));
-					await controls
-						.getByLabel('Pin Y (inches)', { exact: true })
-						.fill(String(target.editedCells.PinY!.value));
-					await controls.getByRole('button', { name: 'Move selected', exact: true }).click();
+					await editSelection(viewer, {
+						type: 'move-shape',
+						x: target.editedCells.PinX!.value,
+						y: target.editedCells.PinY!.value,
+					});
 					await expect(created).not.toHaveAttribute('transform', beforeMove);
 					const afterMove = (await created.getAttribute('transform'))!;
 					await viewport.focus();

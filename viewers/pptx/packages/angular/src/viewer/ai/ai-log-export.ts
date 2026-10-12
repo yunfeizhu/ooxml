@@ -13,11 +13,7 @@ import {
 } from 'ooxml-ui/pptx/ai';
 import type { ExportAiChatLogsMeta, PptxAiChatStore } from 'ooxml-ui/pptx/ai';
 
-export {
-	buildChatLogExport,
-	buildChatLogMarkdown,
-	collectStoredChats,
-} from 'ooxml-ui/pptx/ai';
+export { buildChatLogExport, buildChatLogMarkdown, collectStoredChats } from 'ooxml-ui/pptx/ai';
 export type {
 	AiLogChat,
 	AiLogExport,

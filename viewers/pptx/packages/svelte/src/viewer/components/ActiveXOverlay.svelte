@@ -29,6 +29,7 @@
 				class="pptx-svelte-activex-overlay-image"
 				src={view.imageUrl}
 				alt={view.label}
+				draggable="false"
 				title={`ActiveX control: ${view.label}`}
 				style={`left:${view.left}px;top:${view.top}px;width:${view.width}px;height:${view.height}px`}
 			/>

@@ -3,16 +3,7 @@ import type JSZip from 'jszip';
 import type { DocumentModel } from './model';
 import type { ParagraphStyleCatalog } from './model-paragraph';
 import { orderParagraphProperties } from './tab-stops';
-import {
-	buildXml,
-	children,
-	first,
-	getW,
-	makeW,
-	parseXml,
-	WORD_NS,
-	type XmlElement,
-} from './xml';
+import { buildXml, children, first, getW, makeW, parseXml, WORD_NS, type XmlElement } from './xml';
 
 const STYLES_PART = 'word/styles.xml';
 /** Children of `w:style` that follow `w:pPr` in the schema sequence. */

@@ -2,7 +2,7 @@ import { expect, it } from 'vitest';
 import { editVsdx, type VisioEdit } from './edit';
 import { parseVsdx } from './parser';
 import { VisioPackage } from './package';
-import { fixture, cell, shape, rectangle } from './test-fixtures';
+import { fixture, cell, section, shape, rectangle } from './test-fixtures';
 import { attribute, children } from './sheet';
 import { snapshotEdits } from './ui/edit-commands';
 import { visioPageEditToDrawing } from './ui/page-edit';
@@ -173,21 +173,34 @@ it('rejects invalid commands, missing targets and duplicate IDs', async () => {
 	).rejects.toThrow();
 });
 
-it('refuses order-sensitive container and dynamic formulas elsewhere in the package', async () => {
-	for (const formula of ['CONTAINERSHEETREF(1)!Height', 'INDIRECT("Sheet.2!Width")']) {
-		const original = await fixture({
+it('refuses formulas elsewhere in the package that the new order could disturb', async () => {
+	const container = section('User', `<Row N="msvStructureType">${cell('Value', 0)}</Row>`);
+	const elsewhere = (formula: string, extra = '') =>
+		fixture({
 			pages: [
-				{ id: '0', contents: `<Shapes>${box('1')}${box('2')}</Shapes>` },
+				{ id: '0', contents: `<Shapes>${box('1')}${box('2', extra)}</Shapes>` },
 				{
 					id: '1',
 					contents: `<Shapes>${box('8', cell('UserValue', 1, formula.replaceAll('"', '&quot;')))}</Shapes>`,
 				},
 			],
 		});
-		await expect(editVsdx(original, [order('back')])).rejects.toMatchObject({
+	// A reference built from text and a function nobody knows refuse any reorder.
+	for (const formula of ['INDIRECT("Sheet.2!Width")', 'NOSUCHFUNCTION(1)'])
+		await expect(editVsdx(await elsewhere(formula), [order('back')])).rejects.toMatchObject({
 			code: 'UNSUPPORTED_SHAPE_ORDER',
 		});
-	}
+	// A lookup through containers depends on how containers are stacked: it refuses the reorder
+	// of a container and nothing else. Visio's own flowchart masters all carry such a lookup.
+	const lookup = 'CONTAINERSHEETREF(1)!Height';
+	await expect(editVsdx(await elsewhere(lookup, container), [order('back')])).rejects.toMatchObject(
+		{ code: 'UNSUPPORTED_SHAPE_ORDER' },
+	);
+	const saved = await editVsdx(await elsewhere(lookup), [order('back')]);
+	expect(await ids(saved.bytes)).toEqual(['2', '1']);
+	// So do the action and text functions of Visio's masters.
+	const actions = await elsewhere('SETF(GetRef(User.Row),1)+DEPENDSON(TEXTWIDTH(TheText))');
+	expect(await ids((await editVsdx(actions, [order('back')])).bytes)).toEqual(['2', '1']);
 });
 
 it('keeps connection identities and literal color formulas intact while reordering', async () => {
@@ -213,6 +226,39 @@ it('exposes scene admission for top-level ordinary shapes without promising sour
 	page.shapes[1]!.layerIds = ['0'];
 	expect(visioOrderingShape(page, '2')).toBeUndefined();
 	page.shapes[1]!.layerIds = [];
+	// A stencil shape beside it does not matter, and is itself ordered unless its layer is locked.
 	page.shapes[2]!.masterId = '1';
-	expect(visioOrderingShape(page, '2')).toBeUndefined();
+	expect(visioOrderingShape(page, '2')).toBe(page.shapes[1]);
+	expect(visioOrderingShape(page, '3')).toBe(page.shapes[2]);
+	page.layers = [{ id: '0', name: 'Flowchart', visible: true, printable: true, locked: true }];
+	page.shapes[2]!.layerIds = ['0'];
+	expect(visioOrderingShape(page, '3')).toBeUndefined();
+	page.layers[0]!.locked = false;
+	expect(visioOrderingShape(page, '3')).toBe(page.shapes[2]);
+});
+
+it('orders a stencil shape past a master band it cannot read as ordinary', async () => {
+	const original = await fixture({
+		masters: [{ id: '2', shapes: box('6', cell('DisplayLevel', 0)) }],
+		pages: [
+			{
+				id: '0',
+				contents: `<Shapes>${box('1')}${shape('2', cell('PinX', 1) + cell('PinY', 1), 'Master="2"')}${box('3')}</Shapes>`,
+			},
+		],
+	});
+	expect(await ids((await editVsdx(original, [order('front')])).bytes)).toEqual(['1', '3', '2']);
+	// A drawn shape moves past the stencil shape too.
+	expect(await ids((await editVsdx(original, [order('front', '1')])).bytes)).toEqual([
+		'2',
+		'3',
+		'1',
+	]);
+	// A stencil shape whose master is missing stops every reorder on the page.
+	const dangling = await fixture({
+		pages: [{ id: '0', contents: `<Shapes>${box('1')}${shape('2', '', 'Master="9"')}</Shapes>` }],
+	});
+	await expect(editVsdx(dangling, [order('front', '1')])).rejects.toMatchObject({
+		code: 'UNSUPPORTED_SHAPE_ORDER',
+	});
 });

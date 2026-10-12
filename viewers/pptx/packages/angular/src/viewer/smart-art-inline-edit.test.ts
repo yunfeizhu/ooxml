@@ -1,3 +1,5 @@
+import { computeSmartArtLayout } from 'ooxml-ui/pptx';
+import type { RenderedNode } from 'ooxml-ui/pptx';
 /**
  * Tests for the pure on-canvas SmartArt inline-edit helpers.
  *
@@ -12,8 +14,6 @@
 import type { PptxElement, PptxSlide, PptxSmartArtData, PptxSmartArtNode } from 'pptx-viewer-core';
 import { describe, expect, it } from 'vitest';
 
-import { computeSmartArtLayout } from 'ooxml-ui/pptx';
-import type { RenderedNode } from 'ooxml-ui/pptx';
 import { DEFAULT_PALETTE } from './smart-art-drawing';
 import {
 	beginDrawingNodeEdit,

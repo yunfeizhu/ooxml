@@ -1,9 +1,9 @@
-import type { PptxViewProperties } from 'pptx-viewer-core';
 import type { DeckViewPreferences } from 'ooxml-ui/pptx';
 import {
 	viewerPreferencesFromViewProperties,
 	viewPropertiesPatchFromPreferences,
 } from 'ooxml-ui/pptx';
+import type { PptxViewProperties } from 'pptx-viewer-core';
 import { watch } from 'vue';
 import type { Ref } from 'vue';
 

@@ -32,7 +32,6 @@ import {
 	output,
 } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-
 import { isActionHidden } from 'ooxml-ui/pptx';
 import type {
 	MobileToolbarId,
@@ -40,6 +39,7 @@ import type {
 	MobileToolbarViewState,
 	ToolbarActionId,
 } from 'ooxml-ui/pptx';
+
 import { translationsSignal } from './translations-signal';
 
 @Component({

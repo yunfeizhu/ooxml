@@ -43,6 +43,86 @@ Reordering accepts
 `order: 'front' | 'back' | 'forward' | 'backward'`. Every command includes
 `pageId` and `shapeId`; the complete command batch is atomic.
 
+The Text dialog properties extend `format-text`: `fontTransparency` (percent),
+`textCase` (`normal`, `all-caps`, `initial-caps`, `small-caps`), `textPosition`
+(`normal`, `superscript`, `subscript`), `language` (a Windows LCID), `letterSpacing`,
+`indentRight`, `indentFirst`, `spaceBefore`, `spaceAfter` (points), `lineSpacing`
+(`multiple` writes a negative SpLine, `exact` points), `bulletStyle` (0-7), `bulletText`
+(one character), `margins`, `textBackground` (hex or `none`, saved with Visio's `RGB()+1`
+formula), `textBackgroundTransparency` and `textBlock` (the Text Block tool: centre, size
+as fractions of Width/Height and an angle, written as `Width*k`/`Height*k` formulas so
+the block follows later resizes). Tab stops are not written.
+
+## Layer properties
+
+`set-layer-properties` sets a page layer's `visible`, `print` or `lock` flag: the Visible, Print
+and Lock cells of the layer's row in the page's Layer section (Home > Layers > Layer Properties).
+Omitted flags are kept, a missing cell is added, and a flag driven by a formula is refused. Layer
+property edits form their own transaction and change only `pages.xml`. Renaming, removing and
+recolouring layers, and the Active, Snap and Glue flags, are not written.
+
+## Document stencil and docked stencils
+
+`parseVsdx` lists the drawing's visible masters as `document.masters` (`VisioMaster`: `id`, `name`,
+`nameU`, the master page size, `rootCount`, `oneDimensional` and the master's shapes resolved
+alone, for a preview), and the file names of its Stencil windows (`visio/windows.xml`) as
+`document.stencils`. `visioBuiltInStencil` maps Visio's `BASIC`, `BASFLO` and `ARROWS` stencil
+files to the built-in stencils; `createVsdx({ stencils })` writes those windows. Stencil files are
+never opened.
+
+`insert-master-instance` drops a master on a page as Visio does: a shape that names the master and
+carries `PinX` and `PinY`, plus one `MasterShape` sub-shape per sub-shape of a group master, and
+the page's relationship to the master part when it is missing. The instance is named as Visio
+names it (the master's name, then `Name.ID` once the page has that name), keeps a one-shape
+master's size beside the pin as inherited caches (`F="Inh"`, the form Visio saves and keeps, so
+edits that read a shape's box from the page take it like a drawn shape), joins the master's
+layers by name (missing layers are added to the page; not for group masters) and grows an Auto
+Size page. A master with several top-level shapes is dropped as the group Visio makes: a
+`Type="Group"` shape that names the master, as large as the shapes together, with each shape as a
+sub-shape whose pin and size follow the group (`Sheet.N!Width*0.25`). Visio's Dynamic connector
+master drops as a connector with two free ends (`begin`/`end`). Another 1-D master, a master that
+inherits another and a master whose top-level shapes are turned or flipped are refused
+(`UNSUPPORTED_MASTER_INSTANCE`). `visioMasterDropCommand` (`ooxml-core/visio/ui`) builds the edit
+from a pointer position.
+
+`drop-stencil-master` drops a master of a built-in stencil (`VISIO_BUILT_IN_STENCILS`: Basic
+Shapes, Basic Flowchart Shapes, Miscellaneous Flowchart Shapes, Arrow Shapes) the way Visio drops
+one from a stencil file: the master is copied into the drawing's document stencil the first time
+(`masters.xml`, its master part, relationships and content types, created when the drawing has
+none) and the page gets an instance of it. A master copied earlier is found by its `UniqueID`; a
+master of the drawing with the same universal name is reused when it is one droppable 2-D shape,
+because the built-in stencils stand in for Visio's stencil files. The masters are this package's
+own geometry in the drawing's default styles (`visioBuiltInMaster` gives each a stable `UniqueID`
+in the form Visio keeps and its own `BaseID`); they carry no icon, connection points or Shape
+Data. `visioStencilDropCommand` builds the edit from a pointer position.
+
+Master drops may share a call with other edits: the drops run first, in order, and the remaining
+edits run after them as one transaction, so a drop can be styled, resized, typed into and
+connected in the same `editVsdx` call. A refusal anywhere fails the whole call.
+
+Connectors glue to a stencil instance and follow it when it moves or is resized; its size and
+connection points are read through its master, so an instance that carries only its pin (as Visio
+and this package write a fresh drop) is a glue target like any other. `change-shape` with a
+built-in `shape` on a stencil instance copies that built-in master into the drawing and makes the
+shape an instance of it, through the same `change-shape` by `masterId` that the Document Stencil
+masters use (`edit-change-shape-builtin.ts`, `edit-instance-replace.ts`). The shape keeps its
+position, text, formatting, layers and whole-shape glue, keeps the size it shows when connectors
+are glued to it, and is renamed after the new master (Visio also gives it a new ID; here the ID
+stays). It forms its own transaction.
+
+## Text fields
+
+`insert-text-field` adds a `<fld>` and a Field row (Value formula and cache, Format
+picture, Type 0 string, 2 number, 5 date) at an offset in the source text or at the end.
+It evaluates `NOW()`, the document date functions, `TITLE()`, `CREATOR()` and the other
+document-property functions, `PAGENAME()`, `PAGENUMBER()`, `PAGECOUNT()` and numeric
+formulas over the shape's own cells; anything else is refused. Format pictures are the
+`VISIO_FIELD_FORMATS` subset (`{{date picture}}`, `0`, `0.00`, `#,##0`, ` u` units, `@`).
+The parser shows evaluated page and document context and cached Values; other fields keep
+their stored text. Range edits treat a field as one atomic token and refuse ranges that
+touch it; whole-text replacement of a shape with fields is refused. Visio reopening
+these rows is not verified.
+
 Formatting admits unlayered local leaf shapes and local lines. Whole-shape text
 edits update effective character/paragraph rows, preserving mixed-run markers,
 unrelated style bits and supported cached fields. Proven local `F="Inh"` text
@@ -84,8 +164,9 @@ names, preserving source stacking order, mixed text and inert unknown XML. It
 remaps references between copied shapes and proves affected formula caches.
 The `visioDuplicateCommand` helper defaults to 0.33 drawing inches right/down.
 Native Visio 16 capture and reopen cover nine single, multiple and movement-locked
-cases at three scales. Groups, masters, layers, foreign shapes and unsupported
-dependencies remain refused.
+cases at three scales. Groups made here, drawn shapes on a layer, foreign shapes
+and unsupported dependencies remain refused. A 2D stencil instance is copied as
+an instance of its master (see "Stencil instances: whole-shape commands").
 
 `captureVisioClipboard(bytes, pageId, shapeIds)` returns an owned
 `VisioClipboardSnapshot`; `serializeVisioClipboard` and
@@ -114,7 +195,8 @@ without weakening retained-reference protection. Native Visio 16 deletion and
 core capture/delete/paste reopen cover nine cases at three drawing scales,
 including reverse selection order and independent movement locks. Use
 `scripts/record-visio-batch-delete.ps1` and `VISIO_NATIVE_BATCH_DELETE_DIR` for
-the optional oracle. Connector healing and inherited/group deletion remain open.
+the optional oracle. Stencil instances are deleted whole and a stencil connector
+glued to a deleted shape is released; deleting a group made here remains open.
 
 ## Plan literal text replacement
 
@@ -367,8 +449,29 @@ STORE compression to avoid introducing compression ratios outside reader limits;
 files may grow and exceeding the output limit fails without returning a result.
 
 Only VSDX drawing packages are admitted. Signed/macro-indicated packages,
-master-linked or deleted targets, missing/ambiguous IDs, rich text, fields and
-unknown text markup are rejected. Replacement text must contain valid XML
+deleted targets, missing/ambiguous IDs, rich text, fields and unknown text markup
+are rejected for local shapes. A stencil (master) instance, or a sub-shape of a
+group instance, follows what native Visio 16 saves
+(`scripts/record-visio-instance-text.ps1`, checked by the optional
+`VISIO_NATIVE_INSTANCE_TEXT_DIR` test): replacing all its text writes a plain
+local `Text` and nothing else, even over formatted master text; over master
+text with fields each inherited Field row is also marked deleted locally; a
+range edit (Find and Replace, editing around a field) works on the local `Text`
+or on a local copy of the master's that keeps its run and field markers. The
+master's `LockTextEdit` applies unless the instance overrides it. An instance
+with its own formatted text accepts range edits only. A shape that sizes
+itself from its text (`TEXTWIDTH(TheText)`, `TEXTHEIGHT(TheText, ...)`, the
+flowchart masters' Resize with Text) is measured again after a text, font or
+text block edit and after a resize (`edit-text-size.ts`): its size and what
+follows from it are saved as refreshed caches of unchanged formulas. The
+measurer (`text-extent.ts`, `visioTextExtents`) uses the fonts' own advance
+widths as recorded from Visio 16 (`scripts/record-visio-glyph-advances.ps1`,
+`scripts/record-visio-text-extent.ps1`); `setVisioTextMeasurer` lets a UI
+measure other fonts. Text that cannot be measured reliably (an unknown or
+guessed font, bullets, tabs, a line that only just fits) keeps the saved size
+and the result carries an `edit-text-size-kept` diagnostic; a refreshed size
+carries `edit-text-size`.
+Replacement text must contain valid XML
 characters and cannot contain carriage returns. Edited documents containing
 carriage-return text or tab/newline/carriage-return attribute values are rejected
 conservatively because this slice does not establish their serialization fidelity.
@@ -611,7 +714,10 @@ contracts. Inherited pin guards and redirection still refuse. Only the two local
 pin caches are written; dimensions, geometry, LocPin caches, master attributes
 and definitions remain unchanged. Any other effective or page cache reading a
 changed pin refuses the whole transaction, including transitive dependencies.
-Master-linked resize and deletion remain unsupported.
+Master-linked deletion remains unsupported. A formula the proof cannot follow
+(menus, add-on calls, container lookups: every Visio stencil shape has some)
+no longer refuses the transaction on its own: it can only read another page
+shape by naming its sheet, and naming an edited or dependent cell still refuses.
 Width, Height and LocPin caches may remain inherited from a resolved master/style.
 Both local cache representations and effective inherited sources undergo error/unit
 checks. No missing transform cells are synthesized, and effective dimensions are
@@ -619,17 +725,162 @@ read-only transaction data keyed by the owned instance DOM.
 Move preparation has an aggregate 100,000-work budget charging formula source
 length, evaluation steps and cell/command checks, with deadline checks throughout.
 
+### Stencil instances: resize, rotate, flip and format
+
+`resize-shape`, `rotate-shape`, `flip-shape`, `format-shape` and `format-text`
+accept a top-level instance of a one-shape master (`edit-instance-*.ts`). What
+is written was recorded from Visio 16 with
+`scripts/record-visio-instance-geometry.ps1`; the optional
+`VISIO_NATIVE_INSTANCE_GEOMETRY_DIR` test compares against those recordings.
+
+- A changed Width, Height, PinX, PinY, Angle or flip flag becomes a local value
+  on the instance (a new Width or Height is tagged `U="IN"`, as Visio's).
+- Every inherited cell whose value follows from it is evaluated over the
+  instance's effective sheet (its own cells over the master's) and written as a
+  refreshed cache marked `F="Inh"`, in the master's section and row, so the
+  master's formula stays in effect. Unchanged values are not written. A
+  refreshed length whose master cell has no unit of its own is tagged
+  `U="IN"`, as Visio's.
+- Only arithmetic, comparisons, `IF`, `MIN`, `MAX`, `BOUND`, `AND`/`OR`/`NOT`
+  and references inside the instance are evaluated. A drawn cell (transform, text block,
+  geometry, connection point, formatting) that depends on anything else refuses
+  the edit with `EDIT_UNSUPPORTED_DEPENDENCY`. Caches in User, Property,
+  Actions, Scratch and similar data sections that cannot be computed (they
+  usually need text metrics) are left as saved; Visio does not recompute them on
+  open, so a menu entry such as Resize with Text can stay hidden until the
+  shape is next changed in Visio.
+- A dimension that is not changed but follows the other one or the text
+  (`Height = User.ResizeTxtHeight`) is written as a local value too, so the
+  shape keeps the size asked for.
+- Formatting is planned on a detached copy of the master with the instance laid
+  over it and saved as local cells and partial Character and Paragraph rows.
+  Stencil shapes sit on their stencil's layer; they are refused only when that
+  layer is locked.
+- `move-shape` takes this path when a connector is glued to the instance or the
+  pin-only proof above cannot follow the drawing; cells that read the pin are
+  then recomputed instead of refused.
+- Visio does not lay connectors out again when it opens a file. A glued
+  connector that `rerouteConnector` cannot handle (Visio's own Dynamic
+  connector is a master instance) therefore refuses the move, resize or
+  rotation with `UNSUPPORTED_INSTANCE_EDIT` instead of being left behind.
+
+#### Instances of group masters
+
+An instance of a group master (Visio's Can, Cube and Pyramid, most network and
+people shapes) takes the same edits (`edit-instance-scope.ts`). Recorded with
+`scripts/record-visio-group-instance.ps1`; the optional
+`VISIO_NATIVE_GROUP_INSTANCE_DIR` test compares cell for cell.
+
+- The scope of the edit is the group and every sub-shape at any depth. A
+  master's formula names the master's shape IDs (`Sheet.5!Width`), a formula
+  written on the page names the page's; both resolve to the instance's sheets,
+  so a resize refreshes the sub-shapes' pins, sizes and geometry as `Inh`
+  caches. Move, rotate and flip write on the group alone.
+- `BOUND` (control handles), percentage literals and a bare constant added to
+  a length (inches) are evaluated; a named `Controls` row resolves by name.
+- `format-shape` and `format-text` on the group reach the group and every
+  sub-shape. A cell a master protects with `GUARD`, and a sub-shape that cannot
+  take the formatting (no text, a lock), is passed over, as Visio's ribbon
+  does; the command fails only when every part refuses.
+- A sub-shape's ID targets it alone, with its own sub-shapes when it is a
+  nested group (Visio's sub-selection). There a protected cell refuses the
+  command. `replace-plain-text` writes a local `Text` on the sub-shape.
+- The group Visio makes for a master with several top-level shapes has no
+  master shape behind it: its cells are local, and its sub-shapes follow it
+  through formulas written on the page, which keep their formulas when resized.
+
+Refused for groups: a resize when a sub-shape keeps a pin or size with no
+formula (Visio scales it; that is not reproduced), a shape added to the
+instance on the page, a picture inside the group, and resizing or moving one
+sub-shape on its own.
+
+Refused: masters that inherit another master, 1D masters (lines and
+connectors), locally deleted sections, `GUARD`ed sizes and pins, active locks,
+and another page shape whose formula reads a changed cell of the instance. A shape whose master sizes it
+from its text still keeps its saved size after a text edit: `TEXTHEIGHT` needs
+text metrics the core does not have.
+
+Refused: group masters and sub-shapes of a group instance, masters that inherit
+another master, 1D masters (lines and connectors), locally deleted sections or
+rows, `GUARD`ed sizes and pins, active locks, and another page shape whose
+formula reads a changed cell of the instance. A shape whose master sizes it
+from its text follows the text where it can be measured, and otherwise keeps
+its saved size (see the plain-text section).
+
+rows, `GUARD`ed sizes and pins, active locks, a locked layer, and another page
+shape whose formula reads a changed cell of the instance. A shape whose master
+sizes it from its text still keeps its saved size after a text edit:
+`TEXTHEIGHT` needs text metrics the core does not have.
+
+### Stencil instances: whole-shape commands
+
+Delete, Duplicate, Copy and Paste, ordering, layers, Group and Change Shape take
+stencil instances as well (`edit-instance-shape.ts` and its neighbours). What is
+written was recorded from Visio 16 with
+`scripts/record-visio-instance-shape.ps1`; the optional
+`VISIO_NATIVE_INSTANCE_SHAPE_DIR` test compares delete, duplicate, bring to
+front, layer assignment and master replacement against those recordings.
+
+- `delete-shape` removes the instance with its sub-shapes and leaves the master
+  in the document stencil. A stencil connector (Visio's Dynamic connector)
+  glued to a deleted shape keeps its end where it was: the glue and trigger
+  formulas become plain values and the Connect row goes. Deleting such a
+  connector removes its Connect rows. Checked: `LockDelete` in effect (the
+  instance's cell, else its master's) and locked layers. Visio also steps the
+  connector's `ConFixedCode` and drops a released cell that equals the master's;
+  this editor leaves both as they were.
+- `duplicate-shapes` and `paste-shapes` copy a 2D instance as it is: the same
+  master and local cells, a new sheet ID and name (`Process.6`), the pin moved.
+  Sub-shapes of a group instance take the next free IDs. A connector glued to
+  the source stays with the source. A paste needs the same master under the
+  same ID (its UniqueID, BaseID and NameU are captured with the clipboard) and a
+  page already related to it; anything else is a paste between drawings and is
+  refused. Stencil lines and connectors are not copied.
+- `reorder-shape` moves an instance among its siblings, or a drawn shape past
+  instances, groups and pictures. Each sibling must sit in the ordinary display
+  band; an instance's band and locks come from its master when it has none.
+- `assign-layers` writes a local `LayerMember` on an instance.
+- `group-shapes` takes unglued 2D instances as members: each stays an instance
+  and takes its group-local pin as a local value. A group that holds instances
+  can be moved, rotated and ungrouped; `ungroup-shape` also turns the scaling
+  formulas of a group Visio made into values. A rotated or flipped group cannot
+  be ungrouped while it holds instances.
+- `change-shape` with `masterId` makes a one-shape 2D instance an instance of
+  another such master of the drawing: the `Master` attribute changes, the
+  caches of the old master's formulas are dropped, and the caches that follow
+  the shape's own size are evaluated against the new master. Position, a local
+  size, text, formatting, shape data and layers stay; the page gains its
+  relationship to the master's part. Visio also gives the shape a new sheet ID;
+  this editor keeps it, so dynamic glue stays valid. Refused: glue to a
+  connection point, glue when the size would change, a local override of the
+  old master's geometry or other rows, `LockReplace` and locked layers.
+- Moving, resizing, rotating or flipping an instance on a locked layer is
+  refused by the core, not only greyed out by the interface.
+
+Whole-shape commands used to be refused by any formula in the package that the
+analyser called dynamic, which every Visio stencil master has (`SETATREF`,
+`SHAPETEXT`, `CONTAINERSHEETREF`, event functions). `formula-functions.ts`
+lists the ShapeSheet functions Visio documents, and the scope is now: a
+function outside that list refuses; so does a reference built from text
+(`INDIRECT`, `EVALCELL`, `EVALTEXT`, `REF`); a lookup through containers
+(`CONTAINERSHEETREF` and its family) refuses only when the shape being
+reordered, copied or grouped is itself a container or a list. A master's
+`Sheet.N!` reference names a shape of that master and no longer collides with a
+new page shape of the same ID.
+
 This first bundle has deliberate exclusions:
 
-| Exclusion                                                                     | Reason                                                                              | Next expansion                                                                  |
-| ----------------------------------------------------------------------------- | ----------------------------------------------------------------------------------- | ------------------------------------------------------------------------------- |
-| Master-linked resize/delete, unproven master moves, groups and foreign shapes | Broader instance overrides, nested transforms and resource semantics are not proven | Additional scoped master/instance proofs                                        |
-| Glue/Connects participation and broader 1D editing                            | Proven straight-line translation does not establish connector routing or glue       | Endpoint editing and glued connector routing                                    |
-| Non-page affected/unknown dependencies                                        | Page metadata, document, master and style scopes can otherwise retain stale caches  | Scoped package-wide graph, starting with page metadata and pure theme functions |
-| GUARD, SETATREF and referenced transform formulas                             | Direct overwrites would bypass protection/redirection or discard semantics          | Verified redirection commands; never bypass protection                          |
-| Protected cells and inherited/ambiguous protection                            | LockMoveX/Y, LockWidth/Height/Aspect/Delete must be honored                         | Proven effective protection resolution                                          |
-| Absolute geometry lacking dimension-dependent formulas; nonlinear geometry    | Scaling cached coordinates can distort shape semantics                              | Additional row evaluators and explicit scaling proofs                           |
-| Deletion referenced outside a removed set                                     | Retained formulas, Connects or metadata could dangle                                | Explicit validated dependency-removal and connector-healing transactions        |
+| Exclusion                                              | Reason                                                  | Next expansion                                 |
+| ------------------------------------------------------ | ------------------------------------------------------- | ---------------------------------------------- |
+| Master-linked delete, group masters and foreign shapes | Nested transforms and resource semantics are not proven | Group instance overrides and instance deletion |
+
+| Resizing group masters; foreign shapes | Nested transforms and resource semantics are not proven | Group instance overrides |
+| Glue/Connects participation and broader 1D editing | Proven straight-line translation does not establish connector routing or glue | Endpoint editing and glued connector routing |
+| Non-page affected/unknown dependencies | Page metadata, document, master and style scopes can otherwise retain stale caches | Scoped package-wide graph, starting with page metadata and pure theme functions |
+| GUARD, SETATREF and referenced transform formulas | Direct overwrites would bypass protection/redirection or discard semantics | Verified redirection commands; never bypass protection |
+| Protected cells and inherited/ambiguous protection | LockMoveX/Y, LockWidth/Height/Aspect/Delete must be honored | Proven effective protection resolution |
+| Absolute geometry lacking dimension-dependent formulas; nonlinear geometry | Scaling cached coordinates can distort shape semantics | Additional row evaluators and explicit scaling proofs |
+| Deletion referenced outside a removed set | Retained formulas, Connects or metadata could dangle | Explicit validated dependency-removal and connector-healing transactions |
 
 Relative MoveTo/LineTo geometry scales with Width/Height. Absolute MoveTo/LineTo
 coordinates require a supported transitive dependency on dimensions, except zero

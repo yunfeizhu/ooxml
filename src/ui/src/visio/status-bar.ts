@@ -1,6 +1,7 @@
 /**
- * Visio's status bar on the shared `office-ui-status-bar`: page and shape metrics, a live
- * message region, compatibility notes, the host footer slot and the shared zoom slider.
+ * Visio's status bar on the shared `office-ui-status-bar`: Page n of m, the selection's Width,
+ * Height and Angle, and the drawing language on the left; Presentation Mode and the shared zoom
+ * slider on the right. Announcements go to a visually hidden live region; only errors show.
  */
 export function createStatusBar(doc: Document): HTMLElement {
 	const bar = doc.createElement('office-ui-status-bar');
@@ -18,23 +19,7 @@ export function createStatusBar(doc: Document): HTMLElement {
 	message.setAttribute('role', 'status');
 	const text = doc.createElement('span');
 	text.dataset.status = '';
-	const diagnostics = doc.createElement('span');
-	diagnostics.dataset.diagnostics = '';
-	message.append(text, diagnostics);
-	const notes = doc.createElement('div');
-	notes.className = 'notes-strip';
-	const notesButton = doc.createElement('button');
-	notesButton.type = 'button';
-	notesButton.dataset.chrome = 'notes';
-	notesButton.setAttribute('aria-controls', 'inspector-pane');
-	notesButton.setAttribute('aria-expanded', 'false');
-	const count = doc.createElement('span');
-	count.className = 'notes-count';
-	count.dataset.noteCount = '';
-	notesButton.append('Notes', count);
-	const local = doc.createElement('span');
-	local.textContent = 'Files stay in your browser';
-	notes.append(notesButton, local);
+	message.append(text);
 	const footer = doc.createElement('slot');
 	footer.name = 'workspace-footer';
 	const zoom = doc.createElement('office-ui-zoom-slider');
@@ -54,9 +39,11 @@ export function createStatusBar(doc: Document): HTMLElement {
 	presentation.setAttribute('title', 'Presentation Mode: open a drawing with a foreground page.');
 	bar.append(
 		item('data-page-status'),
-		item('data-shape-status'),
+		item('data-width-status'),
+		item('data-height-status'),
+		item('data-angle-status'),
+		item('data-language-status'),
 		message,
-		notes,
 		footer,
 		presentation,
 		zoom,
@@ -64,9 +51,24 @@ export function createStatusBar(doc: Document): HTMLElement {
 	return bar;
 }
 
+/** The status bar's language: the viewer's `lang`, else the browser's, as Visio names it. */
+export function statusLanguage(tag: string): string {
+	try {
+		const locale = new Intl.Locale(tag || 'en-US').maximize();
+		const names = new Intl.DisplayNames(['en'], { type: 'language' });
+		const language = names.of(locale.language) ?? '';
+		const region = locale.region
+			? new Intl.DisplayNames(['en'], { type: 'region' }).of(locale.region)
+			: '';
+		return region ? `${language} (${region})` : language;
+	} catch {
+		return '';
+	}
+}
+
 /**
- * Visio's page bar under the drawing: the All pages list, the shared document tab strip and
- * Insert Page, enabled for an editable source-backed drawing.
+ * Visio's page bar under the drawing: the shared document tab strip with the All pages list and
+ * Insert Page after the tabs, enabled for an editable source-backed drawing.
  */
 export function createPageTabs(doc: Document): HTMLElement {
 	const bar = doc.createElement('div');
@@ -84,6 +86,10 @@ export function createPageTabs(doc: Document): HTMLElement {
 	strip.setAttribute('add-label', 'Insert Page');
 	strip.setAttribute('add-disabled', '');
 	strip.setAttribute('add-title', 'Insert Page: open a .vsdx file to edit pages.');
-	bar.append(all, strip);
+	// Visio's order: the page tabs, then All, then Insert Page.
+	strip.toggleAttribute('plain', true);
+	all.slot = 'after-tabs';
+	strip.append(all);
+	bar.append(strip);
 	return bar;
 }

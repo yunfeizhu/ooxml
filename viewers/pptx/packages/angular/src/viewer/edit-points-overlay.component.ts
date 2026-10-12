@@ -30,8 +30,6 @@ import {
 	viewChild,
 } from '@angular/core';
 import { TranslatePipe } from '@ngx-translate/core';
-import type { PptxElement } from 'pptx-viewer-core';
-
 import type {
 	CanvasSize,
 	EditPointsCommandId,
@@ -44,6 +42,8 @@ import {
 	EditPointsSession,
 	overlayPointerInput,
 } from 'ooxml-ui/pptx';
+import type { PptxElement } from 'pptx-viewer-core';
+
 import { EditPointsMenuComponent } from './edit-points-menu.component';
 
 /** One Edit Points commit, addressed to its shape. */

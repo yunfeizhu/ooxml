@@ -1,8 +1,4 @@
-import {
-	applyImportedPptxData,
-	buildPptxJsonDocument,
-	deserializePptxFromJson,
-} from '../../index';
+import { applyImportedPptxData, buildPptxJsonDocument, deserializePptxFromJson } from '../../index';
 import type { PptxJsonAssetStats } from '../../index';
 
 import type { ToolContext, ToolResult } from '../types';

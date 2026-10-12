@@ -1,9 +1,9 @@
-import type { PptxSlide } from 'pptx-viewer-core';
 import type {
 	CollaborationLivePatcher,
 	ResolvedKeyboardCustomization,
 	SnapGuideInput,
 } from 'ooxml-ui/pptx';
+import type { PptxSlide } from 'pptx-viewer-core';
 
 import type { ContextMenuCellTarget } from './context-menu-dispatch';
 

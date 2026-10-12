@@ -1,5 +1,5 @@
-import type { TextStyle } from 'pptx-viewer-core';
 import { TEXT_WARP_PRESETS } from 'ooxml-ui/pptx';
+import type { TextStyle } from 'pptx-viewer-core';
 
 import type { Translator } from '../../i18n';
 import { createInspectorSelect, createInspectorCheckbox } from './controls-extra';

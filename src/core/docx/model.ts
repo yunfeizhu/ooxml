@@ -14,12 +14,7 @@ export type {
 	TabStop,
 } from './model-paragraph';
 import type { Paragraph } from './model-paragraph';
-export type {
-	HyperlinkInfo,
-	InlineImage,
-	PicturePlacement,
-	WatermarkSpec,
-} from './inline-model';
+export type { HyperlinkInfo, InlineImage, PicturePlacement, WatermarkSpec } from './inline-model';
 import type { Note, SectionProperties } from './section-model';
 export type {
 	HeaderFooterContent,
@@ -55,11 +50,7 @@ export type {
 	ThemeFontRole,
 	WordUnderlineStyle,
 } from './theme-model';
-export type {
-	RunFormatting,
-	CharacterStyleDefinition,
-	RunStyleCatalog,
-} from './run-style-model';
+export type { RunFormatting, CharacterStyleDefinition, RunStyleCatalog } from './run-style-model';
 import type { RunStyleCatalog } from './run-style-model';
 export type {
 	TableBorderSide,

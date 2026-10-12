@@ -16,7 +16,6 @@
  * @module viewer/load-notices
  */
 import { Injectable, computed, inject, signal } from '@angular/core';
-
 import {
 	checkModifyPassword,
 	compatibilityWarningToasts,
@@ -27,6 +26,7 @@ import type {
 	ModifyPasswordCheckResult,
 	ReadOnlyRecommendation,
 } from 'ooxml-ui/pptx';
+
 import { LoadContentService } from './load-content.service';
 
 /** Why the last password attempt failed; see `checkModifyPassword` (`pptx-viewer-shared`). */

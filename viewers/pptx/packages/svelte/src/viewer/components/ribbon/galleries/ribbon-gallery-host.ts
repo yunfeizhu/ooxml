@@ -1,3 +1,10 @@
+import { applyRibbonGalleryItem, buildRibbonGallery } from 'ooxml-ui/pptx';
+import type {
+	RibbonGalleryApplyResult,
+	RibbonGalleryContext,
+	RibbonGalleryDescriptor,
+	RibbonGalleryId,
+} from 'ooxml-ui/pptx';
 /**
  * The ribbon galleries' link to the editor: it builds the shared
  * `RibbonGalleryContext` from the editor's live selection and deck, asks
@@ -13,13 +20,6 @@
  */
 import type { PptxTheme, PptxThemePreset, XmlObject } from 'pptx-viewer-core';
 import { THEME_PRESETS } from 'pptx-viewer-core';
-import { applyRibbonGalleryItem, buildRibbonGallery } from 'ooxml-ui/pptx';
-import type {
-	RibbonGalleryApplyResult,
-	RibbonGalleryContext,
-	RibbonGalleryDescriptor,
-	RibbonGalleryId,
-} from 'ooxml-ui/pptx';
 import { getContext, setContext } from 'svelte';
 
 import type { EditorState } from '../../../editor/editor-state.svelte';

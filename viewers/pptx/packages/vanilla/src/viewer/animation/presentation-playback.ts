@@ -1,4 +1,3 @@
-import type { PptxSlide, PptxSlideTransition } from 'pptx-viewer-core';
 import type {
 	BuildRafHandle,
 	ElementAnimationState,
@@ -20,6 +19,7 @@ import {
 	resolveMediaTimeNodeElementIds,
 	scheduleAutoAdvanceChain,
 } from 'ooxml-ui/pptx';
+import type { PptxSlide, PptxSlideTransition } from 'pptx-viewer-core';
 
 import {
 	applyElementAnimationStyles,

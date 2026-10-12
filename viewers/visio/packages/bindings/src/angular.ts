@@ -34,6 +34,7 @@ export class VisioViewerComponent implements AfterViewInit, OnChanges, OnDestroy
 	@Input() pageIndex?: number;
 	@Input() zoom?: number;
 	@Input() showToolbar?: boolean;
+	@Input() ribbonAddIns?: ViewerProperties['ribbonAddIns'];
 	@Input() events?: ViewerCallbacks;
 	@Output() documentLoad = new EventEmitter<ViewerEvents['document-load']>();
 	@Output() documentChange = new EventEmitter<ViewerEvents['document-change']>();
@@ -42,6 +43,7 @@ export class VisioViewerComponent implements AfterViewInit, OnChanges, OnDestroy
 	@Output() zoomChange = new EventEmitter<ViewerEvents['zoom-change']>();
 	@Output() shapeSelect = new EventEmitter<ViewerEvents['shape-select']>();
 	@Output() selectionChange = new EventEmitter<ViewerEvents['selection-change']>();
+	@Output() ribbonAddIn = new EventEmitter<ViewerEvents['office-ribbon-add-in']>();
 	private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
 	private binding: MountedViewer | undefined;
 	private readonly handle = viewerHandle(() => this.binding);
@@ -57,6 +59,7 @@ export class VisioViewerComponent implements AfterViewInit, OnChanges, OnDestroy
 		'zoom-change': this.zoomChange,
 		'shape-select': this.shapeSelect,
 		'selection-change': this.selectionChange,
+		'office-ribbon-add-in': this.ribbonAddIn,
 	} satisfies { [K in keyof ViewerEvents]: EventEmitter<ViewerEvents[K]> };
 	private options() {
 		return withEventEmitter(this, (name, value) => {
@@ -157,6 +160,9 @@ export type {
 	CreateVsdxOptions,
 	ViewerEditState,
 	VsdxExportResult,
+	RibbonAddInCommand,
+	RibbonAddInGroup,
+	RibbonAddInTab,
 } from './common';
 
 // A new shared property must also become an actual Angular input on this class.

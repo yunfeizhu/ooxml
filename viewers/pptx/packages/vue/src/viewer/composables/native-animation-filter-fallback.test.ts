@@ -1,3 +1,4 @@
+import { buildTimeline } from 'ooxml-ui/pptx';
 /**
  * Regression test: `p:animEffect/@filter` playback reaches the Vue binding.
  * Vue resolves `pptx-viewer-shared` to source via its own `vitest.config.ts`
@@ -5,7 +6,6 @@
  * filter-fallback behaviour added to shared (`render/animation-filter-effects.ts`).
  */
 import type { PptxNativeAnimation } from 'pptx-viewer-core';
-import { buildTimeline } from 'ooxml-ui/pptx';
 import { describe, expect, it } from 'vitest';
 
 describe('vue: native animation @filter fallback', () => {

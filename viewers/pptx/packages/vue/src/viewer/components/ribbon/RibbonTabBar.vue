@@ -9,6 +9,7 @@
 import { ChevronDown, ChevronUp } from 'lucide-vue-next';
 import { contextualTabLabelKey } from 'ooxml-ui/pptx';
 import type {
+	RibbonAddInTab,
 	RibbonContextualTabId,
 	ToolbarActionId,
 	ToolbarTabDefinition,
@@ -26,6 +27,11 @@ interface Props {
 	visibleTabs: ToolbarTabDefinition[];
 	/** Contextual tabs the selection brings up (shared `visibleContextualTabs`). */
 	contextualTabs?: readonly RibbonContextualTabId[];
+	/** The host's tabs (`ribbonAddIns`), shown after the fixed tabs. */
+	addInTabs?: readonly RibbonAddInTab[];
+	/** The host tab being shown; no fixed or contextual tab is selected while one is. */
+	activeAddIn?: string | null;
+	onSelectAddIn?: (id: string) => void;
 	onSetToolbarSection: (section: ToolbarSection) => void;
 	canEdit: boolean;
 	onEnterRehearsalMode?: () => void;
@@ -57,12 +63,12 @@ const screenTip = inject(ScreenTipKey, (label: string) => label);
 			:key="sec.id"
 			type="button"
 			role="tab"
-			:aria-selected="props.toolbarSection === sec.id"
+			:aria-selected="!props.activeAddIn && props.toolbarSection === sec.id"
 			:title="screenTip(t(sec.labelKey))"
 			:class="
 				cn(
 					'relative px-3.5 py-2 text-[12px] font-medium whitespace-nowrap transition-colors max-md:min-h-[36px] max-md:px-3',
-					props.toolbarSection === sec.id
+					!props.activeAddIn && props.toolbarSection === sec.id
 						? sec.id === 'file'
 							? 'text-white bg-primary/80 rounded-sm'
 							: 'text-foreground after:absolute after:-bottom-px after:left-0 after:right-0 after:h-[2.5px] after:bg-primary'
@@ -76,17 +82,38 @@ const screenTip = inject(ScreenTipKey, (label: string) => label);
 			{{ t(sec.labelKey) }}
 		</button>
 		<button
+			v-for="tab in props.addInTabs ?? []"
+			:key="tab.id"
+			type="button"
+			role="tab"
+			:data-ribbon-add-in-tab="tab.id"
+			:aria-selected="props.activeAddIn === tab.id"
+			:title="screenTip(tab.label)"
+			:class="
+				cn(
+					'relative px-3.5 py-2 text-[12px] font-medium whitespace-nowrap transition-colors max-md:min-h-[36px] max-md:px-3',
+					props.activeAddIn === tab.id
+						? 'text-foreground after:absolute after:-bottom-px after:left-0 after:right-0 after:h-[2.5px] after:bg-primary'
+						: 'text-muted-foreground hover:text-foreground hover:bg-accent/30',
+				)
+			"
+			@click="props.onSelectAddIn?.(tab.id)"
+		>
+			{{ tab.label }}
+		</button>
+		<button
 			v-for="tab in props.contextualTabs ?? []"
 			:key="tab"
 			type="button"
 			role="tab"
 			:data-ribbon-contextual-tab="tab"
-			:aria-selected="props.toolbarSection === tab"
+			:aria-selected="!props.activeAddIn && props.toolbarSection === tab"
 			:title="screenTip(t(contextualTabLabelKey(tab)))"
 			:class="
 				cn(
 					'relative px-3.5 py-2 text-[12px] font-medium whitespace-nowrap transition-colors text-amber-600 dark:text-amber-400 hover:bg-amber-500/10 max-md:min-h-[36px] max-md:px-3',
-					props.toolbarSection === tab &&
+					!props.activeAddIn &&
+						props.toolbarSection === tab &&
 						'after:absolute after:-bottom-px after:left-0 after:right-0 after:h-[2.5px] after:bg-amber-500',
 				)
 			"

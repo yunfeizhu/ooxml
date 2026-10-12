@@ -1,10 +1,6 @@
 <script setup lang="ts">
+import { FILL_MODE_OPTIONS, GRADIENT_TYPE_OPTIONS, PATTERN_PRESET_OPTIONS } from 'ooxml-ui/pptx';
 import type { PptxTableCellStyle } from 'pptx-viewer-core';
-import {
-	FILL_MODE_OPTIONS,
-	GRADIENT_TYPE_OPTIONS,
-	PATTERN_PRESET_OPTIONS,
-} from 'ooxml-ui/pptx';
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 

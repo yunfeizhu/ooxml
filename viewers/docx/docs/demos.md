@@ -2,14 +2,14 @@
 
 The same demo app is built once per framework adapter and published next to these docs. Each one is the real `<docx-editor>` running entirely in your browser: nothing is uploaded, and there is no server behind them.
 
-| Demo                                         | Adapter               | Source                                                      |
-| -------------------------------------------- | --------------------- | ----------------------------------------------------------- |
+| Demo                                         | Adapter               | Source                                                           |
+| -------------------------------------------- | --------------------- | ---------------------------------------------------------------- |
 | [React](/demo/){target="_self"}              | `docx-react-viewer`   | `demos/docx/demo-vanilla` built with `VITE_DEMO_FRAMEWORK=react` |
-| [Vue](/demo-vue/){target="_self"}            | `docx-vue-viewer`     | same app, `vue`                                             |
-| [Angular](/demo-angular/){target="_self"}    | `docx-angular-viewer` | same app, `angular`                                         |
-| [Svelte](/demo-svelte/){target="_self"}      | `docx-svelte-viewer`  | same app, `svelte`                                          |
-| [Solid](/demo-solid/){target="_self"}        | `docx-solid-viewer`   | same app, `solid`                                           |
-| [Vanilla JS](/demo-vanilla/){target="_self"} | `docx-vanilla-viewer` | same app, `vanilla`                                         |
+| [Vue](/demo-vue/){target="_self"}            | `docx-vue-viewer`     | same app, `vue`                                                  |
+| [Angular](/demo-angular/){target="_self"}    | `docx-angular-viewer` | same app, `angular`                                              |
+| [Svelte](/demo-svelte/){target="_self"}      | `docx-svelte-viewer`  | same app, `svelte`                                               |
+| [Solid](/demo-solid/){target="_self"}        | `docx-solid-viewer`   | same app, `solid`                                                |
+| [Vanilla JS](/demo-vanilla/){target="_self"} | `docx-vanilla-viewer` | same app, `vanilla`                                              |
 
 The home page embeds them with a framework switcher: [open the live demo section](/#live-demo).
 

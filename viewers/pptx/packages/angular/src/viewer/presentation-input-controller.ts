@@ -1,3 +1,20 @@
+import {
+	acceptsPresentationInput,
+	applyHighlightClickStyle,
+	createPresentationKeyBuffer,
+	createWheelStepBuffer,
+	findHighlightClickTarget,
+	downloadDataUrl,
+	mapPresentationKey,
+	mapPresentationWheel,
+	openUrlInNewTab,
+	resolveOleVerbTarget,
+	resolvePresentationAction,
+	resolvePresentationClick,
+	runPresentationAction,
+	safeOpenUrl,
+	toggleStageElementMedia,
+} from 'ooxml-ui/pptx';
 /**
  * presentation-input-controller.ts: turns raw keyboard and pointer events during
  * a slide show into show commands.
@@ -17,23 +34,6 @@
  */
 import type { PptxSlide } from 'pptx-viewer-core';
 
-import {
-	acceptsPresentationInput,
-	applyHighlightClickStyle,
-	createPresentationKeyBuffer,
-	createWheelStepBuffer,
-	findHighlightClickTarget,
-	downloadDataUrl,
-	mapPresentationKey,
-	mapPresentationWheel,
-	openUrlInNewTab,
-	resolveOleVerbTarget,
-	resolvePresentationAction,
-	resolvePresentationClick,
-	runPresentationAction,
-	safeOpenUrl,
-	toggleStageElementMedia,
-} from 'ooxml-ui/pptx';
 import type { AnimationPlaybackService } from './animation-playback.service';
 import type { PresentationAnnotationsService } from './presentation-annotations.service';
 import { requestPresentationFullscreen } from './presentation-fullscreen';

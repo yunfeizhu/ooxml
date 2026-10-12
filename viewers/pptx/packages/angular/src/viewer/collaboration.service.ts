@@ -14,8 +14,6 @@
  */
 
 import { DestroyRef, Injectable, computed, inject, signal } from '@angular/core';
-import type { PptxHandlerSaveOptions, PptxSlide } from 'pptx-viewer-core';
-
 import type {
 	CollabLoadOrigin,
 	CollaborationConfig,
@@ -30,6 +28,8 @@ import {
 	resolveTransportForServerUrl,
 	validateRoomId,
 } from 'ooxml-ui/pptx';
+import type { PptxHandlerSaveOptions, PptxSlide } from 'pptx-viewer-core';
+
 import { CollaborationPresenceState } from './collaboration-presence-state';
 import { connectSession } from './collaboration-session-connect';
 import type { ActiveSession, ConnectOptions } from './collaboration-session-setup';

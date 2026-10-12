@@ -113,7 +113,9 @@ export function showTabKeyTips(root: HTMLElement, select: (id: string) => void):
 	active?.();
 	const file = (root as RibbonElement).fileButton();
 	const targets: Target[] = file ? [{ key: 'F', element: file, activate: () => file.click() }] : [];
-	for (const panel of [...root.children].filter((node): node is HTMLElement => node.classList.contains('ribbon-panel'))) {
+	for (const panel of [...root.children].filter((node): node is HTMLElement =>
+		node.classList.contains('ribbon-panel'),
+	)) {
 		const id = panel.dataset.tab ?? '';
 		const tab = tabButton(root, id);
 		if (!tab || isTabHidden(panel)) continue;

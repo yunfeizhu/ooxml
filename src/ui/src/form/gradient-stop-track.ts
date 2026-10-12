@@ -39,9 +39,8 @@ export function createGradientStopTrack(doc: Document) {
 		const previous = drag;
 		drag = undefined;
 		paintStops(current.stops);
-		element
-			.querySelectorAll<HTMLButtonElement>('button')
-			[previous.index]?.style.setProperty('left', `calc(${previous.origin}% - 7px)`);
+		const buttons = element.querySelectorAll<HTMLButtonElement>('button');
+		buttons[previous.index]?.style.setProperty('left', `calc(${previous.origin}% - 7px)`);
 		current.onPreview?.(previous.index, undefined);
 		if (element.hasPointerCapture?.(previous.pointer))
 			element.releasePointerCapture(previous.pointer);
@@ -119,9 +118,8 @@ export function createGradientStopTrack(doc: Document) {
 		);
 		if (value === drag.value) return;
 		drag.value = value;
-		element
-			.querySelectorAll<HTMLButtonElement>('button')
-			[drag.index]?.style.setProperty('left', `calc(${value}% - 7px)`);
+		const buttons = element.querySelectorAll<HTMLButtonElement>('button');
+		buttons[drag.index]?.style.setProperty('left', `calc(${value}% - 7px)`);
 		paintStops(
 			current.stops.map((stop, index) =>
 				index === drag!.index ? { ...stop, position: value } : stop,

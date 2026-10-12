@@ -27,7 +27,9 @@ export interface Identity {
 
 export function loadIdentity(): Identity | null {
 	try {
-		const raw = JSON.parse(safeStorage.getItem('teams:identity') ?? 'null') as Partial<Identity> | null;
+		const raw = JSON.parse(
+			safeStorage.getItem('teams:identity') ?? 'null',
+		) as Partial<Identity> | null;
 		if (raw && typeof raw.id === 'string' && typeof raw.name === 'string' && raw.name.trim())
 			return { id: raw.id, name: raw.name };
 	} catch {

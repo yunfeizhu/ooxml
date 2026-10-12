@@ -11,7 +11,6 @@
  * @module angular-viewer/slide-pane-rail-selection
  */
 import { signal } from '@angular/core';
-
 import { resolveSlidePaneClick } from 'ooxml-ui/pptx';
 
 /** Position and target of an open thumbnail context menu. */

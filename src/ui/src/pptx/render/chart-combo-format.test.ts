@@ -96,6 +96,37 @@ describe('buildComboViewModel series formatting', () => {
 		expect(vm.primitives.filter((p) => p.kind === 'circle')).toHaveLength(4);
 	});
 
+	it('breaks the line at a blank point when c:dispBlanksAs is gap', () => {
+		const data = comboData({ chartChrome: { dispBlanksAs: 'gap' } });
+		data.series[1] = {
+			...data.series[1],
+			values: [3, 2, 0, 3],
+			blanks: [false, false, true, false],
+		};
+		const vm = buildComboViewModel(element, data, CATEGORIES);
+		const lines = vm.primitives.filter((p): p is SvgPolyline => p.kind === 'polyline');
+		// The run after the blank has a single point, so only the first run is stroked.
+		expect(lines).toHaveLength(1);
+		expect(lines[0].points.split(' ')).toHaveLength(2);
+		const markers = vm.primitives.filter(
+			(p): p is SvgCircle => p.kind === 'circle' && p.part?.seriesIndex === 1,
+		);
+		expect(markers.map((m) => m.part?.pointIndex)).toEqual([0, 1, 3]);
+		expect(vm.dataLabels.filter((l) => l.fill === '#05507D')).toHaveLength(3);
+	});
+
+	it('keeps drawing a blank point at zero when c:dispBlanksAs is zero', () => {
+		const data = comboData({ chartChrome: { dispBlanksAs: 'zero' } });
+		data.series[1] = {
+			...data.series[1],
+			values: [3, 2, 0, 3],
+			blanks: [false, false, true, false],
+		};
+		const vm = buildComboViewModel(element, data, CATEGORIES);
+		const line = vm.primitives.find((p): p is SvgPolyline => p.kind === 'polyline');
+		expect(line?.points.split(' ')).toHaveLength(4);
+	});
+
 	it('gives a marker with no c:symbol the automatic shape for its series', () => {
 		const data = comboData();
 		const { symbol: _symbol, ...marker } = data.series[1].marker ?? {};

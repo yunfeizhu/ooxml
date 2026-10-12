@@ -1,3 +1,5 @@
+import type { PptxAiFocusedTarget } from 'ooxml-ui/pptx/ai';
+import { focusTargetChips, isTwoTableFocus, mergeTablesDirective } from 'ooxml-ui/pptx/ai';
 /**
  * AiFocusBar: the strip under the panel header showing the assistant's current
  * focused targets as chips (live from the canvas selection, pinned, or picked).
@@ -9,8 +11,6 @@
  * exactly two tables.
  */
 import type { PptxSlide } from 'pptx-viewer-core';
-import type { PptxAiFocusedTarget } from 'ooxml-ui/pptx/ai';
-import { focusTargetChips, isTwoTableFocus, mergeTablesDirective } from 'ooxml-ui/pptx/ai';
 import { useTranslation } from 'react-i18next';
 import { LuCrosshair, LuGitMerge, LuPin, LuPinOff, LuX } from 'react-icons/lu';
 

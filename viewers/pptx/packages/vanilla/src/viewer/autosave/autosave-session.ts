@@ -1,4 +1,3 @@
-import type { PptxHandler } from 'pptx-viewer-core';
 import type {
 	AutosaveActivation,
 	AutosaveRecord,
@@ -14,6 +13,7 @@ import {
 	resolveAutosaveIntervalMs,
 	shouldShowAutosaveRecoveryPrompt,
 } from 'ooxml-ui/pptx';
+import type { PptxHandler } from 'pptx-viewer-core';
 
 import type { Translator } from '../i18n';
 import type { Store, ViewerState } from '../state';

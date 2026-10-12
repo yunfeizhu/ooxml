@@ -1,4 +1,3 @@
-import type { PptxSlide, PptxTextStyleLevels, TextSegment } from 'pptx-viewer-core';
 import {
 	applyInlineCommand,
 	applyParagraphCommand,
@@ -13,6 +12,7 @@ import {
 	segmentsToPlainText,
 } from 'ooxml-ui/pptx';
 import type { NotesToolbarRequestEvent } from 'ooxml-ui/pptx';
+import type { PptxSlide, PptxTextStyleLevels, TextSegment } from 'pptx-viewer-core';
 
 import type { Translator } from '../i18n';
 import { createEl } from '../render';

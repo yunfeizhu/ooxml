@@ -1,8 +1,9 @@
 import { test, expect } from '@playwright/test';
 import JSZip from 'jszip';
 import { createVsdxFixture } from './fixture.mjs';
-import { downloadCopy } from './ribbon';
+import { downloadCopy, pickColor } from './ribbon';
 import type { VisioViewerElement } from 'ooxml-ui/visio';
+import { openDemo } from './demo-page';
 
 async function selectionFixture(): Promise<Buffer> {
 	const zip = await JSZip.loadAsync(await createVsdxFixture('First target'));
@@ -25,13 +26,17 @@ for (const framework of ['vanilla', 'react', 'vue', 'angular', 'svelte', 'solid'
 		const errors: string[] = [];
 		page.on('pageerror', (error) => errors.push(error.message));
 		await page.setViewportSize({ width: 1600, height: 1000 });
-		await page.goto(framework === 'vanilla' ? '/demo/?sample=1' : `/demo-${framework}/?sample=1`);
+		await openDemo(
+			page,
+			framework === 'vanilla' ? '/demo/?sample=1' : `/demo-${framework}/?sample=1`,
+		);
 		const viewer = page.locator('visio-viewer');
 		await page.locator('#file').setInputFiles({
 			name: 'selection.vsdx',
 			mimeType: 'application/vnd.ms-visio.drawing',
 			buffer: await selectionFixture(),
 		});
+		await expect(page.locator('#file-name')).toHaveText('selection.vsdx');
 		await expect(viewer.locator('svg.paper')).toContainText('Second target');
 		await viewer.evaluate((node) => {
 			const host = node as VisioViewerElement & {
@@ -81,14 +86,14 @@ for (const framework of ['vanilla', 'react', 'vue', 'angular', 'svelte', 'solid'
 				'bold',
 			);
 		await expect(viewer.locator('svg.paper [data-selected="true"]')).toHaveCount(2);
-		await viewer.locator('[command="undo"] button').click();
+		await viewer.locator('.qat [data-command="undo"]').click();
 		for (const shape of [first, second])
 			await expect(shape.locator('tspan[font-family]').first()).not.toHaveAttribute(
 				'font-weight',
 				'bold',
 			);
 		await expect(viewer.locator('svg.paper [data-selected="true"]')).toHaveCount(2);
-		await viewer.locator('[command="redo"] button').click();
+		await viewer.locator('.qat [data-command="redo"]').click();
 		await expect(viewer.locator('svg.paper [data-selected="true"]')).toHaveCount(2);
 		await viewer.locator('[command="strikethrough"] button').click();
 		for (const shape of [first, second])
@@ -96,8 +101,7 @@ for (const framework of ['vanilla', 'react', 'vue', 'angular', 'svelte', 'solid'
 				'text-decoration',
 				'line-through',
 			);
-		await viewer.locator('[data-menu="font-color"] .caret').click();
-		await viewer.locator('[command="font-color-red"]').click();
+		await pickColor(viewer, 'font', '#ff0000');
 		for (const shape of [first, second])
 			await expect(shape.locator('tspan[font-family]').first()).toHaveAttribute('fill', '#ff0000');
 		await viewer.locator('[command="bullets"] button').click();

@@ -1,5 +1,3 @@
-import { hasTextProperties } from 'pptx-viewer-core';
-import type { PptxElement, PptxSlide, TextStyle } from 'pptx-viewer-core';
 import {
 	cycleSelectableElement,
 	isFeatureEnabled,
@@ -8,6 +6,8 @@ import {
 	textFontSizePxToPt,
 } from 'ooxml-ui/pptx';
 import type { ResolvedCustomization } from 'ooxml-ui/pptx';
+import { hasTextProperties } from 'pptx-viewer-core';
+import type { PptxElement, PptxSlide, TextStyle } from 'pptx-viewer-core';
 import { ref } from 'vue';
 import type { ComputedRef, Ref } from 'vue';
 

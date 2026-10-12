@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import type { PptxChartDataLabelOptions, PptxChartStyle } from 'pptx-viewer-core';
 import { DATA_LABEL_CONTENT_OPTIONS, DATA_LABEL_POSITION_OPTIONS } from 'ooxml-ui/pptx';
+import type { PptxChartDataLabelOptions, PptxChartStyle } from 'pptx-viewer-core';
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 

@@ -1,11 +1,26 @@
 import type { ViewerController } from './controller';
 import { editErrorMessage, isEditCancellation } from 'ooxml-core/visio/ui';
-import { MASTER_MIME, masterCreation } from './shapes-window';
-import { insertMaster, pagePoint } from './viewer-draw-tool';
+import type { VisioDocument } from 'ooxml-core/visio';
+import {
+	visioMasterDropCommand,
+	visioMasterDropRefusal,
+	visioStencilDropCommand,
+} from 'ooxml-core/visio/ui';
+import { MASTER_MIME, findMaster, masterCreation, setShapesDocument } from './shapes-window';
+import {
+	DOCUMENT_STENCIL_NAME,
+	documentMaster,
+	shapesDocument,
+	type ShapesDocument,
+} from './shapes-document';
+import { MASTER_QUICK_STYLE, pagePoint } from './viewer-draw-tool';
 
 /**
  * Shapes window interaction: drag a master onto the page to drop it there, or activate it to add
- * it at the page centre. Ellipse and Circle are native ellipses; the rest are core outlines.
+ * it at the page centre. Either way the page gets an instance of a master, as in Visio: a master
+ * of a built-in stencil is first copied into the drawing's own Document Stencil, and a master
+ * that is already there is instanced directly. The window follows the open drawing: its Document
+ * Stencil and the stencils it docks.
  */
 export function wireStencil(
 	pane: HTMLElement,
@@ -16,45 +31,129 @@ export function wireStencil(
 	const Abort = pane.ownerDocument.defaultView?.AbortController ?? AbortController;
 	const events = new Abort();
 	const options = { signal: events.signal };
+	// A drop is accepted while an earlier edit is still saving; the shape is added once it is done.
 	const editable = () => {
 		const { edit, loading } = controller.state;
-		return edit.sourceAvailable && !edit.busy && !loading;
+		return edit.sourceAvailable && !loading;
 	};
-	const add = async (id: string, centre?: { clientX: number; clientY: number }) => {
-		const master = masterCreation(id);
+	const idle = () =>
+		new Promise<void>((resolve) => {
+			let stop: (() => void) | undefined;
+			let done = false;
+			stop = controller.subscribe((state) => {
+				if (done || state.edit.busy) return;
+				done = true;
+				resolve();
+				stop?.();
+			});
+			if (done) stop();
+		});
+	// Drawing the masters is the costly part, so it is done once per parsed drawing.
+	const drawings = new WeakMap<VisioDocument, ShapesDocument>();
+	let shown: VisioDocument | null | undefined;
+	let generation: number | undefined;
+	const follow = (model: VisioDocument | null): void => {
+		if (model === shown) return;
+		// Edits, undo and redo keep the source epoch; opening or replacing a drawing changes it.
+		// No drawing (closed, or still loading) is never an edit of the one that was showing.
+		const opened = !model || !shown || controller.sourceGeneration !== generation;
+		generation = controller.sourceGeneration;
+		shown = model;
+		let next = model ? drawings.get(model) : undefined;
+		if (!next) {
+			next = shapesDocument(model);
+			if (model) drawings.set(model, next);
+		}
+		setShapesDocument(pane, next, opened);
+	};
+	follow(controller.state.document);
+	const unfollow = controller.subscribe((state) => follow(state.document));
+	// Drops are added one at a time, in the order they were made, each where it was released.
+	let queue = Promise.resolve();
+	/** Drop a master of the drawing's own stencil as an instance of it. */
+	const addInstance = (id: string, centre?: { clientX: number; clientY: number }) => {
 		const state = controller.state;
 		const page = state.document?.pages[state.pageIndex];
-		if (!master || !page) return;
-		const { size } = master;
-		if (!editable()) {
-			announce('Open a .vsdx file to add shapes. Model-only documents are read only.');
-			return;
+		const master = documentMaster(state.document, id);
+		if (!master || !page) return queue;
+		const refusal = visioMasterDropRefusal(master);
+		if (refusal || !editable()) {
+			announce(refusal ? `${master.name}: ${refusal}` : 'Open a .vsdx file to add shapes.');
+			return queue;
 		}
 		const svg = viewport.querySelector<SVGSVGElement>('svg.paper');
 		const point = centre && svg ? pagePoint(svg, page, centre) : undefined;
-		// Keep the whole shape on the page, as the drop point is its centre.
-		const x = Math.min(
-			page.width - size.width / 2,
-			Math.max(size.width / 2, point?.x ?? page.width / 2),
-		);
-		const y = Math.min(
-			page.height - size.height / 2,
-			Math.max(size.height / 2, point?.y ?? page.height / 2),
-		);
-		try {
-			const shapeId = await insertMaster(controller, page, master.create, { x, y }, size);
-			const name = pane.querySelector(`[data-master="${id}"] span`)?.textContent ?? 'Shape';
-			announce(`${name} ${shapeId} added from Basic Shapes.`);
-		} catch (error) {
-			if (!isEditCancellation(error) && !controller.state.edit.error)
-				announce(editErrorMessage(error));
+		queue = queue.then(async () => {
+			try {
+				if (controller.state.edit.busy) await idle();
+				const current = controller.state;
+				const target = current.document?.pages[current.pageIndex];
+				const live = documentMaster(current.document, id);
+				if (!target || target.id !== page.id || !live || !editable()) return;
+				const command = visioMasterDropCommand(target, live, point);
+				const token = controller.captureCreationToken(target.id);
+				await controller.applyCreationEdits([command], token);
+				announce(`${live.name} ${command.shapeId} added from ${DOCUMENT_STENCIL_NAME}.`);
+			} catch (error) {
+				if (!isEditCancellation(error) && !controller.state.edit.error)
+					announce(editErrorMessage(error));
+			}
+		});
+		return queue;
+	};
+	const known = (id: string): boolean =>
+		!!masterCreation(id) || !!documentMaster(controller.state.document, id);
+	const add = (id: string, centre?: { clientX: number; clientY: number }) => {
+		if (documentMaster(controller.state.document, id)) return addInstance(id, centre);
+		const master = masterCreation(id);
+		const state = controller.state;
+		const page = state.document?.pages[state.pageIndex];
+		if (!master || !page) return queue;
+		if (!editable()) {
+			announce('Open a .vsdx file to add shapes.');
+			return queue;
 		}
+		const svg = viewport.querySelector<SVGSVGElement>('svg.paper');
+		const point = centre && svg ? pagePoint(svg, page, centre) : undefined;
+		queue = queue.then(async () => {
+			try {
+				if (controller.state.edit.busy) await idle();
+				const current = controller.state;
+				const target = current.document?.pages[current.pageIndex];
+				if (!target || target.id !== page.id || !editable()) return;
+				// As in Visio: the master joins the drawing's own stencil and the page gets an instance
+				// of it, kept whole on the page, in the theme's default look.
+				const command = visioStencilDropCommand(target, id, point);
+				const token = controller.captureCreationToken(target.id);
+				await controller.applyCreationEdits(
+					[
+						command,
+						{
+							type: 'format-shape',
+							pageId: target.id,
+							shapeId: command.shapeId,
+							quickStyle: MASTER_QUICK_STYLE,
+						},
+					],
+					token,
+				);
+				const found = findMaster(id);
+				announce(
+					`${found?.master.name ?? 'Shape'} ${command.shapeId} added from ${found?.stencil.name}.`,
+				);
+			} catch (error) {
+				if (!isEditCancellation(error) && !controller.state.edit.error)
+					announce(editErrorMessage(error));
+			}
+		});
+		return queue;
 	};
 	pane.addEventListener(
 		'dragstart',
 		(event) => {
 			const master = (event.target as Element).closest?.<HTMLElement>('[data-master]');
-			if (!master || !masterCreation(master.dataset.master!) || !event.dataTransfer) return;
+			if (!master || !known(master.dataset.master!) || !event.dataTransfer) return;
+			if ('unsupported' in master.dataset) return event.preventDefault();
 			event.dataTransfer.setData(MASTER_MIME, master.dataset.master!);
 			event.dataTransfer.effectAllowed = 'copy';
 		},
@@ -87,5 +186,8 @@ export function wireStencil(
 		},
 		options,
 	);
-	return () => events.abort();
+	return () => {
+		unfollow();
+		events.abort();
+	};
 }

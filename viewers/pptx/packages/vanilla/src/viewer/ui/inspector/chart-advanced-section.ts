@@ -1,3 +1,13 @@
+import {
+	CHART_AXIS_TYPE_LABEL_KEYS,
+	CHART_MARKER_SYMBOL_LABEL_KEYS,
+	DISPLAY_UNITS_OPTIONS,
+	ERROR_BAR_VALTYPE_OPTIONS,
+	schemaLabel,
+	seriesColorClearState,
+	TRENDLINE_TYPE_OPTIONS,
+	upsertDataPoint,
+} from 'ooxml-ui/pptx';
 /**
  * chart-advanced-section.ts: the axis-scale and per-series formatting block of
  * the vanilla chart inspector.
@@ -13,16 +23,6 @@ import type {
 	PptxChartMarkerSymbol,
 	PptxChartTrendlineType,
 } from 'pptx-viewer-core';
-import {
-	CHART_AXIS_TYPE_LABEL_KEYS,
-	CHART_MARKER_SYMBOL_LABEL_KEYS,
-	DISPLAY_UNITS_OPTIONS,
-	ERROR_BAR_VALTYPE_OPTIONS,
-	schemaLabel,
-	seriesColorClearState,
-	TRENDLINE_TYPE_OPTIONS,
-	upsertDataPoint,
-} from 'ooxml-ui/pptx';
 
 import type { Translator } from '../../i18n';
 import {

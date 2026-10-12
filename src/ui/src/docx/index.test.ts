@@ -146,7 +146,10 @@ describe('DocxEditorElement', () => {
 		root
 			.querySelector<HTMLButtonElement>('[aria-label="Font color"] + [data-split-caret]')!
 			.click();
-		root.querySelector<HTMLButtonElement>('.ribbon-popover [aria-label="Dark Red"]')!.click();
+		root
+			.querySelector('.ribbon-popover office-ui-color-grid')!
+			.shadowRoot!.querySelector<HTMLButtonElement>('[aria-label="Dark Red"]')!
+			.click();
 		root.querySelector<HTMLButtonElement>('[aria-label="Align center"]')!.click();
 		const paragraph = editor.documentModel.blocks[0];
 		expect(paragraph).toMatchObject({

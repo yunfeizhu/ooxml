@@ -1,4 +1,9 @@
 <script setup lang="ts">
+import {
+	schemaLabel,
+	SMARTART_COLOR_SCHEME_LABEL_KEYS,
+	SMARTART_STYLE_LABEL_KEYS,
+} from 'ooxml-ui/pptx';
 import type {
 	PptxElement,
 	PptxSmartArtData,
@@ -7,11 +12,6 @@ import type {
 	SmartArtLayoutType,
 	SmartArtStyle,
 } from 'pptx-viewer-core';
-import {
-	schemaLabel,
-	SMARTART_COLOR_SCHEME_LABEL_KEYS,
-	SMARTART_STYLE_LABEL_KEYS,
-} from 'ooxml-ui/pptx';
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 

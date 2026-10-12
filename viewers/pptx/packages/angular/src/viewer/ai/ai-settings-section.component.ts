@@ -9,9 +9,9 @@
 import { ChangeDetectionStrategy, Component, signal, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { LucideBug, LucideDownload } from '@lucide/angular';
 import { TranslatePipe } from '@ngx-translate/core';
-
 import { createChatHistoryStore } from 'ooxml-ui/pptx/ai';
 import type { PptxAiChatStore } from 'ooxml-ui/pptx/ai';
+
 import { exportAiChatLogs } from './ai-log-export';
 import type { AiLogFormat } from './ai-log-export';
 

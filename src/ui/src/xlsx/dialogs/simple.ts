@@ -11,13 +11,7 @@ import {
 import { UNSET, colsOf, rowsOf, target } from 'ooxml-core/xlsx/ui';
 import { activeChart, activeTable, editChart } from 'ooxml-core/xlsx/ui';
 import type { EditorContext } from 'ooxml-core/xlsx/ui';
-import {
-	type ConfirmProps,
-	confirmDialog,
-	numberPrompt,
-	pickDialog,
-	textPrompt,
-} from './prompts';
+import { type ConfirmProps, confirmDialog, numberPrompt, pickDialog, textPrompt } from './prompts';
 
 const columnWidth = (ctx: EditorContext): number => {
 	const t = target(ctx);

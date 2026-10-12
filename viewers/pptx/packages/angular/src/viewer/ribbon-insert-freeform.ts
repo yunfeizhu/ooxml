@@ -10,6 +10,7 @@
  */
 import { FREEFORM_TOOL_IDS, isDrawingToolVisible } from 'ooxml-ui/pptx';
 import type { FreeformToolKind, ResolvedCustomization } from 'ooxml-ui/pptx';
+
 import type { OutlineAuthoringService } from './outline-authoring.service';
 
 /** The tools the host did not hide, or none without an outline-authoring service. */

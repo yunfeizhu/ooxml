@@ -40,6 +40,7 @@
 	import { createViewerState } from './state/create-viewer-state.svelte';
 	import { ThemeLocaleState } from './state/theme-locale.svelte';
 	import { toViewerStateOptions } from './state/viewer-state-options';
+	import { provideRibbonAddIns } from './state/ribbon-add-ins';
 	import { effectiveHiddenActions, nextRibbonScopeToken, useCustomizationConstraints, useViewerCustomizationRoot } from './state/viewer-customization.svelte';
 	import EditorChromeStyle from './components/EditorChromeStyle.svelte';
 	import RibbonCustomizationStyle from './components/RibbonCustomizationStyle.svelte';
@@ -98,6 +99,7 @@
 
 	// Host UI customisation (`customization` prop + the imperative API below).
 	const customization = useViewerCustomizationRoot(() => props.customization);
+	provideRibbonAddIns(() => props.ribbonAddIns);
 	const ribbonScope = nextRibbonScopeToken();
 	const vm = createViewerState(
 		toViewerStateOptions(() => props, {

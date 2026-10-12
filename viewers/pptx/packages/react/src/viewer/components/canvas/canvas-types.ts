@@ -1,4 +1,10 @@
 import type {
+	CollaborationLivePatcher,
+	InlineTextEditSnapshot,
+	InlineListReadResult,
+	ZoomNavigationTarget,
+} from 'ooxml-ui/pptx';
+import type {
 	ConnectorPptxElement,
 	PptxAction,
 	PptxComment,
@@ -9,12 +15,6 @@ import type {
 	ShapePptxElement,
 	TextStyle,
 } from 'pptx-viewer-core';
-import type {
-	CollaborationLivePatcher,
-	InlineTextEditSnapshot,
-	InlineListReadResult,
-	ZoomNavigationTarget,
-} from 'ooxml-ui/pptx';
 import React from 'react';
 
 import type { CanvasImagePasteHandlers } from '../../hooks/useCanvasImagePaste';

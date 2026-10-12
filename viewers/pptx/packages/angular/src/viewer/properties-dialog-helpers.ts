@@ -11,9 +11,8 @@
  * no regex named-capture-groups (ng-packagr lib-target constraints).
  */
 
-import type { PptxCoreProperties } from 'pptx-viewer-core';
-
 import { formatIsoDate } from 'ooxml-ui/pptx';
+import type { PptxCoreProperties } from 'pptx-viewer-core';
 
 /**
  * Subset of {@link PptxCoreProperties} surfaced by the Properties dialog: the

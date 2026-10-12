@@ -1,5 +1,4 @@
 import { Directive, ElementRef, inject, input, OnDestroy, OnInit } from '@angular/core';
-
 import { attachRibbonOverflow } from 'ooxml-ui/pptx';
 import type { RibbonLaunchers } from 'ooxml-ui/pptx';
 

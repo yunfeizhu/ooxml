@@ -1,6 +1,6 @@
-import type { PptxSlide } from 'pptx-viewer-core';
 import type { FieldSubstitutionContext } from 'ooxml-ui/pptx';
 import { deriveSlideFieldContext } from 'ooxml-ui/pptx';
+import type { PptxSlide } from 'pptx-viewer-core';
 import type { InjectionKey, MaybeRefOrGetter } from 'vue';
 import { inject, provide, toValue } from 'vue';
 

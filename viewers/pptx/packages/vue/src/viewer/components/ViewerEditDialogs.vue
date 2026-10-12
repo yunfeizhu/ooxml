@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { isDialogAvailable } from 'ooxml-ui/pptx';
 /**
  * ViewerEditDialogs: the popups reached while editing the canvas itself
  * (Design > Themes, the element context menu, Insert > Link, Share).
@@ -14,7 +15,6 @@
  * plain object does not unwrap.
  */
 import type { PptxLayoutOption, PptxLayoutPreview, PptxTheme } from 'pptx-viewer-core';
-import { isDialogAvailable } from 'ooxml-ui/pptx';
 import { computed, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 

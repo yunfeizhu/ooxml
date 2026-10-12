@@ -1,3 +1,12 @@
+import {
+	CONNECTOR_SITE_SNAP_PX,
+	collectConnectorSiteCandidates,
+	findConnectorSiteNear,
+	getConnectorEndpointHandles,
+	resolveConnectorEndpointUpdate,
+	withConnectorEndpointUpdate,
+} from 'ooxml-ui/pptx';
+import type { ConnectorEndpointKind } from 'ooxml-ui/pptx';
 /**
  * Connector endpoint authoring: the two handles PowerPoint puts on a selected
  * connector, which attach an end to a shape's connection point or detach it.
@@ -11,15 +20,6 @@
  * only the pointer lifecycle and the SVG.
  */
 import type { ConnectorPptxElement, PptxElement } from 'pptx-viewer-core';
-import {
-	CONNECTOR_SITE_SNAP_PX,
-	collectConnectorSiteCandidates,
-	findConnectorSiteNear,
-	getConnectorEndpointHandles,
-	resolveConnectorEndpointUpdate,
-	withConnectorEndpointUpdate,
-} from 'ooxml-ui/pptx';
-import type { ConnectorEndpointKind } from 'ooxml-ui/pptx';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 

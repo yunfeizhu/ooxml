@@ -1,5 +1,3 @@
-import { hasTextProperties } from 'pptx-viewer-core';
-import type { PptxElement, PptxSlide, TextStyle } from 'pptx-viewer-core';
 import type {
 	CollaborationLivePatcher,
 	InlineListController,
@@ -15,6 +13,8 @@ import {
 	resolveInlineEditNormAutofitShrink,
 	setCellText,
 } from 'ooxml-ui/pptx';
+import { hasTextProperties } from 'pptx-viewer-core';
+import type { PptxElement, PptxSlide, TextStyle } from 'pptx-viewer-core';
 import { computed, ref, shallowRef, watch } from 'vue';
 import type { ComputedRef, Ref } from 'vue';
 

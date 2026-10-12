@@ -8,7 +8,6 @@
  */
 
 import type { TranslateService } from '@ngx-translate/core';
-
 import type { ElementChange, SlideDiff } from 'ooxml-ui/pptx';
 
 /** Single-character glyph for a per-element change kind. */

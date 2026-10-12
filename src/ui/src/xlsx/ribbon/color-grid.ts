@@ -1,39 +1,29 @@
 /**
- * Excel's colour picker: Automatic (or No Fill), Theme Colors (ten columns, each a theme slot over
- * five tints taken from the workbook theme), Standard Colors and More Colors (the browser's colour
- * input). The choice is a SpreadsheetML `Color` (`{ theme, tint }` or `{ rgb }`), or undefined.
+ * Excel's colour picker on the shared `office-ui-color-grid`: Automatic (or No Fill), Theme Colors
+ * (ten columns, each a theme slot over five tints of the workbook theme), Standard Colors and More
+ * Colors (the browser's colour input). The choice is a SpreadsheetML `Color` (`{ theme, tint }`
+ * or `{ rgb }`), or undefined. This module is the thin adapter between that colour model and the
+ * grid's swatches.
  */
-import {
-	DEFAULT_THEME,
-	resolveColor,
-	type Color,
-	type ThemePalette,
-} from 'ooxml-core/xlsx';
-import { arrowNavigation, closeRibbonPopover, mountPopover } from './popover';
+import { DEFAULT_THEME, resolveColor, type Color, type ThemePalette } from 'ooxml-core/xlsx';
+import { defineColorGrid, type OfficeColorPick, type OfficeUiColorGrid } from '../../controls';
+import { closeRibbonPopover, mountPopover } from './popover';
 
 /** Theme slots in Excel's column order with their role names. */
-const THEME_COLUMNS: ReadonlyArray<readonly [number, string]> = [
-	[0, 'Background 1'],
-	[1, 'Text 1'],
-	[2, 'Background 2'],
-	[3, 'Text 2'],
-	[4, 'Accent 1'],
-	[5, 'Accent 2'],
-	[6, 'Accent 3'],
-	[7, 'Accent 4'],
-	[8, 'Accent 5'],
-	[9, 'Accent 6'],
+const THEME_COLUMNS: readonly string[] = [
+	'Background 1',
+	'Text 1',
+	'Background 2',
+	'Text 2',
+	'Accent 1',
+	'Accent 2',
+	'Accent 3',
+	'Accent 4',
+	'Accent 5',
+	'Accent 6',
 ];
 
-/** Excel's five tint rows under each theme colour (lt1, dk1, lt2 and the rest differ). */
-export function themeTints(slot: number): number[] {
-	if (slot === 0) return [-0.05, -0.15, -0.25, -0.35, -0.5];
-	if (slot === 1) return [0.5, 0.35, 0.25, 0.15, 0.05];
-	if (slot === 2) return [-0.1, -0.25, -0.5, -0.75, -0.9];
-	return [0.8, 0.6, 0.4, -0.25, -0.5];
-}
-
-export const STANDARD_COLORS: ReadonlyArray<readonly [string, string]> = [
+const STANDARD_COLORS: ReadonlyArray<readonly [string, string]> = [
 	['C00000', 'Dark Red'],
 	['FF0000', 'Red'],
 	['FFC000', 'Orange'],
@@ -46,21 +36,74 @@ export const STANDARD_COLORS: ReadonlyArray<readonly [string, string]> = [
 	['7030A0', 'Purple'],
 ];
 
+type Translate = (key: string, vars?: Record<string, string | number>) => string;
+
 export interface ColorGridOptions {
 	/** First row: 'Automatic' (font colour) or 'No Fill' (fill colour). */
 	automaticLabel?: string;
 	theme?: ThemePalette;
-	t(key: string, vars?: Record<string, string | number>): string;
+	t: Translate;
 }
-
-const tintName = (tint: number, t: ColorGridOptions['t']) =>
-	tint > 0
-		? t('Lighter {percent}%', { percent: Math.round(tint * 100) })
-		: t('Darker {percent}%', { percent: Math.round(-tint * 100) });
 
 /** The CSS colour a `Color` shows in the workbook theme (for swatches and the split bar). */
 export function cssColor(color: Color | undefined, theme: ThemePalette = DEFAULT_THEME): string {
 	return resolveColor(color, theme) ?? 'transparent';
+}
+
+/** `#rrggbb` for the grid from a resolved colour (`RRGGBB`, `AARRGGBB` or `#rrggbb`). */
+const hex = (css: string | undefined): string | undefined => {
+	const digits = css?.replace(/^#/, '').slice(-6);
+	return digits && /^[0-9a-f]{6}$/i.test(digits) ? `#${digits.toLowerCase()}` : undefined;
+};
+
+/**
+ * The shared colour grid showing a workbook theme, with every name translated. `noneLabel` is
+ * the first row's command (Automatic, No Fill, No Color): choosing it picks no colour.
+ */
+export function excelColorGrid(
+	doc: Document,
+	theme: ThemePalette,
+	t: Translate,
+	options: { noneLabel?: string; moreLabel?: string; label?: string } = {},
+): OfficeUiColorGrid {
+	defineColorGrid();
+	const grid = doc.createElement('office-ui-color-grid') as OfficeUiColorGrid;
+	grid.themeColors = THEME_COLUMNS.map((_, slot) => hex(resolveColor({ theme: slot }, theme)));
+	grid.themeNames = THEME_COLUMNS.map((name) => t(name));
+	grid.variantLabel = (column, variant) =>
+		`${column}, ${t(variant.kind === 'lighter' ? 'Lighter {percent}%' : 'Darker {percent}%', {
+			percent: variant.percent,
+		})}`;
+	grid.standardColors = STANDARD_COLORS.map(([rgb, name]) => ({
+		hex: `#${rgb.toLowerCase()}`,
+		label: t(name),
+	}));
+	grid.themeHeading = t('Theme Colors');
+	grid.standardHeading = t('Standard Colors');
+	if (options.label) grid.label = options.label;
+	if (options.noneLabel) grid.automaticLabel = t(options.noneLabel);
+	if (options.moreLabel) grid.moreLabel = t(options.moreLabel);
+	return grid;
+}
+
+/**
+ * The SpreadsheetML colour a pick stands for: a theme swatch keeps its slot and tint (so it
+ * follows the workbook theme), anything else is its RGB. `alpha` writes `FFRRGGBB`.
+ */
+export function pickedExcelColor(pick: OfficeColorPick, alpha = false): Color | undefined {
+	if (pick.source === 'automatic' || pick.source === 'none') return undefined;
+	if (pick.source === 'theme' && pick.theme) {
+		const variant = pick.theme.variant;
+		const tint = variant ? (variant.kind === 'lighter' ? 1 : -1) * (variant.percent / 100) : 0;
+		return tint ? { theme: pick.theme.column, tint } : { theme: pick.theme.column };
+	}
+	const rgb = pick.color.slice(1).toUpperCase();
+	return { rgb: alpha ? `FF${rgb}` : rgb };
+}
+
+/** The grid's `value` for a colour: its resolved hex, or the none command. */
+export function excelGridValue(color: Color | undefined, theme: ThemePalette): string {
+	return (color ? hex(resolveColor(color, theme)) : undefined) ?? 'automatic';
 }
 
 export function openColorGrid(
@@ -68,74 +111,30 @@ export function openColorGrid(
 	choose: (color: Color | undefined) => void,
 	options: ColorGridOptions,
 ): void {
-	const { t } = options;
 	const theme = options.theme ?? DEFAULT_THEME;
 	const doc = anchor.ownerDocument;
 	const pop = doc.createElement('div');
 	pop.className = 'ribbon-popover color-grid';
-	pop.setAttribute('role', 'menu');
 	const pick = (color: Color | undefined) => {
 		closeRibbonPopover();
 		choose(color);
 	};
-	const swatch = (color: Color, name: string) => {
-		const item = doc.createElement('button');
-		item.type = 'button';
-		item.setAttribute('role', 'menuitem');
-		item.className = 'swatch';
-		item.style.setProperty('--swatch', cssColor(color, theme));
-		item.setAttribute('aria-label', name);
-		item.title = name;
-		item.addEventListener('mousedown', (event) => event.preventDefault());
-		item.addEventListener('click', () => pick(color));
-		return item;
-	};
-	const title = (text: string) => {
-		const el = doc.createElement('div');
-		el.className = 'color-grid-title';
-		el.textContent = t(text);
-		return el;
-	};
-	const cells = (items: HTMLElement[]) => {
-		const el = doc.createElement('div');
-		el.className = 'color-grid-cells';
-		el.append(...items);
-		return el;
-	};
-	const command = (text: string, run: () => void) => {
-		const button = doc.createElement('button');
-		button.type = 'button';
-		button.setAttribute('role', 'menuitem');
-		button.className = 'color-grid-command';
-		button.textContent = text;
-		button.addEventListener('mousedown', (event) => event.preventDefault());
-		button.addEventListener('click', run);
-		return button;
-	};
-	if (options.automaticLabel) pop.append(command(t(options.automaticLabel), () => pick(undefined)));
-	const top = THEME_COLUMNS.map(([slot, name]) => swatch({ theme: slot }, t(name)));
-	const rows = [0, 1, 2, 3, 4].flatMap((row) =>
-		THEME_COLUMNS.map(([slot, name]) => {
-			const tint = themeTints(slot)[row] ?? 0;
-			return swatch({ theme: slot, tint }, `${t(name)}, ${tintName(tint, t)}`);
-		}),
-	);
-	pop.append(
-		title('Theme Colors'),
-		cells([...top, ...rows]),
-		title('Standard Colors'),
-		cells(STANDARD_COLORS.map(([rgb, name]) => swatch({ rgb }, t(name)))),
-	);
+	const grid = excelColorGrid(doc, theme, options.t, {
+		...(options.automaticLabel ? { noneLabel: options.automaticLabel } : {}),
+		moreLabel: 'More Colors...',
+	});
 	const input = doc.createElement('input');
 	input.type = 'color';
 	input.className = 'color-grid-input';
 	input.tabIndex = -1;
 	input.addEventListener('change', () => pick({ rgb: input.value.slice(1).toUpperCase() }));
-	pop.append(
-		command(t('More Colors...'), () => input.click()),
-		input,
+	grid.addEventListener('office-color-pick', (event) =>
+		pick(pickedExcelColor((event as CustomEvent<OfficeColorPick>).detail)),
 	);
-	arrowNavigation(pop, '[role="menuitem"]');
+	grid.addEventListener('office-color-more', () => input.click());
+	// A press on a swatch must not take the focus from the cell being edited.
+	pop.addEventListener('mousedown', (event) => event.preventDefault());
+	pop.append(grid, input);
 	if (!mountPopover(anchor, pop)) return;
-	pop.querySelector<HTMLElement>('[role="menuitem"]')?.focus();
+	grid.focus();
 }

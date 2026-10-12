@@ -1,3 +1,8 @@
+import {
+	canDrillDown,
+	ensureChartInteractionStyles as ensureSharedChartInteractionStyles,
+} from 'ooxml-ui/pptx';
+import type { ChartMarkDragState, ChartValueDragState } from 'ooxml-ui/pptx';
 /* oxlint-disable eslint/one-var -- pervasive pre-existing pattern in this file:
    independent handler-local `const`s, not one statement */
 /**
@@ -18,11 +23,6 @@
  */
 import type { PptxChartData, PptxElement, PptxSlide } from 'pptx-viewer-core';
 
-import {
-	canDrillDown,
-	ensureChartInteractionStyles as ensureSharedChartInteractionStyles,
-} from 'ooxml-ui/pptx';
-import type { ChartMarkDragState, ChartValueDragState } from 'ooxml-ui/pptx';
 import { findOwningSlideIndex } from './smart-art-inline-edit';
 
 // ─────────────────────────────────────────────────────────────────────────────

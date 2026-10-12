@@ -1,3 +1,4 @@
+// @vitest-environment jsdom
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import type { VisioDocument } from 'ooxml-core/visio';
 import { demoDocument } from 'ooxml-core/visio/ui';
@@ -439,7 +440,8 @@ describe('no printing, mounting or mutable-byte validation bypass', () => {
 	});
 	it('fails atomically if a later export fails and still checks actual aggregate byte totals', () => {
 		const model = scene(),
-			real = exporter.exportPageSvg;
+			real = exporter.exportPageSvg,
+			nodeCount = document.body.childNodes.length;
 		const exporting = vi
 			.spyOn(exporter, 'exportPageSvg')
 			.mockImplementationOnce((...args) => real(...args))
@@ -448,7 +450,7 @@ describe('no printing, mounting or mutable-byte validation bypass', () => {
 			});
 		expect(() => createPrintSnapshot(model, { pageIndices: [0, 1] })).toThrow('late failure');
 		expect(exporting).toHaveBeenCalledTimes(2);
-		expect(document.body.childNodes).toHaveLength(0);
+		expect(document.body.childNodes).toHaveLength(nodeCount);
 		exporting.mockImplementation((...args) => ({
 			...real(...args),
 			byteLength: PRINT_SNAPSHOT_LIMITS.maxTotalBytes,

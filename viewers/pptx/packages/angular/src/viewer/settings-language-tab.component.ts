@@ -8,7 +8,6 @@
  * ~300-LOC guideline.
  */
 import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
-
 import type { LocaleCatalogEntry } from 'ooxml-ui/pptx/i18n';
 
 @Component({

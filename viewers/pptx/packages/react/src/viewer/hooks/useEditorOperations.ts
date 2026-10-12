@@ -1,4 +1,3 @@
-import type { PptxHandler, PptxSlide, PptxElement, TextStyle } from 'pptx-viewer-core';
 /**
  * useEditorOperations: Composes all editor-interaction hooks (element ops,
  * section ops, find/replace, comments, canvas interactions, insert, manipulate,
@@ -11,6 +10,7 @@ import {
 	rasterResultToPngBlob,
 } from 'ooxml-ui/pptx';
 import type { ResolvedKeyboardCustomization } from 'ooxml-ui/pptx';
+import type { PptxHandler, PptxSlide, PptxElement, TextStyle } from 'pptx-viewer-core';
 import type React from 'react';
 import { useCallback, useMemo } from 'react';
 

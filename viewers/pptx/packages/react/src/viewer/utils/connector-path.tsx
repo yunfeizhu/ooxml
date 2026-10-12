@@ -11,11 +11,7 @@ import { ConnectorPathGeometry } from '../types';
 // Connection-site geometry + compound-line helpers now live in
 // `pptx-viewer-shared`; re-export them here to preserve the historical import
 // surface for downstream connector code.
-export {
-	getConnectionSites,
-	getCompoundLineOffsets,
-	getCompoundLineWidths,
-} from 'ooxml-ui/pptx';
+export { getConnectionSites, getCompoundLineOffsets, getCompoundLineWidths } from 'ooxml-ui/pptx';
 
 export function getConnectorAdjustment(
 	element: PptxElementWithShapeStyle,

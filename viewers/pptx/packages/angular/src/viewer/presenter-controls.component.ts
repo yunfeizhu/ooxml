@@ -15,9 +15,9 @@ import {
 	output,
 	signal,
 } from '@angular/core';
+import type { CanvasSize, PresentationSnapshot } from 'ooxml-ui/pptx';
 import type { PptxElement, PptxSlide } from 'pptx-viewer-core';
 
-import type { CanvasSize, PresentationSnapshot } from 'ooxml-ui/pptx';
 import { PresenterConsoleStripComponent } from './presenter-console-strip.component';
 import { PresenterSlideNavigatorComponent } from './presenter-slide-navigator.component';
 

@@ -1,14 +1,4 @@
 <script setup lang="ts">
-/**
- * DrawingGroup: Shapes, Arrange, Shape Fill, Shape Outline, Quick Styles and
- * Shape Effects. Every control and popover (the shapes list, the layer-order
- * menu, the colour popovers, the style galleries) is the shared
- * `pptx-ui-ribbon-home-drawing` element; this adapter reflects selection,
- * deck colours and gallery descriptors into it and runs the undoable edits.
- * Vue port of React's `toolbar/DrawingGroup.tsx`.
- */
-import type { PptxElement, ShapeStyle } from 'pptx-viewer-core';
-import { hasShapeProperties } from 'pptx-viewer-core';
 import type { RibbonHomeRequestEvent } from 'ooxml-ui/pptx';
 import {
 	drawingHomeControls,
@@ -19,6 +9,16 @@ import {
 	shapeOutlineChange,
 	withHomeGalleries,
 } from 'ooxml-ui/pptx';
+/**
+ * DrawingGroup: Shapes, Arrange, Shape Fill, Shape Outline, Quick Styles and
+ * Shape Effects. Every control and popover (the shapes list, the layer-order
+ * menu, the colour popovers, the style galleries) is the shared
+ * `pptx-ui-ribbon-home-drawing` element; this adapter reflects selection,
+ * deck colours and gallery descriptors into it and runs the undoable edits.
+ * Vue port of React's `toolbar/DrawingGroup.tsx`.
+ */
+import type { PptxElement, ShapeStyle } from 'pptx-viewer-core';
+import { hasShapeProperties } from 'pptx-viewer-core';
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 

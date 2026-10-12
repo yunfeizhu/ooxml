@@ -18,10 +18,10 @@ import {
 	signal,
 } from '@angular/core';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
-import type { PptxElement, PptxLayoutPreview } from 'pptx-viewer-core';
-
 import type { RibbonHomePopupEvent, RibbonHomeRequestEvent } from 'ooxml-ui/pptx';
 import { resetSlideLayoutPath, slidesHomeControls } from 'ooxml-ui/pptx';
+import type { PptxElement, PptxLayoutPreview } from 'pptx-viewer-core';
+
 import { EditorStateService } from './editor-state.service';
 import { LoadContentService } from './load-content.service';
 import { RibbonClipboardGroupComponent } from './ribbon-clipboard-group.component';

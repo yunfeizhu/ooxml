@@ -1,6 +1,6 @@
-import type { PptxElement } from 'pptx-viewer-core';
 import { buildCropOverlay } from 'ooxml-ui/pptx';
 import type { CropHandleId, CropOverlayBox } from 'ooxml-ui/pptx';
+import type { PptxElement } from 'pptx-viewer-core';
 
 import { createEl } from '../render';
 

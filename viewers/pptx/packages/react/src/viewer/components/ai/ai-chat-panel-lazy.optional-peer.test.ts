@@ -64,7 +64,10 @@ describe('the @ai-sdk/react peer is never statically imported', () => {
 	});
 
 	it('bundles the React and Vue message helpers with an empty optional-ai stub', async () => {
-		const sharedUiParts = join(import.meta.dirname, '../../../../../../../../src/ui/src/pptx/ai/ui-parts.ts');
+		const sharedUiParts = join(
+			import.meta.dirname,
+			'../../../../../../../../src/ui/src/pptx/ai/ui-parts.ts',
+		);
 		const plugin = {
 			name: 'optional-ai-peer-fixture',
 			resolveId(source: string) {

@@ -1,3 +1,4 @@
+import { setPendingCaretPoint } from 'ooxml-ui/pptx';
 /**
  * Selecting inside a group, driven through the REAL stage interactions (shared
  * `group-drill` decides; this checks the stage asks it and acts on the answer):
@@ -8,7 +9,6 @@
  * steps back out to the group, and the member's edits land in its group.
  */
 import type { PptxElement } from 'pptx-viewer-core';
-import { setPendingCaretPoint } from 'ooxml-ui/pptx';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { createTranslator } from '../i18n';

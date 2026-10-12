@@ -1,7 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import type { SafeHtml } from '@angular/platform-browser';
-
 import type { OmmlNode } from 'ooxml-ui/pptx';
 import { ommlToMathml, sanitizeMathMl } from 'ooxml-ui/pptx';
 

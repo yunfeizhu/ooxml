@@ -1,3 +1,5 @@
+import { applyOutlineEdit, buildOutline, mapOutlineKey, OUTLINE_ROW_ATTR } from 'ooxml-ui/pptx';
+import type { OutlineEdit, OutlineRow } from 'ooxml-ui/pptx';
 /**
  * Outline-view state and keyboard, kept out of the markup.
  *
@@ -13,13 +15,6 @@
  * COUNT, so without the nonce bump an outline edit would be invisible to undo.
  */
 import type { PptxSlide } from 'pptx-viewer-core';
-import {
-	applyOutlineEdit,
-	buildOutline,
-	mapOutlineKey,
-	OUTLINE_ROW_ATTR,
-} from 'ooxml-ui/pptx';
-import type { OutlineEdit, OutlineRow } from 'ooxml-ui/pptx';
 import { useCallback, useEffect, useMemo, useRef } from 'react';
 
 import type { CanvasSize } from '../../types';

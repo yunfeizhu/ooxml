@@ -1,6 +1,6 @@
-import type { PptxSlide } from 'pptx-viewer-core';
 import { applyFindReplacements, findInSlides, replaceMatch } from 'ooxml-ui/pptx';
 import type { FindResult } from 'ooxml-ui/pptx';
+import type { PptxSlide } from 'pptx-viewer-core';
 import type { ComputedRef, Ref } from 'vue';
 import { computed, ref } from 'vue';
 
